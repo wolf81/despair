@@ -31,43 +31,29 @@ local function carvePassage(cx, cy, grid)
     end
 end
 
-M.generate = function(size)
-    local tiles = {}
-
-    local map_w = size + 2
-    local map_h = size + 2
-
-    for y = 1, map_h do
-        tiles[y] = {}
-        for x = 1, map_w do
-            tiles[y][x] = 0
-
-            -- if y == 1 or y == map_h or x == 1 or x == map_w then
-            --     tiles[y][x] = 1
-            -- end
-        end
-    end
+local function newGrid(size, fn)
+    fn = fn or function(x, y) return 0 end
 
     local grid = {}
     for y = 1, size do
         grid[y] = {}
         for x = 1, size do
-            grid[y][x] = 0
+            grid[y][x] = fn(x, y)
         end
     end
+    return grid
+end
+
+M.generate = function(size)
+    local map_w = size + 2
+    local map_h = size + 2
+
+    local grid = newGrid(size)
     carvePassage(1, 1, grid)
 
-    local tiles = {}
-    local scale = 8
-    for y = 1, size * 2 + 1 do
-        tiles[y] = {}
-        for x = 1, size * 2 + 1 do
-            tiles[y][x] = 0
-            if y % 2 == 1 or x % 2 == 1 then
-                tiles[y][x] = 1
-            end
-        end
-    end
+    local tiles = newGrid(size * 2 + 1, function(x, y) 
+        return (y % 2 == 1 or x % 2 == 1) and 1 or 0
+    end)
 
     for y = 1, size do
         for x = 1, size do
