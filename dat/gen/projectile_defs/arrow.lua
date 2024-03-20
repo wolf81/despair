@@ -1,0 +1,15 @@
+return {
+	id = 'arrow',
+	type = 'projectile',
+	sound = 'shoot',
+	texture = 'fx',
+	anim_n = { 69 },
+	anim_w = { 65 },
+	anim_s = { 69 },
+	anim_e = { 65 },
+	anim_nw = { 67 },
+	anim_ne = { 71 },
+	anim_sw = { 67 },
+	anim_se = { 71 },
+	anim_time = 0,
+}

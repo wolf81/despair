@@ -1,0 +1,7 @@
+ID$         |TYPE$      |SOUND$  |TEXTURE$ |ANIM_N@ |ANIM_W@ |ANIM_S@ |ANIM_E@ |ANIM_NW@ |ANIM_NE@ |ANIM_SW@ |ANIM_SE@ |ANIM_TIME# |
+
+bolt_purple |projectile |spell   |fx       |64      |64      |64      |64      |64       |64       |64       |64       |           |
+orb         |projectile |spell   |fx       |103     |103     |103     |103     |103      |103      |103      |103      |           |
+acid_arrow  |projectile |laser_b |fx_ext   |35      |33      |39      |37      |34       |36       |38       |40       |           |
+fireball    |projectile |bazooka |fx       |5       |7       |3       |1       |6        |8        |4        |2        |           |
+arrow       |projectile |shoot   |fx       |69      |65      |69      |65      |67       |71       |67       |71       |           |

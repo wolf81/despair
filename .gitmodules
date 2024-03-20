@@ -1,0 +1,6 @@
+[submodule "lib/hump"]
+	path = lib/hump
+	url = git@github.com:wolf81/hump.git
+[submodule "lib/lume"]
+	path = lib/lume
+	url = git@github.com:wolf81/lume.git
