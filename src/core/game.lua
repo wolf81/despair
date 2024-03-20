@@ -69,6 +69,8 @@ function Game.new()
                 local tile_id = tiles[y][x]
                 local quad_idx = 73
 
+                if tile_id == nil then goto continue end
+
                 if tile_id ~= 0 then
                     quad_idx = 1
                     if y < map_h then
@@ -79,6 +81,8 @@ function Game.new()
                 end
 
                 love.graphics.draw(texture, quads[quad_idx], x * TILE_SIZE, y * TILE_SIZE)
+
+                ::continue::
             end
         end
 

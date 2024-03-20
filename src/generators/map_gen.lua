@@ -45,11 +45,32 @@ local function newGrid(size, fn)
 end
 
 M.generate = function(size, scale)
-    scale = math.max(scale or 8, 0)
+    scale = math.max(scale or 1, 0)
 
     -- create a maze using recursive backtracker algorithm
     local grid = newGrid(size)
     carvePassage(1, 1, grid)
+
+
+    -- TODO: dead-end removal
+    -- go through each grid tile
+    -- if tile has only a single exit, it's a dead-end
+    -- use percentage change to remove
+    for y = 1, #grid do
+        for x = 1, #grid[y] do
+            local v = grid[y][x]
+
+            if v == Dir.E or v == Dir.W or v == Dir.S or v == Dir.N then
+                local remove = math.random(2) == 1                
+                if remove then
+                    local nx, ny = x + Dx[v], y + Dy[v]
+                    local nv = grid[ny][nx]
+                    grid[ny][nx] = bit.band(bit.bnot(Opposite[v]), nv)
+                    grid[y][x] = 0
+                end
+            end
+        end
+    end
 
     -- factor takes into account border around map
     local factor = scale + 2
@@ -76,6 +97,14 @@ M.generate = function(size, scale)
                     tiles[y * factor + 1][x * factor - i] = 0
                 end
             end
+
+            -- if v == 0 then
+            --     for i = 0, scale do
+            --         for j = 0, scale do
+            --             tiles[y * factor - i][x * factor - j] = nil                    
+            --         end                             
+            --     end
+            -- end
         end
     end
 

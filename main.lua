@@ -37,6 +37,8 @@ end
 function love.load(args)
     preload()
 
+    math.randomseed(os.time())
+
     game = Game()
 end
 
