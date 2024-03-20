@@ -6,4 +6,4 @@
 --]]
 
 TILE_SIZE = 16
-MAP_SIZE = 40
+MAP_SIZE = 5

@@ -28,14 +28,13 @@ local function newCamera(coord, zoom)
     return camera
 end
 
-local function drawGrid()
+local function drawGrid(map_w, map_h)
     love.graphics.setColor(1.0, 0.0, 1.0, 1.0)
-    for y = 1, MAP_SIZE do
-        love.graphics.line(TILE_SIZE, y * TILE_SIZE, (MAP_SIZE + 1) * TILE_SIZE, y * TILE_SIZE)
+    for y = 1, map_w do
+        love.graphics.line(TILE_SIZE, y * TILE_SIZE, (map_w + 1) * TILE_SIZE, y * TILE_SIZE)
     end
-
-    for x = 1, MAP_SIZE do
-        love.graphics.line(x * TILE_SIZE, TILE_SIZE, x * TILE_SIZE, (MAP_SIZE + 1) * TILE_SIZE)
+    for x = 1, map_h do
+        love.graphics.line(x * TILE_SIZE, TILE_SIZE, x * TILE_SIZE, (map_h + 1) * TILE_SIZE)
     end
     love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
 end
@@ -83,7 +82,7 @@ function Game.new()
             end
         end
 
-        drawGrid()
+        drawGrid(map_w, map_h)
 
         lume.each(entities, 'draw')
 
