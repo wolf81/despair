@@ -44,27 +44,37 @@ local function newGrid(size, fn)
     return grid
 end
 
-M.generate = function(size)
-    local map_w = size + 2
-    local map_h = size + 2
+M.generate = function(size, scale)
+    scale = math.max(scale or 8, 0)
 
+    -- create a maze using recursive backtracker algorithm
     local grid = newGrid(size)
     carvePassage(1, 1, grid)
 
-    local tiles = newGrid(size * 2 + 1, function(x, y) 
-        return (y % 2 == 1 or x % 2 == 1) and 1 or 0
+    -- factor takes into account border around map
+    local factor = scale + 2
+
+    -- create tiles array and set initial borders
+    local tiles = newGrid(size * factor + 1, function(x, y) 
+        return (y % factor == 1 or x % factor == 1) and 1 or 0
     end)
+
+    -- TODO: remove some dead-ends
 
     for y = 1, size do
         for x = 1, size do
             local v = grid[y][x]
 
             if bit.band(v, Dir.E) ~= 0 then
-                tiles[y * 2][x * 2 + 1] = 0
+                for i = 0, scale do
+                    tiles[y * factor - i][x * factor + 1] = 0                    
+                end
             end 
 
             if bit.band(v, Dir.S) ~= 0 then
-                tiles[y * 2 + 1][x * 2] = 0
+                for i = 0, scale do
+                    tiles[y * factor + 1][x * factor - i] = 0
+                end
             end
         end
     end
