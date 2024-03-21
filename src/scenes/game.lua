@@ -1,6 +1,8 @@
 local Game = {}
 
 Game.new = function()
+    math.randomseed(os.time())
+
     local dungeon = Dungeon()
 
     local update = function(self, dt) dungeon:update(dt) end

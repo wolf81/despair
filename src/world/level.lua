@@ -5,7 +5,11 @@
 --  info+despair@wolftrail.net
 --]]
 
+local mfloor = math.floor
+
 local Level = {}
+
+local CAM_OFFSET = TILE_SIZE / 2
 
 local function initSystems(entities)
     local inputSystem = System(Input)
@@ -63,8 +67,12 @@ function Level.new()
         lume.each(systems, 'update', dt, self)
     end
 
+    local worldSprites = love.graphics.newSpriteBatch(TextureCache:get('world'))
+
     local draw = function(self)
         camera:attach()
+
+        worldSprites:clear()
 
         local texture = TextureCache:get('world')
         local quads = QuadCache:get('world')
@@ -84,11 +92,13 @@ function Level.new()
                     end
                 end
 
-                love.graphics.draw(texture, quads[quad_idx], x * TILE_SIZE, y * TILE_SIZE)
+                worldSprites:add(quads[quad_idx], x * TILE_SIZE, y * TILE_SIZE)
 
                 ::continue::
             end
         end
+
+        love.graphics.draw(worldSprites)
 
         -- drawGrid(map_w, map_h)
 
@@ -111,8 +121,10 @@ function Level.new()
 
     local moveCamera = function(self, coord, duration)
         local pos = coord * TILE_SIZE
-        local offset = TILE_SIZE / 2
-        Timer.tween(duration, camera, { x = pos.x + offset, y = pos.y + offset })
+        Timer.tween(duration, camera, { 
+            x = mfloor(pos.x + CAM_OFFSET), 
+            y = mfloor(pos.y + CAM_OFFSET),
+        })
     end
 
     return setmetatable({

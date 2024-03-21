@@ -8,8 +8,6 @@
 local Dungeon = {}
 
 Dungeon.new = function()
-    math.randomseed(os.time())
-
     -- TODO: add new level when user navigates to next level
     local levels = { Level() }
     local level_idx = 1
