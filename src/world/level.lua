@@ -61,7 +61,7 @@ end
 
 function Level.new()
     -- generate a map
-    local tiles, coords = MapGenerator.generate(MAP_SIZE, 5)
+    local tiles, coords = MazeGenerator.generate(MAP_SIZE, 5)
     local map = Map(tiles, function(id) return id ~= 0 end)
     local map_w, map_h = map:getSize()
 

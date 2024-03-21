@@ -41,5 +41,5 @@ QuadCache       = Cache()
 
 -- generators
 QuadGenerator   = require 'src.generators.quad_gen'
-MapGenerator    = require 'src.generators.map_gen'
+MazeGenerator   = require 'src.generators.maze_gen'
 IdGenerator     = require 'src.generators.id_gen'
