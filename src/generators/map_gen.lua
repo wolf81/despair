@@ -89,7 +89,7 @@ M.generate = function(size, scale)
                 for ny = y1, y2 do
                     for nx = x1, x2 do
                         if tiles[ny][nx] == math.huge then
-                        tiles[ny][nx] = 0
+                            tiles[ny][nx] = 0
                         end
                     end
                 end

@@ -41,7 +41,7 @@ end
 
 function Game.new()
     -- generate a map
-    local tiles = MapGenerator.generate(MAP_SIZE)
+    local tiles = MapGenerator.generate(MAP_SIZE, 8)
     local map = Map(tiles, function(id) return id == 1 end)
     local map_w, map_h = map:size()
 
