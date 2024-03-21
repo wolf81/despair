@@ -9,23 +9,39 @@ local mfloor, lrandom = math.floor, love.math.random
 
 local Level = {}
 
-local function newEntities(coords)
-    local entities = {}
+local function newStairs(coords, min_dist)
+    min_dist = min_dist or 2
+    print(coords, #coords)
 
-    -- stairs
-    -- TODO: maybe shouldn't be an entity, just a coord and texture?
-    local stair_up = EntityFactory.create('dun_13', table.remove(coords, lrandom(#coords)))
-    table.insert(entities, stair_up)
-    local stair_dn = EntityFactory.create('dun_14', table.remove(coords, lrandom(#coords)))
-    table.insert(entities, stair_dn)
+    local stair_up, stair_dn = nil, nil
+
+    while true do
+        local coord1 = table.remove(coords, lrandom(#coords))
+        local coord2 = table.remove(coords, lrandom(#coords))
+
+        if coord1:dist(coord2) > min_dist then
+            stair_up = EntityFactory.create('dun_14', coord1)
+            stair_dn = EntityFactory.create('dun_13', coord2)
+            break
+        else
+            table.insert(coords, coord1)
+            table.insert(coords, coord2)
+        end
+    end
+
+    return stair_up, stair_dn
+end
+
+local function newMonsters(coords)
+    local monsters = {}
 
     for i = 1, mfloor(math.sqrt(#coords / 2)) do
         local type = i % 2 == 0 and 'bat' or 'spider'
-        local entity = EntityFactory.create(type, table.remove(coords, lrandom(#coords)))
-        table.insert(entities, entity)
+        local monster = EntityFactory.create(type, table.remove(coords, lrandom(#coords)))
+        table.insert(monsters, monster)
     end
 
-    return entities
+    return monsters
 end
 
 local function initSystems(entities)
@@ -66,7 +82,9 @@ function Level.new()
     local map_w, map_h = map:getSize()
 
     -- generate entities
-    local entities = newEntities(coords)
+    local stair_up, stair_dn = newStairs(coords, map_w / 2)
+    local monsters = newMonsters(coords)
+    local entities = lume.concat(monsters, { stair_up, stair_dn })
 
     -- add camera
     local camera = newCamera(4.0)
@@ -132,8 +150,7 @@ function Level.new()
     end
 
     local enter = function(self, player)
-        -- TODO: coord should be of stairs down
-        player.coord = vector(8, 6)
+        player.coord = stair_up.coord:clone()
 
         for _, system in ipairs(systems) do
             system:addComponent(player)
