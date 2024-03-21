@@ -79,9 +79,10 @@ function Level.new()
         for y = 1, map_w do
             for x = 1, map_h do
                 local tile_id = tiles[y][x]
-                local quad_idx = 73
 
                 if tile_id == math.huge then goto continue end
+
+                local quad_idx = 73
 
                 if tile_id ~= 0 then
                     quad_idx = 1

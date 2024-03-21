@@ -9,8 +9,8 @@ local Cache = require 'src.cache'
 
 -- libraries
 Camera          = require 'lib.hump.camera'
-Timer           = require 'lib.hump.timer'
 vector          = require 'lib.hump.vector'
+Timer           = require 'lib.hump.timer'
 lume            = require 'lib.lume.lume'
 
 -- scenes
@@ -26,14 +26,14 @@ Direction       = require 'src.util.direction'
 Animation       = require 'src.util.animation'
 
 -- entity component system
+EntityFactory   = require 'src.ecs.factory'
 Entity          = require 'src.ecs.entity'
 System          = require 'src.ecs.system'
-EntityFactory   = require 'src.ecs.factory'
 
 -- components
-Input           = require 'src.components.input'
 Intellect       = require 'src.components.intellect'
 Visual          = require 'src.components.visual'
+Input           = require 'src.components.input'
 
 -- caches
 TextureCache    = Cache()

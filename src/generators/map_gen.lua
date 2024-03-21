@@ -5,6 +5,9 @@
 --  info+despair@wolftrail.net
 --]]
 
+-- recursive backtracker algorithm based on: 
+-- https://weblog.jamisbuck.org/2010/12/27/maze-generation-recursive-backtracking
+
 local bband, bbnot, bbor = bit.band, bit.bnot, bit.bor
 
 local M = {}
