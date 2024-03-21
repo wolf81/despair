@@ -42,12 +42,16 @@ end
 function Game.new()
     -- generate a map
     local tiles = MapGenerator.generate(MAP_SIZE, 8)
-    local map = Map(tiles, function(id) return id == 1 end)
+    local map = Map(tiles, function(id) return id ~= 0 end)
     local map_w, map_h = map:size()
 
     -- generate entities
     local player = EntityFactory.create('pc1', vector(8, 6))
-    local entities = { player }
+    local bat1 = EntityFactory.create('bat', vector(10, 10))
+    local bat2 = EntityFactory.create('bat', vector(8, 5))
+    local spider1 = EntityFactory.create('spider', vector(12, 10))
+    local spider2 = EntityFactory.create('spider', vector(12, 12))
+    local entities = { player, bat1, bat2, spider1, spider2 }
 
     -- add camera
     local camera = newCamera(player.coord, 4.0)

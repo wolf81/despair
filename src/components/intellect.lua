@@ -42,6 +42,7 @@ function Intellect.new(entity, def)
         if game:isBlocked(next_coord) then return end 
 
         local prev_coord = entity.coord:clone()
+        game:setBlocked(prev_coord, false)
         game:setBlocked(next_coord, true)
 
         if self.dir ~= dir then
@@ -53,7 +54,6 @@ function Intellect.new(entity, def)
         is_busy = true
         Timer.tween(0.5, entity, { coord = next_coord }, 'linear', function() 
             entity.coord = next_coord
-            game:setBlocked(prev_coord, false)
             is_busy = false
         end)
     end

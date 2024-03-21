@@ -8,7 +8,7 @@
 local Map = {}
 
 function Map.new(tiles, fn)
-    fn = fn or function(id) return true end
+    fn = fn or function(id) return false end
 
     local blocked = {}
 
