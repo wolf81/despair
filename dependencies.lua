@@ -13,9 +13,13 @@ Timer           = require 'lib.hump.timer'
 vector          = require 'lib.hump.vector'
 lume            = require 'lib.lume.lume'
 
--- core game
-Game            = require 'src.core.game'
-Map             = require 'src.core.map'
+-- scenes
+Game            = require 'src.scenes.game'
+
+-- world
+Dungeon         = require 'src.world.dungeon'
+Level           = require 'src.world.level'
+Map             = require 'src.world.map'
 
 -- util
 Direction       = require 'src.util.direction'

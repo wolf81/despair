@@ -5,7 +5,7 @@
 --  info+despair@wolftrail.net
 --]]
 
-local Game = {}
+local Level = {}
 
 local function initSystems(entities)
     local inputSystem = System(Input)
@@ -39,7 +39,7 @@ local function drawGrid(map_w, map_h)
     love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
 end
 
-function Game.new()
+function Level.new()
     -- generate a map
     local tiles = MapGenerator.generate(MAP_SIZE, 8)
     local map = Map(tiles, function(id) return id ~= 0 end)
@@ -123,9 +123,9 @@ function Game.new()
         setBlocked  = setBlocked,
         getEntity   = getEntity,
         moveCamera  = moveCamera,
-    }, Game)
+    }, Level)
 end
 
-return setmetatable(Game, { 
-    __call = function(_, ...) return Game.new(...) end,
+return setmetatable(Level, { 
+    __call = function(_, ...) return Level.new(...) end,
 })
