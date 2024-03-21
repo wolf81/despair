@@ -5,6 +5,8 @@
 --  info+despair@wolftrail.net
 --]]
 
+local lrandom = love.math.random
+
 local Intellect = {}
 
 local function updateAnimation(entity, def, dir)
@@ -25,7 +27,7 @@ end
 
 local function getRandomDirection()
     local dirs = { Direction.N, Direction.E, Direction.S, Direction.W }
-    return dirs[math.random(#dirs)]
+    return dirs[lrandom(#dirs)]
 end
 
 function Intellect.new(entity, def)

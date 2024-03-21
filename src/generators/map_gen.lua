@@ -65,23 +65,23 @@ M.generate = function(size, scale)
     carvePassage(1, 1, grid)
 
     -- remove some dead-ends
-    -- TODO: seems a little bit buggy, e.g. when removing all dead-ends would expect map to be empty
-    for y = 1, #grid do
-        for x = 1, #grid[y] do
-            local v = grid[y][x]
+    -- TODO: seems a little bit buggy, e.g. removing all dead-ends does not remove all tiles
+    for cy = 1, #grid do
+        for cx = 1, #grid[cy] do
+            local cv = grid[cy][cx]
 
-            if v == Dir.E or v == Dir.W or v == Dir.S or v == Dir.N then
+            if cv == Dir.E or cv == Dir.W or cv == Dir.S or cv == Dir.N then
                 if lrandom() > 0.5 then
-                    local nx, ny = x + Dx[v], y + Dy[v]
+                    local nx, ny = cx + Dx[cv], cy + Dy[cv]
                     local nv = grid[ny][nx]
-                    grid[ny][nx] = bband(bbnot(Opposite[v]), nv)
-                    grid[y][x] = 0
+                    grid[ny][nx] = bband(bbnot(Opposite[cv]), nv)
+                    grid[cy][cx] = 0
                 end
             end
         end
     end
 
-    -- factor takes into account border around map
+    -- factor takes into account tile border
     local factor = scale + 1
 
     -- create tiles array and set initial borders
@@ -136,7 +136,28 @@ M.generate = function(size, scale)
         end
     end
 
-    return tiles
+    -- keep track of empty coords which can be used to add entities later
+    local coords = {}
+    for y = 1, #grid do
+        for x = 1, #grid[y] do
+            local v = grid[y][x]
+            if v ~= 0 then
+                local y1, y2 = (y - 1) * factor + 2, y * factor
+                local x1, x2 = (x - 1) * factor + 2, x * factor
+
+                for ty = y1, y2 do
+                    for tx = x1, x2 do
+                        table.insert(coords, vector(tx, ty))
+                    end
+                end
+
+                -- TODO: areas between grid coords can be empty if a wall was opened
+                -- add those coords as well
+            end
+        end
+    end
+
+    return tiles, coords
 end
 
 return M

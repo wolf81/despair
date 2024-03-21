@@ -23,7 +23,7 @@ function Visual.new(entity, def)
 
     local texture = TextureCache:get(def.texture)
     local quads = QuadCache:get(def.texture)
-    local anim = Animation.loop({ 1 })
+    local anim = Animation.loop(def['anim'] or { 1 })
 
     update = function(self, dt, game) 
         self.anim:update(dt)

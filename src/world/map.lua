@@ -10,10 +10,8 @@ local Map = {}
 function Map.new(tiles, fn)
     fn = fn or function(id) return false end
 
+    local height, width = #tiles, #tiles[1]
     local blocked = {}
-
-    local height = #tiles
-    local width = #tiles[1]
 
     for y = 1, height do
         blocked[y] = {}

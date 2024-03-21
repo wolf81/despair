@@ -5,16 +5,26 @@
 --  info+despair@wolftrail.net
 --]]
 
-local mfloor, mhuge = math.floor
+local mfloor, lrandom = math.floor, love.math.random
 
 local Level = {}
 
-local function newEntities()
-    local bat1 = EntityFactory.create('bat', vector(10, 10))
-    local bat2 = EntityFactory.create('bat', vector(8, 5))
-    local spider1 = EntityFactory.create('spider', vector(12, 10))
-    local spider2 = EntityFactory.create('spider', vector(12, 12))
-    return { bat1, bat2, spider1, spider2 }
+local function newEntities(coords)
+    local entities = {}
+    for i = 1, 4 do
+        local type = i % 2 == 0 and 'bat' or 'spider'
+        local entity = EntityFactory.create(type, table.remove(coords, lrandom(#coords)))
+        table.insert(entities, entity)
+    end
+
+    -- stairs
+    -- TODO: maybe shouldn't be an entity, just a coord and texture?
+    local stair_up = EntityFactory.create('dun_13', table.remove(coords, lrandom(#coords)))
+    table.insert(entities, stair_up)
+    local stair_dn = EntityFactory.create('dun_14', table.remove(coords, lrandom(#coords)))
+    table.insert(entities, stair_dn)
+
+    return entities
 end
 
 local function initSystems(entities)
@@ -50,12 +60,12 @@ end
 
 function Level.new()
     -- generate a map
-    local tiles = MapGenerator.generate(MAP_SIZE, 8)
+    local tiles, coords = MapGenerator.generate(MAP_SIZE, 3)
     local map = Map(tiles, function(id) return id ~= 0 end)
     local map_w, map_h = map:getSize()
 
     -- generate entities
-    local entities = newEntities()
+    local entities = newEntities(coords)
 
     -- add camera
     local camera = newCamera(4.0)
@@ -107,6 +117,8 @@ function Level.new()
     end
 
     local isBlocked = function(self, coord)
+        if coord.x < 1 or coord.x > map_w then return true end
+        if coord.y < 1 or coord.y > map_h then return true end   
         return map:isBlocked(coord.x, coord.y)
     end
 
