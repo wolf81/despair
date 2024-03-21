@@ -11,11 +11,6 @@ local Level = {}
 
 local function newEntities(coords)
     local entities = {}
-    for i = 1, 4 do
-        local type = i % 2 == 0 and 'bat' or 'spider'
-        local entity = EntityFactory.create(type, table.remove(coords, lrandom(#coords)))
-        table.insert(entities, entity)
-    end
 
     -- stairs
     -- TODO: maybe shouldn't be an entity, just a coord and texture?
@@ -23,6 +18,12 @@ local function newEntities(coords)
     table.insert(entities, stair_up)
     local stair_dn = EntityFactory.create('dun_14', table.remove(coords, lrandom(#coords)))
     table.insert(entities, stair_dn)
+
+    for i = 1, mfloor(math.sqrt(#coords / 2)) do
+        local type = i % 2 == 0 and 'bat' or 'spider'
+        local entity = EntityFactory.create(type, table.remove(coords, lrandom(#coords)))
+        table.insert(entities, entity)
+    end
 
     return entities
 end
@@ -60,7 +61,7 @@ end
 
 function Level.new()
     -- generate a map
-    local tiles, coords = MapGenerator.generate(MAP_SIZE, 3)
+    local tiles, coords = MapGenerator.generate(MAP_SIZE, 5)
     local map = Map(tiles, function(id) return id ~= 0 end)
     local map_w, map_h = map:getSize()
 
