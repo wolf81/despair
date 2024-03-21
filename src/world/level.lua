@@ -5,16 +5,22 @@
 --  info+despair@wolftrail.net
 --]]
 
-local mfloor = math.floor
+local mfloor, mhuge = math.floor
 
 local Level = {}
 
-local CAM_OFFSET = TILE_SIZE / 2
+local function newEntities()
+    local bat1 = EntityFactory.create('bat', vector(10, 10))
+    local bat2 = EntityFactory.create('bat', vector(8, 5))
+    local spider1 = EntityFactory.create('spider', vector(12, 10))
+    local spider2 = EntityFactory.create('spider', vector(12, 12))
+    return { bat1, bat2, spider1, spider2 }
+end
 
 local function initSystems(entities)
     local inputSystem = System(Input)
-    local intellectSystem = System(Intellect)
     local visualSystem = System(Visual)
+    local intellectSystem = System(Intellect)
     
     for _, entity in ipairs(entities) do
         intellectSystem:addComponent(entity)
@@ -25,9 +31,8 @@ local function initSystems(entities)
     return { intellectSystem, inputSystem, visualSystem }
 end
 
-local function newCamera(coord, zoom)
-    local pos = coord * TILE_SIZE
-    local camera = Camera(pos.x + TILE_SIZE / 2, pos.y + TILE_SIZE / 2)
+local function newCamera(zoom)
+    local camera = Camera(0, 0)
     camera:zoomTo(zoom or 1.0)
     return camera
 end
@@ -47,18 +52,13 @@ function Level.new()
     -- generate a map
     local tiles = MapGenerator.generate(MAP_SIZE, 8)
     local map = Map(tiles, function(id) return id ~= 0 end)
-    local map_w, map_h = map:size()
+    local map_w, map_h = map:getSize()
 
     -- generate entities
-    local player = EntityFactory.create('pc1', vector(8, 6))
-    local bat1 = EntityFactory.create('bat', vector(10, 10))
-    local bat2 = EntityFactory.create('bat', vector(8, 5))
-    local spider1 = EntityFactory.create('spider', vector(12, 10))
-    local spider2 = EntityFactory.create('spider', vector(12, 12))
-    local entities = { player, bat1, bat2, spider1, spider2 }
+    local entities = newEntities()
 
     -- add camera
-    local camera = newCamera(player.coord, 4.0)
+    local camera = newCamera(4.0)
 
     -- setup ecs
     local systems = initSystems(entities)
@@ -85,10 +85,8 @@ function Level.new()
 
                 if tile_id ~= 0 then
                     quad_idx = 1
-                    if y < map_h then
-                        if tiles[y + 1][x] == 1 then
-                            quad_idx = 8
-                        end
+                    if y < map_h and tiles[y + 1][x] == 1 then
+                        quad_idx = 8
                     end
                 end
 
@@ -119,11 +117,25 @@ function Level.new()
         return nil
     end
 
+    local enter = function(self, player)
+        -- TODO: coord should be of stairs down
+        player.coord = vector(8, 6)
+
+        for _, system in ipairs(systems) do
+            system:addComponent(player)
+        end
+
+        table.insert(entities, player)
+        self:moveCamera(player.coord, 0)
+    end
+
+    -- add offset of half tile, as we want the camera to focus on middle of tile coord
+    local cam_offset = TILE_SIZE / 2
     local moveCamera = function(self, coord, duration)
         local pos = coord * TILE_SIZE
         Timer.tween(duration, camera, { 
-            x = mfloor(pos.x + CAM_OFFSET), 
-            y = mfloor(pos.y + CAM_OFFSET),
+            x = mfloor(pos.x + cam_offset), 
+            y = mfloor(pos.y + cam_offset),
         })
     end
 
@@ -135,6 +147,7 @@ function Level.new()
         setBlocked  = setBlocked,
         getEntity   = getEntity,
         moveCamera  = moveCamera,
+        enter       = enter,
     }, Level)
 end
 

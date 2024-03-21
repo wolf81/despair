@@ -12,6 +12,9 @@ Dungeon.new = function()
     local levels = { Level() }
     local level_idx = 1
 
+    local player = EntityFactory.create('pc1', vector(8, 6))
+    levels[level_idx]:enter(player)
+
     local update = function(self, dt) levels[level_idx]:update(dt) end
 
     local draw = function(self) levels[level_idx]:draw() end

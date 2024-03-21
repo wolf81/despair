@@ -12,9 +12,12 @@ function Map.new(tiles, fn)
 
     local blocked = {}
 
-    for y = 1, #tiles do
+    local height = #tiles
+    local width = #tiles[1]
+
+    for y = 1, height do
         blocked[y] = {}
-        for x = 1, #tiles do
+        for x = 1, width do
             blocked[y][x] = fn(tiles[y][x]) == true
         end
     end
@@ -27,16 +30,15 @@ function Map.new(tiles, fn)
         return blocked[y][x]
     end
 
-    local size = function(self)
-        local w, h = #tiles[1], #tiles
-        return w, h
+    local getSize = function(self)
+        return width, height
     end
 
     return setmetatable({
         -- methods
         setBlocked  = setBlocked,
         isBlocked   = isBlocked,
-        size        = size,
+        getSize     = getSize,
     }, Map)
 end
 
