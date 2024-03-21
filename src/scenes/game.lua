@@ -8,7 +8,7 @@
 local Game = {}
 
 Game.new = function()
-    math.randomseed(os.time())
+    love.math.setRandomSeed(1)
 
     local dungeon = Dungeon()
 

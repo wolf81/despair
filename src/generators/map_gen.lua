@@ -8,7 +8,7 @@
 -- recursive backtracker algorithm based on: 
 -- https://weblog.jamisbuck.org/2010/12/27/maze-generation-recursive-backtracking
 
-local bband, bbnot, bbor = bit.band, bit.bnot, bit.bor
+local bband, bbnot, bbor, lrandom = bit.band, bit.bnot, bit.bor, love.math.random
 
 local M = {}
 
@@ -23,8 +23,16 @@ local Dx = { [Dir.E] = 1, [Dir.W] = -1, [Dir.S] = 0, [Dir.N] = 0 }
 local Dy = { [Dir.E] = 0, [Dir.W] = 0, [Dir.N] = -1, [Dir.S] = 1 }
 local Opposite = { [Dir.E] = Dir.W, [Dir.W] = Dir.E, [Dir.S] = Dir.N, [Dir.N] = Dir.S }
 
+local function shuffle(tbl)
+    for i = #tbl, 2, -1 do
+        local j = lrandom(i)
+        tbl[i], tbl[j] = tbl[j], tbl[i]
+    end
+    return tbl
+end
+
 local function carvePassage(cx, cy, grid)
-    local dirs = lume.shuffle({ Dir.N, Dir.S, Dir.E, Dir.W })
+    local dirs = shuffle({ Dir.N, Dir.S, Dir.E, Dir.W })
     
     for _, dir in ipairs(dirs) do
         local nx, ny = cx + Dx[dir], cy + Dy[dir]
@@ -63,7 +71,7 @@ M.generate = function(size, scale)
             local v = grid[y][x]
 
             if v == Dir.E or v == Dir.W or v == Dir.S or v == Dir.N then
-                if math.random() > 0.5 then
+                if lrandom() > 0.5 then
                     local nx, ny = x + Dx[v], y + Dy[v]
                     local nv = grid[ny][nx]
                     grid[ny][nx] = bband(bbnot(Opposite[v]), nv)
