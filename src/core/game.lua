@@ -50,7 +50,7 @@ function Game.new()
     local entities = { player }
 
     -- add camera
-    local camera = newCamera(player.coord, 3)
+    local camera = newCamera(player.coord, 4.0)
 
     -- setup ecs
     local systems = initSystems(entities)
