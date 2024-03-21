@@ -69,12 +69,12 @@ function Game.new()
                 local tile_id = tiles[y][x]
                 local quad_idx = 73
 
-                if tile_id == nil then goto continue end
+                if tile_id == math.huge then goto continue end
 
                 if tile_id ~= 0 then
                     quad_idx = 1
                     if y < map_h then
-                        if tiles[y + 1][x] ~= 0 then
+                        if tiles[y + 1][x] == 1 then
                             quad_idx = 8
                         end
                     end
@@ -86,7 +86,7 @@ function Game.new()
             end
         end
 
-        drawGrid(map_w, map_h)
+        -- drawGrid(map_w, map_h)
 
         lume.each(entities, 'draw')
 

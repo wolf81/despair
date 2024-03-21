@@ -5,6 +5,8 @@
 --  info+despair@wolftrail.net
 --]]
 
+local bband, bbnot, bbor = bit.band, bit.bnot, bit.bor
+
 local M = {}
 
 local Dir = {
@@ -24,8 +26,8 @@ local function carvePassage(cx, cy, grid)
     for _, dir in ipairs(dirs) do
         local nx, ny = cx + Dx[dir], cy + Dy[dir]
         if ny > 0 and ny <= #grid and nx > 0 and nx <= #grid[ny] and grid[ny][nx] == 0 then
-            grid[cy][cx] = bit.bor(grid[cy][cx], dir)
-            grid[ny][nx] = bit.bor(grid[ny][nx], Opposite[dir])
+            grid[cy][cx] = bbor(grid[cy][cx], dir)
+            grid[ny][nx] = bbor(grid[ny][nx], Opposite[dir])
             carvePassage(nx, ny, grid)
         end 
     end
@@ -51,21 +53,17 @@ M.generate = function(size, scale)
     local grid = newGrid(size)
     carvePassage(1, 1, grid)
 
-
-    -- TODO: dead-end removal
-    -- go through each grid tile
-    -- if tile has only a single exit, it's a dead-end
-    -- use percentage change to remove
+    -- remove some dead-ends
+    -- TODO: seems a little bit buggy, e.g. when removing all dead-ends would expect map to be empty
     for y = 1, #grid do
         for x = 1, #grid[y] do
             local v = grid[y][x]
 
             if v == Dir.E or v == Dir.W or v == Dir.S or v == Dir.N then
-                local remove = math.random(2) == 1                
-                if remove then
+                if math.random() > 0.5 then
                     local nx, ny = x + Dx[v], y + Dy[v]
                     local nv = grid[ny][nx]
-                    grid[ny][nx] = bit.band(bit.bnot(Opposite[v]), nv)
+                    grid[ny][nx] = bband(bbnot(Opposite[v]), nv)
                     grid[y][x] = 0
                 end
             end
@@ -76,35 +74,52 @@ M.generate = function(size, scale)
     local factor = scale + 2
 
     -- create tiles array and set initial borders
-    local tiles = newGrid(size * factor + 1, function(x, y) 
-        return (y % factor == 1 or x % factor == 1) and 1 or 0
-    end)
+    local tiles = newGrid(size * factor + 1, function(x, y) return math.huge end)
 
-    -- TODO: remove some dead-ends
-
+    -- configure tiles in tiles array, based on grid
     for y = 1, size do
         for x = 1, size do
             local v = grid[y][x]
 
-            if bit.band(v, Dir.E) ~= 0 then
-                for i = 0, scale do
-                    tiles[y * factor - i][x * factor + 1] = 0                    
-                end
-            end 
+            if v ~= 0 then
+                local y1, y2 = y * factor - scale - 1, y * factor + 1
+                local x1, x2 = x * factor - scale - 1, x * factor + 1
 
-            if bit.band(v, Dir.S) ~= 0 then
-                for i = 0, scale do
-                    tiles[y * factor + 1][x * factor - i] = 0
+                -- add ground tiles
+                for ny = y1, y2 do
+                    for nx = x1, x2 do
+                        tiles[ny][nx] = 0
+                    end
+                end
+                
+                -- north blocked: add wall tiles
+                if bband(v, Dir.N) == 0 then
+                    for nx = x1, x2 do
+                        tiles[y1][nx] = 1 
+                    end
+                end
+
+                -- south blocked: add wall tiles
+                if bband(v, Dir.S) == 0 then
+                    for nx = x1, x2 do
+                        tiles[y2][nx] = 1 
+                    end
+                end
+
+                -- east blocked: add wall tiles
+                if bband(v, Dir.E) == 0 then
+                    for ny = y1, y2 do
+                        tiles[ny][x2] = 1 
+                    end
+                end
+
+                -- west blocked: add wall tiles
+                if bband(v, Dir.W) == 0 then
+                    for ny = y1, y2 do
+                        tiles[ny][x1] = 1 
+                    end
                 end
             end
-
-            -- if v == 0 then
-            --     for i = 0, scale do
-            --         for j = 0, scale do
-            --             tiles[y * factor - i][x * factor - j] = nil                    
-            --         end                             
-            --     end
-            -- end
         end
     end
 
