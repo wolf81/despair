@@ -47,7 +47,7 @@ local function newGrid(size, fn)
 end
 
 M.generate = function(size, scale)
-    scale = math.max(scale or 1, 0)
+    scale = math.max(scale or 1, 1)
 
     -- create a maze using recursive backtracker algorithm
     local grid = newGrid(size)
@@ -71,7 +71,7 @@ M.generate = function(size, scale)
     end
 
     -- factor takes into account border around map
-    local factor = scale + 2
+    local factor = scale + 1
 
     -- create tiles array and set initial borders
     local tiles = newGrid(size * factor + 1, function(x, y) return math.huge end)
@@ -82,13 +82,15 @@ M.generate = function(size, scale)
             local v = grid[y][x]
 
             if v ~= 0 then
-                local y1, y2 = y * factor - scale - 1, y * factor + 1
-                local x1, x2 = x * factor - scale - 1, x * factor + 1
+                local y1, y2 = (y - 1) * factor + 1, y * factor + 1
+                local x1, x2 = (x - 1) * factor + 1, x * factor + 1
 
                 -- add ground tiles
                 for ny = y1, y2 do
                     for nx = x1, x2 do
+                        if tiles[ny][nx] == math.huge then
                         tiles[ny][nx] = 0
+                        end
                     end
                 end
                 
