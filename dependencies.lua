@@ -5,7 +5,7 @@
 --  info+despair@wolftrail.net
 --]]
 
-local Cache = require 'src.cache'
+local Cache = require 'src.util.cache'
 
 -- libraries
 Camera          = require 'lib.hump.camera'
