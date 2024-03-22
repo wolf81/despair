@@ -91,14 +91,28 @@ function Level.new(dungeon)
     end
 
     local enter = function(self, player)
-        player.coord = stair_up.coord:clone()
+        table.insert(entities, player)
 
         for _, system in ipairs(systems) do
             system:addComponent(player)
         end
 
-        table.insert(entities, player)
+        -- move player to stairs and focus camera on player
+        player.coord = stair_up.coord:clone()
         self:moveCamera(player.coord, 0)
+    end
+
+    local exit = function(self, player)
+        for idx, entity in ipairs(entities) do
+            if entity == player then
+                table.remove(entities, idx)
+                break
+            end
+        end        
+
+        for _, system in ipairs(systems) do
+            system:removeComponent(player)
+        end
     end
 
     -- add offset of half tile, as we want the camera to focus on middle of tile coord
@@ -120,6 +134,7 @@ function Level.new(dungeon)
         getEntity   = getEntity,
         moveCamera  = moveCamera,
         enter       = enter,
+        exit        = exit,
     }, Level)
 end
 

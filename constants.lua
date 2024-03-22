@@ -5,5 +5,6 @@
 --  info+despair@wolftrail.net
 --]]
 
-TILE_SIZE = 16
-MAP_SIZE = 4
+TILE_SIZE       = 16
+MAP_SIZE        = 4
+DUNGEON_LEVELS  = 40

@@ -18,7 +18,36 @@ Dungeon.new = function()
     local enter = function(self)
         levels = { Level(self) }
         level_idx = 1
+        levels[level_idx]:enter(player)
+    end
 
+    local nextLevel = function(self)
+        if level_idx == DUNGEON_LEVELS then 
+            error('already at max level, should not have stairs down')
+        end
+
+        -- exit current level
+        levels[level_idx]:exit(player)
+
+        -- proceed to next level, generating a new level if needed
+        level_idx = level_idx + 1
+        if level_idx > #levels then
+            local level = Level(self)
+            table.insert(levels, level)
+        end
+        levels[level_idx]:enter(player)
+    end
+
+    local prevLevel = function(self)
+        if level_idx == 1 then
+            print('A magical force is preventing your exit. Maybe you need to find the Orb of Cerbos to escape?')
+        end
+
+        -- exit current level
+        levels[level_idx]:exit(player)
+
+        -- proceed to previous level
+        level_idx = level_idx - 1
         levels[level_idx]:enter(player)
     end
 
