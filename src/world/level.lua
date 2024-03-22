@@ -23,16 +23,16 @@ local function newMonsters(coords)
 end
 --]]
 
-local function initSystems(entities)
+local function initSystems(entity_manager)
     local inputSystem = System(Input)
     local visualSystem = System(Visual)
     local intellectSystem = System(Intellect)
-    
-    for _, entity in ipairs(entities) do
+
+    for entity in entity_manager:eachEntity() do
         intellectSystem:addComponent(entity)
         visualSystem:addComponent(entity)
         inputSystem:addComponent(entity)
-    end
+    end    
 
     return { intellectSystem, inputSystem, visualSystem }
 end
@@ -43,27 +43,55 @@ local function newCamera(zoom)
     return camera
 end
 
+local function getKey(coord)
+    return coord.x .. ':' .. coord.y
+end
+
 function Level.new(dungeon)
     -- generate a map
     local tiles, stair_up, stair_dn = MazeGenerator.generate(MAP_SIZE, 5)
     local map = Map(tiles, function(id) return id ~= 0 end)
     local map_w, map_h = map:getSize()
 
+    local entity_manager = EntityManager()
+
     -- generate stairs using coords from maze generator
     stair_up = EntityFactory.create('dun_14', stair_up)
     stair_dn = EntityFactory.create('dun_13', stair_dn)
 
-    -- keep track of entities
-    local entities = { stair_up, stair_dn }
+    entity_manager:addEntity(stair_up)
+    entity_manager:addEntity(stair_dn)
 
     -- add camera
     local camera = newCamera(4.0)
 
     -- setup ecs
-    local systems = initSystems(entities)
+    local systems = initSystems(entity_manager)
+
+    local addEntity = function(self, entity)
+        for _, system in ipairs(systems) do
+            system:addComponent(entity)
+        end
+
+        entity_manager:addEntity(entity)
+    end
+
+    local removeEntity = function(self, entity)
+        for _, system in ipairs(systems) do
+            system:removeComponent(entity)
+        end
+
+        entity_manager:removeEntity(entity)
+    end
+
+    local updateEntity = function(self, entity)
+        entity_manager:updateEntity(entity)
+    end
 
     local update = function(self, dt)
-        lume.each(systems, 'update', dt, self)
+        for _, system in ipairs(systems) do
+            system:update(dt, self)
+        end
     end
 
     local draw = function(self)
@@ -71,7 +99,7 @@ function Level.new(dungeon)
 
         map:draw()
 
-        lume.each(entities, 'draw')
+        entity_manager:draw()
 
         camera:detach()
     end
@@ -86,33 +114,21 @@ function Level.new(dungeon)
         map:setBlocked(coord.x, coord.y, flag)
     end
 
-    local getEntity = function(self)
-        return nil
+    local getEntities = function(self, coord)
+        return entity_info[getKey(coord)] or {}
     end
 
     local enter = function(self, player)
-        table.insert(entities, player)
+        player.coord = stair_up.coord:clone()
 
-        for _, system in ipairs(systems) do
-            system:addComponent(player)
-        end
+        self:addEntity(player)
 
         -- move player to stairs and focus camera on player
-        player.coord = stair_up.coord:clone()
         self:moveCamera(player.coord, 0)
     end
 
     local exit = function(self, player)
-        for idx, entity in ipairs(entities) do
-            if entity == player then
-                table.remove(entities, idx)
-                break
-            end
-        end        
-
-        for _, system in ipairs(systems) do
-            system:removeComponent(player)
-        end
+        self:removeEntity(player)
     end
 
     -- add offset of half tile, as we want the camera to focus on middle of tile coord
@@ -127,14 +143,16 @@ function Level.new(dungeon)
 
     return setmetatable({
         -- methods
-        update      = update,
-        draw        = draw,
-        isBlocked   = isBlocked,
-        setBlocked  = setBlocked,
-        getEntity   = getEntity,
-        moveCamera  = moveCamera,
-        enter       = enter,
-        exit        = exit,
+        update          = update,
+        draw            = draw,
+        isBlocked       = isBlocked,
+        setBlocked      = setBlocked,
+        moveCamera      = moveCamera,
+        enter           = enter,
+        exit            = exit,
+        addEntity       = addEntity,
+        removeEntity    = removeEntity,
+        getEntities     = getEntities,
     }, Level)
 end
 

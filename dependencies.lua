@@ -9,8 +9,8 @@ local Cache = require 'src.util.cache'
 
 -- libraries
 Camera          = require 'lib.hump.camera'
-vector          = require 'lib.hump.vector'
 Timer           = require 'lib.hump.timer'
+vector          = require 'lib.hump.vector'
 lume            = require 'lib.lume.lume'
 
 -- scenes
@@ -24,6 +24,9 @@ Map             = require 'src.world.map'
 -- util
 Direction       = require 'src.util.direction'
 Animation       = require 'src.util.animation'
+
+-- entity manager
+EntityManager   = require 'src.entity_manager'
 
 -- entity component system
 EntityFactory   = require 'src.ecs.factory'
