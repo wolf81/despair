@@ -53,7 +53,7 @@ M.create = function(id, coord)
 
     assert(def ~= nil, 'entity not registered \'' .. id .. '\'')
 
-    local entity = Entity(def, coord) 
+    local entity = Entity(def, coord or vector(0, 0)) 
 
     if def.texture ~= nil then
         entity:addComponent(Visual(entity, def))

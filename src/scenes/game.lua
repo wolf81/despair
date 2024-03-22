@@ -8,9 +8,10 @@
 local Game = {}
 
 Game.new = function()
---    love.math.setRandomSeed(1)
+    love.math.setRandomSeed(1)
 
     local dungeon = Dungeon()
+    dungeon:enter()
 
     local update = function(self, dt) dungeon:update(dt) end
 

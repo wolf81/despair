@@ -43,7 +43,7 @@ local function newCamera(zoom)
     return camera
 end
 
-function Level.new()
+function Level.new(dungeon)
     -- generate a map
     local tiles, stair_up, stair_dn = MazeGenerator.generate(MAP_SIZE, 5)
     local map = Map(tiles, function(id) return id ~= 0 end)
