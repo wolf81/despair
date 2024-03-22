@@ -64,13 +64,13 @@ M.generate = function(size, scale)
     local grid = newGrid(size)
     carvePassage(1, 1, grid)
 
-    -- remove some dead-ends
-    -- TODO: seems a little bit buggy, e.g. removing all dead-ends does not remove all tiles
+    -- remove some dead-ends 
     for cy = 1, #grid do
         for cx = 1, #grid[cy] do
             local cv = grid[cy][cx]
 
             if cv == Dir.E or cv == Dir.W or cv == Dir.S or cv == Dir.N then
+                -- TODO: seems a little bit buggy, e.g. lrandom() > 0.0 does not remove all tiles
                 if lrandom() > 0.5 then
                     local nx, ny = cx + Dx[cv], cy + Dy[cv]
                     local nv = grid[ny][nx]
@@ -84,6 +84,9 @@ M.generate = function(size, scale)
     -- factor takes into account tile border
     local factor = scale + 1
 
+    -- keep track of empty coords, so we can add stairs later
+    local coords = {}
+
     -- create tiles array and set initial borders
     local tiles = newGrid(size * factor + 1, function(x, y) return math.huge end)
 
@@ -93,6 +96,9 @@ M.generate = function(size, scale)
             local v = grid[y][x]
 
             if v ~= 0 then
+                -- possible grid coords for stairs
+                table.insert(coords, vector(x, y))
+
                 local y1, y2 = (y - 1) * factor + 1, y * factor + 1
                 local x1, x2 = (x - 1) * factor + 1, x * factor + 1
 
@@ -136,28 +142,17 @@ M.generate = function(size, scale)
         end
     end
 
-    -- keep track of empty coords which can be used to add entities later
-    local coords = {}
-    for y = 1, #grid do
-        for x = 1, #grid[y] do
-            local v = grid[y][x]
-            if v ~= 0 then
-                local y1, y2 = (y - 1) * factor + 2, y * factor
-                local x1, x2 = (x - 1) * factor + 2, x * factor
-
-                for ty = y1, y2 do
-                    for tx = x1, x2 do
-                        table.insert(coords, vector(tx, ty))
-                    end
-                end
-
-                -- TODO: areas between grid coords can be empty if a wall was opened
-                -- add those coords as well
-            end
-        end
+    -- generate coords for stairs up & stairs down
+    local stairs = {}
+    for i = 1, 2 do
+        local coord = table.remove(coords, lrandom(#coords))
+        local x, y = coord:unpack()
+        local y1, y2 = (y - 1) * factor + 2, y * factor
+        local x1, x2 = (x - 1) * factor + 2, x * factor
+        table.insert(stairs, vector(lrandom(x1, x2), lrandom(y1, y2)))
     end
 
-    return tiles, coords
+    return tiles, unpack(stairs)
 end
 
 return M

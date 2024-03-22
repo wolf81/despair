@@ -77,13 +77,16 @@ end
 
 function Level.new()
     -- generate a map
-    local tiles, coords = MazeGenerator.generate(MAP_SIZE, 5)
+    local tiles, stair_up, stair_dn = MazeGenerator.generate(MAP_SIZE, 5)
     local map = Map(tiles, function(id) return id ~= 0 end)
     local map_w, map_h = map:getSize()
 
+    stair_up = EntityFactory.create('dun_14', stair_up)
+    stair_dn = EntityFactory.create('dun_13', stair_dn)
+
     -- generate entities
-    local stair_up, stair_dn = newStairs(coords, map_w / 2)
-    local monsters = newMonsters(coords)
+    -- local stair_up, stair_dn = newStairs(coords, map_w / 2)
+    -- local monsters = newMonsters(coords)
     local entities = lume.concat(monsters, { stair_up, stair_dn })
 
     -- add camera
