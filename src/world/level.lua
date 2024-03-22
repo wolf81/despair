@@ -9,29 +9,7 @@ local mfloor, lrandom = math.floor, love.math.random
 
 local Level = {}
 
-local function newStairs(coords, min_dist)
-    min_dist = min_dist or 2
-    print(coords, #coords)
-
-    local stair_up, stair_dn = nil, nil
-
-    while true do
-        local coord1 = table.remove(coords, lrandom(#coords))
-        local coord2 = table.remove(coords, lrandom(#coords))
-
-        if coord1:dist(coord2) > min_dist then
-            stair_up = EntityFactory.create('dun_14', coord1)
-            stair_dn = EntityFactory.create('dun_13', coord2)
-            break
-        else
-            table.insert(coords, coord1)
-            table.insert(coords, coord2)
-        end
-    end
-
-    return stair_up, stair_dn
-end
-
+--[[
 local function newMonsters(coords)
     local monsters = {}
 
@@ -43,6 +21,7 @@ local function newMonsters(coords)
 
     return monsters
 end
+--]]
 
 local function initSystems(entities)
     local inputSystem = System(Input)
@@ -81,13 +60,12 @@ function Level.new()
     local map = Map(tiles, function(id) return id ~= 0 end)
     local map_w, map_h = map:getSize()
 
+    -- generate stairs using coords from maze generator
     stair_up = EntityFactory.create('dun_14', stair_up)
     stair_dn = EntityFactory.create('dun_13', stair_dn)
 
-    -- generate entities
-    -- local stair_up, stair_dn = newStairs(coords, map_w / 2)
-    -- local monsters = newMonsters(coords)
-    local entities = lume.concat(monsters, { stair_up, stair_dn })
+    -- keep track of entities
+    local entities = { stair_up, stair_dn }
 
     -- add camera
     local camera = newCamera(4.0)
@@ -99,6 +77,7 @@ function Level.new()
         lume.each(systems, 'update', dt, self)
     end
 
+    -- use a sprite batch for world texture, to efficiently draw the same quad multiple times
     local worldSprites = love.graphics.newSpriteBatch(TextureCache:get('world'))
 
     local draw = function(self)
