@@ -25,7 +25,7 @@ function Visual.new(entity, def)
     local quads = QuadCache:get(def.texture)
     local anim = Animation.loop(def['anim'] or { 1 })
 
-    update = function(self, dt, game) 
+    update = function(self, dt, level) 
         self.anim:update(dt)
     end
 

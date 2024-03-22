@@ -37,12 +37,6 @@ local function initSystems(entity_manager)
     return { intellectSystem, inputSystem, visualSystem }
 end
 
-local function newCamera(zoom)
-    local camera = Camera(0, 0)
-    camera:zoomTo(zoom or 1.0)
-    return camera
-end
-
 local function getKey(coord)
     return coord.x .. ':' .. coord.y
 end
@@ -63,7 +57,7 @@ function Level.new(dungeon)
     entity_manager:addEntity(stair_dn)
 
     -- add camera
-    local camera = newCamera(4.0)
+    local camera = Camera(0.0, 0.0, CAMERA_ZOOM)
 
     -- setup ecs
     local systems = initSystems(entity_manager)
@@ -84,7 +78,7 @@ function Level.new(dungeon)
         entity_manager:removeEntity(entity)
     end
 
-    local updateEntity = function(self, entity)
+    local updateEntity = function(self, entity)        
         entity_manager:updateEntity(entity)
     end
 
@@ -98,7 +92,6 @@ function Level.new(dungeon)
         camera:attach()
 
         map:draw()
-
         entity_manager:draw()
 
         camera:detach()
@@ -115,7 +108,7 @@ function Level.new(dungeon)
     end
 
     local getEntities = function(self, coord)
-        return entity_info[getKey(coord)] or {}
+        return entity_manager:getEntities(coord)
     end
 
     local enter = function(self, player)
@@ -151,8 +144,9 @@ function Level.new(dungeon)
         enter           = enter,
         exit            = exit,
         addEntity       = addEntity,
-        removeEntity    = removeEntity,
         getEntities     = getEntities,
+        removeEntity    = removeEntity,
+        updateEntity    = updateEntity,
     }, Level)
 end
 

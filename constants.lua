@@ -8,3 +8,4 @@
 TILE_SIZE       = 16
 MAP_SIZE        = 4
 DUNGEON_LEVELS  = 40
+CAMERA_ZOOM     = 4

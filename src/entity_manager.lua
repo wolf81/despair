@@ -22,6 +22,7 @@ function EntityManager.new()
     --  }
     local coord_info = {}
 
+    -- add entity to manager
     local addEntity = function(self, new_entity)
         assert(coord_info[new_entity] == nil, 'entity already added to collection')
 
@@ -35,6 +36,7 @@ function EntityManager.new()
         coord_info[new_entity] = new_entity.coord
     end
 
+    -- remove entity from manager
     local removeEntity = function(self, old_entity)
         local old_coord = coord_info[old_entity]
         assert(old_coord ~= nil, 'entity is not part of collection')
@@ -53,15 +55,18 @@ function EntityManager.new()
         coord_info[old_entity] = nil
     end
 
+    -- update entity coord, should be called whenever coord has changed
     local updateEntity = function(self, old_entity)
         self:remove(old_entity)
         self:add(old_entity)
     end
 
+    -- get entities at a given coordinate
     local getEntities = function(self, coord)
         return entity_info[getKey(coord)] or {}
     end
 
+    -- iterate through all entities
     local eachEntity = function(self)
         local entity = nil
 
@@ -75,6 +80,7 @@ function EntityManager.new()
         end
     end
 
+    -- draw all entities
     local draw = function()
         for _, entities in pairs(entity_info) do
             for _, entity in ipairs(entities) do

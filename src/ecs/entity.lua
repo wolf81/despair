@@ -29,9 +29,9 @@ function Entity.new(def, coord)
         return components[T]
     end
 
-    -- update entity with delta time and game state
+    -- update entity with delta time and level state
     -- currently an empty implementation as the component system handles updating of components
-    local update = function(self, dt, game)
+    local update = function(self, dt, level)
         -- body
     end
 

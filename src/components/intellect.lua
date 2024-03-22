@@ -33,7 +33,7 @@ end
 function Intellect.new(entity, def)
     local is_busy = false
 
-    update = function(self, dt, game)
+    update = function(self, dt, level)
         if is_busy then return end
 
         local dir = getRandomDirection()
@@ -41,11 +41,11 @@ function Intellect.new(entity, def)
 
         -- ensure entity can move to next coord
         if next_coord == entity.coord then return end
-        if game:isBlocked(next_coord) then return end 
+        if level:isBlocked(next_coord) then return end 
 
         local prev_coord = entity.coord:clone()
-        game:setBlocked(prev_coord, false)
-        game:setBlocked(next_coord, true)
+        level:setBlocked(prev_coord, false)
+        level:setBlocked(next_coord, true)
 
         if self.dir ~= dir then
             updateAnimation(entity, def, dir)
