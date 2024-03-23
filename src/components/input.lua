@@ -26,28 +26,8 @@ end
 function Input.new(entity, def)
     local is_busy = false
 
-    update = function(self, dt, game)
+    update = function(self, dt, level)
         if is_busy then return end
-
-        -- try interact
-        if love.keyboard.isDown('e') then
-            local x1, x2 = entity.coord.x - 1, entity.coord.x + 1
-            local y1, y2 = entity.coord.y - 1, entity.coord.y + 1
-
-            for y = y1, y2 do
-                for x = x1, x2 do
-                    -- TODO: skip self
-                    -- maybe should have a getEntity method that accepts a filter function?
-                    local entity, interactable = game:getEntityWithComponent(x, y, Interactable)
-
-                    if interactable == nil then goto continue end
-
-                    interactable:interact(game, entity)
-
-                    ::continue::
-                end
-            end
-        end
 
         -- try move
         local dir = Direction.NONE
@@ -64,11 +44,13 @@ function Input.new(entity, def)
         local next_coord = entity.coord + dir
 
         -- ensure entity can move to next coord
-        if dir == Direction.NONE then return end
-        if game:isBlocked(next_coord) then return end 
+        if next_coord == entity.coord then return end
+        if level:isBlocked(next_coord) then return end 
 
-        local prev_coord = entity.coord:clone()
-        game:setBlocked(next_coord, true)
+        local entities = level:getEntities(next_coord, function(e) return e.type == 'npc' end)
+        if #entities > 0 then return end
+
+        Signal.emit('move', entity, next_coord)
 
         if self.dir ~= dir then
             updateAnimation(entity, def, dir)
@@ -79,19 +61,10 @@ function Input.new(entity, def)
         is_busy = true
         Timer.tween(0.2, entity, { coord = next_coord }, 'linear', function()
             entity.coord = next_coord
-            game:setBlocked(prev_coord, false)
             is_busy = false
         end)
 
-        game:moveCamera(next_coord, 0.2)
-
-        -- if we can enter room, update visuals
-        local door = game:getEntity(next_coord.x, next_coord.y, function(entity) 
-            return entity.type == 'door' 
-        end)
-        if door ~= nil then
-            game:enterRoom(door.coord.x, door.coord.y)
-        end
+        level:moveCamera(next_coord, 0.2)
     end
 
     -- set initial animation

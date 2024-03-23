@@ -5,6 +5,8 @@
 --  info+despair@wolftrail.net
 --]]
 
+local lrandom = love.math.random
+
 local Intellect = {}
 
 local function updateAnimation(entity, def, dir)
@@ -25,13 +27,13 @@ end
 
 local function getRandomDirection()
     local dirs = { Direction.N, Direction.E, Direction.S, Direction.W }
-    return dirs[math.random(#dirs)]
+    return dirs[lrandom(#dirs)]
 end
 
 function Intellect.new(entity, def)
     local is_busy = false
 
-    update = function(self, dt, game)
+    update = function(self, dt, level)
         if is_busy then return end
 
         local dir = getRandomDirection()
@@ -39,10 +41,10 @@ function Intellect.new(entity, def)
 
         -- ensure entity can move to next coord
         if next_coord == entity.coord then return end
-        if game:isBlocked(next_coord) then return end 
+        if level:isBlocked(next_coord) then return end 
+        if #level:getEntities(next_coord) > 0 then return end
 
-        local prev_coord = entity.coord:clone()
-        game:setBlocked(next_coord, true)
+        Signal.emit('move', entity, next_coord)
 
         if self.dir ~= dir then
             updateAnimation(entity, def, dir)
@@ -53,7 +55,6 @@ function Intellect.new(entity, def)
         is_busy = true
         Timer.tween(0.5, entity, { coord = next_coord }, 'linear', function() 
             entity.coord = next_coord
-            game:setBlocked(prev_coord, false)
             is_busy = false
         end)
     end

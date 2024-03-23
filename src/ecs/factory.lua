@@ -53,21 +53,16 @@ M.create = function(id, coord)
 
     assert(def ~= nil, 'entity not registered \'' .. id .. '\'')
 
-    local entity = Entity(def, coord)   
-    local visual = Visual(entity, def)
-    entity:addComponent(visual)
+    local entity = Entity(def, coord or vector(0, 0)) 
+
+    if def.texture ~= nil then
+        entity:addComponent(Visual(entity, def))
+    end  
 
     if entity.type == 'pc' then
         entity:addComponent(Input(entity, def))
     elseif entity.type == 'npc' then
         entity:addComponent(Intellect(entity, def))
-    elseif entity.type == 'door' then
-        local handler = function(entity, game, state)
-            -- TODO: maybe set passable flag on entity depending on state open or closed?
-            game:setBlocked(entity.coord, state == 'close')
-        end
-
-        entity:addComponent(Interactable(entity, def, handler))
     end
 
     return entity
