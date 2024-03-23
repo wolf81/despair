@@ -9,8 +9,9 @@ local Cache = require 'src.util.cache'
 
 -- libraries
 Camera          = require 'lib.hump.camera'
-Timer           = require 'lib.hump.timer'
+Signal          = require 'lib.hump.signal'
 vector          = require 'lib.hump.vector'
+Timer           = require 'lib.hump.timer'
 lume            = require 'lib.lume.lume'
 
 -- scenes

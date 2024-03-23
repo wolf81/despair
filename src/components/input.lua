@@ -47,9 +47,10 @@ function Input.new(entity, def)
         if next_coord == entity.coord then return end
         if level:isBlocked(next_coord) then return end 
 
-        local prev_coord = entity.coord:clone()
-        level:setBlocked(prev_coord, false)
-        level:setBlocked(next_coord, true)
+        local entities = level:getEntities(next_coord, function(e) return e.type == 'npc' end)
+        if #entities > 0 then return end
+
+        Signal.emit('move', entity, next_coord)
 
         if self.dir ~= dir then
             updateAnimation(entity, def, dir)

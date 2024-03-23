@@ -55,15 +55,20 @@ function EntityManager.new()
         coord_info[old_entity] = nil
     end
 
-    -- update entity coord, should be called whenever coord has changed
-    local updateEntity = function(self, old_entity)
-        self:remove(old_entity)
-        self:add(old_entity)
-    end
-
     -- get entities at a given coordinate
-    local getEntities = function(self, coord)
-        return entity_info[getKey(coord)] or {}
+    local getEntities = function(self, coord, fn)
+        fn = fn or function(entity) return true end
+
+        local entities = entity_info[getKey(coord)] or {}
+        local filtered = {}
+
+        for _, entity in ipairs(entities) do
+            if fn(entity) then
+                table.insert(filtered, entity)
+            end
+        end
+
+        return filtered
     end
 
     -- iterate through all entities
@@ -85,14 +90,47 @@ function EntityManager.new()
         end
     end
 
+    local moveHandler = function(old_entity, next_coord)
+        assert(coord_info[old_entity] ~= nil, 'entity is not part of collection')
+
+        local old_coord = coord_info[old_entity]
+
+        local key = getKey(old_coord)
+        local entities = entity_info[key]
+        for i, entity in ipairs(entities) do
+            if entity == old_entity then 
+                table.remove(entities, i) 
+                break
+            end
+        end
+
+        key = getKey(next_coord)
+        entities = entity_info[key] or {}
+        table.insert(entities, old_entity)
+        entity_info[key] = entities
+
+        coord_info[old_entity] = next_coord
+    end
+
+    -- TODO: better naming
+    local register = function(self)
+        Signal.register('move', moveHandler)
+    end
+
+    -- TODO: better naming
+    local unregister = function(self)
+        Signal.unregister('move', moveHandler)
+    end
+
     return setmetatable({
         -- methods
         addEntity       = addEntity,
         removeEntity    = removeEntity,
-        updateEntity    = updateEntity,
         getEntities     = getEntities,
         eachEntity      = eachEntity,
         draw            = draw,
+        register        = register,
+        unregister      = unregister,
     }, EntityManager)
 end
 

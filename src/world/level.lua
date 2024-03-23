@@ -20,7 +20,6 @@ local function newMonsters()
 
     return monsters
 end
---]]
 
 local function initSystems(entity_manager)
     local inputSystem = System(Input)
@@ -110,8 +109,8 @@ function Level.new(dungeon)
         map:setBlocked(coord.x, coord.y, flag)
     end
 
-    local getEntities = function(self, coord)
-        return entity_manager:getEntities(coord)
+    local getEntities = function(self, coord, fn)
+        return entity_manager:getEntities(coord, fn)
     end
 
     local enter = function(self, player)
@@ -121,10 +120,14 @@ function Level.new(dungeon)
 
         -- move player to stairs and focus camera on player
         self:moveCamera(player.coord, 0)
+
+        entity_manager:register()
     end
 
     local exit = function(self, player)
         self:removeEntity(player)
+
+        entity_manager:unregister()
     end
 
     -- add offset of half tile, as we want the camera to focus on middle of tile coord

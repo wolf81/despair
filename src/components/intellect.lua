@@ -42,10 +42,9 @@ function Intellect.new(entity, def)
         -- ensure entity can move to next coord
         if next_coord == entity.coord then return end
         if level:isBlocked(next_coord) then return end 
+        if #level:getEntities(next_coord) > 0 then return end
 
-        local prev_coord = entity.coord:clone()
-        level:setBlocked(prev_coord, false)
-        level:setBlocked(next_coord, true)
+        Signal.emit('move', entity, next_coord)
 
         if self.dir ~= dir then
             updateAnimation(entity, def, dir)
