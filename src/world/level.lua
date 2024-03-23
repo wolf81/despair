@@ -9,13 +9,12 @@ local mfloor, lrandom = math.floor, love.math.random
 
 local Level = {}
 
---[[
-local function newMonsters(coords)
+local function newMonsters()
     local monsters = {}
 
-    for i = 1, mfloor(math.sqrt(#coords / 2)) do
-        local type = i % 2 == 0 and 'bat' or 'spider'
-        local monster = EntityFactory.create(type, table.remove(coords, lrandom(#coords)))
+    for x = 2, 23, 3  do
+        local type = x % 2 == 0 and 'bat' or 'spider'
+        local monster = EntityFactory.create(type, vector(x, 8))
         table.insert(monsters, monster)
     end
 
@@ -55,6 +54,10 @@ function Level.new(dungeon)
 
     entity_manager:addEntity(stair_up)
     entity_manager:addEntity(stair_dn)
+
+    for _, monster in ipairs(newMonsters()) do
+        entity_manager:addEntity(monster)
+    end
 
     -- add camera
     local camera = Camera(0.0, 0.0, CAMERA_ZOOM)

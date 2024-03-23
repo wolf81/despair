@@ -71,11 +71,7 @@ function EntityManager.new()
         local entity = nil
 
         return function()
-            entity, _ = next(coord_info, nil)
-            while entity ~= nil do 
-                entity, _ = next(coord_info, entity)
-            end
-
+            entity, _ = next(coord_info, entity)
             return entity
         end
     end
