@@ -51,7 +51,8 @@ function Level.new(dungeon)
 
     local entities = { stair_up, stair_dn }
 
-    local active_idx = 0
+    -- handle game turns
+    local turn = Turn(self)
 
     for _, monster in ipairs(newMonsters()) do
         table.insert(entities, monster)
@@ -63,6 +64,17 @@ function Level.new(dungeon)
 
     -- setup ecs
     local systems = initSystems(entities)
+
+    local cam_offset = TILE_SIZE / 2
+    local moveHandler = function(entity, coord, duration)
+        if entity.type ~= 'pc' then return end
+
+        local pos = coord * TILE_SIZE
+        Timer.tween(duration, camera, { 
+            x = mfloor(pos.x + cam_offset), 
+            y = mfloor(pos.y + cam_offset),
+        })
+    end
 
     local addEntity = function(self, entity)
         table.insert(entities, entity)
@@ -87,49 +99,25 @@ function Level.new(dungeon)
         end
     end
 
-    local actions, actors = {}, {}
-
     local update = function(self, dt)
         for _, system in ipairs(systems) do
             system:update(dt, self)
         end
 
-        if #actors == 0 then
+        -- create new turn if needed
+        if turn:isFinished() then
+            local actors = {} 
+            
             for _, entity in ipairs(entities) do
                 if entity:getComponent(Control) then
                     table.insert(actors, entity)
                 end
             end
 
-            active_idx = #actors
+            turn = Turn(self, actors)
         end
 
-        while active_idx > 0 do
-            local actor = actors[active_idx]
-            local control = actor:getComponent(Control)
-            local action = control:getAction(self)
-            if action == nil then
-                break
-            else
-                table.insert(actions, action)
-                active_idx = active_idx - 1
-            end
-
-            ::continue::
-        end
-
-        if #actors == #actions then
-            local duration = 0.2
-
-            for i = #actions, 1, -1 do
-                actions[i]:execute(self, duration)
-                table.remove(actions, i)
-            end
-
-            Timer.after(duration, function() 
-                actors = {}                 
-            end)
-        end
+        turn:update(dt)
     end
 
     local draw = function(self)
@@ -168,17 +156,6 @@ function Level.new(dungeon)
         return filtered
     end
 
-    local cam_offset = TILE_SIZE / 2
-    local moveHandler = function(entity, coord, duration)
-        print(entity, coord, duration)
-        if entity.type == 'pc' then
-            local pos = coord * TILE_SIZE
-            Timer.tween(duration, camera, { 
-                x = mfloor(pos.x + cam_offset), 
-                y = mfloor(pos.y + cam_offset),
-            })
-        end
-    end
     local enter = function(self, player)
         player.coord = stair_up.coord:clone()
 
@@ -188,7 +165,8 @@ function Level.new(dungeon)
 
         Signal.register('move', moveHandler)
 
-        self:moveCamera(player.coord, 0)
+        -- focus on player
+        moveHandler(player, player.coord, 0)
     end
 
     local exit = function(self, player)
@@ -197,22 +175,12 @@ function Level.new(dungeon)
         Signal.unregister('move', moveHandler)
     end
 
-    -- add offset of half tile, as we want the camera to focus on middle of tile coord
-    local moveCamera = function(self, coord, duration)
-        local pos = coord * TILE_SIZE
-        Timer.tween(duration, camera, { 
-            x = mfloor(pos.x + cam_offset), 
-            y = mfloor(pos.y + cam_offset),
-        })
-    end
-
     return setmetatable({
         -- methods
         update          = update,
         draw            = draw,
         isBlocked       = isBlocked,
         setBlocked      = setBlocked,
-        moveCamera      = moveCamera,
         enter           = enter,
         exit            = exit,
         addEntity       = addEntity,

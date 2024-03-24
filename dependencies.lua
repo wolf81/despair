@@ -22,6 +22,8 @@ Dungeon         = require 'src.world.dungeon'
 Level           = require 'src.world.level'
 Map             = require 'src.world.map'
 
+Turn            = require 'src.turn'
+
 -- util
 Direction       = require 'src.util.direction'
 Animation       = require 'src.util.animation'
