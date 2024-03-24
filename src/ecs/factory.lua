@@ -60,8 +60,10 @@ M.create = function(id, coord)
     end  
 
     if entity.type == 'pc' then
+        entity.z_index = 2
         entity:addComponent(Input(entity, def))
     elseif entity.type == 'npc' then
+        entity.z_index = 1
         entity:addComponent(Intellect(entity, def))
     end
 

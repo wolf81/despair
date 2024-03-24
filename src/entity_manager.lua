@@ -5,13 +5,16 @@ local function getKey(coord)
 end
 
 function EntityManager.new()
-    -- store entity info per coord as such: 
-    --  { 
-    --      ['5:7'] = { player     }, 
-    --      ['1:4'] = { bat, eagle }, 
-    --      ...,
-    --  } 
-    local entity_info = {}
+    -- store entity info per layer as such: 
+    --  {
+    --      [1] = {
+    --          ['5:7'] = { player     }, 
+    --          ['1:4'] = { bat, eagle }, 
+    --          ...,
+    --      },
+    --      [2] = { ... },
+    --  }
+    local layer_info = {}
 
     -- store coord info per entity as such:
     --  {
@@ -26,11 +29,22 @@ function EntityManager.new()
     local addEntity = function(self, new_entity)
         assert(coord_info[new_entity] == nil, 'entity already added to collection')
 
+        -- add layer if needed
+        local entity_info = layer_info[new_entity.z_index]
+        if not entity_info then
+            entity_info = {}
+            table.insert(layer_info, new_entity.z_index, entity_info)
+        end
+
         -- add to entity info
         local key = getKey(new_entity.coord)
+        local entities = entity_info[key]
+        if not entities then
+            entities = {}
+            entity_info[key] = entities
+        end
         local entities = entity_info[key] or {}
         table.insert(entities, new_entity)
-        entity_info[key] = entities
 
         -- add to coord info
         coord_info[new_entity] = new_entity.coord
@@ -59,14 +73,18 @@ function EntityManager.new()
     local getEntities = function(self, coord, fn)
         fn = fn or function(entity) return true end
 
-        local entities = entity_info[getKey(coord)] or {}
         local filtered = {}
 
-        for _, entity in ipairs(entities) do
-            if fn(entity) then
-                table.insert(filtered, entity)
+        for _, entity_info in pairs(layer_info) do
+            local entities = entity_info[getKey(coord)] or {}
+
+            for _, entity in ipairs(entities) do
+                if fn(entity) then
+                    table.insert(filtered, entity)
+                end
             end
         end
+
 
         return filtered
     end
@@ -83,9 +101,11 @@ function EntityManager.new()
 
     -- draw all entities
     local draw = function()
-        for _, entities in pairs(entity_info) do
-            for _, entity in ipairs(entities) do
-                entity:draw()
+        for _, entity_info in pairs(layer_info) do
+            for _, entities in pairs(entity_info) do
+                for _, entity in ipairs(entities) do
+                    entity:draw()
+                end
             end
         end
     end
@@ -93,6 +113,7 @@ function EntityManager.new()
     local moveHandler = function(old_entity, next_coord)
         assert(coord_info[old_entity] ~= nil, 'entity is not part of collection')
 
+        local entity_info = layer_info[old_entity.z_index]
         local old_coord = coord_info[old_entity]
 
         local key = getKey(old_coord)
@@ -112,25 +133,23 @@ function EntityManager.new()
         coord_info[old_entity] = next_coord
     end
 
-    -- TODO: better naming
-    local register = function(self)
+    local registerHandlers = function(self)
         Signal.register('move', moveHandler)
     end
 
-    -- TODO: better naming
-    local unregister = function(self)
+    local unregisterHandlers = function(self)
         Signal.unregister('move', moveHandler)
     end
 
     return setmetatable({
         -- methods
-        addEntity       = addEntity,
-        removeEntity    = removeEntity,
-        getEntities     = getEntities,
-        eachEntity      = eachEntity,
-        draw            = draw,
-        register        = register,
-        unregister      = unregister,
+        addEntity           = addEntity,
+        removeEntity        = removeEntity,
+        getEntities         = getEntities,
+        eachEntity          = eachEntity,
+        draw                = draw,
+        registerHandlers    = registerHandlers,
+        unregisterHandlers  = unregisterHandlers,
     }, EntityManager)
 end
 

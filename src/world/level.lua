@@ -121,13 +121,13 @@ function Level.new(dungeon)
         -- move player to stairs and focus camera on player
         self:moveCamera(player.coord, 0)
 
-        entity_manager:register()
+        entity_manager:registerHandlers()
     end
 
     local exit = function(self, player)
         self:removeEntity(player)
 
-        entity_manager:unregister()
+        entity_manager:unregisterHandlers()
     end
 
     -- add offset of half tile, as we want the camera to focus on middle of tile coord

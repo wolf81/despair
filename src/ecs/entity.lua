@@ -47,6 +47,7 @@ function Entity.new(def, coord)
         coord           = coord,
         type            = def.type,
         flags           = 0,
+        z_index         = 1,
         -- methods
         getComponent    = getComponent,
         removeComponent = removeComponent,
