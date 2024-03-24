@@ -26,8 +26,12 @@ Map             = require 'src.world.map'
 Direction       = require 'src.util.direction'
 Animation       = require 'src.util.animation'
 
--- entity manager
-EntityManager   = require 'src.entity_manager'
+-- actions
+Move            = require 'src.actions.move'
+
+-- input types
+Keyboard        = require 'src.input_types.keyboard'
+Cpu             = require 'src.input_types.cpu'
 
 -- entity component system
 EntityFactory   = require 'src.ecs.factory'
@@ -35,9 +39,8 @@ Entity          = require 'src.ecs.entity'
 System          = require 'src.ecs.system'
 
 -- components
-Intellect       = require 'src.components.intellect'
 Visual          = require 'src.components.visual'
-Input           = require 'src.components.input'
+Control         = require 'src.components.control'
 
 -- caches
 TextureCache    = Cache()

@@ -60,11 +60,13 @@ M.create = function(id, coord)
     end  
 
     if entity.type == 'pc' then
-        entity.z_index = 2
-        entity:addComponent(Input(entity, def))
+        entity.z_index = 100
+        -- entity:addComponent(Input(entity, def))
+        entity:addComponent(Control(entity, def, Keyboard(entity)))
     elseif entity.type == 'npc' then
         entity.z_index = 1
-        entity:addComponent(Intellect(entity, def))
+        -- entity:addComponent(Intellect(entity, def))
+        entity:addComponent(Control(entity, def, Cpu(entity)))
     end
 
     return entity
