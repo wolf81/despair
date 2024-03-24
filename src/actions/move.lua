@@ -12,7 +12,7 @@ Move.new = function(level, entity, coord)
         did_execute = true
 
         Signal.emit('move', entity, coord, duration)
-
+print('exec', entity.type)
         Timer.tween(duration, entity, { coord = coord }, 'linear', function() 
             entity.coord = coord
         end)
