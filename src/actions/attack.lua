@@ -1,9 +1,9 @@
 local Attack = {}
 
-function Attack.new(entity, target)
+function Attack.new(level, entity, target)
     local did_execute = false
 
-    local execute = function(self, level, duration)
+    local execute = function(self, duration)
         if did_execute then return end
 
         did_execute = true
@@ -11,6 +11,7 @@ function Attack.new(entity, target)
         local health = target:getComponent(Health)
         local damage = math.random(15, 25)
         health:remove(damage)
+        print('is alive?', health:isAlive())
 
         Signal.emit('attack', entity, target, damage)
     end

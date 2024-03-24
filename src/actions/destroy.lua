@@ -1,9 +1,9 @@
 local Destroy = {}
 
-Destroy.new = function(entity)
+Destroy.new = function(level, entity)
     local did_execute = false
 
-    local execute = function(self, level, duration)
+    local execute = function(self, duration)
         if did_execute then return end
 
         did_execute = true

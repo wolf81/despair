@@ -1,9 +1,12 @@
 local Move = {}
 
-Move.new = function(entity, coord)
+Move.new = function(level, entity, coord)
     local did_execute = false
 
-    local execute = function(self, level, duration)
+    level:setBlocked(entity.coord, false)
+    level:setBlocked(coord, true)
+
+    local execute = function(self, duration)
         if did_execute then return end
 
         did_execute = true

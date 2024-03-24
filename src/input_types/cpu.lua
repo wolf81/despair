@@ -21,7 +21,7 @@ Cpu.new = function(entity)
         level:setBlocked(entity.coord, false)
         level:setBlocked(next_coord, true)
 
-        return Move(entity, next_coord)
+        return Move(level, entity, next_coord)
     end
 
     return setmetatable({

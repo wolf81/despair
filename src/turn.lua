@@ -28,7 +28,7 @@ Turn.new = function(level, actors)
             local duration = 0.2
 
             for i = #actions, 1, -1 do
-                actions[i]:execute(level, duration)
+                actions[i]:execute(duration)
                 table.remove(actions, i)
             end
 

@@ -24,7 +24,7 @@ Control.new = function(entity, def, input_type)
     local getAction = function(self, level) 
         local health = entity:getComponent(Health)
         if not health:isAlive() then 
-            return Destroy(entity) 
+            return Destroy(level, entity) 
         end
 
         return input_type:getAction(level)

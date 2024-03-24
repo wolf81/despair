@@ -13,7 +13,7 @@ Keyboard.new = function(entity)
             direction = Direction.S
         elseif love.keyboard.isDown('space') then
             -- TODO: clean-up
-            return Move(entity, entity.coord)
+            return Move(level, entity, entity.coord)
         end
 
         local next_coord = entity.coord + direction
@@ -24,15 +24,13 @@ Keyboard.new = function(entity)
             local entities = level:getEntities(next_coord, function(e) return e.type == 'npc' end)
             if #entities > 0 then
                 local target = entities[1]
-                return Attack(entity, target)
+                return Attack(level, entity, target)
             end
 
             return nil 
         end 
 
-        level:setBlocked(entity.coord, false)
-        level:setBlocked(next_coord, true)
-        return Move(entity, next_coord)
+        return Move(level, entity, next_coord)
     end
 
     return setmetatable({
