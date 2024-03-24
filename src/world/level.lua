@@ -168,6 +168,17 @@ function Level.new(dungeon)
         return filtered
     end
 
+    local cam_offset = TILE_SIZE / 2
+    local moveHandler = function(entity, coord, duration)
+        print(entity, coord, duration)
+        if entity.type == 'pc' then
+            local pos = coord * TILE_SIZE
+            Timer.tween(duration, camera, { 
+                x = mfloor(pos.x + cam_offset), 
+                y = mfloor(pos.y + cam_offset),
+            })
+        end
+    end
     local enter = function(self, player)
         player.coord = stair_up.coord:clone()
 
@@ -175,16 +186,18 @@ function Level.new(dungeon)
 
         self:setBlocked(player.coord, true)
 
-        -- move player to stairs and focus camera on player
+        Signal.register('move', moveHandler)
+
         self:moveCamera(player.coord, 0)
     end
 
     local exit = function(self, player)
         self:removeEntity(player)
+
+        Signal.unregister('move', moveHandler)
     end
 
     -- add offset of half tile, as we want the camera to focus on middle of tile coord
-    local cam_offset = TILE_SIZE / 2
     local moveCamera = function(self, coord, duration)
         local pos = coord * TILE_SIZE
         Timer.tween(duration, camera, { 

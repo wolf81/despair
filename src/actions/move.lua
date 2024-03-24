@@ -8,14 +8,11 @@ Move.new = function(entity, coord)
 
         did_execute = true
 
+        Signal.emit('move', entity, coord, duration)
+
         Timer.tween(duration, entity, { coord = coord }, 'linear', function() 
             entity.coord = coord
         end)
-
-        -- TODO: use Signal here instead
-        if entity.type == 'pc' then
-            level:moveCamera(coord, duration)
-        end
     end
 
     return setmetatable({
