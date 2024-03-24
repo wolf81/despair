@@ -2,6 +2,7 @@ local Turn = {}
 
 Turn.new = function(level, actors)
     actors = actors or {}
+
     local actions, active_idx, is_finished = {}, #actors, #actors == 0
 
     update = function(self, dt)
@@ -9,7 +10,7 @@ Turn.new = function(level, actors)
 
         -- get actions for each actor, in order
         while active_idx > 0 do
-            local actor = actors[active_idx]
+            local actor = actors[active_idx]            
             local control = actor:getComponent(Control)
             local action = control:getAction(level)
             if action == nil then

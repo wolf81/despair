@@ -8,7 +8,7 @@ local function getRandomDirection()
 end
 
 Cpu.new = function(entity)
-    local getInput = function(self, level) 
+    local getAction = function(self, level) 
         local direction = getRandomDirection()
 
         local next_coord = entity.coord + direction
@@ -18,12 +18,15 @@ Cpu.new = function(entity)
         if level:isBlocked(next_coord) then return nil end 
         if #level:getEntities(next_coord) > 0 then return nil end
 
-        return direction
+        level:setBlocked(entity.coord, false)
+        level:setBlocked(next_coord, true)
+
+        return Move(entity, next_coord)
     end
 
     return setmetatable({
         -- methods
-        getInput = getInput,
+        getAction = getAction,
     }, Cpu)
 end
 

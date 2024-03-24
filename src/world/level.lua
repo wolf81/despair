@@ -65,15 +65,22 @@ function Level.new(dungeon)
     -- setup ecs
     local systems = initSystems(entities)
 
-    local cam_offset = TILE_SIZE / 2
-    local moveHandler = function(entity, coord, duration)
+    local onMove = function(self, entity, coord, duration)
         if entity.type ~= 'pc' then return end
 
-        local pos = coord * TILE_SIZE
-        Timer.tween(duration, camera, { 
-            x = mfloor(pos.x + cam_offset), 
-            y = mfloor(pos.y + cam_offset),
-        })
+        self:moveCamera(coord, duration)
+    end
+
+    local onDestroy = function(self, entity, duration)
+        self:setBlocked(entity.coord, false)
+        Timer.after(duration, function() 
+            print('mark for removal')
+            entity.remove = true
+        end)
+    end
+
+    local onAttack = function(self, entity, target, hitpoints)
+        print(entity.type .. ' hit ' .. target.type .. ' for ' .. hitpoints .. ' hitpoints')
     end
 
     local addEntity = function(self, entity)
@@ -87,7 +94,8 @@ function Level.new(dungeon)
         end
     end
 
-    local removeEntity = function(self, entity)
+    local removeEntity = function(self, entity)    
+        print('remove', entity.type)    
         for i, e in ipairs(entities) do
             if e == entity then
                 table.remove(entities, i)
@@ -100,6 +108,13 @@ function Level.new(dungeon)
     end
 
     local update = function(self, dt)
+        for i = #entities, 1, -1 do
+            local entity = entities[i]
+            if entity.remove then
+                self:removeEntity(entity)
+            end
+        end
+
         for _, system in ipairs(systems) do
             system:update(dt, self)
         end
@@ -156,6 +171,8 @@ function Level.new(dungeon)
         return filtered
     end
 
+    local handlers = {}
+
     local enter = function(self, player)
         player.coord = stair_up.coord:clone()
 
@@ -163,16 +180,35 @@ function Level.new(dungeon)
 
         self:setBlocked(player.coord, true)
 
-        Signal.register('move', moveHandler)
+        handlers = {
+            ['move'] = function(...) onMove(self, ...) end,
+            ['attack'] = function(...) onAttack(self, ...) end,
+            ['destroy'] = function(...) onDestroy(self, ...) end,
+        }
+
+        for key, handler in pairs(handlers) do
+            Signal.register(key, handler)
+        end
 
         -- focus on player
-        moveHandler(player, player.coord, 0)
+        onMove(self, player, player.coord, 0)
     end
 
     local exit = function(self, player)
         self:removeEntity(player)
 
-        Signal.unregister('move', moveHandler)
+        for key, handler in pairs(handlers) do
+            Signal.unregister(key, handler)
+        end
+    end
+
+    local cam_offset = TILE_SIZE / 2
+    local moveCamera = function(self, coord, duration)
+        local pos = coord * TILE_SIZE
+        Timer.tween(duration, camera, { 
+            x = mfloor(pos.x + cam_offset), 
+            y = mfloor(pos.y + cam_offset),
+        })
     end
 
     return setmetatable({
@@ -186,6 +222,7 @@ function Level.new(dungeon)
         addEntity       = addEntity,
         getEntities     = getEntities,
         removeEntity    = removeEntity,
+        moveCamera      = moveCamera,
     }, Level)
 end
 

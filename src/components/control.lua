@@ -19,20 +19,15 @@ end
 Control.new = function(entity, def, input_type)
     assert(input_type ~= nil, 'missing parameter "input_type"')
     
-    local update = function(self, dt)
-        -- body
-    end
+    local update = function(self, dt) end
 
     local getAction = function(self, level) 
-        local direction = input_type:getInput(level)
-        if direction ~= nil then
-            level:setBlocked(entity.coord, false)
-            local next_coord = entity.coord + direction
-            level:setBlocked(next_coord, true)
-            return Move(entity, next_coord)
+        local health = entity:getComponent(Health)
+        if not health:isAlive() then 
+            return Destroy(entity) 
         end
 
-        return nil
+        return input_type:getAction(level)
     end
 
     -- set initial animation

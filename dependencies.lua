@@ -30,6 +30,8 @@ Animation       = require 'src.util.animation'
 
 -- actions
 Move            = require 'src.actions.move'
+Attack          = require 'src.actions.attack'
+Destroy         = require 'src.actions.destroy'
 
 -- input types
 Keyboard        = require 'src.input_types.keyboard'
@@ -43,6 +45,7 @@ System          = require 'src.ecs.system'
 -- components
 Visual          = require 'src.components.visual'
 Control         = require 'src.components.control'
+Health          = require 'src.components.health'
 
 -- caches
 TextureCache    = Cache()

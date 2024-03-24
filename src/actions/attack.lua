@@ -1,6 +1,6 @@
 local Attack = {}
 
-function Attack.new()
+function Attack.new(entity, target)
     local did_execute = false
 
     local execute = function(self, level, duration)
@@ -8,9 +8,11 @@ function Attack.new()
 
         did_execute = true
 
-        -- Timer.tween(duration, entity, { coord = coord }, 'linear', function() 
-        --     entity.coord = coord
-        -- end)
+        local health = target:getComponent(Health)
+        local damage = math.random(15, 25)
+        health:remove(damage)
+
+        Signal.emit('attack', entity, target, damage)
     end
 
     return setmetatable({
