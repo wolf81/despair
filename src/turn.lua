@@ -1,12 +1,14 @@
 local Turn = {}
 
-Turn.new = function(level, actors)
+Turn.new = function(level, actors, duration)
     actors = actors or {}
 
-    local active_idx, is_finished = #actors, false
+    local time, active_idx, is_finished = 0, #actors, false
 
-    update = function(self, dt)
+    update = function(self, dt)        
         if is_finished then return end
+
+        time = time + dt
 
         -- get actions for each actor, in order
         while active_idx > 0 do
@@ -14,11 +16,18 @@ Turn.new = function(level, actors)
             local control = actor:getComponent(Control)
             local action = control:getAction(level)
             if action == nil then
-                break
+                if time > duration then
+                    goto continue 
+                else
+                    break                    
+                end
             else
                 action:execute(TURN_DURATION)
-                active_idx = active_idx - 1
             end
+
+            ::continue::
+
+            active_idx = active_idx - 1
         end
 
         if active_idx == 0 then

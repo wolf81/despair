@@ -3,16 +3,16 @@ local Move = {}
 Move.new = function(level, entity, coord)
     local did_execute = false
 
-    level:setBlocked(entity.coord, false)
-    level:setBlocked(coord, true)
-
     local execute = function(self, duration)
         if did_execute then return end
 
         did_execute = true
 
+        level:setBlocked(entity.coord, false)
+        level:setBlocked(coord, true)
+
         Signal.emit('move', entity, coord, duration)
-print('exec', entity.type)
+
         Timer.tween(duration, entity, { coord = coord }, 'linear', function() 
             entity.coord = coord
         end)

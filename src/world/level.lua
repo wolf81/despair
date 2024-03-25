@@ -72,9 +72,7 @@ function Level.new(dungeon)
     end
 
     local onDestroy = function(self, entity, duration)
-        self:setBlocked(entity.coord, false)
         Timer.after(duration, function() 
-            print('mark for removal')
             entity.remove = true
         end)
     end
@@ -129,7 +127,7 @@ function Level.new(dungeon)
                 end
             end
 
-            turn = Turn(self, actors)
+            turn = Turn(self, actors, TURN_DELAY)
         end
 
         turn:update(dt)

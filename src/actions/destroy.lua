@@ -8,6 +8,8 @@ Destroy.new = function(level, entity)
 
         did_execute = true
 
+        level:setBlocked(entity.coord, false)
+
         Signal.emit('destroy', entity, duration)
 
         -- TODO: fade out
