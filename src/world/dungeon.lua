@@ -18,7 +18,7 @@ Dungeon.new = function()
     local enter = function(self)
         levels = { Level(self) }
         level_idx = 1
-        levels[level_idx]:enter(player)
+        levels[level_idx]:enter(player, Stair.UP)
     end
 
     local nextLevel = function(self)
@@ -29,33 +29,44 @@ Dungeon.new = function()
         -- exit current level
         levels[level_idx]:exit(player)
 
-        -- proceed to next level, generating a new level if needed
-        level_idx = level_idx + 1
-        if level_idx > #levels then
-            local level = Level(self)
-            table.insert(levels, level)
-        end
-        levels[level_idx]:enter(player)
+        -- FIXME: seems we need to add a delay, due to some global camera state causing camera to 
+        -- target wrong area in map
+        Timer.after(0.5, function() 
+            -- proceed to next level, generating a new level if needed
+            level_idx = level_idx + 1
+            if level_idx > #levels then
+                local level = Level(self)
+                table.insert(levels, level)
+            end
+            levels[level_idx]:enter(player, Stair.UP)
+        end)
     end
 
     local prevLevel = function(self)
         if level_idx == 1 then
             print('A magical force is preventing your exit. Maybe you need to find the Orb of Cerbos to escape?')
+            return
         end
 
         -- exit current level
         levels[level_idx]:exit(player)
 
-        -- proceed to previous level
-        level_idx = level_idx - 1
-        levels[level_idx]:enter(player)
+        -- FIXME: seems we need to add a delay, due to some global camera state causing camera to 
+        -- target wrong area in map
+        Timer.after(0.5, function() 
+            -- proceed to previous level
+            level_idx = level_idx - 1
+            levels[level_idx]:enter(player, Stair.DOWN)
+        end)
     end
 
     return setmetatable({
         -- methods
-        enter   = enter,
-        update  = update,
-        draw    = draw,
+        enter       = enter,
+        update      = update,
+        draw        = draw,
+        nextLevel   = nextLevel,
+        prevLevel   = prevLevel,
     }, Dungeon)
 end
 

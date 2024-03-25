@@ -5,6 +5,13 @@ Turn.new = function(level, actors, duration)
 
     local time, active_idx, is_finished = 0, #actors, false
 
+    for i, actor in ipairs(actors) do
+        if actor.type == 'pc' then
+            actors[#actors], actors[i] = actors[i], actors[#actors]
+            break        
+        end
+    end
+
     update = function(self, dt)        
         if is_finished then return end
 

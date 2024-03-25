@@ -37,7 +37,7 @@ end
 function love.load(args)
     preload()
 
-    success = love.window.setMode(WINDOW_W, WINDOW_H)
+    success = love.window.setMode(WINDOW_W * SCALE, WINDOW_H * SCALE)
 
     game = Game()
 end
