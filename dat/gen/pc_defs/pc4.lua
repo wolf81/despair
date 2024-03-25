@@ -13,9 +13,9 @@ return {
 	flags = { '' },
 	equip = { 'mstar_1', 'chain_0' },
 	texture = 'uf_heroes',
-	anim_e = { 1, 2, 3, 4 },
-	anim_s = { 1, 2, 3, 4 },
-	anim_n = { 1, 2, 3, 4 },
-	anim_w = { 1, 2, 3, 4 },
+	anim_e = { 17, 18, 19, 20 },
+	anim_s = { 17, 18, 19, 20 },
+	anim_n = { 17, 18, 19, 20 },
+	anim_w = { 17, 18, 19, 20 },
 	anim_time = 0,
 }
