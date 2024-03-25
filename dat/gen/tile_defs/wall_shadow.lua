@@ -2,7 +2,7 @@ return {
 	id = 'wall_shadow',
 	type = 'tile',
 	kind = 'wall_shadow',
-	texture = 'world',
+	texture = 'uf_terrain',
 	theme = { 'dungeon', 'cavern' },
 	weight = 1,
 	anim = { 176 },

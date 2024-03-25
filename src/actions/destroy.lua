@@ -1,3 +1,10 @@
+--[[
+--  Dungeon of Despair
+--
+--  Author: Wolfgang Schreurs
+--  info+despair@wolftrail.net
+--]]
+
 local Destroy = {}
 
 Destroy.new = function(level, entity)
@@ -7,6 +14,8 @@ Destroy.new = function(level, entity)
         if did_execute then return end
 
         did_execute = true
+
+        level:setBlocked(entity.coord, false)
 
         Signal.emit('destroy', entity, duration)
 

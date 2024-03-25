@@ -2,7 +2,7 @@ return {
 	id = 'dun_15',
 	type = 'tile',
 	kind = 'floor',
-	texture = 'world',
+	texture = 'uf_terrain',
 	theme = { 'dungeon' },
 	weight = 50,
 	anim = { 65 },

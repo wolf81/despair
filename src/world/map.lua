@@ -33,25 +33,25 @@ function Map.new(tiles, fn)
     end
 
     -- use a sprite batch for world texture, to efficiently draw the same quad multiple times
-    local worldSprites = love.graphics.newSpriteBatch(TextureCache:get('world'))
+    local worldSprites = love.graphics.newSpriteBatch(TextureCache:get('uf_terrain'))
 
     local draw = function(self, show_grid)
         worldSprites:clear()
 
-        local texture = TextureCache:get('world')
-        local quads = QuadCache:get('world')
+        local texture = TextureCache:get('uf_terrain')
+        local quads = QuadCache:get('uf_terrain')
         for y = 1, self.height do
             for x = 1, self.width do
                 local tile_id = tiles[y][x]
 
                 if tile_id == math.huge then goto continue end
 
-                local quad_idx = 73
+                local quad_idx = 22
 
                 if tile_id ~= 0 then
-                    quad_idx = 1
+                    quad_idx = 342
                     if y < height and tiles[y + 1][x] == 1 then
-                        quad_idx = 8
+                        quad_idx = 322
                     end
                 end
 

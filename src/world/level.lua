@@ -9,13 +9,18 @@ local mfloor, lrandom = math.floor, love.math.random
 
 local Level = {}
 
-local function newMonsters()
+local function newMonsters(map)
     local monsters = {}
 
-    for x = 2, 23, 3  do
-        local type = x % 2 == 0 and 'bat' or 'spider'
-        local monster = EntityFactory.create(type, vector(x, 8))
-        table.insert(monsters, monster)
+    while #monsters < 10 do
+        local x = lrandom(map.width)
+        local y = lrandom(map.height)
+
+        if not map:isBlocked(x, y) then
+            local type = #monsters % 2 == 0 and 'bat' or 'spider'
+            local monster = EntityFactory.create(type, vector(x, y))
+            table.insert(monsters, monster)
+        end        
     end
 
     return monsters
@@ -54,13 +59,13 @@ function Level.new(dungeon)
     -- handle game turns
     local turn = Turn(self)
 
-    for _, monster in ipairs(newMonsters()) do
+    for _, monster in ipairs(newMonsters(map)) do
         table.insert(entities, monster)
         map:setBlocked(monster.coord.x, monster.coord.y, true)
     end
 
     -- add camera
-    local camera = Camera(0.0, 0.0, CAMERA_ZOOM)
+    local camera = Camera(0.0, 0.0, SCALE)
 
     -- setup ecs
     local systems = initSystems(entities)
@@ -69,12 +74,20 @@ function Level.new(dungeon)
         if entity.type ~= 'pc' then return end
 
         self:moveCamera(coord, duration)
+
+        if entity.coord ~= coord then 
+            if coord == stair_up.coord then
+                self:setBlocked(coord, false)
+                dungeon:prevLevel()
+            elseif coord == stair_dn.coord then
+                self:setBlocked(coord, false)
+                dungeon:nextLevel()
+            end
+        end
     end
 
     local onDestroy = function(self, entity, duration)
-        self:setBlocked(entity.coord, false)
         Timer.after(duration, function() 
-            print('mark for removal')
             entity.remove = true
         end)
     end
@@ -94,8 +107,7 @@ function Level.new(dungeon)
         end
     end
 
-    local removeEntity = function(self, entity)    
-        print('remove', entity.type)    
+    local removeEntity = function(self, entity)         
         for i, e in ipairs(entities) do
             if e == entity then
                 table.remove(entities, i)
@@ -129,7 +141,7 @@ function Level.new(dungeon)
                 end
             end
 
-            turn = Turn(self, actors)
+            turn = Turn(self, actors, TURN_DELAY)
         end
 
         turn:update(dt)
@@ -173,8 +185,12 @@ function Level.new(dungeon)
 
     local handlers = {}
 
-    local enter = function(self, player)
-        player.coord = stair_up.coord:clone()
+    local enter = function(self, player, stair)
+        if stair == Stair.UP then
+            player.coord = stair_up.coord:clone()
+        else
+            player.coord = stair_dn.coord:clone()
+        end
 
         self:addEntity(player)
 
@@ -194,11 +210,11 @@ function Level.new(dungeon)
         onMove(self, player, player.coord, 0)
     end
 
-    local exit = function(self, player)
+    local exit = function(self, player)        
         self:removeEntity(player)
 
         for key, handler in pairs(handlers) do
-            Signal.unregister(key, handler)
+            Signal.remove(key, handler)
         end
     end
 
