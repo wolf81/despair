@@ -1,2 +1,0 @@
-ID$               |TYPE$ |NAME$             |SCHOOL$ |LEVEL# |DURATION# |RANGE# |PROJ$ |SAFE$ |TARGET$ |EFFECT$ |
-cure_light_wounds |spell |Cure Light Wounds |divine  |1      |          |       |      |      |self    |heal    |

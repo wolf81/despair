@@ -1,3 +1,0 @@
-ID$     |TYPE$ |NAME$ |TEXTURE$ |ANIM_OPEN@ |ANIM_CLOSE@ |STATES@    |
-
-door1_h |door  |Door  |uf_terrain    |275        |274         |close,open |
