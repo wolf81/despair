@@ -9,15 +9,6 @@ local mfloor = math.floor
 
 local Visual = {}
 
-Visual.getAnimKey = function(dir)
-    -- TODO: should be hash table for speedy lookup
-    if dir == Direction.S then return 'anim_s' end
-    if dir == Direction.E then return 'anim_e' end
-    if dir == Direction.N then return 'anim_n' end
-    if dir == Direction.W then return 'anim_w' end
-    return 'anim_s'
-end
-
 Visual.new = function(entity, def)
     local last_dir = nil
 

@@ -13,9 +13,5 @@ return {
 	flags = { 'DV' },
 	equip = { 'qstaff_1', 'robe_0' },
 	texture = 'uf_heroes',
-	anim_e = { 1, 2, 3, 4 },
-	anim_s = { 1, 2, 3, 4 },
-	anim_n = { 1, 2, 3, 4 },
-	anim_w = { 1, 2, 3, 4 },
-	anim_time = 0,
+	anim = { 1, 2, 3, 4 },
 }

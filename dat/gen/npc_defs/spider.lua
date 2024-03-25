@@ -10,11 +10,7 @@ return {
 	speed = 20,
 	equip = { 'bite_1' },
 	texture = 'uf_heroes',
-	anim_e = { 197, 198, 199, 200 },
-	anim_s = { 197, 198, 199, 200 },
-	anim_n = { 197, 198, 199, 200 },
-	anim_w = { 197, 198, 199, 200 },
-	anim_time = 0,
+	anim = { 197, 198, 199, 200 },
 	morale = 0,
 	special = { '' },
 }

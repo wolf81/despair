@@ -13,9 +13,5 @@ return {
 	flags = { '' },
 	equip = { 'sleat_0', 'ssword_1', 'ssword_1' },
 	texture = 'uf_heroes',
-	anim_e = { 29, 30, 31, 32 },
-	anim_s = { 29, 30, 31, 32 },
-	anim_n = { 29, 30, 31, 32 },
-	anim_w = { 29, 30, 31, 32 },
-	anim_time = 0,
+	anim = { 29, 30, 31, 32 },
 }

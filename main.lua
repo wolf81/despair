@@ -37,7 +37,9 @@ end
 function love.load(args)
     preload()
 
-    success = love.window.setMode(WINDOW_W * SCALE, WINDOW_H * SCALE)
+    success = love.window.setMode(WINDOW_W * SCALE, WINDOW_H * SCALE, {
+        highdpi = false,
+    })
 
     game = Game()
 end
