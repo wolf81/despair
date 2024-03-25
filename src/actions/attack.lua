@@ -1,3 +1,10 @@
+--[[
+--  Dungeon of Despair
+--
+--  Author: Wolfgang Schreurs
+--  info+despair@wolftrail.net
+--]]
+
 local Attack = {}
 
 function Attack.new(level, entity, target)
