@@ -71,6 +71,9 @@ function Level.new(dungeon)
     local systems = initSystems(entities)
 
     local onMove = function(self, entity, coord, duration)
+        self:setBlocked(entity.coord, false)
+        self:setBlocked(coord, true)
+
         if entity.type ~= 'pc' then return end
 
         self:moveCamera(coord, duration)
@@ -88,11 +91,12 @@ function Level.new(dungeon)
 
     local onDestroy = function(self, entity, duration)
         Timer.after(duration, function() 
+            self:setBlocked(entity.coord, false)
             entity.remove = true
         end)
     end
 
-    local onAttack = function(self, entity, target, hitpoints)
+    local onAttack = function(self, entity, target, hitpoints, duration)
         print(entity.type .. ' hit ' .. target.type .. ' for ' .. hitpoints .. ' hitpoints')
     end
 

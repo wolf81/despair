@@ -6,7 +6,9 @@ TODO
 [X] Allow player to proceed to next level by moving on exit stairs
 [X] Allow player to proceed to previous level by moving on entrance stairs
 [X] Implement turn-based mechanism with auto-advancing of turns every 4 seconds
+[X] Implement smooth level transitions
+[X] Implement fade-out animation for Destroy action
 [ ] Generate monsters randomly just outside visible area of player
 [ ] Generate items randomly just outside of visible area of player
-[ ] Implement fade-out animation for Destroy action
-[ ] Implement smooth level transitions
+[ ] Implement level saving and loading
+[ ] Investigate if smoother movement is possible by setting player direction

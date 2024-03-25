@@ -24,7 +24,10 @@ Keyboard.new = function(entity)
             local entities = level:getEntities(next_coord, function(e) return e.type == 'npc' end)
             if #entities > 0 then
                 local target = entities[1]
-                return Attack(level, entity, target)
+                local health = target:getComponent(Health)
+                if health:isAlive() then
+                    return Attack(level, entity, target)
+                end
             end
 
             return nil 

@@ -18,9 +18,8 @@ function Attack.new(level, entity, target)
         local health = target:getComponent(Health)
         local damage = math.random(15, 25)
         health:remove(damage)
-        print('is alive?', health:isAlive())
 
-        Signal.emit('attack', entity, target, damage)
+        Signal.emit('attack', entity, target, damage, duration)
     end
 
     return setmetatable({

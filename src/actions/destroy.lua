@@ -15,14 +15,10 @@ Destroy.new = function(level, entity)
 
         did_execute = true
 
-        level:setBlocked(entity.coord, false)
-
         Signal.emit('destroy', entity, duration)
 
-        -- TODO: fade out
-        -- Timer.tween(duration, entity, { coord = coord }, 'linear', function() 
-        --     entity.coord = coord
-        -- end)
+        local visual = entity:getComponent(Visual)
+        visual:fadeOut(duration)
     end
 
     return setmetatable({

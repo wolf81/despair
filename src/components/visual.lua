@@ -21,16 +21,23 @@ Visual.new = function(entity, def)
     end
 
     draw = function(self)
+        love.graphics.setColor(1.0, 1.0, 1.0, alpha)
         local pos = entity.coord * TILE_SIZE
         self.anim:draw(texture, quads, pos)
+        love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
+    end
+
+    fadeOut = function(self, duration)
+        self.anim = Animation.fadeOut(def['anim'] or { 1 }, duration)
     end
 
     return setmetatable({
         -- properties
-        anim = anim,
+        anim    = anim,
         -- methods
-        update = update,
-        draw = draw,
+        update  = update,
+        draw    = draw,
+        fadeOut = fadeOut,
     }, Visual)
 end
 

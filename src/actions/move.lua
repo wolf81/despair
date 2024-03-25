@@ -15,9 +15,6 @@ Move.new = function(level, entity, coord)
 
         did_execute = true
 
-        level:setBlocked(entity.coord, false)
-        level:setBlocked(coord, true)
-
         Signal.emit('move', entity, coord, duration)
 
         Timer.tween(duration, entity, { coord = coord }, 'linear', function() 

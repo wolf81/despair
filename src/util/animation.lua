@@ -5,13 +5,13 @@
 --  info+despair@wolftrail.net
 --]]
 
-local mmin = math.min
+local mmin, mmax = math.min, math.max
 
 local DURATION = 0.2
 
 local Animation = {}
 
-function Animation.loop(frames, duration)
+Animation.loop = function(frames, duration)
     local frame_idx = 1
     local time = 0.0
     local duration = duration or DURATION
@@ -38,7 +38,38 @@ function Animation.loop(frames, duration)
     }, Animation)
 end
 
-function Animation.crossfade(frame1, frame2, duration)
+Animation.fadeOut = function(frames, duration)
+    local frame_idx = 1
+    local time = 0.0
+    local duration = duration or DURATION
+    local alpha = 1.0
+
+    local update = function(self, dt)
+        time = time + dt
+
+        if alpha > 0.0 then
+            alpha = mmax(1.0 - (time / duration), 0.0)
+        end
+    end
+
+    local draw = function(self, texture, quads, pos)
+        love.graphics.setColor(1.0, 1.0, 1.0, alpha)
+        
+        local frame = frames[frame_idx]
+        local quad = quads[frame]
+        love.graphics.draw(texture, quad, pos.x, pos.y)
+        
+        love.graphics.setColor(1.0, 1.0, 1.0, 1.0)        
+    end
+
+    return setmetatable({ 
+        -- methods
+        update  = update,
+        draw    = draw,
+    }, Animation)
+end
+
+Animation.crossfade = function(frame1, frame2, duration)
     local time = 0.0
     local duration = duration or DURATION
 

@@ -27,7 +27,6 @@ Control.new = function(entity, def, input_type)
 
     local setEnabled = function(self, flag)
         is_enabled = (flag == true)
-        print('is_enabled', is_enabled == true)
     end
 
     return setmetatable({             

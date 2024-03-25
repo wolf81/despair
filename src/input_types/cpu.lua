@@ -18,9 +18,6 @@ Cpu.new = function(entity)
         if level:isBlocked(next_coord) then return nil end 
         if #level:getEntities(next_coord) > 0 then return nil end
 
-        level:setBlocked(entity.coord, false)
-        level:setBlocked(next_coord, true)
-
         return Move(level, entity, next_coord)
     end
 
