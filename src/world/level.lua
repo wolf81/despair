@@ -185,13 +185,7 @@ function Level.new(dungeon)
 
     local handlers = {}
 
-    local enter = function(self, player, stair)
-        if stair == Stair.UP then
-            player.coord = stair_up.coord:clone()
-        else
-            player.coord = stair_dn.coord:clone()
-        end
-
+    local enter = function(self, player)
         self:addEntity(player)
 
         self:setBlocked(player.coord, true)
@@ -228,6 +222,9 @@ function Level.new(dungeon)
     end
 
     return setmetatable({
+        -- properties
+        entry_coord     = stair_up.coord,
+        exit_coord      = stair_dn.coord,
         -- methods
         update          = update,
         draw            = draw,

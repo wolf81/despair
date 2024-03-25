@@ -25,7 +25,6 @@ Map             = require 'src.world.map'
 -- util
 Direction       = require 'src.util.direction'
 Animation       = require 'src.util.animation'
-Stair           = require 'src.util.stair'
 Turn            = require 'src.util.turn'
 
 -- actions
