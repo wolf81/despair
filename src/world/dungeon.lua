@@ -26,12 +26,15 @@ Dungeon.new = function()
             error('already at max level, should not have stairs down')
         end
 
-        -- exit current level
-        levels[level_idx]:exit(player)
+        local control = player:getComponent(Control)
+        control:setEnabled(false)
 
         -- FIXME: seems we need to add a delay, due to some global camera state causing camera to 
         -- target wrong area in map
         Timer.after(0.5, function() 
+            control:setEnabled(true)
+
+            levels[level_idx]:exit(player)
             -- proceed to next level, generating a new level if needed
             level_idx = level_idx + 1
             if level_idx > #levels then
@@ -48,12 +51,15 @@ Dungeon.new = function()
             return
         end
 
-        -- exit current level
-        levels[level_idx]:exit(player)
+        local control = player:getComponent(Control)
+        control:setEnabled(false)
 
         -- FIXME: seems we need to add a delay, due to some global camera state causing camera to 
         -- target wrong area in map
         Timer.after(0.5, function() 
+            control:setEnabled(true)
+
+            levels[level_idx]:exit(player)
             -- proceed to previous level
             level_idx = level_idx - 1
             levels[level_idx]:enter(player, Stair.DOWN)
