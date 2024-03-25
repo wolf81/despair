@@ -14,8 +14,8 @@ dun_10      |tile  |wall_v      |uf_terrain    |dungeon        |6       |10    |
 dun_11      |tile  |wall_v      |uf_terrain    |dungeon        |3       |11    |           |
 dun_12      |tile  |wall_v      |uf_terrain    |dungeon        |1       |12    |           |
 
-dun_13      |tile  |stair_up    |uf_terrain    |dungeon        |1       |13    |           |
-dun_14      |tile  |stair_dn    |uf_terrain    |dungeon        |1       |14    |           |
+dun_13      |tile  |stair_up    |uf_terrain    |dungeon        |1       |50    |           |
+dun_14      |tile  |stair_dn    |uf_terrain    |dungeon        |1       |49    |           |
 
 dun_15      |tile  |floor       |uf_terrain    |dungeon        |50      |65    |           |
 dun_16      |tile  |floor       |uf_terrain    |dungeon        |25      |66    |           |

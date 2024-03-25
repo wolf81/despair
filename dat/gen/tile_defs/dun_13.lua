@@ -5,6 +5,6 @@ return {
 	texture = 'uf_terrain',
 	theme = { 'dungeon' },
 	weight = 1,
-	anim = { 13 },
+	anim = { 50 },
 	anim_time = 0,
 }
