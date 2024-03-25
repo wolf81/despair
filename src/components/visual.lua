@@ -18,7 +18,7 @@ Visual.getAnimKey = function(dir)
     return 'anim_s'
 end
 
-function Visual.new(entity, def)
+Visual.new = function(entity, def)
     local last_dir = nil
 
     local texture = TextureCache:get(def.texture)

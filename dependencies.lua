@@ -22,12 +22,20 @@ Dungeon         = require 'src.world.dungeon'
 Level           = require 'src.world.level'
 Map             = require 'src.world.map'
 
+Turn            = require 'src.turn'
+
 -- util
 Direction       = require 'src.util.direction'
 Animation       = require 'src.util.animation'
 
--- entity manager
-EntityManager   = require 'src.entity_manager'
+-- actions
+Move            = require 'src.actions.move'
+Attack          = require 'src.actions.attack'
+Destroy         = require 'src.actions.destroy'
+
+-- input types
+Keyboard        = require 'src.input_types.keyboard'
+Cpu             = require 'src.input_types.cpu'
 
 -- entity component system
 EntityFactory   = require 'src.ecs.factory'
@@ -35,9 +43,9 @@ Entity          = require 'src.ecs.entity'
 System          = require 'src.ecs.system'
 
 -- components
-Intellect       = require 'src.components.intellect'
 Visual          = require 'src.components.visual'
-Input           = require 'src.components.input'
+Control         = require 'src.components.control'
+Health          = require 'src.components.health'
 
 -- caches
 TextureCache    = Cache()

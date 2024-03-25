@@ -21,12 +21,12 @@ local function newMonsters()
     return monsters
 end
 
-local function initSystems(entity_manager)
+local function initSystems(entities)
     local inputSystem = System(Input)
     local visualSystem = System(Visual)
     local intellectSystem = System(Intellect)
 
-    for entity in entity_manager:eachEntity() do
+    for _, entity in ipairs(entities) do
         intellectSystem:addComponent(entity)
         visualSystem:addComponent(entity)
         inputSystem:addComponent(entity)
@@ -45,56 +45,104 @@ function Level.new(dungeon)
     local map = Map(tiles, function(id) return id ~= 0 end)
     local map_w, map_h = map:getSize()
 
-    local entity_manager = EntityManager()
-
     -- generate stairs using coords from maze generator
     stair_up = EntityFactory.create('dun_14', stair_up)
     stair_dn = EntityFactory.create('dun_13', stair_dn)
 
-    entity_manager:addEntity(stair_up)
-    entity_manager:addEntity(stair_dn)
+    local entities = { stair_up, stair_dn }
+
+    -- handle game turns
+    local turn = Turn(self)
 
     for _, monster in ipairs(newMonsters()) do
-        entity_manager:addEntity(monster)
+        table.insert(entities, monster)
+        map:setBlocked(monster.coord.x, monster.coord.y, true)
     end
 
     -- add camera
     local camera = Camera(0.0, 0.0, CAMERA_ZOOM)
 
     -- setup ecs
-    local systems = initSystems(entity_manager)
+    local systems = initSystems(entities)
+
+    local onMove = function(self, entity, coord, duration)
+        if entity.type ~= 'pc' then return end
+
+        self:moveCamera(coord, duration)
+    end
+
+    local onDestroy = function(self, entity, duration)
+        self:setBlocked(entity.coord, false)
+        Timer.after(duration, function() 
+            print('mark for removal')
+            entity.remove = true
+        end)
+    end
+
+    local onAttack = function(self, entity, target, hitpoints)
+        print(entity.type .. ' hit ' .. target.type .. ' for ' .. hitpoints .. ' hitpoints')
+    end
 
     local addEntity = function(self, entity)
+        table.insert(entities, entity)
+
+        -- a skip list would be useful here, to keep the list auto-sorted
+        table.sort(entities, function(a, b) return a.z_index < b.z_index end)
+
         for _, system in ipairs(systems) do
             system:addComponent(entity)
         end
-
-        entity_manager:addEntity(entity)
     end
 
-    local removeEntity = function(self, entity)
+    local removeEntity = function(self, entity)    
+        print('remove', entity.type)    
+        for i, e in ipairs(entities) do
+            if e == entity then
+                table.remove(entities, i)
+            end
+        end
+
         for _, system in ipairs(systems) do
             system:removeComponent(entity)
         end
-
-        entity_manager:removeEntity(entity)
-    end
-
-    local updateEntity = function(self, entity)        
-        entity_manager:updateEntity(entity)
     end
 
     local update = function(self, dt)
+        for i = #entities, 1, -1 do
+            local entity = entities[i]
+            if entity.remove then
+                self:removeEntity(entity)
+            end
+        end
+
         for _, system in ipairs(systems) do
             system:update(dt, self)
         end
+
+        -- create new turn if needed
+        if turn:isFinished() then
+            local actors = {} 
+            
+            for _, entity in ipairs(entities) do
+                if entity:getComponent(Control) then
+                    table.insert(actors, entity)
+                end
+            end
+
+            turn = Turn(self, actors)
+        end
+
+        turn:update(dt)
     end
 
     local draw = function(self)
         camera:attach()
 
         map:draw()
-        entity_manager:draw()
+
+        for _, entity in ipairs(entities) do
+            entity:draw()
+        end
 
         camera:detach()
     end
@@ -110,27 +158,50 @@ function Level.new(dungeon)
     end
 
     local getEntities = function(self, coord, fn)
-        return entity_manager:getEntities(coord, fn)
+        local filtered = {}
+
+        fn = fn or function(e) return true end
+
+        for _, entity in ipairs(entities) do
+            if entity.coord == coord and fn(entity) then
+                table.insert(filtered, entity)
+            end
+        end
+
+        return filtered
     end
+
+    local handlers = {}
 
     local enter = function(self, player)
         player.coord = stair_up.coord:clone()
 
         self:addEntity(player)
 
-        -- move player to stairs and focus camera on player
-        self:moveCamera(player.coord, 0)
+        self:setBlocked(player.coord, true)
 
-        entity_manager:registerHandlers()
+        handlers = {
+            ['move'] = function(...) onMove(self, ...) end,
+            ['attack'] = function(...) onAttack(self, ...) end,
+            ['destroy'] = function(...) onDestroy(self, ...) end,
+        }
+
+        for key, handler in pairs(handlers) do
+            Signal.register(key, handler)
+        end
+
+        -- focus on player
+        onMove(self, player, player.coord, 0)
     end
 
     local exit = function(self, player)
         self:removeEntity(player)
 
-        entity_manager:unregisterHandlers()
+        for key, handler in pairs(handlers) do
+            Signal.unregister(key, handler)
+        end
     end
 
-    -- add offset of half tile, as we want the camera to focus on middle of tile coord
     local cam_offset = TILE_SIZE / 2
     local moveCamera = function(self, coord, duration)
         local pos = coord * TILE_SIZE
@@ -146,13 +217,12 @@ function Level.new(dungeon)
         draw            = draw,
         isBlocked       = isBlocked,
         setBlocked      = setBlocked,
-        moveCamera      = moveCamera,
         enter           = enter,
         exit            = exit,
         addEntity       = addEntity,
         getEntities     = getEntities,
         removeEntity    = removeEntity,
-        updateEntity    = updateEntity,
+        moveCamera      = moveCamera,
     }, Level)
 end
 
