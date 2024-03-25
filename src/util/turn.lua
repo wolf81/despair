@@ -22,21 +22,17 @@ Turn.new = function(level, actors, duration)
             local actor = actors[active_idx]  
             local control = actor:getComponent(Control)
             local action = control:getAction(level)
-            if action == nil then
-                if time > duration then
-                    goto continue 
-                else
-                    break                    
-                end
-            else
-                action:execute(TURN_DURATION)
+            if action == nil and time > duration then
+                action = Move(level, actor, actor.coord)
             end
 
-            ::continue::
+            if action == nil then break end
 
+            action:execute(TURN_DURATION)
             active_idx = active_idx - 1
         end
 
+        -- if all actors have performed their actions
         if active_idx == 0 then
             Timer.after(TURN_DURATION, function() 
                 is_finished = true
