@@ -1,6 +1,6 @@
 ID$ |TYPE$ |NAME$    |CLASS$  |RACE$    |LEVEL# |SIGHT# |SPEED# |STR# |DEX# |MIND# |FLAGS@ |EQUIP@                     |TEXTURE$ |ANIM_E@ |ANIM_S@ |ANIM_N@ |ANIM_W@ |ANIM_TIME# |
 
-pc1 |pc    |Kendrick |fighter |dwarf    |4      |60     |25     |16   |13   |10    |DV     |chain_0,lshield_0,lsword_1 |actors   |1,17    |2,18    |3,19    |4,20    |           |
-pc2 |pc    |Morris   |rogue   |human    |3      |60     |30     |12   |15   |12    |       |sleat_0,ssword_1,ssword_1  |actors   |9,25    |10,26   |11,27   |12,28   |           |
-pc3 |pc    |Cholmer  |mage    |elf      |1      |60     |30     |12   |13   |16    |DV     |qstaff_1,robe_0            |actors   |41,57   |42,58   |43,59   |44,60   |           |
-pc4 |pc    |Barnabas |cleric  |halfling |2      |60     |25     |10   |16   |13    |       |mstar_1,chain_0            |actors   |45,61   |46,62   |47,63   |48,64   |           |
+pc1 |pc    |Kendrick |fighter |dwarf    |4      |60     |25     |16   |13   |10    |DV     |chain_0,lshield_0,lsword_1 |uf_heroes   |1,2,3,4    |1,2,3,4   |1,2,3,4    |1,2,3,4    |           |
+pc2 |pc    |Morris   |rogue   |human    |3      |60     |30     |12   |15   |12    |       |sleat_0,ssword_1,ssword_1  |uf_heroes   |1,2,3,4   |1,2,3,4  |1,2,3,4  |1,2,3,4  |           |
+pc3 |pc    |Cholmer  |mage    |elf      |1      |60     |30     |12   |13   |16    |DV     |qstaff_1,robe_0            |uf_heroes   |1,2,3,4   |1,2,3,4  |1,2,3,4  |1,2,3,4 |           |
+pc4 |pc    |Barnabas |cleric  |halfling |2      |60     |25     |10   |16   |13    |       |mstar_1,chain_0            |uf_heroes   |1,2,3,4   |1,2,3,4   |1,2,3,4  |1,2,3,4   |           |

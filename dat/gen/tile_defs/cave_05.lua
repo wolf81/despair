@@ -2,7 +2,7 @@ return {
 	id = 'cave_05',
 	type = 'tile',
 	kind = 'wall_h',
-	texture = 'world',
+	texture = 'uf_terrain',
 	theme = { 'cavern' },
 	weight = 3,
 	anim = { 21 },

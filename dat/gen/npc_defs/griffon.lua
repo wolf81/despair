@@ -9,7 +9,7 @@ return {
 	sight = 60,
 	speed = 80,
 	equip = { 'bite_4' },
-	texture = 'actors',
+	texture = 'uf_heroes',
 	anim_e = { 397, 413 },
 	anim_s = { 398, 414 },
 	anim_n = { 399, 415 },

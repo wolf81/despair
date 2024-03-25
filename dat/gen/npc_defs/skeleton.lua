@@ -9,7 +9,7 @@ return {
 	sight = 60,
 	speed = 30,
 	equip = { 'sbow_1', 'ssword_2' },
-	texture = 'actors',
+	texture = 'uf_heroes',
 	anim_e = { 129, 145 },
 	anim_s = { 130, 146 },
 	anim_n = { 131, 147 },

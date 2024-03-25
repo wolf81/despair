@@ -1,51 +1,51 @@
 ID$         |TYPE$ |KIND$       |TEXTURE$ |THEME@         |WEIGHT# |ANIM@ |ANIM_TIME# |
 
-dun_01      |tile  |wall_h      |world    |dungeon        |50      |1     |           |
-dun_02      |tile  |wall_h      |world    |dungeon        |25      |2     |           |
-dun_03      |tile  |wall_h      |world    |dungeon        |12      |3     |           |
-dun_04      |tile  |wall_h      |world    |dungeon        |6       |4     |           |
-dun_05      |tile  |wall_h      |world    |dungeon        |3       |5     |           |
-dun_06      |tile  |wall_h      |world    |dungeon        |1       |6     |           |
+dun_01      |tile  |wall_h      |uf_terrain |dungeon        |50      |1     |           |
+dun_02      |tile  |wall_h      |uf_terrain    |dungeon        |25      |2     |           |
+dun_03      |tile  |wall_h      |uf_terrain    |dungeon        |12      |3     |           |
+dun_04      |tile  |wall_h      |uf_terrain    |dungeon        |6       |4     |           |
+dun_05      |tile  |wall_h      |uf_terrain    |dungeon        |3       |5     |           |
+dun_06      |tile  |wall_h      |uf_terrain    |dungeon        |1       |6     |           |
 
-dun_07      |tile  |wall_v      |world    |dungeon        |50      |7     |           |
-dun_08      |tile  |wall_v      |world    |dungeon        |25      |8     |           |
-dun_09      |tile  |wall_v      |world    |dungeon        |12      |9     |           |
-dun_10      |tile  |wall_v      |world    |dungeon        |6       |10    |           |
-dun_11      |tile  |wall_v      |world    |dungeon        |3       |11    |           |
-dun_12      |tile  |wall_v      |world    |dungeon        |1       |12    |           |
+dun_07      |tile  |wall_v      |uf_terrain    |dungeon        |50      |7     |           |
+dun_08      |tile  |wall_v      |uf_terrain    |dungeon        |25      |8     |           |
+dun_09      |tile  |wall_v      |uf_terrain    |dungeon        |12      |9     |           |
+dun_10      |tile  |wall_v      |uf_terrain    |dungeon        |6       |10    |           |
+dun_11      |tile  |wall_v      |uf_terrain    |dungeon        |3       |11    |           |
+dun_12      |tile  |wall_v      |uf_terrain    |dungeon        |1       |12    |           |
 
-dun_13      |tile  |stair_up    |world    |dungeon        |1       |13    |           |
-dun_14      |tile  |stair_dn    |world    |dungeon        |1       |14    |           |
+dun_13      |tile  |stair_up    |uf_terrain    |dungeon        |1       |13    |           |
+dun_14      |tile  |stair_dn    |uf_terrain    |dungeon        |1       |14    |           |
 
-dun_15      |tile  |floor       |world    |dungeon        |50      |65    |           |
-dun_16      |tile  |floor       |world    |dungeon        |25      |66    |           |
-dun_17      |tile  |floor       |world    |dungeon        |12      |67    |           |
-dun_18      |tile  |floor       |world    |dungeon        |6       |68    |           |
-dun_19      |tile  |floor       |world    |dungeon        |3       |69    |           |
-dun_20      |tile  |floor       |world    |dungeon        |1       |70    |           |
+dun_15      |tile  |floor       |uf_terrain    |dungeon        |50      |65    |           |
+dun_16      |tile  |floor       |uf_terrain    |dungeon        |25      |66    |           |
+dun_17      |tile  |floor       |uf_terrain    |dungeon        |12      |67    |           |
+dun_18      |tile  |floor       |uf_terrain    |dungeon        |6       |68    |           |
+dun_19      |tile  |floor       |uf_terrain    |dungeon        |3       |69    |           |
+dun_20      |tile  |floor       |uf_terrain    |dungeon        |1       |70    |           |
 
-cave_01     |tile  |wall_h      |world    |cavern         |50      |17    |           |
-cave_02     |tile  |wall_h      |world    |cavern         |25      |18    |           |
-cave_03     |tile  |wall_h      |world    |cavern         |12      |19    |           |
-cave_04     |tile  |wall_h      |world    |cavern         |6       |20    |           |
-cave_05     |tile  |wall_h      |world    |cavern         |3       |21    |           |
-cave_06     |tile  |wall_h      |world    |cavern         |1       |22    |           |
+cave_01     |tile  |wall_h      |uf_terrain    |cavern         |50      |17    |           |
+cave_02     |tile  |wall_h      |uf_terrain    |cavern         |25      |18    |           |
+cave_03     |tile  |wall_h      |uf_terrain    |cavern         |12      |19    |           |
+cave_04     |tile  |wall_h      |uf_terrain    |cavern         |6       |20    |           |
+cave_05     |tile  |wall_h      |uf_terrain    |cavern         |3       |21    |           |
+cave_06     |tile  |wall_h      |uf_terrain    |cavern         |1       |22    |           |
 
-cave_07     |tile  |wall_v      |world    |cavern         |50      |23    |           |
-cave_08     |tile  |wall_v      |world    |cavern         |25      |24    |           |
-cave_09     |tile  |wall_v      |world    |cavern         |12      |25    |           |
-cave_10     |tile  |wall_v      |world    |cavern         |6       |26    |           |
-cave_11     |tile  |wall_v      |world    |cavern         |3       |27    |           |
-cave_12     |tile  |wall_v      |world    |cavern         |1       |28    |           |
+cave_07     |tile  |wall_v      |uf_terrain    |cavern         |50      |23    |           |
+cave_08     |tile  |wall_v      |uf_terrain    |cavern         |25      |24    |           |
+cave_09     |tile  |wall_v      |uf_terrain    |cavern         |12      |25    |           |
+cave_10     |tile  |wall_v      |uf_terrain    |cavern         |6       |26    |           |
+cave_11     |tile  |wall_v      |uf_terrain    |cavern         |3       |27    |           |
+cave_12     |tile  |wall_v      |uf_terrain    |cavern         |1       |28    |           |
 
-cave_13     |tile  |stair_up    |world    |cavern         |1       |29    |           |
-cave_14     |tile  |stair_dn    |world    |cavern         |1       |30    |           |
+cave_13     |tile  |stair_up    |uf_terrain    |cavern         |1       |29    |           |
+cave_14     |tile  |stair_dn    |uf_terrain    |cavern         |1       |30    |           |
 
-cave_15     |tile  |floor       |world    |cavern         |50      |81    |           |
-cave_16     |tile  |floor       |world    |cavern         |25      |82    |           |
-cave_17     |tile  |floor       |world    |cavern         |12      |83    |           |
-cave_18     |tile  |floor       |world    |cavern         |6       |84    |           |
-cave_19     |tile  |floor       |world    |cavern         |3       |85    |           |
-cave_20     |tile  |floor       |world    |cavern         |1       |86    |           |
+cave_15     |tile  |floor       |uf_terrain    |cavern         |50      |81    |           |
+cave_16     |tile  |floor       |uf_terrain    |cavern         |25      |82    |           |
+cave_17     |tile  |floor       |uf_terrain    |cavern         |12      |83    |           |
+cave_18     |tile  |floor       |uf_terrain    |cavern         |6       |84    |           |
+cave_19     |tile  |floor       |uf_terrain    |cavern         |3       |85    |           |
+cave_20     |tile  |floor       |uf_terrain    |cavern         |1       |86    |           |
 
-wall_shadow |tile  |wall_shadow |world    |dungeon,cavern |1       |176   |           |
+wall_shadow |tile  |wall_shadow |uf_terrain    |dungeon,cavern |1       |176   |           |

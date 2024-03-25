@@ -7,7 +7,7 @@
 
 local mmin = math.min
 
-local DURATION = 0.5
+local DURATION = 0.2
 
 local Animation = {}
 

@@ -9,7 +9,7 @@ return {
 	sight = 60,
 	speed = 40,
 	equip = { 'inc_touch_1' },
-	texture = 'actors_ext',
+	texture = 'uf_heroes',
 	anim_e = { 1, 17 },
 	anim_s = { 2, 18 },
 	anim_n = { 3, 19 },

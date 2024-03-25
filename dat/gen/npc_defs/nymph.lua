@@ -9,7 +9,7 @@ return {
 	sight = 60,
 	speed = 30,
 	equip = { 'dagger_0' },
-	texture = 'actors',
+	texture = 'uf_heroes',
 	anim_e = { 201, 217 },
 	anim_s = { 202, 218 },
 	anim_n = { 203, 219 },
