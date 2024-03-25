@@ -12,8 +12,7 @@ Keyboard.new = function(entity)
         elseif love.keyboard.isDown('down') or love.keyboard.isDown('s') then
             direction = Direction.S
         elseif love.keyboard.isDown('space') then
-            -- TODO: clean-up
-            return Move(level, entity, entity.coord)
+            return Idle(level, entity)
         end
 
         local next_coord = entity.coord + direction

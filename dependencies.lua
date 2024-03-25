@@ -31,6 +31,7 @@ Turn            = require 'src.util.turn'
 Move            = require 'src.actions.move'
 Attack          = require 'src.actions.attack'
 Destroy         = require 'src.actions.destroy'
+Idle            = require 'src.actions.idle'
 
 -- input types
 Keyboard        = require 'src.input_types.keyboard'
@@ -45,6 +46,11 @@ System          = require 'src.ecs.system'
 Visual          = require 'src.components.visual'
 Control         = require 'src.components.control'
 Health          = require 'src.components.health'
+Weapon          = require 'src.components.weapon'
+Armor           = require 'src.components.armor'
+
+-- resolvers
+MeleeCombat     = require 'src.resolvers.melee_combat'
 
 -- caches
 TextureCache    = Cache()

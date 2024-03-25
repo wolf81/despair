@@ -46,6 +46,7 @@ function Entity.new(def, coord)
         id              = IdGenerator.generate(),
         coord           = coord,
         type            = def.type,
+        name            = def.name or 'Unknown',
         flags           = 0,
         z_index         = 1,
         remove          = false,

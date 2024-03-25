@@ -96,8 +96,16 @@ function Level.new(dungeon)
         end)
     end
 
-    local onAttack = function(self, entity, target, hitpoints, duration)
-        print(entity.type .. ' hit ' .. target.type .. ' for ' .. hitpoints .. ' hitpoints')
+    local onAttack = function(self, entity, target, damage, duration)
+        if damage == 0 then
+            print(entity.name .. ' missed attack on ' .. target.name)
+        else
+            print(entity.name .. ' hit ' .. target.name .. ' for ' .. damage .. ' hitpoints')
+        end
+    end
+
+    local onIdle = function(self, entity, duration)
+        print(entity.name .. ' is idling')
     end
 
     local addEntity = function(self, entity)
@@ -196,6 +204,7 @@ function Level.new(dungeon)
 
         handlers = {
             ['move'] = function(...) onMove(self, ...) end,
+            ['idle'] = function(...) onIdle(self, ...) end,
             ['attack'] = function(...) onAttack(self, ...) end,
             ['destroy'] = function(...) onDestroy(self, ...) end,
         }

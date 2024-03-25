@@ -15,9 +15,7 @@ function Attack.new(level, entity, target)
 
         did_execute = true
 
-        local health = target:getComponent(Health)
-        local damage = math.random(15, 25)
-        health:remove(damage)
+        local damage = MeleeCombat.resolve(entity, target)
 
         Signal.emit('attack', entity, target, damage, duration)
     end
