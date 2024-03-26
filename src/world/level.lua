@@ -12,7 +12,10 @@ local Level = {}
 local function newMonsters(map)
     local monsters = {}
 
-    local types = { 'bat', 'spider', 'skeleton', 'skel_mage', 'skel_warr', 'panther', 'rat' }
+    local types = { 
+        'bat', 'spider', 'skeleton', 'skel_mage', 'skel_warr', 
+        'skel_arch', 'snake', 'rat',
+    }
 
     while #monsters < 10 do
         local x = lrandom(map.width)

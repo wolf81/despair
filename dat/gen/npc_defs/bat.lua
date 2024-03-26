@@ -2,7 +2,7 @@ return {
 	id = 'bat',
 	type = 'npc',
 	name = 'Bat',
-	hd = '1d8+2',
+	hd = '1d8',
 	ac = 12,
 	class = '',
 	flags = { '' },

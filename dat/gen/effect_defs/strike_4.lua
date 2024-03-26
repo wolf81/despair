@@ -1,6 +1,6 @@
 return {
-	id = 'strike_1',
+	id = 'strike_4',
 	type = 'effect',
 	texture = 'uf_fx_impact',
-	anim = { 1, 2, 3 },
+	anim = { 10, 11, 12 },
 }
