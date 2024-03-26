@@ -25,8 +25,6 @@ Health.new = function(entity, def)
 
     local current = total
 
-    local update = function(self, dt) end
-
     local getValue = function(self) return current end
 
     local reduce = function(self, hitpoints) current = mmax(current - hitpoints, 0) end

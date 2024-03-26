@@ -62,6 +62,7 @@ M.create = function(id, coord)
     if entity.type == 'pc' then
         entity.z_index = 10
         entity:addComponent(Control(entity, def, Keyboard(entity)))
+        entity:addComponent(Equipment(entity, def))
         entity:addComponent(Stats(entity, def))
         entity:addComponent(Health(entity, def))
         entity:addComponent(Armor(entity, def))
@@ -69,6 +70,7 @@ M.create = function(id, coord)
     elseif entity.type == 'npc' then
         entity.z_index = 5
         entity:addComponent(Control(entity, def, Cpu(entity)))
+        entity:addComponent(Equipment(entity, def))
         entity:addComponent(Health(entity, def))
         entity:addComponent(Armor(entity, def))
         entity:addComponent(Weapon(entity, def))

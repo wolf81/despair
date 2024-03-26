@@ -12,8 +12,6 @@ Control.new = function(entity, def, input_type)
 
     local is_enabled = true
     
-    local update = function(self, dt) end
-
     local getAction = function(self, level)
         if not is_enabled then return end 
 
@@ -31,7 +29,6 @@ Control.new = function(entity, def, input_type)
 
     return setmetatable({             
         -- methods
-        update      = update,
         getAction   = getAction,
         setEnabled  = setEnabled,
     }, Control)

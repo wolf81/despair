@@ -44,6 +44,7 @@ Entity          = require 'src.ecs.entity'
 System          = require 'src.ecs.system'
 
 -- components
+Equipment       = require 'src.components.equipment'
 Visual          = require 'src.components.visual'
 Control         = require 'src.components.control'
 Health          = require 'src.components.health'
