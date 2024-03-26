@@ -14,7 +14,8 @@ local function newMonsters(map)
 
     local types = { 
         'bat', 'spider', 'skeleton', 'skel_mage', 'skel_warr', 
-        'skel_arch', 'snake', 'rat',
+        'skel_arch', 'snake', 'rat', 'gr_ooze', 'red_drag',
+        'wraith',
     }
 
     while #monsters < 10 do
