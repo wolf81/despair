@@ -27,17 +27,13 @@ local function newMonsters(map)
 end
 
 local function initSystems(entities)
-    local inputSystem = System(Input)
     local visualSystem = System(Visual)
-    local intellectSystem = System(Intellect)
 
     for _, entity in ipairs(entities) do
-        intellectSystem:addComponent(entity)
         visualSystem:addComponent(entity)
-        inputSystem:addComponent(entity)
     end    
 
-    return { intellectSystem, inputSystem, visualSystem }
+    return { visualSystem }
 end
 
 local function getKey(coord)
