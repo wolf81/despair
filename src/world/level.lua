@@ -98,12 +98,18 @@ Level.new = function(dungeon)
         end)
     end
 
-    local onAttack = function(self, entity, target, damage, duration)
+    local onAttack = function(self, entity, target, damage, is_crit, duration)
         if damage == 0 then
             print(entity.name .. ' missed attack on ' .. target.name)
         else
-            print(entity.name .. ' hit ' .. target.name .. ' for ' .. damage .. ' hitpoints')
+            if is_crit then
+                print(entity.name .. ' critically hit ' .. target.name .. ' for ' .. damage .. ' hitpoints')
+            else
+                print(entity.name .. ' hit ' .. target.name .. ' for ' .. damage .. ' hitpoints')
+            end
         end
+
+        -- TODO: screen shake on critical hits
     end
 
     local onIdle = function(self, entity, duration)

@@ -24,16 +24,22 @@ Weapon.new = function(entity, def)
         return 0
     end
 
-    local getDamage = function(self)
+    local getDamage = function(self, is_crit)
+        is_crit = (is_crit == true) or false
+
         local base, bonus = 0, 0
 
-        -- calculate weapon damage
+        -- calculate weapon damage - critical hits always inflict maximum damage
         local weapon = equipment:getItem('mainhand')
         if weapon ~= nil then 
-            base = ndn.dice(weapon.damage).roll()
+            if is_crit then
+                base = ndn.dice(weapon.damage).max()
+            else
+                base = ndn.dice(weapon.damage).roll()
+            end
         end
 
-        -- calculate strength bonus, if applicable
+        -- add strength bonus, if applicable
         if stats ~= nil then
             bonus = stats:getBonus('str')
             if weapon.kind == '2h' then
