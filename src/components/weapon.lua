@@ -47,7 +47,7 @@ Weapon.new = function(entity, def)
             end
         end
 
-        return mmax(base + bonus, 0)
+        return mmax(base + bonus, 1)
     end
 
     return setmetatable({
