@@ -13,3 +13,4 @@ TODO
 [ ] Implement level saving and loading
 [ ] Investigate if smoother movement is possible by setting player direction
 [ ] Sort actor turn order by initiative
+[ ] Add level to attack bonus
