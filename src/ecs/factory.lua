@@ -83,6 +83,8 @@ M.create = function(id, coord)
         entity.kind     = def['kind']
         entity.attack   = def['attack']
         entity.damage   = def['damage']
+    elseif entity.type == 'effect' then
+        entity.z_index  = 20
     end
 
     return entity

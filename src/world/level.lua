@@ -95,6 +95,10 @@ Level.new = function(dungeon)
     end
 
     local onAttack = function(self, entity, target, damage, is_crit, duration)
+        local effect = EntityFactory.create('strike_1', target.coord:clone())
+        self:addEntity(effect)
+        Timer.after(duration, function() self:removeEntity(effect) end)
+
         if damage == 0 then
             print(entity.name .. ' missed attack on ' .. target.name)
         else

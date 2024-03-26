@@ -7,14 +7,13 @@
 
 local mmin, mmax = math.min, math.max
 
-local DURATION = 0.2
-
 local Animation = {}
 
 Animation.loop = function(frames, duration)
+    assert(duration ~= nil, 'missing parameter "duration"')
+
     local frame_idx = 1
     local time = 0.0
-    local duration = duration or DURATION
 
     local update = function(self, dt)
         time = time + dt

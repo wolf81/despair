@@ -9,12 +9,18 @@ local mfloor = math.floor
 
 local Visual = {}
 
-Visual.new = function(entity, def)
-    local last_dir = nil
+Visual.new = function(entity, def, duration)
+    local frames = def['anim'] or { 1 }
+
+    duration = duration or ANIM_DURATION
+
+    if entity.type == 'effect' then
+        duration = duration / #frames
+    end
 
     local texture = TextureCache:get(def.texture)
     local quads = QuadCache:get(def.texture)
-    local anim = Animation.loop(def['anim'] or { 1 })
+    local anim = Animation.loop(frames, duration)
 
     update = function(self, dt, level) 
         self.anim:update(dt)

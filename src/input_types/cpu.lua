@@ -33,7 +33,7 @@ Cpu.new = function(entity)
 
         -- ensure entity can move to next coord
         if level:isBlocked(next_coord) then return Idle(level, entity) end 
-        if #level:getEntities(next_coord) > 0 then Idle(level, entity) end
+        if #level:getEntities(next_coord) > 0 then return Idle(level, entity) end
 
         return Move(level, entity, next_coord)
     end
