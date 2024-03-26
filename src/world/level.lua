@@ -12,12 +12,14 @@ local Level = {}
 local function newMonsters(map)
     local monsters = {}
 
+    local types = { 'bat', 'spider', 'skeleton', 'skel_mage', 'skel_warr', 'panther', 'rat' }
+
     while #monsters < 10 do
         local x = lrandom(map.width)
         local y = lrandom(map.height)
 
         if not map:isBlocked(x, y) then
-            local type = #monsters % 2 == 0 and 'bat' or 'spider'
+            local type = types[lrandom(#types)]
             local monster = EntityFactory.create(type, vector(x, y))
             table.insert(monsters, monster)
         end        

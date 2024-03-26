@@ -1,4 +1,9 @@
-ID$    |TYPE$ |NAME$  |HD$   |AC# |CLASS$ |FLAGS@ |SIGHT# |SPEED# |EQUIP@ |TEXTURE$  |ANIM@           |MORALE# |SPECIAL@ |
+ID$       |TYPE$ |NAME$            |HD$   |AC# |CLASS$ |FLAGS@ |SIGHT# |SPEED# |EQUIP@ |TEXTURE$  |ANIM@           |MORALE# |SPECIAL@ |
 
-spider |npc   |Spider |1d8+2 |12  |       |       |60     |20     |bite_1 |uf_heroes |197,198,199,200 |        |         |
-bat    |npc   |Bat    |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |181,182,183,184 |        |         |
+spider    |npc   |Spider           |1d8+2 |12  |       |       |60     |20     |bite_1 |uf_heroes |197,198,199,200 |        |         |
+bat       |npc   |Bat              |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |181,182,183,184 |        |         |
+skeleton  |npc   |Skeleton         |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |121,122,123,124 |        |         |
+skel_warr |npc   |Skeleton Warrior |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |125,126,127,128 |        |         |
+skel_mage |npc   |Skeleton Mage    |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |129,130,131,132 |        |         |
+rat       |npc   |Rat              |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |101,102,103,104 |        |         |
+panther   |npc   |Panther          |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |121,122,123,124 |        |         |
