@@ -10,20 +10,32 @@ local mmax = math.max
 local Health = {}
 
 Health.new = function(entity, def)
-    local total = 20
+    local total = 1
+
+    local hd = def['hd']
+    if hd ~= nil then
+        total = ndn.dice(hd).average()
+    else
+        local stats = entity:getComponent(Stats)
+        if stats ~= nil then
+            -- TODO: should be STR stat + 1d6 per level
+            total = stats:getValue('str') + ndn.dice('1d6').roll()
+        end
+    end
+
     local current = total
 
     local update = function(self, dt) end
 
     local getValue = function(self) return current end
 
-    local remove = function(self, value) current = mmax(current - value, 0) end
+    local reduce = function(self, hitpoints) current = mmax(current - hitpoints, 0) end
 
     local isAlive = function(self) return current > 0 end
 
     return setmetatable({
         getValue = getValue,
-        remove   = remove,
+        reduce   = reduce,
         isAlive  = isAlive,
     }, Health)
 end

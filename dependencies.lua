@@ -13,6 +13,7 @@ Signal          = require 'lib.hump.signal'
 vector          = require 'lib.hump.vector'
 Timer           = require 'lib.hump.timer'
 lume            = require 'lib.lume.lume'
+ndn             = require 'lib.ndn'
 
 -- scenes
 Game            = require 'src.scenes.game'
@@ -48,6 +49,7 @@ Control         = require 'src.components.control'
 Health          = require 'src.components.health'
 Weapon          = require 'src.components.weapon'
 Armor           = require 'src.components.armor'
+Stats           = require 'src.components.stats'
 
 -- resolvers
 MeleeCombat     = require 'src.resolvers.melee_combat'

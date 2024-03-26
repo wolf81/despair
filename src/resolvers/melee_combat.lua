@@ -11,7 +11,7 @@ M.resolve = function(entity, target)
 
     if is_hit then
         damage = weapon:getDamage()        
-        health:remove(damage)
+        health:reduce(damage)
     end
     
     return damage

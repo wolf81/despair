@@ -2,7 +2,7 @@ return {
 	id = 'spider',
 	type = 'npc',
 	name = 'Spider',
-	hd = '1d4-1',
+	hd = '1d8',
 	ac = 12,
 	class = '',
 	flags = { '' },

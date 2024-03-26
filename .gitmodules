@@ -4,3 +4,6 @@
 [submodule "lib/lume"]
 	path = lib/lume
 	url = git@github.com:wolf81/lume.git
+[submodule "lib/ndn"]
+	path = lib/ndn
+	url = https://github.com/wolf81/ndn.git

@@ -1,4 +1,4 @@
 ID$    |TYPE$ |NAME$  |HD$   |AC# |CLASS$ |FLAGS@ |SIGHT# |SPEED# |EQUIP@ |TEXTURE$  |ANIM@           |MORALE# |SPECIAL@ |
 
-spider |npc   |Spider |1d4-1 |12  |       |       |60     |20     |bite_1 |uf_heroes |197,198,199,200 |        |         |
-bat    |npc   |Bat    |1d4-1 |12  |       |       |60     |30     |bite_0 |uf_heroes |181,182,183,184 |        |         |
+spider |npc   |Spider |1d8+2 |12  |       |       |60     |20     |bite_1 |uf_heroes |197,198,199,200 |        |         |
+bat    |npc   |Bat    |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |181,182,183,184 |        |         |
