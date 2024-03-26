@@ -12,3 +12,4 @@ TODO
 [ ] Generate items randomly just outside of visible area of player
 [ ] Implement level saving and loading
 [ ] Investigate if smoother movement is possible by setting player direction
+[ ] Sort actor turn order by initiative
