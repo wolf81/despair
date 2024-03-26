@@ -36,10 +36,6 @@ local function initSystems(entities)
     return { visualSystem }
 end
 
-local function getKey(coord)
-    return coord.x .. ':' .. coord.y
-end
-
 Level.new = function(dungeon)
     -- generate a map
     local tiles, stair_up, stair_dn = MazeGenerator.generate(MAP_SIZE, 5)
@@ -55,6 +51,9 @@ Level.new = function(dungeon)
     -- handle game turns
     local turn = Turn(self)
 
+    -- fog of war
+    local fog = Fog(13, 10)
+
     for _, monster in ipairs(newMonsters(map)) do
         table.insert(entities, monster)
         map:setBlocked(monster.coord.x, monster.coord.y, true)
@@ -66,11 +65,23 @@ Level.new = function(dungeon)
     -- setup ecs
     local systems = initSystems(entities)
 
+    -- setup line of sight
+    local shadowcaster = Shadowcaster(
+        -- is visible
+        function(x, y) return map:getTile(x, y) == 0 end, 
+        -- cast light
+        function(x, y) fog:reveal(x, y) end
+    )
+
     local onMove = function(self, entity, coord, duration)
         self:setBlocked(entity.coord, false)
         self:setBlocked(coord, true)
 
         if entity.type ~= 'pc' then return end
+
+        -- update fog of war
+        fog:cover()        
+        shadowcaster:castLight(coord.x, coord.y, 6)    
 
         self:moveCamera(coord, duration)
 
@@ -178,6 +189,9 @@ Level.new = function(dungeon)
         for _, entity in ipairs(entities) do
             entity:draw()
         end
+
+        local ox, oy = camera:worldCoords(0, 0)
+        fog:draw(ox, oy)
 
         camera:detach()
     end

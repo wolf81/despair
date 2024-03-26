@@ -24,9 +24,11 @@ Level           = require 'src.world.level'
 Map             = require 'src.world.map'
 
 -- util
+Shadowcaster    = require 'src.util.shadowcaster'
 Direction       = require 'src.util.direction'
 Animation       = require 'src.util.animation'
 Turn            = require 'src.util.turn'
+Fog             = require 'src.util.fog'
 
 -- actions
 Move            = require 'src.actions.move'

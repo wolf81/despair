@@ -8,6 +8,7 @@ TODO
 [X] Implement turn-based mechanism with auto-advancing of turns every 4 seconds
 [X] Implement smooth level transitions
 [X] Implement fade-out animation for Destroy action
+[X] Implement line of sight
 [ ] Generate monsters randomly just outside visible area of player
 [ ] Generate items randomly just outside of visible area of player
 [ ] Implement level saving and loading
@@ -15,4 +16,3 @@ TODO
 [ ] Sort actor turn order by initiative
 [ ] Add level to attack bonus
 [ ] Implement movement speed
-[ ] Implement line of sight

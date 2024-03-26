@@ -32,6 +32,10 @@ Map.new = function(tiles, fn)
         return width, height
     end
 
+    local getTile = function(self, x, y)
+        return tiles[y][x]
+    end
+
     -- use a sprite batch for world texture, to efficiently draw the same quad multiple times
     local worldSprites = love.graphics.newSpriteBatch(TextureCache:get('uf_terrain'))
 
@@ -91,6 +95,7 @@ Map.new = function(tiles, fn)
         setBlocked  = setBlocked,
         isBlocked   = isBlocked,
         getSize     = getSize,
+        getTile     = getTile,
         draw        = draw,
     }, Map)
 end
