@@ -57,6 +57,9 @@ Level.new = function(dungeon)
     for _, monster in ipairs(newMonsters(map)) do
         table.insert(entities, monster)
         map:setBlocked(monster.coord.x, monster.coord.y, true)
+
+        local visual = monster:getComponent(Visual)
+        visual.alpha = 0.0
     end
 
     -- add camera
@@ -77,11 +80,49 @@ Level.new = function(dungeon)
         self:setBlocked(entity.coord, false)
         self:setBlocked(coord, true)
 
-        if entity.type ~= 'pc' then return end
+        if entity.type ~= 'pc' then 
+            local prev_coord_visible = fog:isVisible(entity.coord.x, entity.coord.y)
+            local next_coord_visible = fog:isVisible(coord.x, coord.y)
+            if next_coord_visible and not prev_coord_visible then
+                local visual = entity:getComponent(Visual)
+                Timer.tween(duration, visual, { alpha = 1.0 }, 'linear')
+            end
+
+            if prev_coord_visible and not next_coord_visible then
+                local visual = entity:getComponent(Visual)
+                Timer.tween(duration, visual, { alpha = 0.0 }, 'linear')
+            end
+
+            return
+        end
 
         -- update fog of war
-        fog:cover()        
-        shadowcaster:castLight(coord.x, coord.y, 6)    
+        fog:cover()     
+        local radius = 6   
+        shadowcaster:castLight(coord.x, coord.y, radius)    
+
+        for y = coord.y - radius - 1, coord.y + radius + 1 do
+            for x = coord.x - radius - 1, coord.x + radius + 1 do
+                if not fog:isVisible(x, y) then
+                    -- hide any npcs here
+                    for _, entity in ipairs(self:getEntities(vector(x, y))) do
+                        if entity:getComponent(Control) then
+                            local visual = entity:getComponent(Visual)
+                            Timer.tween(duration, visual, { alpha = 0.0 }, 'linear')
+                        end
+                    end
+                end
+
+                if fog:isVisible(x, y) then
+                    for _, entity in ipairs(self:getEntities(vector(x, y))) do
+                        if entity:getComponent(Control) then
+                            local visual = entity:getComponent(Visual)
+                            Timer.tween(duration, visual, { alpha = 1.0 }, 'linear')
+                        end
+                    end
+                end
+            end
+        end
 
         self:moveCamera(coord, duration)
 

@@ -15,10 +15,10 @@ Keyboard.new = function(entity)
             return Idle(level, entity)
         end
 
-        local next_coord = entity.coord + direction
+        if direction == Direction.NONE then return nil end
 
         -- ensure entity can move to next coord
-        if next_coord == entity.coord then return nil end
+        local next_coord = entity.coord + direction
         if level:isBlocked(next_coord) then 
             local entities = level:getEntities(next_coord, function(e) return e.type == 'npc' end)
             if #entities > 0 then

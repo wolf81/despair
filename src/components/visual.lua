@@ -39,7 +39,7 @@ Visual.new = function(entity, def, duration)
             end
         end
 
-        love.graphics.setColor(1.0, 1.0, 1.0, alpha)
+        love.graphics.setColor(1.0, 1.0, 1.0, self.alpha)
         local pos = entity.coord * TILE_SIZE
         self.anim:draw(texture, quads, pos)
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
@@ -93,6 +93,7 @@ Visual.new = function(entity, def, duration)
 
     return setmetatable({
         -- properties
+        alpha       = 1.0,
         anim        = anim,
         -- methods
         update      = update,

@@ -17,6 +17,7 @@ Fog.new = function(width, height)
     -- 13, 10
     local visible = {}
     local revealed = {}
+    local last_visible = {}
 
     local draw = function(self, ox, oy)
         local x = mfloor(ox / TILE_SIZE)
@@ -38,18 +39,29 @@ Fog.new = function(width, height)
     local reveal = function(self, x, y)
         local key = getKey(x, y)
         visible[key] = true
-        revealed[key] = true
+        revealed[key] = true        
+    end
+
+    local isVisible = function(self, x, y)
+        return visible[getKey(x, y)] == true
+    end
+
+    local wasVisible = function(self, x, y)
+        return last_visible[getKey(x, y)] == true
     end
 
     local cover = function(self)
+        last_visible = visible
         visible = {}
     end
 
     return setmetatable({
         -- methods
-        draw = draw,
-        cover = cover,
-        reveal = reveal,
+        draw        = draw,
+        cover       = cover,
+        reveal      = reveal,
+        isVisible   = isVisible,
+        wasVisible  = wasVisible,
     }, Fog)
 end
 
