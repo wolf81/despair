@@ -59,4 +59,6 @@ Entity.new = function(def, coord)
     }, Entity)
 end
 
-return setmetatable(Entity, { __call = function(_, ...) return Entity.new(...) end })
+return setmetatable(Entity, { 
+    __call = function(_, ...) return Entity.new(...) end,
+})

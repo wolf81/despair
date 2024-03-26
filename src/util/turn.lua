@@ -7,24 +7,30 @@
 
 local Turn = {}
 
+local function sortByInitiative(actors)
+    for i = 2, #actors, 1 do
+        local c1 = actors[i - 1]:getComponent(Control)
+        local c2 = actors[i]:getComponent(Control)
+
+        if c1:getInitiative() > c2:getInitiative() then
+            actors[i - 1], actors[i] = actors[i], actors[i - 1]
+        end 
+    end
+end
+
 Turn.new = function(level, actors, duration)
     actors = actors or {}
 
-    local time, active_idx, is_finished = 0, #actors, false
+    sortByInitiative(actors)
 
-    for i, actor in ipairs(actors) do
-        if actor.type == 'pc' then
-            actors[#actors], actors[i] = actors[i], actors[#actors]
-            break        
-        end
-    end
+    local time, active_idx, is_finished = 0, #actors, false
 
     local update = function(self, dt)        
         if is_finished then return end
 
         time = time + dt
 
-        -- get actions for each actor, in order
+        -- get actions for each actor
         while active_idx > 0 do
             local actor = actors[active_idx]  
             local control = actor:getComponent(Control)

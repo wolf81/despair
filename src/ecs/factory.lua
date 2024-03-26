@@ -61,9 +61,9 @@ M.create = function(id, coord)
 
     if entity.type == 'pc' then
         entity.z_index = 15
+        entity:addComponent(Stats(entity, def))
         entity:addComponent(Control(entity, def, Keyboard(entity)))
         entity:addComponent(Equipment(entity, def))
-        entity:addComponent(Stats(entity, def))
         entity:addComponent(Health(entity, def))
         entity:addComponent(Armor(entity, def))
         entity:addComponent(Weapon(entity, def))
