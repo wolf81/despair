@@ -102,6 +102,9 @@ Level.new = function(dungeon)
         if damage == 0 then
             print(entity.name .. ' missed attack on ' .. target.name)
         else
+            local visual = target:getComponent(Visual)
+            visual:colorize(duration)
+
             if is_crit then
                 print(entity.name .. ' critically hit ' .. target.name .. ' for ' .. damage .. ' hitpoints')
             else

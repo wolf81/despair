@@ -32,6 +32,16 @@ local function preload()
         local quads = QuadGenerator.generate(image, TILE_SIZE, TILE_SIZE)
         QuadCache:register(key, quads)
     end
+
+    local shd_dir = 'shd'
+    local files = love.filesystem.getDirectoryItems(shd_dir)
+    for _, file in ipairs(files) do
+        local key = file:match('^(.*)%.')
+
+        local shader = love.graphics.newShader(shd_dir .. '/' .. file)
+        ShaderCache:register(key, shader)
+        print('shader', key)
+    end
 end
 
 function love.load(args)

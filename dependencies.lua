@@ -58,6 +58,7 @@ MeleeCombat     = require 'src.resolvers.melee_combat'
 -- caches
 TextureCache    = Cache()
 QuadCache       = Cache()
+ShaderCache     = Cache()
 
 -- generators
 QuadGenerator   = require 'src.generators.quad_gen'

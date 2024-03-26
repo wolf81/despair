@@ -14,3 +14,5 @@ TODO
 [ ] Investigate if smoother movement is possible by setting player direction
 [ ] Sort actor turn order by initiative
 [ ] Add level to attack bonus
+[ ] Implement movement speed
+[ ] Implement line of sight
