@@ -8,7 +8,7 @@
 local Entity = {}
 
 -- create a new entity based on a definition and a coordinate
-function Entity.new(def, coord)
+Entity.new = function(def, coord)
     assert(def ~= nil, 'missing parameter "def"')
     assert(coord ~= nil, 'missing parameter "coord"')
     

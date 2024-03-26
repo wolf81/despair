@@ -7,7 +7,7 @@
 
 local Map = {}
 
-function Map.new(tiles, fn)
+Map.new = function(tiles, fn)
     fn = fn or function(id) return false end
 
     local height, width = #tiles, #tiles[1]

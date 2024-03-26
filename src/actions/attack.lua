@@ -7,7 +7,7 @@
 
 local Attack = {}
 
-function Attack.new(level, entity, target)
+Attack.new = function(level, entity, target)
     local did_execute = false
 
     local execute = function(self, duration)

@@ -19,7 +19,7 @@ Turn.new = function(level, actors, duration)
         end
     end
 
-    update = function(self, dt)        
+    local update = function(self, dt)        
         if is_finished then return end
 
         time = time + dt

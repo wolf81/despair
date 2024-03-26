@@ -7,7 +7,7 @@
 
 local Cache = {}
 
-function Cache.new()
+Cache.new = function()
     local cache = {}
 
     local register = function(self, key, value)

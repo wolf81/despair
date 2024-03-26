@@ -4,9 +4,9 @@ local Stats = {}
 
 Stats.new = function(entity, def)
     local stats = {
-        str = def['str'],
-        dex = def['dex'],
-        mind = def['mind'],
+        str     = def['str'],
+        dex     = def['dex'],
+        mind    = def['mind'],
     }
 
     local getValue = function(self, stat)
@@ -14,7 +14,7 @@ Stats.new = function(entity, def)
     end
 
     local getBonus = function(self, stat)
-        return mfloor(stats[stat] - 10) / 2
+        return mfloor((stats[stat] - 10) / 2)
     end
 
     return setmetatable({

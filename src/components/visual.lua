@@ -41,4 +41,6 @@ Visual.new = function(entity, def)
     }, Visual)
 end
 
-return setmetatable(Visual, { __call = function(_, ...) return Visual.new(...) end })
+return setmetatable(Visual, { 
+    __call = function(_, ...) return Visual.new(...) end, 
+})

@@ -44,7 +44,7 @@ local function getKey(coord)
     return coord.x .. ':' .. coord.y
 end
 
-function Level.new(dungeon)
+Level.new = function(dungeon)
     -- generate a map
     local tiles, stair_up, stair_dn = MazeGenerator.generate(MAP_SIZE, 5)
     local map = Map(tiles, function(id) return id ~= 0 end)
@@ -90,6 +90,8 @@ function Level.new(dungeon)
     end
 
     local onDestroy = function(self, entity, duration)
+        print(entity.name .. ' is destroyed')
+
         Timer.after(duration, function() 
             self:setBlocked(entity.coord, false)
             entity.remove = true

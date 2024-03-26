@@ -7,7 +7,7 @@
 
 local System = {}
 
-function System.new(T)
+System.new = function(T)
     local components = {}
 
     local addComponent = function(self, entity)
