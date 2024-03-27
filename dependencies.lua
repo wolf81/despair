@@ -8,6 +8,7 @@
 local Cache = require 'src.util.cache'
 
 -- libraries
+bresenham       = require 'lib.bresenham.bresenham'
 Camera          = require 'lib.hump.camera'
 Signal          = require 'lib.hump.signal'
 vector          = require 'lib.hump.vector'
@@ -57,7 +58,7 @@ Stats           = require 'src.components.stats'
 Armor           = require 'src.components.armor'
 
 -- resolvers
-MeleeCombat     = require 'src.resolvers.melee_combat'
+CombatResolver  = require 'src.resolvers.combat'
 
 -- caches
 TextureCache    = Cache()

@@ -15,7 +15,7 @@ Attack.new = function(level, entity, target)
 
         did_execute = true
 
-        local status = MeleeCombat.resolve(entity, target)
+        local status = CombatResolver.resolve(entity, target)
 
         Signal.emit('attack', entity, target, status, duration)
     end

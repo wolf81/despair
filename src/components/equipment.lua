@@ -18,6 +18,10 @@ local SLOTS = {
 Equipment.new = function(entity, def)
     local equip = {}
 
+    for slot, _ in pairs(SLOTS) do
+        equip[slot] = nil
+    end
+
     for _, id in ipairs(def['equip']) do
         local item = EntityFactory.create(id)
         if item.type == 'armor' then
@@ -46,9 +50,23 @@ Equipment.new = function(entity, def)
         return equip[slot]
     end
 
+    local equipMelee = function(self) 
+        -- TODO: should swap items & return true if melee was equipped
+        local weapon_type = equip.mainhand.kind
+        return weapon_type ~= 'ranged_1h' and weapon_type ~= 'ranged_2h' 
+    end
+
+    local equipRanged = function(self)
+        -- TODO: should swap items & return true if ranged was equipped
+        local weapon_type = equip.mainhand.kind
+        return (weapon_type == 'ranged_1h') or (weapon_type == 'ranged_2h') 
+    end
+
     return setmetatable({
         -- methods
-        getItem = getItem,
+        getItem     = getItem,
+        equipMelee  = equipMelee,
+        equipRanged = equipRanged,
     }, Equipment)
 end
 

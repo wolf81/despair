@@ -26,6 +26,7 @@ Visual.new = function(entity, def, duration)
     local texture = TextureCache:get(def.texture)
     local quads = QuadCache:get(def.texture)
     local anim = Animation.loop(frames, duration)
+    print(entity.name, #quads)
 
     update = function(self, dt, level) 
         self.anim:update(dt)

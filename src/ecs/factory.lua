@@ -86,16 +86,17 @@ M.create = function(id, coord)
         entity:addComponent(Armor(entity, def))
         entity:addComponent(Weapon(entity, def))
     elseif entity.type == 'armor' then
-        entity.z_index  = 5
-        entity.kind     = def['kind']
-        entity.ac       = def['ac']
+        entity.z_index      = 5
+        entity.kind         = def['kind']
+        entity.ac           = def['ac']
     elseif entity.type == 'weapon' then
-        entity.z_index  = 5
-        entity.kind     = def['kind']
-        entity.attack   = def['attack']
-        entity.damage   = def['damage']
+        entity.z_index      = 5
+        entity.kind         = def['kind']
+        entity.attack       = def['attack']
+        entity.damage       = def['damage']
+        entity.projectile   = def['projectile']
     elseif entity.type == 'effect' then
-        entity.z_index  = 20
+        entity.z_index      = 20
     end
 
     return entity

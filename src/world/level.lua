@@ -47,6 +47,7 @@ Level.new = function(dungeon)
     local tiles, stair_up, stair_dn = MazeGenerator.generate(MAP_SIZE, 5)
     local map = Map(tiles, function(id) return id ~= 0 end)
     local map_w, map_h = map:getSize()
+    local player_idx = 0
 
     -- generate stairs using coords from maze generator
     stair_up = EntityFactory.create('dun_14', stair_up)
@@ -157,6 +158,16 @@ Level.new = function(dungeon)
         self:addEntity(effect)
         Timer.after(duration, function() self:removeEntity(effect) end)
 
+        if status.proj_id ~= nil then
+            local projectile = EntityFactory.create(status.proj_id, entity.coord:clone())
+            self:addEntity(projectile)
+            -- TODO: rotate projectile towards player
+
+            Timer.tween(duration, projectile, { coord = target.coord }, 'linear', function()
+                self:removeEntity(projectile)
+            end)
+        end
+
         if damage == 0 then
             print(entity.name .. ' missed attack on ' .. target.name)
         else
@@ -184,19 +195,30 @@ Level.new = function(dungeon)
         table.insert(entities, entity)
 
         -- a skip list would be useful here, to keep the list auto-sorted
-        table.sort(entities, function(a, b) return a.z_index < b.z_index end)
+        table.sort(entities, function(a, b) return a.z_index < b.z_index end)    
 
         for _, system in ipairs(systems) do
             system:addComponent(entity)
         end
+
+        for idx, entity in ipairs(entities) do
+            if entity.type == 'pc' then
+                player_idx = idx
+            end
+        end
     end
 
     local removeEntity = function(self, entity)         
-        for i, e in ipairs(entities) do
+        for idx, e in ipairs(entities) do
             if e == entity then
-                table.remove(entities, i)
+                if idx < player_idx then
+                    player_idx = player_idx - 1                
+                end
+                table.remove(entities, idx)
             end
         end
+
+        if entity.type == 'pc' then player_idx = 0 end
 
         for _, system in ipairs(systems) do
             system:removeComponent(entity)
@@ -252,6 +274,12 @@ Level.new = function(dungeon)
         return map:isBlocked(coord.x, coord.y)
     end
 
+    local inLineOfSight = function(self, coord1, coord2) 
+        return bresenham.los(coord1.x, coord1.y, coord2.x, coord2.y, function(x, y) 
+            return map:getTile(x, y) == 0
+        end)
+    end
+
     local setBlocked = function(self, coord, flag)
         map:setBlocked(coord.x, coord.y, flag)
     end
@@ -268,6 +296,10 @@ Level.new = function(dungeon)
         end
 
         return filtered
+    end
+
+    local getPlayer = function(self)
+        return (player_idx > 0) and entities[player_idx] or nil
     end
 
     local handlers = {}
@@ -318,9 +350,11 @@ Level.new = function(dungeon)
         draw            = draw,
         isBlocked       = isBlocked,
         setBlocked      = setBlocked,
+        inLineOfSight   = inLineOfSight,
         enter           = enter,
         exit            = exit,
         addEntity       = addEntity,
+        getPlayer       = getPlayer,
         getEntities     = getEntities,
         removeEntity    = removeEntity,
         moveCamera      = moveCamera,

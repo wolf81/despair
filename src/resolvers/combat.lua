@@ -11,6 +11,7 @@ M.resolve = function(entity, target)
     local health = target:getComponent(Health)
     local armor = target:getComponent(Armor)
     local weapon = entity:getComponent(Weapon)
+    local equipment = entity:getComponent(Equipment)
 
     local roll = ndn.dice('1d20').roll()
     local is_crit = roll == 20 -- critical hit, dealing maximum damage
@@ -26,7 +27,9 @@ M.resolve = function(entity, target)
     if is_hit then
         health:drain(damage)
     end
-    
+
+    local eq_weapon = equipment:getItem('mainhand')
+   
     return {
         ac      = ac,
         roll    = roll,
@@ -34,6 +37,7 @@ M.resolve = function(entity, target)
         damage  = damage,
         is_hit  = is_hit,
         is_crit = is_crit,
+        proj_id = eq_weapon.projectile,
     }
 end
 

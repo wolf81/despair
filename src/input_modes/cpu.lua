@@ -7,30 +7,26 @@ local function getRandomDirection()
     return dirs[lrandom(#dirs)]
 end
 
-local function getAdjacentPlayer(level, entity)
-    local dirs = { 
-        Direction.N, Direction.E, Direction.S, Direction.W, 
-        Direction.NW, Direction.SW, Direction.SE, Direction.NE, 
-    }
-
-    for _, dir in ipairs(dirs) do
-        local entities = level:getEntities(entity.coord + dir)
-        if #entities > 0 then
-            target = entities[1]
-            if target.type == 'pc' then
-                return target
-            end
-        end
-    end
-
-    return nil
-end
-
 Cpu.new = function(entity)
     local getAction = function(self, level)
-        local player = getAdjacentPlayer(level, entity)
+        local player = level:getPlayer()
         if player ~= nil then
-            return Attack(level, entity, player)
+            local distance = player.coord:dist(entity.coord)
+            if distance < 2 then
+                local equip = entity:getComponent(Equipment)
+                if equip:equipMelee() then
+                    print('equipped melee')
+                    return Attack(level, entity, player)
+                end
+            elseif distance < 10 then
+                local equip = entity:getComponent(Equipment)
+                if equip:equipRanged() then
+                    -- check line of sight
+                    if level:inLineOfSight(entity.coord, player.coord) then
+                        return Attack(level, entity, player)
+                    end
+                end
+            end
         end
 
         -- try to move in a random direction
