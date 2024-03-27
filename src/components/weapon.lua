@@ -24,15 +24,23 @@ Weapon.new = function(entity, def)
         local base = weapon ~= 0 and weapon.attack or 0
         local bonus = 0
 
-        -- add strength or dexterity bonus for player characters
+        -- add bonuses for player characters
         if stats ~= nil then
             local str_bonus = stats:getBonus('str')
+            local dex_bonus = stats:getBonus('dex')
 
-            if weapon.kind == 'light' and 
-                (entity.class == 'fighter' or entity.class == 'rogue') then
-                bonus = bonus + mmax(str_bonus, stats:getBonus('dex'))
-            else
-                bonus = bonus + str_bonus
+            if weapon.kind == 'ranged_1h' or weapon.kind == 'ranged_2h' then
+                -- for missle weapons add dexterity bonus
+                bonus = bonus + dex_bonus
+            else 
+                -- for melee weapons add strength bonus
+                -- for light weapons, fighters & rogues may use dexterity bonus, if higher                
+                if weapon.kind == 'light' and 
+                    (entity.class == 'fighter' or entity.class == 'rogue') then
+                    bonus = bonus + mmax(str_bonus, dex_bonus)
+                else
+                    bonus = bonus + str_bonus
+                end            
             end
         end
 
