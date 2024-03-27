@@ -241,6 +241,10 @@ Level.new = function(dungeon)
             system:update(dt, self)
         end
 
+        Pointer.update(camera, self)
+
+        if player_idx == 0 then return end
+
         -- create new turn if needed
         if turn:isFinished() then
             local actors = {} 
@@ -255,8 +259,6 @@ Level.new = function(dungeon)
         end
 
         turn:update(dt)
-
-        Pointer.update(camera, self)
     end
 
     local draw = function(self)
