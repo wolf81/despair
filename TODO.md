@@ -1,19 +1,19 @@
 TODO
 ====
 
-[x] Add entrance & exit stairs
-[x] If player performs an action, turn is advanced for all entities
-[X] Allow player to proceed to next level by moving on exit stairs
-[X] Allow player to proceed to previous level by moving on entrance stairs
-[X] Implement turn-based mechanism with auto-advancing of turns every 4 seconds
-[X] Implement smooth level transitions
-[X] Implement fade-out animation for Destroy action
-[X] Implement line of sight
-[X] Sort actor turn order by initiative
-[ ] Generate monsters randomly just outside visible area of player
-[ ] Generate items randomly just outside of visible area of player
-[ ] Implement level saving and loading
-[ ] Investigate if smoother movement is possible by setting player direction
-[ ] Add level to attack bonus
-[ ] Implement movement speed
-[ ] Fix: sometimes a turn is stuck for a full duration when NPC is destroyed
+[x] feat: Add entrance & exit stairs
+[x] feat: If player performs an action, turn is advanced for all entities
+[X] feat: Allow player to proceed to next level by moving on exit stairs
+[X] feat: Allow player to proceed to previous level by moving on entrance stairs
+[X] feat: Implement turn-based mechanism with auto-advancing of turns every 4 seconds
+[X] feat: Implement smooth level transitions
+[X] feat: Implement fade-out animation for Destroy action
+[X] feat: Implement line of sight
+[X] feat: Sort actor turn order by initiative
+[X] feat: Investigate if smoother movement is possible by setting player direction
+[X] feat: Add level to attack bonus
+[ ] feat: Generate monsters randomly just outside visible area of player
+[ ] feat: Generate items randomly just outside of visible area of player
+[ ] feat: Implement level saving and loading
+[ ] feat: Implement movement speed
+[ ] fix: sometimes a turn is stuck for a full duration when NPC is destroyed
