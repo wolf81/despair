@@ -5,7 +5,7 @@
 --  info+despair@wolftrail.net
 --]]
 
-local mfloor, lrandom = math.floor, love.math.random
+local mfloor, matan2, lrandom = math.floor, math.atan2, love.math.random
 
 local Level = {}
 
@@ -159,16 +159,20 @@ Level.new = function(dungeon)
         Timer.after(duration, function() self:removeEntity(effect) end)
 
         if status.proj_id ~= nil then
-            local projectile = EntityFactory.create(status.proj_id, entity.coord:clone())
+            local coord1 = vector(entity.coord.x + 0.5, entity.coord.y + 0.5)
+            local coord2 = vector(target.coord.x + 0.5, target.coord.y + 0.5)
+            local projectile = EntityFactory.create(status.proj_id, coord1)            
             self:addEntity(projectile)
-            -- TODO: rotate projectile towards player
-
-            Timer.tween(duration, projectile, { coord = target.coord }, 'linear', function()
+            local visual = projectile:getComponent(Visual)
+            local rot = matan2(coord2.x - coord1.x, coord1.y - coord2.y) - math.pi / 2
+            visual:setRotation(rot)
+            
+            Timer.tween(duration, projectile, { coord = coord2 }, 'linear', function()
                 self:removeEntity(projectile)
             end)
         end
 
-        if damage == 0 then
+        if status.damage == 0 then
             print(entity.name .. ' missed attack on ' .. target.name)
         else
             local visual = target:getComponent(Visual)
