@@ -15,9 +15,9 @@ Attack.new = function(level, entity, target)
 
         did_execute = true
 
-        local damage, is_crit = MeleeCombat.resolve(entity, target)
+        local status = MeleeCombat.resolve(entity, target)
 
-        Signal.emit('attack', entity, target, damage, is_crit, duration)
+        Signal.emit('attack', entity, target, status, duration)
     end
 
     return setmetatable({

@@ -21,11 +21,13 @@ Armor.new = function(entity, def)
             bonus = bonus + chest.ac
         end
 
+        -- add shield bonus, if equipped
         local offhand = equipment:getItem('offhand')
         if offhand ~= nil and offhand.type == 'armor' then
             bonus = bonus + offhand.ac
         end
 
+        -- add dexterity bonus in case of player characters
         local stats = entity:getComponent(Stats)
         if stats ~= nil then
             bonus = bonus + stats:getBonus('dex')

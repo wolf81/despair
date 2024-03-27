@@ -7,8 +7,8 @@
 
 local Control = {}
 
-Control.new = function(entity, def, input_type)
-    assert(input_type ~= nil, 'missing parameter "input_type"')
+Control.new = function(entity, def, input_mode)
+    assert(input_mode ~= nil, 'missing parameter "input_mode"')
 
     local is_enabled = true
     
@@ -20,7 +20,7 @@ Control.new = function(entity, def, input_type)
             return Destroy(level, entity) 
         end
 
-        return input_type:getAction(level)
+        return input_mode:getAction(level)
     end
 
     local setEnabled = function(self, flag)

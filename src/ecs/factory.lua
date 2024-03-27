@@ -61,6 +61,8 @@ M.create = function(id, coord)
 
     if entity.type == 'pc' then
         entity.z_index = 15
+        entity.class = def['class']
+        entity:addComponent(ExpLevel(entity, def))
         entity:addComponent(Stats(entity, def))
         entity:addComponent(Control(entity, def, Keyboard(entity)))
         entity:addComponent(Equipment(entity, def))

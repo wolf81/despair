@@ -31,14 +31,14 @@ Turn            = require 'src.util.turn'
 Fog             = require 'src.util.fog'
 
 -- actions
-Move            = require 'src.actions.move'
-Attack          = require 'src.actions.attack'
 Destroy         = require 'src.actions.destroy'
+Attack          = require 'src.actions.attack'
+Move            = require 'src.actions.move'
 Idle            = require 'src.actions.idle'
 
--- input types
-Keyboard        = require 'src.input_types.keyboard'
-Cpu             = require 'src.input_types.cpu'
+-- input modes
+Keyboard        = require 'src.input_modes.keyboard'
+Cpu             = require 'src.input_modes.cpu'
 
 -- entity component system
 EntityFactory   = require 'src.ecs.factory'
@@ -47,8 +47,9 @@ System          = require 'src.ecs.system'
 
 -- components
 Equipment       = require 'src.components.equipment'
-Visual          = require 'src.components.visual'
+ExpLevel        = require 'src.components.exp_level'
 Control         = require 'src.components.control'
+Visual          = require 'src.components.visual'
 Health          = require 'src.components.health'
 Weapon          = require 'src.components.weapon'
 Armor           = require 'src.components.armor'
@@ -59,8 +60,8 @@ MeleeCombat     = require 'src.resolvers.melee_combat'
 
 -- caches
 TextureCache    = Cache()
-QuadCache       = Cache()
 ShaderCache     = Cache()
+QuadCache       = Cache()
 
 -- generators
 QuadGenerator   = require 'src.generators.quad_gen'

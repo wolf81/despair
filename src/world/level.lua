@@ -152,7 +152,7 @@ Level.new = function(dungeon)
         end)
     end
 
-    local onAttack = function(self, entity, target, damage, is_crit, duration)
+    local onAttack = function(self, entity, target, status, duration)
         local effect = EntityFactory.create('strike_1', target.coord:clone())
         self:addEntity(effect)
         Timer.after(duration, function() self:removeEntity(effect) end)
@@ -163,11 +163,14 @@ Level.new = function(dungeon)
             local visual = target:getComponent(Visual)
             visual:colorize(duration)
 
-            if is_crit then
-                print(entity.name .. ' critically hit ' .. target.name .. ' for ' .. damage .. ' hitpoints')
+            if status.is_crit then
+                print(entity.name .. ' critically hit ' .. target.name .. ' for ' .. status.damage .. ' hitpoints')
             else
-                print(entity.name .. ' hit ' .. target.name .. ' for ' .. damage .. ' hitpoints')
+                print(entity.name .. ' hit ' .. target.name .. ' for ' .. status.damage .. ' hitpoints')
             end
+
+            local total = status.roll + status.attack
+            print(total .. ' (' .. status.roll .. ' + ' + status.attack .. ') vs ' .. status.ac)
         end
 
         -- TODO: screen shake on critical hits
