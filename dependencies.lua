@@ -28,6 +28,7 @@ Map             = require 'src.world.map'
 Shadowcaster    = require 'src.util.shadowcaster'
 Direction       = require 'src.util.direction'
 Animation       = require 'src.util.animation'
+Pointer         = require 'src.util.pointer'
 Turn            = require 'src.util.turn'
 Fog             = require 'src.util.fog'
 
@@ -39,6 +40,7 @@ Idle            = require 'src.actions.idle'
 
 -- input modes
 Keyboard        = require 'src.input_modes.keyboard'
+Mouse           = require 'src.input_modes.mouse'
 Cpu             = require 'src.input_modes.cpu'
 
 -- entity component system

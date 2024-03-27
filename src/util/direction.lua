@@ -23,7 +23,6 @@ Direction.isOrdinal = function(dir)
     return dir.x ~= 0 and dir.y ~= 0
 end
 
---[[
 -- get direction from a vector
 Direction.fromHeading = function(x, y)
     if x == 0 and y < 0 then return Direction.N
@@ -36,6 +35,5 @@ Direction.fromHeading = function(x, y)
     elseif x > 0 and y > 0 then return Direction.SE
     else return Direction.NONE end
 end
---]]
 
 return Direction

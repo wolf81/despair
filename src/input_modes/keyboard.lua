@@ -40,14 +40,16 @@ Keyboard.new = function(entity)
             return nil 
         end 
 
-        if not Direction.isOrdinal(direction) then
+        if Direction.isOrdinal(direction) then            
             return Move(level, entity, next_coord)
         end
+
+        return nil
     end
 
     return setmetatable({
         -- methods
-        getAction = getAction,
+        getAction   = getAction,
     }, Keyboard)
 end
 

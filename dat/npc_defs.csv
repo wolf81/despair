@@ -5,10 +5,9 @@ bat       |npc   |Bat              |1d8   |12  |       |       |60     |30     |
 skeleton  |npc   |Skeleton         |1d12  |12  |       |       |60     |30     |bite_0 |uf_heroes |121,122,123,124 |        |         |
 skel_warr |npc   |Skeleton Warrior |1d12  |12  |       |       |60     |30     |bite_0 |uf_heroes |125,126,127,128 |        |         |
 skel_mage |npc   |Skeleton Mage    |1d12  |12  |       |       |60     |30     |bite_0 |uf_heroes |129,130,131,132 |        |         |
-skel_arch |npc   |Skeleton Archer  |1d12  |12  |       |       |60     |30     |bite_0 |uf_heroes |133,134,135,136 |        |         |
+skel_arch |npc   |Skeleton Archer  |1d12  |12  |       |       |60     |30     |sbow_0 |uf_heroes |133,134,135,136 |        |         |
 rat       |npc   |Rat              |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |201,202,203,204 |        |         |
 snake     |npc   |Snake            |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |221,222,223,224 |        |         |
 gr_ooze   |npc   |Green Ooze       |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |469,470,471,472 |        |         |
 red_drag  |npc   |Red Dragon       |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |349,350,351,352 |        |         |
-wraith    |npc   |Wraith 	       |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |173,174,175,176 |        |         |
-
+wraith    |npc   |Wraith           |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |173,174,175,176 |        |         |

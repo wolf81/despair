@@ -255,6 +255,8 @@ Level.new = function(dungeon)
         end
 
         turn:update(dt)
+
+        Pointer.update(camera, self)
     end
 
     local draw = function(self)
@@ -268,6 +270,8 @@ Level.new = function(dungeon)
 
         local ox, oy = camera:worldCoords(0, 0)
         fog:draw(ox, oy)
+
+        Pointer.draw(camera)
 
         camera:detach()
     end
@@ -314,9 +318,9 @@ Level.new = function(dungeon)
         self:setBlocked(player.coord, true)
 
         handlers = {
-            ['move'] = function(...) onMove(self, ...) end,
-            ['idle'] = function(...) onIdle(self, ...) end,
-            ['attack'] = function(...) onAttack(self, ...) end,
+            ['move']    = function(...) onMove(self, ...)    end,
+            ['idle']    = function(...) onIdle(self, ...)    end,
+            ['attack']  = function(...) onAttack(self, ...)  end,
             ['destroy'] = function(...) onDestroy(self, ...) end,
         }
 

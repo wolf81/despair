@@ -69,7 +69,7 @@ M.create = function(id, coord)
         assert(RACES[race] ~= nil, 'invalid race "' .. race .. '"')
         entity.race = race
 
-        entity:addComponent(Control(entity, def, Keyboard(entity)))
+        entity:addComponent(Control(entity, def, Keyboard(entity), Mouse(entity)))
         entity:addComponent(Equipment(entity, def))
         entity:addComponent(Skills(entity, def))
         entity:addComponent(Stats(entity, def))
