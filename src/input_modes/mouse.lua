@@ -34,31 +34,7 @@ Mouse.new = function(entity)
             return nil
         end 
 
-        if Direction.isOrdinal(direction) then
-            local dxy = entity.coord - Pointer.getCoord()
-
-            if direction == Direction.NW then
-                direction = dxy.x < dxy.y and Direction.W or Direction.N 
-            elseif direction == Direction.SW then
-                direction = dxy.x < dxy.y and Direction.W or Direction.S 
-            elseif direction == Direction.NE then
-                direction = dxy.x < dxy.y and Direction.E or Direction.N 
-            elseif direction == Direction.SE then
-                direction = dxy.x < dxy.y and Direction.E or Direction.S 
-            end
-
-            next_coord = entity.coord + direction
-            if not level:isBlocked(next_coord) then
-                return Move(level, entity, next_coord)
-            end
-        else
-            return Move(level, entity, next_coord)
-        end
-
-        if not Direction.isOrdinal(direction) then
-        end
-
-        return nil
+        return Move(level, entity, next_coord)
     end
 
     return setmetatable({

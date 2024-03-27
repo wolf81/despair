@@ -17,7 +17,7 @@ local function newMonsters(map)
         'skel_arch', 'cobra', 'rat', 'green_ooze', 'red_drag',
         'wraith', 'vampire', 'vampire_lord', 'lich', 'dire_cobra',
         'dire_bat', 'blue_drag', 'orc_shaman', 'orc_warrior', 
-        'purple_jelly', 'black_widow_mat', 'spectator', 'observer'
+        'purple_jelly', 'blk_widow_mat', 'spectator', 'observer'
     }
 
     while #monsters < 10 do

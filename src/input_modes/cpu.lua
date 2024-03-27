@@ -3,7 +3,7 @@ local lrandom = love.math.random
 local Cpu = {}
 
 local function getRandomDirection()
-    local dirs = { Direction.N, Direction.E, Direction.S, Direction.W }
+    local dirs = { Direction.N, Direction.E, Direction.S, Direction.W, Direction.NW, Direction.SW, Direction.NE, Direction.SE }
     return dirs[lrandom(#dirs)]
 end
 
