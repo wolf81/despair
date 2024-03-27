@@ -1,7 +1,7 @@
 return {
-	id = 'skel_mage',
+	id = 'skel_arch',
 	type = 'npc',
-	name = 'Skeleton Mage',
+	name = 'Skeleton Archer',
 	hd = '1d12',
 	ac = 12,
 	class = '',
@@ -10,7 +10,7 @@ return {
 	speed = 30,
 	equip = { 'bite_0' },
 	texture = 'uf_heroes',
-	anim = { 129, 130, 131, 132 },
+	anim = { 133, 134, 135, 136 },
 	morale = 0,
 	special = { '' },
 }

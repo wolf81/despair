@@ -1,7 +1,7 @@
 return {
 	id = 'sbow_0',
 	type = 'weapon',
-	kind = 'ranged',
+	kind = 'ranged_2h',
 	name = 'Shortbow',
 	attack = 0,
 	damage = '1d6',

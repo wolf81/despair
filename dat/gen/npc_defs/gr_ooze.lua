@@ -1,8 +1,8 @@
 return {
-	id = 'skel_mage',
+	id = 'gr_ooze',
 	type = 'npc',
-	name = 'Skeleton Mage',
-	hd = '1d12',
+	name = 'Green Ooze',
+	hd = '1d8',
 	ac = 12,
 	class = '',
 	flags = { '' },
@@ -10,7 +10,7 @@ return {
 	speed = 30,
 	equip = { 'bite_0' },
 	texture = 'uf_heroes',
-	anim = { 129, 130, 131, 132 },
+	anim = { 469, 470, 471, 472 },
 	morale = 0,
 	special = { '' },
 }

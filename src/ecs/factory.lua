@@ -60,13 +60,31 @@ M.create = function(id, coord)
     end  
 
     if entity.type == 'pc' then
-        entity.z_index = 10
+        entity.z_index = 15
+        entity:addComponent(Stats(entity, def))
         entity:addComponent(Control(entity, def, Keyboard(entity)))
+        entity:addComponent(Equipment(entity, def))
         entity:addComponent(Health(entity, def))
+        entity:addComponent(Armor(entity, def))
+        entity:addComponent(Weapon(entity, def))
     elseif entity.type == 'npc' then
-        entity.z_index = 5
+        entity.z_index = 10        
         entity:addComponent(Control(entity, def, Cpu(entity)))
+        entity:addComponent(Equipment(entity, def))
         entity:addComponent(Health(entity, def))
+        entity:addComponent(Armor(entity, def))
+        entity:addComponent(Weapon(entity, def))
+    elseif entity.type == 'armor' then
+        entity.z_index  = 5
+        entity.kind     = def['kind']
+        entity.ac       = def['ac']
+    elseif entity.type == 'weapon' then
+        entity.z_index  = 5
+        entity.kind     = def['kind']
+        entity.attack   = def['attack']
+        entity.damage   = def['damage']
+    elseif entity.type == 'effect' then
+        entity.z_index  = 20
     end
 
     return entity

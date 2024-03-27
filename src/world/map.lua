@@ -7,7 +7,7 @@
 
 local Map = {}
 
-function Map.new(tiles, fn)
+Map.new = function(tiles, fn)
     fn = fn or function(id) return false end
 
     local height, width = #tiles, #tiles[1]
@@ -32,6 +32,10 @@ function Map.new(tiles, fn)
         return width, height
     end
 
+    local getTile = function(self, x, y)
+        return tiles[y][x]
+    end
+
     -- use a sprite batch for world texture, to efficiently draw the same quad multiple times
     local worldSprites = love.graphics.newSpriteBatch(TextureCache:get('uf_terrain'))
 
@@ -44,7 +48,7 @@ function Map.new(tiles, fn)
             for x = 1, self.width do
                 local tile_id = tiles[y][x]
 
-                if tile_id == math.huge then goto continue end
+                if tile_id == math.huge then goto next end
 
                 local quad_idx = 22
 
@@ -57,7 +61,7 @@ function Map.new(tiles, fn)
 
                 worldSprites:add(quads[quad_idx], x * TILE_SIZE, y * TILE_SIZE)
 
-                ::continue::
+                ::next::
             end
         end
 
@@ -91,6 +95,7 @@ function Map.new(tiles, fn)
         setBlocked  = setBlocked,
         isBlocked   = isBlocked,
         getSize     = getSize,
+        getTile     = getTile,
         draw        = draw,
     }, Map)
 end

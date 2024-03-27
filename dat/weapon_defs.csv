@@ -1,26 +1,26 @@
-ID$         |TYPE$  |KIND$  |NAME$                |ATTACK# |DAMAGE$ |SPECIAL@           |RANGE# |
+ID$         |TYPE$  |KIND$     |NAME$                |ATTACK# |DAMAGE$ |SPECIAL@           |RANGE# |
 
-lsword_1    |weapon |1h     |Longsword +5         |5       |1d8+4   |                   |       |
-lsword_2    |weapon |1h     |Longsword +2         |1       |1d8+1   |                   |       |
-mstar_1     |weapon |1h     |Morningstar +1       |1       |1d8     |                   |       |
+lsword_1    |weapon |1h        |Longsword +5         |5       |1d8+4   |                   |       |
+lsword_2    |weapon |1h        |Longsword +2         |1       |1d8+1   |                   |       |
+mstar_1     |weapon |1h        |Morningstar +1       |1       |1d8     |                   |       |
 
-qstaff_1    |weapon |2h     |Quarterstaff +2      |2       |1d6+1   |                   |       |
-cstaff_0    |weapon |2h     |Crooked Staff +2     |2       |1d8     |                   |       |
+qstaff_1    |weapon |2h        |Quarterstaff +2      |2       |1d6+1   |                   |       |
+cstaff_0    |weapon |2h        |Crooked Staff +2     |2       |1d8     |                   |       |
 
-ssword_1    |weapon |light  |Short Sword +0       |0       |1d6+1   |                   |       |
-ssword_2    |weapon |light  |Short Sword +4       |4       |1d6+2   |                   |       |
-unarmed_1   |weapon |light  |Unarmed Strike +9    |9       |1d8+4   |                   |       |
-slam_0      |weapon |light  |Slam +3              |3       |1d6+1   |                   |       |
-slam_1      |weapon |light  |Slam +5              |5       |1d6+4   |level_drain_1_dc14 |       |
-bite_0      |weapon |light  |Bite                 |0       |1d1     |                   |       |
-bite_1      |weapon |light  |Bite +4              |4       |1d1     |poison_1d4         |       |
-bite_2      |weapon |light  |Bite +3              |3       |1d6+1   |                   |       |
-bite_3      |weapon |light  |Bite +5              |5       |1d8+1   |fire_1d6           |       |
-bite_4      |weapon |light  |Bite +11             |7       |2d6+4   |                   |       |
-inc_touch_0 |weapon |light  |Incorporeal Touch +5 |5       |1d4     |dmg_str_1d6        |       |
-inc_touch_1 |weapon |light  |Incorporeal Touch +3 |3       |1d6     |dmg_str_1d6        |       |
-dagger_0    |weapon |light  |Dagger +6            |6       |1d4     |                   |       |
+ssword_1    |weapon |light     |Short Sword +0       |0       |1d6+1   |                   |       |
+ssword_2    |weapon |light     |Short Sword +4       |4       |1d6+2   |                   |       |
+unarmed_1   |weapon |light     |Unarmed Strike +9    |9       |1d8+4   |                   |       |
+slam_0      |weapon |light     |Slam +3              |3       |1d6+1   |                   |       |
+slam_1      |weapon |light     |Slam +5              |5       |1d6+4   |level_drain_1_dc14 |       |
+bite_0      |weapon |light     |Bite                 |0       |1d1     |                   |       |
+bite_1      |weapon |light     |Bite +4              |4       |1d1     |poison_1d4         |       |
+bite_2      |weapon |light     |Bite +3              |3       |1d6+1   |                   |       |
+bite_3      |weapon |light     |Bite +5              |5       |1d8+1   |fire_1d6           |       |
+bite_4      |weapon |light     |Bite +11             |7       |2d6+4   |                   |       |
+inc_touch_0 |weapon |light     |Incorporeal Touch +5 |5       |1d4     |dmg_str_1d6        |       |
+inc_touch_1 |weapon |light     |Incorporeal Touch +3 |3       |1d6     |dmg_str_1d6        |       |
+dagger_0    |weapon |light     |Dagger +6            |6       |1d4     |                   |       |
 
-sbow_0      |weapon |ranged |Shortbow             |0       |1d6     |                   |60     |
-sbow_1      |weapon |ranged |Shortbow +4          |4       |1d6+2   |                   |60     |
-lbow_0      |weapon |ranged |Longbow +3           |3       |1d8     |                   |60     |
+sbow_0      |weapon |ranged_2h |Shortbow             |0       |1d6     |                   |60     |
+sbow_1      |weapon |ranged_2h |Shortbow +4          |4       |1d6+2   |                   |60     |
+lbow_0      |weapon |ranged_2h |Longbow +3           |3       |1d8     |                   |60     |

@@ -5,9 +5,9 @@
 --  info+despair@wolftrail.net
 --]]
 
-local Attack = {}
+local Idle = {}
 
-Attack.new = function(level, entity, target)
+Idle.new = function(level, entity)
     local did_execute = false
 
     local execute = function(self, duration)
@@ -15,17 +15,15 @@ Attack.new = function(level, entity, target)
 
         did_execute = true
 
-        local damage, is_crit = MeleeCombat.resolve(entity, target)
-
-        Signal.emit('attack', entity, target, damage, is_crit, duration)
+        Signal.emit('idle', entity, duration)
     end
 
     return setmetatable({
         -- methods
         execute = execute,
-    }, Attack)
+    }, Idle)
 end
 
-return setmetatable(Attack, { 
-	__call = function(_, ...) return Attack.new(...) end,
+return setmetatable(Idle, {
+    __call = function(_, ...) return Idle.new(...) end,
 })

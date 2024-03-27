@@ -8,7 +8,7 @@
 local Entity = {}
 
 -- create a new entity based on a definition and a coordinate
-function Entity.new(def, coord)
+Entity.new = function(def, coord)
     assert(def ~= nil, 'missing parameter "def"')
     assert(coord ~= nil, 'missing parameter "coord"')
     
@@ -46,6 +46,7 @@ function Entity.new(def, coord)
         id              = IdGenerator.generate(),
         coord           = coord,
         type            = def.type,
+        name            = def.name or 'Unknown',
         flags           = 0,
         z_index         = 1,
         remove          = false,
@@ -58,4 +59,6 @@ function Entity.new(def, coord)
     }, Entity)
 end
 
-return setmetatable(Entity, { __call = function(_, ...) return Entity.new(...) end })
+return setmetatable(Entity, { 
+    __call = function(_, ...) return Entity.new(...) end,
+})

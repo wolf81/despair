@@ -7,7 +7,7 @@
 
 local Cache = {}
 
-function Cache.new()
+Cache.new = function()
     local cache = {}
 
     local register = function(self, key, value)
@@ -21,8 +21,8 @@ function Cache.new()
 
     return setmetatable({
         -- methods
-        register = register,
-        get      = get,
+        register    = register,
+        get         = get,
     }, Cache)
 end
 

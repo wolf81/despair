@@ -13,9 +13,5 @@ return {
 	flags = { 'DV' },
 	equip = { 'chain_0', 'lshield_0', 'lsword_1' },
 	texture = 'uf_heroes',
-	anim_e = { 21, 22, 23, 24 },
-	anim_s = { 21, 22, 23, 24 },
-	anim_n = { 21, 22, 23, 24 },
-	anim_w = { 21, 22, 23, 24 },
-	anim_time = 0,
+	anim = { 21, 22, 23, 24 },
 }

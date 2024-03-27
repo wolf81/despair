@@ -12,19 +12,21 @@ Keyboard.new = function(entity)
         elseif love.keyboard.isDown('down') or love.keyboard.isDown('s') then
             direction = Direction.S
         elseif love.keyboard.isDown('space') then
-            -- TODO: clean-up
-            return Move(level, entity, entity.coord)
+            return Idle(level, entity)
         end
 
-        local next_coord = entity.coord + direction
+        if direction == Direction.NONE then return nil end
 
         -- ensure entity can move to next coord
-        if next_coord == entity.coord then return nil end
+        local next_coord = entity.coord + direction
         if level:isBlocked(next_coord) then 
             local entities = level:getEntities(next_coord, function(e) return e.type == 'npc' end)
             if #entities > 0 then
                 local target = entities[1]
-                return Attack(level, entity, target)
+                local health = target:getComponent(Health)
+                if health:isAlive() then
+                    return Attack(level, entity, target)
+                end
             end
 
             return nil 

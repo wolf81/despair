@@ -10,15 +10,21 @@ local Dungeon = {}
 Dungeon.new = function()
     local player = EntityFactory.create('pc1')
     local levels, level_idx = {}, 0
+    local alpha = 1.0
 
     local update = function(self, dt) levels[level_idx]:update(dt) end
 
-    local draw = function(self) levels[level_idx]:draw() end
+    local draw = function(self)
+        love.graphics.setColor(1.0, 1.0, 1.0, self.alpha) 
+        levels[level_idx]:draw() 
+        love.graphics.setColor(1.0, 1.0, 1.0, 1.0) 
+    end
 
     local enter = function(self)
         levels = { Level(self) }
         level_idx = 1
-        levels[level_idx]:enter(player, Stair.UP)
+        player.coord = levels[level_idx].entry_coord:clone()
+        levels[level_idx]:enter(player)
     end
 
     local nextLevel = function(self)
@@ -26,19 +32,25 @@ Dungeon.new = function()
             error('already at max level, should not have stairs down')
         end
 
-        -- exit current level
-        levels[level_idx]:exit(player)
+        local control = player:getComponent(Control)
+        control:setEnabled(false)
 
-        -- FIXME: seems we need to add a delay, due to some global camera state causing camera to 
-        -- target wrong area in map
-        Timer.after(0.5, function() 
+        Timer.tween(0.5, self, { alpha = 0.0 }, 'linear', function()
+            levels[level_idx]:exit(player)
             -- proceed to next level, generating a new level if needed
             level_idx = level_idx + 1
             if level_idx > #levels then
-                local level = Level(self)
-                table.insert(levels, level)
+                table.insert(levels, Level(self))
             end
-            levels[level_idx]:enter(player, Stair.UP)
+
+            local level = levels[level_idx]
+            player.coord = level.entry_coord:clone()
+            level:enter(player)
+
+            Timer.tween(0.5, self, { alpha = 1.0 }, 'linear', function()
+                self.alpha = 1.0
+                control:setEnabled(true)
+            end)
         end)
     end
 
@@ -48,19 +60,27 @@ Dungeon.new = function()
             return
         end
 
-        -- exit current level
-        levels[level_idx]:exit(player)
+        local control = player:getComponent(Control)
+        control:setEnabled(false)
 
-        -- FIXME: seems we need to add a delay, due to some global camera state causing camera to 
-        -- target wrong area in map
-        Timer.after(0.5, function() 
+        Timer.tween(0.5, self, { alpha = 0.0 }, 'linear', function()
+            levels[level_idx]:exit(player)
             -- proceed to previous level
             level_idx = level_idx - 1
-            levels[level_idx]:enter(player, Stair.DOWN)
+            local level = levels[level_idx]
+            player.coord = level.exit_coord:clone()
+            level:enter(player)
+
+            Timer.tween(0.5, self, { alpha = 1.0 }, 'linear', function()
+                self.alpha = 1.0
+                control:setEnabled(true)
+            end)
         end)
     end
 
     return setmetatable({
+        -- properties
+        alpha       = alpha,
         -- methods
         enter       = enter,
         update      = update,

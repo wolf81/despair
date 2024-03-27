@@ -12,12 +12,18 @@ local Level = {}
 local function newMonsters(map)
     local monsters = {}
 
+    local types = { 
+        'bat', 'spider', 'skeleton', 'skel_mage', 'skel_warr', 
+        'skel_arch', 'snake', 'rat', 'gr_ooze', 'red_drag',
+        'wraith',
+    }
+
     while #monsters < 10 do
         local x = lrandom(map.width)
         local y = lrandom(map.height)
 
         if not map:isBlocked(x, y) then
-            local type = #monsters % 2 == 0 and 'bat' or 'spider'
+            local type = types[lrandom(#types)]
             local monster = EntityFactory.create(type, vector(x, y))
             table.insert(monsters, monster)
         end        
@@ -27,24 +33,16 @@ local function newMonsters(map)
 end
 
 local function initSystems(entities)
-    local inputSystem = System(Input)
     local visualSystem = System(Visual)
-    local intellectSystem = System(Intellect)
 
     for _, entity in ipairs(entities) do
-        intellectSystem:addComponent(entity)
         visualSystem:addComponent(entity)
-        inputSystem:addComponent(entity)
     end    
 
-    return { intellectSystem, inputSystem, visualSystem }
+    return { visualSystem }
 end
 
-local function getKey(coord)
-    return coord.x .. ':' .. coord.y
-end
-
-function Level.new(dungeon)
+Level.new = function(dungeon)
     -- generate a map
     local tiles, stair_up, stair_dn = MazeGenerator.generate(MAP_SIZE, 5)
     local map = Map(tiles, function(id) return id ~= 0 end)
@@ -59,9 +57,15 @@ function Level.new(dungeon)
     -- handle game turns
     local turn = Turn(self)
 
+    -- fog of war
+    local fog = Fog(13, 10)
+
     for _, monster in ipairs(newMonsters(map)) do
         table.insert(entities, monster)
         map:setBlocked(monster.coord.x, monster.coord.y, true)
+
+        local visual = monster:getComponent(Visual)
+        visual.alpha = 0.0
     end
 
     -- add camera
@@ -70,8 +74,61 @@ function Level.new(dungeon)
     -- setup ecs
     local systems = initSystems(entities)
 
+    -- setup line of sight
+    local shadowcaster = Shadowcaster(
+        -- is visible
+        function(x, y) return map:getTile(x, y) == 0 end, 
+        -- cast light
+        function(x, y) fog:reveal(x, y) end
+    )
+
     local onMove = function(self, entity, coord, duration)
-        if entity.type ~= 'pc' then return end
+        self:setBlocked(entity.coord, false)
+        self:setBlocked(coord, true)
+
+        if entity.type ~= 'pc' then 
+            local prev_coord_visible = fog:isVisible(entity.coord.x, entity.coord.y)
+            local next_coord_visible = fog:isVisible(coord.x, coord.y)
+            if next_coord_visible and not prev_coord_visible then
+                local visual = entity:getComponent(Visual)
+                Timer.tween(duration, visual, { alpha = 1.0 }, 'linear')
+            end
+
+            if prev_coord_visible and not next_coord_visible then
+                local visual = entity:getComponent(Visual)
+                Timer.tween(duration, visual, { alpha = 0.0 }, 'linear')
+            end
+
+            return
+        end
+
+        -- update fog of war
+        fog:cover()     
+        local radius = 6   
+        shadowcaster:castLight(coord.x, coord.y, radius)    
+
+        for y = coord.y - radius - 1, coord.y + radius + 1 do
+            for x = coord.x - radius - 1, coord.x + radius + 1 do
+                if not fog:isVisible(x, y) then
+                    -- hide any npcs here
+                    for _, entity in ipairs(self:getEntities(vector(x, y))) do
+                        if entity:getComponent(Control) then
+                            local visual = entity:getComponent(Visual)
+                            Timer.tween(duration, visual, { alpha = 0.0 }, 'linear')
+                        end
+                    end
+                end
+
+                if fog:isVisible(x, y) then
+                    for _, entity in ipairs(self:getEntities(vector(x, y))) do
+                        if entity:getComponent(Control) then
+                            local visual = entity:getComponent(Visual)
+                            Timer.tween(duration, visual, { alpha = 1.0 }, 'linear')
+                        end
+                    end
+                end
+            end
+        end
 
         self:moveCamera(coord, duration)
 
@@ -87,13 +144,37 @@ function Level.new(dungeon)
     end
 
     local onDestroy = function(self, entity, duration)
+        print(entity.name .. ' is destroyed')
+
         Timer.after(duration, function() 
+            self:setBlocked(entity.coord, false)
             entity.remove = true
         end)
     end
 
-    local onAttack = function(self, entity, target, hitpoints)
-        print(entity.type .. ' hit ' .. target.type .. ' for ' .. hitpoints .. ' hitpoints')
+    local onAttack = function(self, entity, target, damage, is_crit, duration)
+        local effect = EntityFactory.create('strike_1', target.coord:clone())
+        self:addEntity(effect)
+        Timer.after(duration, function() self:removeEntity(effect) end)
+
+        if damage == 0 then
+            print(entity.name .. ' missed attack on ' .. target.name)
+        else
+            local visual = target:getComponent(Visual)
+            visual:colorize(duration)
+
+            if is_crit then
+                print(entity.name .. ' critically hit ' .. target.name .. ' for ' .. damage .. ' hitpoints')
+            else
+                print(entity.name .. ' hit ' .. target.name .. ' for ' .. damage .. ' hitpoints')
+            end
+        end
+
+        -- TODO: screen shake on critical hits
+    end
+
+    local onIdle = function(self, entity, duration)
+        print(entity.name .. ' is idling')
     end
 
     local addEntity = function(self, entity)
@@ -156,6 +237,9 @@ function Level.new(dungeon)
             entity:draw()
         end
 
+        local ox, oy = camera:worldCoords(0, 0)
+        fog:draw(ox, oy)
+
         camera:detach()
     end
 
@@ -185,19 +269,14 @@ function Level.new(dungeon)
 
     local handlers = {}
 
-    local enter = function(self, player, stair)
-        if stair == Stair.UP then
-            player.coord = stair_up.coord:clone()
-        else
-            player.coord = stair_dn.coord:clone()
-        end
-
+    local enter = function(self, player)
         self:addEntity(player)
 
         self:setBlocked(player.coord, true)
 
         handlers = {
             ['move'] = function(...) onMove(self, ...) end,
+            ['idle'] = function(...) onIdle(self, ...) end,
             ['attack'] = function(...) onAttack(self, ...) end,
             ['destroy'] = function(...) onDestroy(self, ...) end,
         }
@@ -228,6 +307,9 @@ function Level.new(dungeon)
     end
 
     return setmetatable({
+        -- properties
+        entry_coord     = stair_up.coord,
+        exit_coord      = stair_dn.coord,
         -- methods
         update          = update,
         draw            = draw,

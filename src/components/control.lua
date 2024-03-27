@@ -7,28 +7,14 @@
 
 local Control = {}
 
-local function updateAnimation(entity, def, dir)
-    local visual = entity:getComponent(Visual)
-
-    if dir == Direction.N then
-        visual.anim = Animation.loop(def['anim_n'])
-    elseif dir == Direction.E then
-        visual.anim = Animation.loop(def['anim_e'])    
-    elseif dir == Direction.W then
-        visual.anim = Animation.loop(def['anim_w'])    
-    elseif dir == Direction.S or dir == Direction.NONE then
-        visual.anim = Animation.loop(def['anim_s'])
-    else
-        error('invalid direction "' .. dir .. '"')
-    end
-end
-
 Control.new = function(entity, def, input_type)
     assert(input_type ~= nil, 'missing parameter "input_type"')
-    
-    local update = function(self, dt) end
 
-    local getAction = function(self, level) 
+    local is_enabled = true
+    
+    local getAction = function(self, level)
+        if not is_enabled then return end 
+
         local health = entity:getComponent(Health)
         if not health:isAlive() then 
             return Destroy(level, entity) 
@@ -37,13 +23,28 @@ Control.new = function(entity, def, input_type)
         return input_type:getAction(level)
     end
 
-    -- set initial animation
-    updateAnimation(entity, def, Direction.S)
+    local setEnabled = function(self, flag)
+        is_enabled = (flag == true)
+    end
 
-    return setmetatable({        
+    local getInitiative = function(self)
+        local base = ndn.dice('1d20').roll()
+        local bonus = 0
+
+        -- maybe not very efficient to do this every turn
+        local stats = entity:getComponent(Stats)
+        if stats ~= nil then
+            bonus = bonus + stats:getBonus('dex')
+        end
+
+        return base + bonus
+    end
+
+    return setmetatable({             
         -- methods
-        update      = update,
-        getAction   = getAction,
+        getAction       = getAction,
+        getInitiative   = getInitiative,
+        setEnabled      = setEnabled,
     }, Control)
 end
 
