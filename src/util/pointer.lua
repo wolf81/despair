@@ -9,10 +9,7 @@ M.update = function(camera, level)
     local x, y = camera:worldCoords(mx, my)
     local coord = vector(mfloor(x / TILE_SIZE), mfloor(y / TILE_SIZE)) 
 
-    if coord ~= last_coord then
-        print('coord changed', coord)
-        last_coord = coord
-    end
+    if coord ~= last_coord then last_coord = coord end
 end
 
 M.draw = function(camera, level)
