@@ -16,6 +16,8 @@ TODO
 [ ] feat: Generate items randomly just outside of visible area of player
 [ ] feat: Implement level saving and loading
 [ ] feat: Implement movement speed
+[ ] feat: Generate health over time
+[ ] feat: Improve variety of textures in dungeon
 [ ] fix: sometimes a turn is stuck for a full duration when NPC is destroyed
 [ ] fix: clean-up Visual & Animation classes - should have methods on Visual to change current animation
 [ ] fix: sometimes monsters stay visible under fog of war

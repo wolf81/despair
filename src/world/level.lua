@@ -166,7 +166,7 @@ Level.new = function(dungeon)
             local visual = projectile:getComponent(Visual)
             local rot = matan2(coord2.x - coord1.x, coord1.y - coord2.y) - math.pi / 2
             visual:setRotation(rot)
-            
+
             Timer.tween(duration, projectile, { coord = coord2 }, 'linear', function()
                 self:removeEntity(projectile)
             end)
@@ -183,10 +183,10 @@ Level.new = function(dungeon)
             else
                 print(entity.name .. ' hit ' .. target.name .. ' for ' .. status.damage .. ' hitpoints')
             end
-
-            local total = status.roll + status.attack
-            print(total .. ' (' .. status.roll .. ' + ' .. status.attack .. ') vs ' .. status.ac)
         end
+
+        local total = status.roll + status.attack
+        print(total .. ' (' .. status.roll .. ' + ' .. status.attack .. ') vs ' .. status.ac)
 
         -- TODO: screen shake on critical hits
     end
