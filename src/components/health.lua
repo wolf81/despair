@@ -10,31 +10,46 @@ local mmax = math.max
 local Health = {}
 
 Health.new = function(entity, def)
-    local total = 1
-
     local hd = def['hd']
-    if hd ~= nil then
-        total = ndn.dice(hd).average()
-    else
-        local stats = entity:getComponent(Stats)
-        if stats ~= nil then
-            -- TODO: should be STR stat + 1d6 per level
-            total = stats:getValue('str') + ndn.dice('1d6').roll()
-        end
+    local stats = entity:getComponent(Stats)
+    local current, total = 1, 1
+
+    assert(hd ~= nil or stats ~= nil, 'missing field "hd" or component "Stats"')
+
+    local exp_level = entity:getComponent(ExpLevel)
+    if exp_level ~= nil then
+        assert(exp_level:getValue() ~= 1, 'level should be 1, for additional levels call "increase"')
     end
 
-    local current = total
+    if hd ~= nil then
+        total = ndn.dice(hd).average()
+        current = total
+    else
+        total = stats:getValue('str') + 1
+        current = total
+    end
 
-    local getValue = function(self) return current end
+    local drain = function(self, hitpoints) 
+        current = mmax(current - hitpoints, 0) 
+    end
 
-    local reduce = function(self, hitpoints) current = mmax(current - hitpoints, 0) end
+    local increase = function(self, hitpoints)
+        assert(hitpoints >= 1 and hitpoints <= 6, '"hitpoints" should be a value between 1 and 6')
+        total = total + hitpoints 
+        current = current + hitpoints
+    end
+
+    local getCurrent = function(self) return current end
+
+    local getTotal = function(self) return total end
 
     local isAlive = function(self) return current > 0 end
 
     return setmetatable({
-        getValue = getValue,
-        reduce   = reduce,
-        isAlive  = isAlive,
+        getCurrent  = getCurrent,
+        getTotal    = getTotal,
+        isAlive     = isAlive,
+        drain       = drain,
     }, Health)
 end
 

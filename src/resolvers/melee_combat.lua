@@ -17,11 +17,14 @@ M.resolve = function(entity, target)
     local is_miss = roll == 1 -- critical miss
     local attack = weapon:getAttack()
     local ac = armor:getValue()
-    local is_hit = is_crit or not is_miss and ((roll + attack) > ac)
+    local is_hit = is_crit
+    if not is_miss then
+        is_hit = is_crit or ((roll + attack) > ac)
+    end
     local damage = weapon:getDamage(is_crit)
 
     if is_hit then
-        health:reduce(damage)
+        health:drain(damage)
     end
     
     return {
