@@ -69,17 +69,19 @@ M.create = function(id, coord)
         assert(RACES[race] ~= nil, 'invalid race "' .. race .. '"')
         entity.race = race
 
-        entity:addComponent(ExpLevel(entity, def))
-        entity:addComponent(Stats(entity, def))
         entity:addComponent(Control(entity, def, Keyboard(entity)))
         entity:addComponent(Equipment(entity, def))
+        entity:addComponent(Skills(entity, def))
+        entity:addComponent(Stats(entity, def))
         entity:addComponent(Health(entity, def))
         entity:addComponent(Armor(entity, def))
         entity:addComponent(Weapon(entity, def))
+        entity:addComponent(ExpLevel(entity, def))
     elseif entity.type == 'npc' then
         entity.z_index = 10        
         entity:addComponent(Control(entity, def, Cpu(entity)))
         entity:addComponent(Equipment(entity, def))
+        entity:addComponent(Skills(entity, def))
         entity:addComponent(Health(entity, def))
         entity:addComponent(Armor(entity, def))
         entity:addComponent(Weapon(entity, def))

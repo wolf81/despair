@@ -13,9 +13,6 @@ Weapon.new = function(entity, def)
     local equipment = entity:getComponent(Equipment)
     assert(equipment ~= nil, 'component missing: "Equipment"')
 
-    local stats = entity:getComponent(Stats)
-    local exp_level = entity:getComponent(ExpLevel)
-
     -- TODO: it should not be possible to have no weapon equipped, mainly important for players, 
     -- maybe humanoids - to use fist weapons if other weapons are unequipped
 
@@ -25,6 +22,7 @@ Weapon.new = function(entity, def)
         local bonus = 0
 
         -- add bonuses for player characters
+        local stats = entity:getComponent(Stats)
         if stats ~= nil then
             local str_bonus = stats:getBonus('str')
             local dex_bonus = stats:getBonus('dex')
@@ -45,6 +43,7 @@ Weapon.new = function(entity, def)
         end
 
         -- add experience level bonus, if applicable
+        local exp_level = entity:getComponent(ExpLevel)
         if exp_level ~= nil then
             bonus = bonus + exp_level:getValue()
         end
@@ -67,6 +66,7 @@ Weapon.new = function(entity, def)
             end
         end
 
+        local stats = entity:getComponent(Stats)
         if stats ~= nil then
             local str_bonus = stats:getBonus('str')
             bonus = bonus + (weapon.kind == '2h' and str_bonus * 2 or str_bonus)
