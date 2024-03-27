@@ -17,13 +17,13 @@ local Direction = {
     SE   = vector( 1,  1),
 }
 
---[[
 -- TODO: consider just checking if value larger than 0x8 or perhaps check
 -- if 2nd bit from right is not 0
 Direction.isOrdinal = function(dir)
     return dir.x ~= 0 and dir.y ~= 0
 end
 
+--[[
 -- get direction from a vector
 Direction.fromHeading = function(x, y)
     if x == 0 and y < 0 then return Direction.N

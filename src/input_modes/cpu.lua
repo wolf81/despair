@@ -8,7 +8,12 @@ local function getRandomDirection()
 end
 
 local function getAdjacentPlayer(level, entity)
-    for _, dir in ipairs({ Direction.N, Direction.E, Direction.S, Direction.W }) do
+    local dirs = { 
+        Direction.N, Direction.E, Direction.S, Direction.W, 
+        Direction.NW, Direction.SW, Direction.SE, Direction.NE, 
+    }
+
+    for _, dir in ipairs(dirs) do
         local entities = level:getEntities(entity.coord + dir)
         if #entities > 0 then
             target = entities[1]
