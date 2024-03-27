@@ -1,12 +1,19 @@
+--[[
+--  Dungeon of Despair
+--
+--  Author: Wolfgang Schreurs
+--  info+despair@wolftrail.net
+--]]
+
 local mfloor = math.floor
 
 local Stats = {}
 
 Stats.new = function(entity, def)
     local stats = {
-        str     = def['str'],
-        dex     = def['dex'],
-        mind    = def['mind'],
+        str  = def['str'],
+        dex  = def['dex'],
+        mind = def['mind'],
     }
 
     local getValue = function(self, stat)

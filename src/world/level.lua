@@ -170,7 +170,7 @@ Level.new = function(dungeon)
             end
 
             local total = status.roll + status.attack
-            print(total .. ' (' .. status.roll .. ' + ' + status.attack .. ') vs ' .. status.ac)
+            print(total .. ' (' .. status.roll .. ' + ' .. status.attack .. ') vs ' .. status.ac)
         end
 
         -- TODO: screen shake on critical hits

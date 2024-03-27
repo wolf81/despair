@@ -61,7 +61,14 @@ M.create = function(id, coord)
 
     if entity.type == 'pc' then
         entity.z_index = 15
-        entity.class = def['class']
+        local class, race = def['class'], def['race']
+
+        assert(CLASSES[class] ~= nil, 'invalid class "' .. class .. '"')
+        entity.class = class
+
+        assert(RACES[race] ~= nil, 'invalid race "' .. race .. '"')
+        entity.race = race
+
         entity:addComponent(ExpLevel(entity, def))
         entity:addComponent(Stats(entity, def))
         entity:addComponent(Control(entity, def, Keyboard(entity)))

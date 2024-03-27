@@ -15,3 +15,17 @@ ANIM_DURATION   = TURN_DURATION
 
 WINDOW_W        = 640
 WINDOW_H        = 480
+
+CLASSES = {
+    ['fighter']     = true,
+    ['cleric']      = true,
+    ['rogue']       = true,
+    ['mage']        = true,
+}
+
+RACES = {
+    ['halfling']    = true,
+    ['human']       = true,
+    ['dwarf']       = true,
+    ['elf']         = true,
+}

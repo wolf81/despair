@@ -52,8 +52,9 @@ Control         = require 'src.components.control'
 Visual          = require 'src.components.visual'
 Health          = require 'src.components.health'
 Weapon          = require 'src.components.weapon'
-Armor           = require 'src.components.armor'
+Skills          = require 'src.components.skills'
 Stats           = require 'src.components.stats'
+Armor           = require 'src.components.armor'
 
 -- resolvers
 MeleeCombat     = require 'src.resolvers.melee_combat'
