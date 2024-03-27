@@ -1,13 +1,29 @@
-ID$       |TYPE$ |NAME$            |HD$   |AC# |CLASS$ |FLAGS@ |SIGHT# |SPEED# |EQUIP@ |TEXTURE$  |ANIM@           |MORALE# |SPECIAL@ |
+ID$           |TYPE$ |NAME$                 |HD$   |AC# |CLASS$ |FLAGS@ |SIGHT# |SPEED# |EQUIP@ |TEXTURE$  |ANIM@           |MORALE# |SPECIAL@ |
 
-spider    |npc   |Spider           |1d8+2 |12  |       |       |60     |20     |bite_1 |uf_heroes |197,198,199,200 |        |         |
-bat       |npc   |Bat              |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |181,182,183,184 |        |         |
-skeleton  |npc   |Skeleton         |1d12  |12  |       |       |60     |30     |bite_0 |uf_heroes |121,122,123,124 |        |         |
-skel_warr |npc   |Skeleton Warrior |1d12  |12  |       |       |60     |30     |bite_0 |uf_heroes |125,126,127,128 |        |         |
-skel_mage |npc   |Skeleton Mage    |1d12  |12  |       |       |60     |30     |bite_0 |uf_heroes |129,130,131,132 |        |         |
-skel_arch |npc   |Skeleton Archer  |1d12  |12  |       |       |60     |30     |sbow_0 |uf_heroes |133,134,135,136 |        |         |
-rat       |npc   |Rat              |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |201,202,203,204 |        |         |
-snake     |npc   |Snake            |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |221,222,223,224 |        |         |
-gr_ooze   |npc   |Green Ooze       |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |469,470,471,472 |        |         |
-red_drag  |npc   |Red Dragon       |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |349,350,351,352 |        |         |
-wraith    |npc   |Wraith           |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |173,174,175,176 |        |         |
+task_master   |npc   |taskmaster            |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |81,82,83,84     |        |         |
+skeleton      |npc   |skeleton              |1d12  |12  |       |       |60     |30     |bite_0 |uf_heroes |121,122,123,124 |        |         |
+skel_warr     |npc   |skeleton warrior      |1d12  |12  |       |       |60     |30     |bite_0 |uf_heroes |125,126,127,128 |        |         |
+skel_mage     |npc   |skeleton mage         |1d12  |12  |       |       |60     |30     |bite_0 |uf_heroes |129,130,131,132 |        |         |
+skel_arch     |npc   |skeleton archer       |1d12  |12  |       |       |60     |30     |sbow_0 |uf_heroes |133,134,135,136 |        |         |
+orc_shaman    |npc   |orc shaman            |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |153,154,155,156 |        |         |
+orc_warrior   |npc   |orc warrior           |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |157,158,159,160 |        |         |
+wraith        |npc   |wraith                |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |173,174,175,176 |        |         |
+dire_bat      |npc   |dire bat              |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |177,178,179,180 |        |         |
+bat           |npc   |bat                   |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |181,182,183,184 |        |         |
+blk_widow_mat |npc   |black widow matriarch |1d8+2 |12  |       |       |60     |20     |bite_1 |uf_heroes |193,194,195,196 |        |         |
+blk_widow     |npc   |black widow           |1d8+2 |12  |       |       |60     |20     |bite_1 |uf_heroes |197,198,199,200 |        |         |
+rat           |npc   |rat                   |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |201,202,203,204 |        |         |
+dire_cobra    |npc   |dire cobra            |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |217,218,219,220 |        |         |
+cobra         |npc   |cobra                 |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |221,222,223,224 |        |         |
+minotaur      |npc   |minotaur              |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |225,226,227,228 |        |         |
+vampire       |npc   |vampire               |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |229,230,231,232 |        |         |
+vampire_lord  |npc   |vampire lord          |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |233,234,235,236 |        |         |
+lich          |npc   |lich                  |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |237,238,239,240 |        |         |
+watcher       |npc   |watcher               |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |273,274,275,276 |        |         |
+spectator     |npc   |spectator             |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |277,278,279,280 |        |         |
+black_drag    |npc   |black dragon          |1d12  |12  |       |       |60     |30     |bite_0 |uf_heroes |345,346,347,348 |        |         |
+red_drag      |npc   |red dragon            |1d12  |12  |       |       |60     |30     |bite_0 |uf_heroes |349,350,351,352 |        |         |
+blue_drag     |npc   |azure dragon          |1d12  |12  |       |       |60     |30     |bite_0 |uf_heroes |353,354,355,356 |        |         |
+green_drag    |npc   |emerald dragon        |1d12  |12  |       |       |60     |30     |bite_0 |uf_heroes |357,358,359,360 |        |         |
+green_ooze    |npc   |green ooze            |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |469,470,471,472 |        |         |
+purple_jelly  |npc   |purple jelly          |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |473,474,475,476 |        |         |
