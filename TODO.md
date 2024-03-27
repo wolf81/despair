@@ -17,3 +17,4 @@ TODO
 [ ] feat: Implement level saving and loading
 [ ] feat: Implement movement speed
 [ ] fix: sometimes a turn is stuck for a full duration when NPC is destroyed
+[ ] fix: clean-up Visual & Animation classes - should have methods on Visual to change current animation
