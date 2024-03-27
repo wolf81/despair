@@ -1,0 +1,16 @@
+return {
+	id = 'blk_widow_mat',
+	type = 'npc',
+	name = 'black widow matriarch',
+	hd = '1d8+2',
+	ac = 12,
+	class = '',
+	flags = { '' },
+	sight = 60,
+	speed = 20,
+	equip = { 'bite_1' },
+	texture = 'uf_heroes',
+	anim = { 193, 194, 195, 196 },
+	morale = 0,
+	special = { '' },
+}

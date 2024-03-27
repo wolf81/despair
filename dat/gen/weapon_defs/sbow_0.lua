@@ -4,7 +4,7 @@ return {
 	kind = 'ranged_2h',
 	name = 'Shortbow',
 	attack = 0,
-	damage = '1d3',
+	damage = '1d6',
 	special = { '' },
 	range = 60,
 	projectile = 'arrow_1',

@@ -1,7 +1,7 @@
 return {
 	id = 'skel_arch',
 	type = 'npc',
-	name = 'Skeleton Archer',
+	name = 'skeleton archer',
 	hd = '1d12',
 	ac = 12,
 	class = '',

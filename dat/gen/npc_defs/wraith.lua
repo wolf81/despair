@@ -1,7 +1,7 @@
 return {
 	id = 'wraith',
 	type = 'npc',
-	name = 'Wraith',
+	name = 'wraith',
 	hd = '1d8',
 	ac = 12,
 	class = '',

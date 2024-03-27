@@ -1,7 +1,7 @@
 return {
-	id = 'red_drag',
+	id = 'blue_drag',
 	type = 'npc',
-	name = 'red dragon',
+	name = 'azure dragon',
 	hd = '1d12',
 	ac = 12,
 	class = '',
@@ -10,7 +10,7 @@ return {
 	speed = 30,
 	equip = { 'bite_0' },
 	texture = 'uf_heroes',
-	anim = { 349, 350, 351, 352 },
+	anim = { 353, 354, 355, 356 },
 	morale = 0,
 	special = { '' },
 }

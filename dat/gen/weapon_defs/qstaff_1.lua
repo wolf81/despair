@@ -7,4 +7,5 @@ return {
 	damage = '1d6+1',
 	special = { '' },
 	range = 0,
+	projectile = '',
 }

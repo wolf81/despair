@@ -19,7 +19,7 @@ minotaur      |npc   |minotaur              |1d8   |12  |       |       |60     
 vampire       |npc   |vampire               |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |229,230,231,232 |        |         |
 vampire_lord  |npc   |vampire lord          |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |233,234,235,236 |        |         |
 lich          |npc   |lich                  |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |237,238,239,240 |        |         |
-watcher       |npc   |watcher               |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |273,274,275,276 |        |         |
+observer      |npc   |observer              |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |273,274,275,276 |        |         |
 spectator     |npc   |spectator             |1d8   |12  |       |       |60     |30     |bite_0 |uf_heroes |277,278,279,280 |        |         |
 black_drag    |npc   |black dragon          |1d12  |12  |       |       |60     |30     |bite_0 |uf_heroes |345,346,347,348 |        |         |
 red_drag      |npc   |red dragon            |1d12  |12  |       |       |60     |30     |bite_0 |uf_heroes |349,350,351,352 |        |         |

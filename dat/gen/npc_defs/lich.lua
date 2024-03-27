@@ -1,8 +1,8 @@
 return {
-	id = 'red_drag',
+	id = 'lich',
 	type = 'npc',
-	name = 'red dragon',
-	hd = '1d12',
+	name = 'lich',
+	hd = '1d8',
 	ac = 12,
 	class = '',
 	flags = { '' },
@@ -10,7 +10,7 @@ return {
 	speed = 30,
 	equip = { 'bite_0' },
 	texture = 'uf_heroes',
-	anim = { 349, 350, 351, 352 },
+	anim = { 237, 238, 239, 240 },
 	morale = 0,
 	special = { '' },
 }

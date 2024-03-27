@@ -1,8 +1,8 @@
 return {
-	id = 'red_drag',
+	id = 'dire_cobra',
 	type = 'npc',
-	name = 'red dragon',
-	hd = '1d12',
+	name = 'dire cobra',
+	hd = '1d8',
 	ac = 12,
 	class = '',
 	flags = { '' },
@@ -10,7 +10,7 @@ return {
 	speed = 30,
 	equip = { 'bite_0' },
 	texture = 'uf_heroes',
-	anim = { 349, 350, 351, 352 },
+	anim = { 217, 218, 219, 220 },
 	morale = 0,
 	special = { '' },
 }

@@ -13,9 +13,11 @@ local function newMonsters(map)
     local monsters = {}
 
     local types = { 
-        'bat', 'spider', 'skeleton', 'skel_mage', 'skel_warr', 
-        'skel_arch', 'snake', 'rat', 'gr_ooze', 'red_drag',
-        'wraith',
+        'bat', 'blk_widow', 'skeleton', 'skel_mage', 'skel_warr', 
+        'skel_arch', 'cobra', 'rat', 'green_ooze', 'red_drag',
+        'wraith', 'vampire', 'vampire_lord', 'lich', 'dire_cobra',
+        'dire_bat', 'blue_drag', 'orc_shaman', 'orc_warrior', 
+        'purple_jelly', 'black_widow_mat', 'spectator', 'observer'
     }
 
     while #monsters < 10 do
@@ -158,7 +160,7 @@ Level.new = function(dungeon)
         self:addEntity(effect)
         Timer.after(duration, function() self:removeEntity(effect) end)
 
-        if status.proj_id ~= nil then
+        if status.proj_id ~= nil and status.proj_id ~= '' then
             local coord1 = vector(entity.coord.x + 0.5, entity.coord.y + 0.5)
             local coord2 = vector(target.coord.x + 0.5, target.coord.y + 0.5)
             local projectile = EntityFactory.create(status.proj_id, coord1)            

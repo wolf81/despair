@@ -1,7 +1,7 @@
 return {
 	id = 'skel_mage',
 	type = 'npc',
-	name = 'Skeleton Mage',
+	name = 'skeleton mage',
 	hd = '1d12',
 	ac = 12,
 	class = '',

@@ -1,7 +1,7 @@
 return {
-	id = 'gr_ooze',
+	id = 'green_ooze',
 	type = 'npc',
-	name = 'Green Ooze',
+	name = 'green ooze',
 	hd = '1d8',
 	ac = 12,
 	class = '',
