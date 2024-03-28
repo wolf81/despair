@@ -14,18 +14,17 @@
 [X] feat: Investigate if smoother movement is possible by setting player direction
 [X] feat: Add level to attack bonus
 [X] feat: Move camera related code to a separate class
+[X] feat: Implement health recovery over turns
+[X] feat: Implement ranged attack for player characters
+[X] feat: Implement custom mouse cursor
 [ ] feat: Generate monsters randomly just outside visible area of player
 [ ] feat: Generate items randomly just outside of visible area of player
 [ ] feat: Implement level saving and loading
 [ ] feat: Implement movement speed
-[ ] feat: Generate health over time
 [ ] feat: Improve variety of textures in dungeon
 [ ] feat: Use a Dijkstra map for pathfinding
-[ ] feat: Implement health recovery over turns
-[ ] feat: Implement ranged attack for player characters
 [ ] feat: Implement magic missile spell
 [ ] feat: Add proper arrow image for bows 
-[ ] feat: Implement mouse pointer icons, e.g. for targeting & moving
 
 ## LIB
 
