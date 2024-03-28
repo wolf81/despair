@@ -29,29 +29,37 @@ Health.new = function(entity, def)
         current = total
     end
 
+    -- reduce health by amount of hitpoints
+    -- returns current & total health
     local harm = function(self, hitpoints) 
         current = mmax(current - hitpoints, 0) 
+        return current, total
     end
 
+    -- increase health by amount of hitpoints, up to maximum allowed
+    -- returns current & total health
     local heal = function(self, hitpoints)
         current = mmin(current + hitpoints, total)
+        return current, total
     end
 
+    -- increase current & total by amount of hitpoints
+    -- returns current & total health
     local increase = function(self, hitpoints)
         assert(hitpoints >= 1 and hitpoints <= 6, '"hitpoints" should be a value between 1 and 6')
         total = total + hitpoints 
         current = current + hitpoints
+        return current, total
     end
 
-    local getCurrent = function(self) return current end
-
-    local getTotal = function(self) return total end
-
+    -- check if hitpoints is greater than 0
     local isAlive = function(self) return current > 0 end
 
+    -- get current & total health value
+    local getValue = function(self) return current, total end
+
     return setmetatable({
-        getCurrent  = getCurrent,
-        getTotal    = getTotal,
+        getValue    = getValue,
         isAlive     = isAlive,
         harm        = harm,
         heal        = heal,

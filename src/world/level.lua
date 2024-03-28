@@ -258,6 +258,12 @@ Level.new = function(dungeon)
             end
 
             turn = Turn(self, actors, TURN_DELAY)
+
+            -- heal player 1 hitpoint every 5 turns
+            if turn:getIndex() % 5 == 0 then
+                local player_health = entities[player_idx]:getComponent(Health)
+                player_health:heal(1)
+            end
         end
 
         turn:update(dt)

@@ -1,5 +1,6 @@
-TODO
-====
+# TODO
+
+# FEATURES
 
 [x] feat: Add entrance & exit stairs
 [x] feat: If player performs an action, turn is advanced for all entities
@@ -20,6 +21,18 @@ TODO
 [ ] feat: Improve variety of textures in dungeon
 [ ] feat: Use a Dijkstra map for pathfinding
 [ ] feat: Implement health recovery over turns
+[ ] feat: Implement ranged attack for player characters
+[ ] feat: Implement magic missile spell
+[ ] feat: Add proper arrow image for bows 
+[ ] feat: Implement mouse pointer icons, e.g. for targeting & moving
+
+## LIB
+
+[ ] Clean-up ndn, using classes similar as in Dungeon of Despair
+[ ] Possibly move Dijkstra, ndn and bresenham into a Rogue tools library
+
+## BUGS 
+
 [ ] fix: sometimes a turn is stuck for a full duration when NPC is destroyed
 [ ] fix: clean-up Visual & Animation classes - should have methods on Visual to change current animation
 [ ] fix: sometimes monsters stay visible under fog of war
