@@ -13,6 +13,7 @@
 [X] feat: Sort actor turn order by initiative
 [X] feat: Investigate if smoother movement is possible by setting player direction
 [X] feat: Add level to attack bonus
+[X] feat: Move camera related code to a separate class
 [ ] feat: Generate monsters randomly just outside visible area of player
 [ ] feat: Generate items randomly just outside of visible area of player
 [ ] feat: Implement level saving and loading

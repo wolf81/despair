@@ -73,6 +73,7 @@ Level.new = function(dungeon)
 
     -- add camera
     local camera = Camera(0.0, 0.0, SCALE)
+    local follow = true
 
     -- setup ecs
     local systems = initSystems(entities)
@@ -133,7 +134,7 @@ Level.new = function(dungeon)
             end
         end
 
-        self:moveCamera(coord, duration)
+        camera:move(coord, duration)
 
         if entity.coord ~= coord then 
             if coord == stair_up.coord then
@@ -190,7 +191,9 @@ Level.new = function(dungeon)
         local total = status.roll + status.attack
         print(total .. ' (' .. status.roll .. ' + ' .. status.attack .. ') vs ' .. status.ac)
 
-        -- TODO: screen shake on critical hits
+        if status.is_crit then
+            camera:shake(duration)
+        end
     end
 
     local onIdle = function(self, entity, duration)
@@ -270,18 +273,16 @@ Level.new = function(dungeon)
     end
 
     local draw = function(self)
-        camera:attach()
+        camera:draw(function() 
+            map:draw()
 
-        map:draw()
+            for _, entity in ipairs(entities) do
+                entity:draw()
+            end
 
-        for _, entity in ipairs(entities) do
-            entity:draw()
-        end
-
-        local ox, oy = camera:worldCoords(0, 0)
-        fog:draw(ox, oy)
-
-        camera:detach()
+            local ox, oy = camera:worldCoords(0, 0)
+            fog:draw(ox, oy)
+        end)
     end
 
     local isBlocked = function(self, coord)
@@ -347,16 +348,7 @@ Level.new = function(dungeon)
             Signal.remove(key, handler)
         end
     end
-
-    local cam_offset = TILE_SIZE / 2
-    local moveCamera = function(self, coord, duration)
-        local pos = coord * TILE_SIZE
-        Timer.tween(duration, camera, { 
-            x = mfloor(pos.x + cam_offset), 
-            y = mfloor(pos.y + cam_offset),
-        })
-    end
-
+    
     return setmetatable({
         -- properties
         entry_coord     = stair_up.coord,
@@ -373,7 +365,6 @@ Level.new = function(dungeon)
         getPlayer       = getPlayer,
         getEntities     = getEntities,
         removeEntity    = removeEntity,
-        moveCamera      = moveCamera,
     }, Level)
 end
 

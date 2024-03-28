@@ -9,7 +9,6 @@ local Cache = require 'src.util.cache'
 
 -- libraries
 bresenham       = require 'lib.bresenham.bresenham'
-Camera          = require 'lib.hump.camera'
 Signal          = require 'lib.hump.signal'
 vector          = require 'lib.hump.vector'
 Timer           = require 'lib.hump.timer'
@@ -29,6 +28,7 @@ Shadowcaster    = require 'src.util.shadowcaster'
 Direction       = require 'src.util.direction'
 Animation       = require 'src.util.animation'
 Pointer         = require 'src.util.pointer'
+Camera          = require 'src.util.camera'
 Turn            = require 'src.util.turn'
 Fog             = require 'src.util.fog'
 
