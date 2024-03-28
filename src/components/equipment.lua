@@ -25,9 +25,14 @@ Equipment.new = function(entity, def)
         equip[slot] = nil
     end
 
-    local getItem = function(self, slot)
+    local getItem = function(self, slot, fn)
         assert(SLOTS[slot] ~= nil, 'invalid slot "' .. slot .. '"')
-        return equip[slot]
+
+        fn = fn or function(item) return true end
+
+        local item = equip[slot]
+
+        return fn(item) and item or nil
     end
 
     -- equip the first melee item that can be found in backpack
@@ -145,11 +150,12 @@ Equipment.new = function(entity, def)
 
     return setmetatable({
         -- methods
-        getItem     = getItem,
-        equipMelee  = equipMelee,
         equipRanged = equipRanged,
+        equipMelee  = equipMelee,
         equipAll    = equipAll,
+        didEquip    = didEquip,
         unequip     = unequip,
+        getItem     = getItem,
         equip       = equip,
     }, Equipment)
 end

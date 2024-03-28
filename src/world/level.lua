@@ -156,10 +156,6 @@ Level.new = function(dungeon)
     end
 
     local onAttack = function(self, entity, target, status, duration)
-        local effect = EntityFactory.create('strike_1', target.coord:clone())
-        self:addEntity(effect)
-        Timer.after(duration, function() self:removeEntity(effect) end)
-
         if status.proj_id ~= nil and status.proj_id ~= '' then
             local coord1 = vector(entity.coord.x + 0.5, entity.coord.y + 0.5)
             local coord2 = vector(target.coord.x + 0.5, target.coord.y + 0.5)
@@ -172,6 +168,10 @@ Level.new = function(dungeon)
             Timer.tween(duration, projectile, { coord = coord2 }, 'linear', function()
                 self:removeEntity(projectile)
             end)
+        else
+            local effect = EntityFactory.create('strike_1', target.coord:clone())
+            self:addEntity(effect)
+            Timer.after(duration, function() self:removeEntity(effect) end)        
         end
 
         if status.damage == 0 then
