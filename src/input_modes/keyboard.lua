@@ -25,6 +25,8 @@ Keyboard.new = function(entity)
 
         if direction == Direction.NONE then return nil end
 
+        love.mouse.setVisible(false)
+
         -- ensure entity can move to next coord
         local next_coord = entity.coord + direction
         if level:isBlocked(next_coord) then 

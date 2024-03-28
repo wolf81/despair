@@ -281,8 +281,6 @@ Level.new = function(dungeon)
         local ox, oy = camera:worldCoords(0, 0)
         fog:draw(ox, oy)
 
-        Pointer.draw(camera)
-
         camera:detach()
     end
 

@@ -51,6 +51,9 @@ end
 function love.load(args)
     preload()
 
+    -- init graphics for pointer device
+    Pointer.init()
+
     success = love.window.setMode(WINDOW_W * SCALE, WINDOW_H * SCALE, {
         highdpi = false,
     })
