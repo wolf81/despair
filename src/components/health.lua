@@ -5,7 +5,7 @@
 --  info+despair@wolftrail.net
 --]]
 
-local mmax = math.max
+local mmin, mmax = math.min, math.max
 
 local Health = {}
 
@@ -29,8 +29,12 @@ Health.new = function(entity, def)
         current = total
     end
 
-    local drain = function(self, hitpoints) 
+    local harm = function(self, hitpoints) 
         current = mmax(current - hitpoints, 0) 
+    end
+
+    local heal = function(self, hitpoints)
+        current = mmin(current + hitpoints, total)
     end
 
     local increase = function(self, hitpoints)
@@ -49,7 +53,8 @@ Health.new = function(entity, def)
         getCurrent  = getCurrent,
         getTotal    = getTotal,
         isAlive     = isAlive,
-        drain       = drain,
+        harm        = harm,
+        heal        = heal,
     }, Health)
 end
 

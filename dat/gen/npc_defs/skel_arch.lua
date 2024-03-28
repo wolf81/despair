@@ -8,7 +8,7 @@ return {
 	flags = { '' },
 	sight = 60,
 	speed = 30,
-	equip = { 'sbow_0' },
+	equip = { 'sbow_0', 'bite_0' },
 	texture = 'uf_heroes',
 	anim = { 133, 134, 135, 136 },
 	morale = 0,

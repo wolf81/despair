@@ -25,7 +25,7 @@ M.resolve = function(entity, target)
     local damage = is_hit and weapon:getDamage(is_crit) or 0
 
     if is_hit then
-        health:drain(damage)
+        health:harm(damage)
     end
 
     local eq_weapon = equipment:getItem('mainhand')

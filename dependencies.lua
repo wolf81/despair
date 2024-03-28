@@ -51,6 +51,7 @@ System          = require 'src.ecs.system'
 -- components
 Equipment       = require 'src.components.equipment'
 ExpLevel        = require 'src.components.exp_level'
+Backpack        = require 'src.components.backpack'
 Control         = require 'src.components.control'
 Visual          = require 'src.components.visual'
 Health          = require 'src.components.health'

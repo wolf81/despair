@@ -48,7 +48,7 @@ Map.new = function(tiles, fn)
             for x = 1, self.width do
                 local tile_id = tiles[y][x]
 
-                if tile_id == math.huge then goto next end
+                if tile_id == math.huge then goto continue end
 
                 local quad_idx = 22
 
@@ -61,7 +61,7 @@ Map.new = function(tiles, fn)
 
                 worldSprites:add(quads[quad_idx], x * TILE_SIZE, y * TILE_SIZE)
 
-                ::next::
+                ::continue::
             end
         end
 

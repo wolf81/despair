@@ -9,7 +9,7 @@ local Armor = {}
 
 Armor.new = function(entity, def)
     local equipment = entity:getComponent(Equipment)
-    assert(equipment ~= nil, 'component missing: "Equipment"')
+    assert(equipment ~= nil, 'missing component: "Equipment"')
 
     local base = def['ac'] or 0
 

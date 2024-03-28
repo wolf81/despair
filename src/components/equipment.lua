@@ -16,33 +16,13 @@ local SLOTS = {
 }
 
 Equipment.new = function(entity, def)
+    local backpack = entity:getComponent(Backpack)
+    assert(backpack ~= nil, 'missing component: "Backpack"')
+
     local equip = {}
 
     for slot, _ in pairs(SLOTS) do
         equip[slot] = nil
-    end
-
-    for _, id in ipairs(def['equip']) do
-        local item = EntityFactory.create(id)
-        if item.type == 'armor' then
-            if item.kind == 'chest' then
-                equip.chest = item
-            elseif item.kind == 'shield' then
-                equip.offhand = item
-            end
-        elseif item.type == 'weapon' then
-            if item.kind == '2h' then
-                equip.offhand = nil
-                equip.mainhand = item
-            elseif item.kind == '1h' or item.kind == 'light' then
-                equip.mainhand = item
-            elseif item.kind == 'ranged_1h' then
-                equip.mainhand = item
-            elseif item.kind == 'ranged_2h' then
-                equip.offhand = nil
-                equip.mainhand = item
-            end
-        end
     end
 
     local getItem = function(self, slot)
@@ -50,16 +30,117 @@ Equipment.new = function(entity, def)
         return equip[slot]
     end
 
+    -- equip the first melee item that can be found in backpack
+    -- do nothing if a melee item is already equipped
     local equipMelee = function(self) 
-        -- TODO: should swap items & return true if melee was equipped
-        local weapon_type = equip.mainhand.kind
-        return weapon_type ~= 'ranged_1h' and weapon_type ~= 'ranged_2h' 
+        local filter = function(item) 
+            return item.type == 'weapon' and item.kind ~= 'ranged_1h' and item.kind ~= 'ranged_2h' 
+        end
+
+        -- already equipped
+        if equip.mainhand ~= nil and filter(equip.mainhand) then return true end
+
+        -- find item in backpack
+        local items = backpack:take(function(item) return filter(item) end)
+
+        if #items > 0 then
+            -- equip first item found
+            self:equip(items[1])
+
+            -- return all extra items to backpack
+            for i = 2, #items do backpack:put(items[i]) end
+
+            -- equipped successfully 
+            return true
+        end
+
+        -- failed to equip
+        return false
     end
 
+    -- equip the first ranged item that can be found in backpack
+    -- do nothing if a ranged item is already equipped
     local equipRanged = function(self)
-        -- TODO: should swap items & return true if ranged was equipped
-        local weapon_type = equip.mainhand.kind
-        return (weapon_type == 'ranged_1h') or (weapon_type == 'ranged_2h') 
+        local filter = function(item) 
+            return item.type == 'weapon' and (item.kind == 'ranged_1h' or item.kind == 'ranged_2h') 
+        end
+
+        -- already equipped
+        if equip.mainhand ~= nil and filter(equip.mainhand) then return true end
+
+        -- find item in backpack
+        local items = backpack:take(function(item) return filter(item) end)
+
+        if #items > 0 then
+            -- equip first item found
+            self:equip(items[1])
+
+            -- return all extra items to backpack
+            for i = 2, #items do backpack:put(items[i]) end
+
+            -- equipped successfully 
+            return true
+        end
+
+        -- failed to equip
+        return false
+    end
+
+    -- unequip an item from a slot, moving the item to backpack 
+    -- will do nothing if slot is empty
+    local unequip = function(self, slot)
+        assert(SLOTS[slot] ~= nil, 'invalid slot: "' .. slot .. '"')
+
+        -- remote item from slot and put in backpack
+        local item = equip[slot]
+        equip[slot] = nil
+        backpack:put(item)
+    end
+
+    -- equip any item in a slot, returns true if successful
+    local equip = function(self, item)
+        if item == nil then return false end
+
+        if item.type == 'armor' then
+            if item.kind == 'chest' then
+                self:unequip('chest')
+                equip.chest = item
+                return true
+            elseif item.kind == 'shield' then
+                self:unequip('offhand')
+                equip.offhand = item
+                return true
+            end
+        elseif item.type == 'weapon' then
+            if item.kind == '2h' then
+                self:unequip('mainhand')
+                self:unequip('offhand')
+                equip.mainhand = item
+                return true
+            elseif item.kind == '1h' or item.kind == 'light' then
+                self:unequip('mainhand')
+                equip.mainhand = item
+                return true
+            elseif item.kind == 'ranged_1h' then
+                self:unequip('mainhand')
+                equip.mainhand = item
+                return true
+            elseif item.kind == 'ranged_2h' then
+                self:unequip('mainhand')
+                self:unequip('offhand')
+                equip.mainhand = item
+                return true
+            end
+        end
+
+        return false
+    end
+
+    -- equip all items from backpack
+    local equipAll = function(self)
+        for item in backpack:each() do
+            self:equip(item)
+        end
     end
 
     return setmetatable({
@@ -67,6 +148,9 @@ Equipment.new = function(entity, def)
         getItem     = getItem,
         equipMelee  = equipMelee,
         equipRanged = equipRanged,
+        equipAll    = equipAll,
+        unequip     = unequip,
+        equip       = equip,
     }, Equipment)
 end
 

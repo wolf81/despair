@@ -18,6 +18,8 @@ TODO
 [ ] feat: Implement movement speed
 [ ] feat: Generate health over time
 [ ] feat: Improve variety of textures in dungeon
+[ ] feat: Use a Dijkstra map for pathfinding
+[ ] feat: Implement health recovery over turns
 [ ] fix: sometimes a turn is stuck for a full duration when NPC is destroyed
 [ ] fix: clean-up Visual & Animation classes - should have methods on Visual to change current animation
 [ ] fix: sometimes monsters stay visible under fog of war

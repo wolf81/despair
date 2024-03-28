@@ -15,7 +15,6 @@ Cpu.new = function(entity)
             if distance < 2 then
                 local equip = entity:getComponent(Equipment)
                 if equip:equipMelee() then
-                    print('equipped melee')
                     return Attack(level, entity, player)
                 end
             elseif distance < 10 then

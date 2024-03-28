@@ -11,7 +11,7 @@ local Weapon = {}
 
 Weapon.new = function(entity, def)
     local equipment = entity:getComponent(Equipment)
-    assert(equipment ~= nil, 'component missing: "Equipment"')
+    assert(equipment ~= nil, 'missing component: "Equipment"')
 
     -- TODO: it should not be possible to have no weapon equipped, mainly important for players, 
     -- maybe humanoids - to use fist weapons if other weapons are unequipped

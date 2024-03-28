@@ -13,7 +13,7 @@ Skills.new = function(entity, def)
     local race = def['race']
     local hd = def['hd']
 
-    assert(level ~= nil or hd ~= nil, 'missing fields, either "hd" or "level" is required')
+    assert(level ~= nil or hd ~= nil, 'missing field: "hd" or "level"')
 
     -- if hitdice is defined, use the dice count as level
     if hd ~= nil then level = ndn.dice(hd).count() end

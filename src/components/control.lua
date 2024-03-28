@@ -9,7 +9,7 @@ local Control = {}
 
 Control.new = function(entity, def, ...)
     local input_modes = {...}
-    assert(#input_modes > 0, 'at least 1 input mode is required')
+    assert(#input_modes > 0, 'missing argument(s): "Keyboard", "Mouse" and/or "Cpu"')
 
     local is_enabled = true
 
