@@ -16,7 +16,7 @@ Turn.new = function(level, actors, duration)
     -- ensure player is always first
     for idx, actor in ipairs(actors) do
         if actor.type == 'pc' then
-            actors[1], actors[idx] = actors[idx], actors[1]
+            actors[#actors], actors[idx] = actors[idx], actors[#actors]
         end
     end
 
@@ -33,7 +33,7 @@ Turn.new = function(level, actors, duration)
             local control = actor:getComponent(Control)
             local action = control:getAction(level)
             if action == nil and time > duration then
-                action = Move(level, actor, actor.coord)
+                action = Idle(level, actor)
             end
 
             if action == nil then break end
