@@ -35,7 +35,7 @@ Cpu.new = function(entity)
         if level:isBlocked(next_coord) then return Idle(level, entity) end 
         if #level:getEntities(next_coord) > 0 then return Idle(level, entity) end
 
-        return Move(level, entity, next_coord)
+        return Move(level, entity, { next_coord })
     end
 
     return setmetatable({

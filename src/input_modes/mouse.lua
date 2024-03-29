@@ -58,7 +58,7 @@ Mouse.new = function(entity)
 
         -- if next coord is not blocked, can move in direction
         if not level:isBlocked(next_coord) then
-            return Move(level, entity, next_coord)            
+            return Move(level, entity, { next_coord })            
         end
 
         -- direction was blocked - if blocked by enemy entity perform a melee attack

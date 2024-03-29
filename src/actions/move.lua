@@ -7,7 +7,21 @@
 
 local Move = {}
 
-Move.new = function(level, entity, coord)
+local function tween(duration, entity, coords)
+    local coord = table.remove(coords, 1)
+
+    local fn = function() entity.coord = coord end
+
+    if #coords > 0 then
+        fn = function() tween(duration, entity, coords) end
+    end
+
+    return Timer.tween(duration, entity, { coord = coord }, 'linear', fn)
+end
+
+Move.new = function(level, entity, coords)
+    assert(coords ~= nil, 'missing argument: coords')
+
     local did_execute = false
 
     local execute = function(self, duration)
@@ -15,11 +29,11 @@ Move.new = function(level, entity, coord)
 
         did_execute = true
 
+        local coord = coords[#coords]
+
         Signal.emit('move', entity, coord, duration)
 
-        Timer.tween(duration, entity, { coord = coord }, 'linear', function() 
-            entity.coord = coord
-        end)
+        tween(duration / #coords, entity, coords)
     end
 
     return setmetatable({
