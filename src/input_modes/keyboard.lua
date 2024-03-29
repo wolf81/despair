@@ -47,7 +47,7 @@ Keyboard.new = function(entity)
 
     return setmetatable({
         -- methods
-        getAction   = getAction,
+        getAction = getAction,
     }, Keyboard)
 end
 
