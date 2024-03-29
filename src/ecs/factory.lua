@@ -16,7 +16,7 @@ M.register = function(dir_path, fn)
     local filenames = love.filesystem.getDirectoryItems(dir_path)
     local base_path = love.filesystem.getRealDirectory(dir_path)
     for _, filename in ipairs(filenames) do     
-        if not string.find(filename, '.*%.lua') then goto next end
+        if not string.find(filename, '.*%.lua') then goto continue end
 
         local filepath = base_path .. '/' .. dir_path .. '/' .. filename
         print('register: ' .. filepath)
@@ -36,7 +36,7 @@ M.register = function(dir_path, fn)
         -- useful for preloading data
         fn(definition)
 
-        ::next::
+        ::continue::
     end 
 end
 
@@ -61,30 +61,50 @@ M.create = function(id, coord)
 
     if entity.type == 'pc' then
         entity.z_index = 15
-        entity:addComponent(Stats(entity, def))
-        entity:addComponent(Control(entity, def, Keyboard(entity)))
+        local class, race = def['class'], def['race']
+
+        assert(CLASSES[class] ~= nil, 'invalid class "' .. class .. '"')
+        entity.class = class
+
+        assert(RACES[race] ~= nil, 'invalid race "' .. race .. '"')
+        entity.race = race
+
+        entity:addComponent(Control(entity, def, Keyboard(entity), Mouse(entity)))
+        entity:addComponent(Backpack(entity, def))
         entity:addComponent(Equipment(entity, def))
+        entity:addComponent(Skills(entity, def))
+        entity:addComponent(Stats(entity, def))
         entity:addComponent(Health(entity, def))
         entity:addComponent(Armor(entity, def))
         entity:addComponent(Weapon(entity, def))
+        entity:addComponent(ExpLevel(entity, def))
+
+        -- equip all from backpack
+        entity:getComponent(Equipment):equipAll()
     elseif entity.type == 'npc' then
         entity.z_index = 10        
         entity:addComponent(Control(entity, def, Cpu(entity)))
+        entity:addComponent(Backpack(entity, def))
         entity:addComponent(Equipment(entity, def))
+        entity:addComponent(Skills(entity, def))
         entity:addComponent(Health(entity, def))
         entity:addComponent(Armor(entity, def))
         entity:addComponent(Weapon(entity, def))
+
+        -- equip all from backpack
+        entity:getComponent(Equipment):equipAll()
     elseif entity.type == 'armor' then
-        entity.z_index  = 5
-        entity.kind     = def['kind']
-        entity.ac       = def['ac']
+        entity.z_index      = 5
+        entity.kind         = def['kind']
+        entity.ac           = def['ac']
     elseif entity.type == 'weapon' then
-        entity.z_index  = 5
-        entity.kind     = def['kind']
-        entity.attack   = def['attack']
-        entity.damage   = def['damage']
+        entity.z_index      = 5
+        entity.kind         = def['kind']
+        entity.attack       = def['attack']
+        entity.damage       = def['damage']
+        entity.projectile   = def['projectile']
     elseif entity.type == 'effect' then
-        entity.z_index  = 20
+        entity.z_index      = 20
     end
 
     return entity

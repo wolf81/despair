@@ -24,10 +24,10 @@ Animation.loop = function(frames, duration)
         end
     end
 
-    local draw = function(self, texture, quads, pos)
+    local draw = function(self, texture, quads, pos, rot, ox, oy)
         local frame = frames[frame_idx]
         local quad = quads[frame]
-        love.graphics.draw(texture, quad, pos.x, pos.y)
+        love.graphics.draw(texture, quad, pos.x, pos.y, rot, 1, 1, ox, oy)
     end
 
     return setmetatable({ 

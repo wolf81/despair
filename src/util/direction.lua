@@ -17,7 +17,6 @@ local Direction = {
     SE   = vector( 1,  1),
 }
 
---[[
 -- TODO: consider just checking if value larger than 0x8 or perhaps check
 -- if 2nd bit from right is not 0
 Direction.isOrdinal = function(dir)
@@ -36,6 +35,5 @@ Direction.fromHeading = function(x, y)
     elseif x > 0 and y > 0 then return Direction.SE
     else return Direction.NONE end
 end
---]]
 
 return Direction

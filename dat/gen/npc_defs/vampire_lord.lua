@@ -1,0 +1,16 @@
+return {
+	id = 'vampire_lord',
+	type = 'npc',
+	name = 'vampire lord',
+	hd = '1d8',
+	ac = 12,
+	class = '',
+	flags = { '' },
+	sight = 60,
+	speed = 30,
+	equip = { 'bite_0' },
+	texture = 'uf_heroes',
+	anim = { 233, 234, 235, 236 },
+	morale = 0,
+	special = { '' },
+}

@@ -1,0 +1,16 @@
+return {
+	id = 'task_master',
+	type = 'npc',
+	name = 'taskmaster',
+	hd = '1d8',
+	ac = 12,
+	class = '',
+	flags = { '' },
+	sight = 60,
+	speed = 30,
+	equip = { 'bite_0' },
+	texture = 'uf_heroes',
+	anim = { 81, 82, 83, 84 },
+	morale = 0,
+	special = { '' },
+}

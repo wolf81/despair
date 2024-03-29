@@ -1,0 +1,16 @@
+return {
+	id = 'dire_cobra',
+	type = 'npc',
+	name = 'dire cobra',
+	hd = '1d8',
+	ac = 12,
+	class = '',
+	flags = { '' },
+	sight = 60,
+	speed = 30,
+	equip = { 'bite_0' },
+	texture = 'uf_heroes',
+	anim = { 217, 218, 219, 220 },
+	morale = 0,
+	special = { '' },
+}

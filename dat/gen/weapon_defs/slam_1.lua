@@ -7,4 +7,5 @@ return {
 	damage = '1d6+4',
 	special = { 'level_drain_1_dc14' },
 	range = 0,
+	projectile = '',
 }

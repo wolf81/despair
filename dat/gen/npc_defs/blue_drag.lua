@@ -1,0 +1,16 @@
+return {
+	id = 'blue_drag',
+	type = 'npc',
+	name = 'azure dragon',
+	hd = '1d12',
+	ac = 12,
+	class = '',
+	flags = { '' },
+	sight = 60,
+	speed = 30,
+	equip = { 'bite_0' },
+	texture = 'uf_heroes',
+	anim = { 353, 354, 355, 356 },
+	morale = 0,
+	special = { '' },
+}

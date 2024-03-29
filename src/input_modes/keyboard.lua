@@ -11,11 +11,21 @@ Keyboard.new = function(entity)
             direction = Direction.N
         elseif love.keyboard.isDown('down') or love.keyboard.isDown('s') then
             direction = Direction.S
+        elseif love.keyboard.isDown('q') then
+            direction = Direction.NW
+        elseif love.keyboard.isDown('e') then
+            direction = Direction.NE
+        elseif love.keyboard.isDown('z') then 
+            direction = Direction.SW
+        elseif love.keyboard.isDown('c') then
+            direction = Direction.SE
         elseif love.keyboard.isDown('space') then
             return Idle(level, entity)
         end
 
         if direction == Direction.NONE then return nil end
+
+        love.mouse.setVisible(false)
 
         -- ensure entity can move to next coord
         local next_coord = entity.coord + direction
@@ -37,7 +47,7 @@ Keyboard.new = function(entity)
 
     return setmetatable({
         -- methods
-        getAction = getAction,
+        getAction   = getAction,
     }, Keyboard)
 end
 

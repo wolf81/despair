@@ -1,7 +1,7 @@
 return {
 	id = 'skeleton',
 	type = 'npc',
-	name = 'Skeleton',
+	name = 'skeleton',
 	hd = '1d12',
 	ac = 12,
 	class = '',

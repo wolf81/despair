@@ -7,6 +7,8 @@
 
 local Turn = {}
 
+local index = 1
+
 local function sortByInitiative(actors)
     for i = 2, #actors, 1 do
         local c1 = actors[i - 1]:getComponent(Control)
@@ -20,6 +22,7 @@ end
 
 Turn.new = function(level, actors, duration)
     actors = actors or {}
+    index = index + 1
 
     sortByInitiative(actors)
 
@@ -53,13 +56,14 @@ Turn.new = function(level, actors, duration)
         end
     end
 
-    local isFinished = function() 
-        return is_finished 
-    end
+    local isFinished = function() return is_finished end
+
+    local getIndex = function() return index end
 
     return setmetatable({
         -- methods
         isFinished  = isFinished,
+        getIndex    = getIndex,
         update      = update,
     }, Turn)
 end

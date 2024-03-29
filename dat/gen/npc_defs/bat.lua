@@ -1,7 +1,7 @@
 return {
 	id = 'bat',
 	type = 'npc',
-	name = 'Bat',
+	name = 'bat',
 	hd = '1d8',
 	ac = 12,
 	class = '',

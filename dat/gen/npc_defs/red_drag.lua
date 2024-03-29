@@ -1,8 +1,8 @@
 return {
 	id = 'red_drag',
 	type = 'npc',
-	name = 'Red Dragon',
-	hd = '1d8',
+	name = 'red dragon',
+	hd = '1d12',
 	ac = 12,
 	class = '',
 	flags = { '' },

@@ -8,7 +8,7 @@
 local Cache = require 'src.util.cache'
 
 -- libraries
-Camera          = require 'lib.hump.camera'
+bresenham       = require 'lib.bresenham.bresenham'
 Signal          = require 'lib.hump.signal'
 vector          = require 'lib.hump.vector'
 Timer           = require 'lib.hump.timer'
@@ -27,18 +27,21 @@ Map             = require 'src.world.map'
 Shadowcaster    = require 'src.util.shadowcaster'
 Direction       = require 'src.util.direction'
 Animation       = require 'src.util.animation'
+Pointer         = require 'src.util.pointer'
+Camera          = require 'src.util.camera'
 Turn            = require 'src.util.turn'
 Fog             = require 'src.util.fog'
 
 -- actions
-Move            = require 'src.actions.move'
-Attack          = require 'src.actions.attack'
 Destroy         = require 'src.actions.destroy'
+Attack          = require 'src.actions.attack'
+Move            = require 'src.actions.move'
 Idle            = require 'src.actions.idle'
 
--- input types
-Keyboard        = require 'src.input_types.keyboard'
-Cpu             = require 'src.input_types.cpu'
+-- input modes
+Keyboard        = require 'src.input_modes.keyboard'
+Mouse           = require 'src.input_modes.mouse'
+Cpu             = require 'src.input_modes.cpu'
 
 -- entity component system
 EntityFactory   = require 'src.ecs.factory'
@@ -47,20 +50,23 @@ System          = require 'src.ecs.system'
 
 -- components
 Equipment       = require 'src.components.equipment'
-Visual          = require 'src.components.visual'
+ExpLevel        = require 'src.components.exp_level'
+Backpack        = require 'src.components.backpack'
 Control         = require 'src.components.control'
+Visual          = require 'src.components.visual'
 Health          = require 'src.components.health'
 Weapon          = require 'src.components.weapon'
-Armor           = require 'src.components.armor'
+Skills          = require 'src.components.skills'
 Stats           = require 'src.components.stats'
+Armor           = require 'src.components.armor'
 
 -- resolvers
-MeleeCombat     = require 'src.resolvers.melee_combat'
+CombatResolver  = require 'src.resolvers.combat'
 
 -- caches
 TextureCache    = Cache()
-QuadCache       = Cache()
 ShaderCache     = Cache()
+QuadCache       = Cache()
 
 -- generators
 QuadGenerator   = require 'src.generators.quad_gen'

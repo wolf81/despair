@@ -1,0 +1,16 @@
+return {
+	id = 'orc_shaman',
+	type = 'npc',
+	name = 'orc shaman',
+	hd = '1d8',
+	ac = 12,
+	class = '',
+	flags = { '' },
+	sight = 60,
+	speed = 30,
+	equip = { 'bite_0' },
+	texture = 'uf_heroes',
+	anim = { 153, 154, 155, 156 },
+	morale = 0,
+	special = { '' },
+}

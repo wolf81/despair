@@ -5,36 +5,64 @@
 --  info+despair@wolftrail.net
 --]]
 
-local mmax = math.max
+local mmin, mmax = math.min, math.max
 
 local Health = {}
 
 Health.new = function(entity, def)
-    local total = 1
-
     local hd = def['hd']
-    if hd ~= nil then
-        total = ndn.dice(hd).average()
-    else
-        local stats = entity:getComponent(Stats)
-        if stats ~= nil then
-            -- TODO: should be STR stat + 1d6 per level
-            total = stats:getValue('str') + ndn.dice('1d6').roll()
-        end
+    local stats = entity:getComponent(Stats)
+    local current, total = 1, 1
+
+    assert(hd ~= nil or stats ~= nil, 'missing field "hd" or component "Stats"')
+
+    local exp_level = entity:getComponent(ExpLevel)
+    if exp_level ~= nil then
+        assert(exp_level:getValue() ~= 1, 'level should be 1, for additional levels call "increase"')
     end
 
-    local current = total
+    if hd ~= nil then
+        total = ndn.dice(hd).average()
+        current = total
+    else
+        total = stats:getValue('str') + 1
+        current = total
+    end
 
-    local getValue = function(self) return current end
+    -- reduce health by amount of hitpoints
+    -- returns current & total health
+    local harm = function(self, hitpoints) 
+        current = mmax(current - hitpoints, 0) 
+        return current, total
+    end
 
-    local reduce = function(self, hitpoints) current = mmax(current - hitpoints, 0) end
+    -- increase health by amount of hitpoints, up to maximum allowed
+    -- returns current & total health
+    local heal = function(self, hitpoints)
+        current = mmin(current + hitpoints, total)
+        return current, total
+    end
 
+    -- increase current & total by amount of hitpoints
+    -- returns current & total health
+    local increase = function(self, hitpoints)
+        assert(hitpoints >= 1 and hitpoints <= 6, '"hitpoints" should be a value between 1 and 6')
+        total = total + hitpoints 
+        current = current + hitpoints
+        return current, total
+    end
+
+    -- check if hitpoints is greater than 0
     local isAlive = function(self) return current > 0 end
 
+    -- get current & total health value
+    local getValue = function(self) return current, total end
+
     return setmetatable({
-        getValue = getValue,
-        reduce   = reduce,
-        isAlive  = isAlive,
+        getValue    = getValue,
+        isAlive     = isAlive,
+        harm        = harm,
+        heal        = heal,
     }, Health)
 end
 

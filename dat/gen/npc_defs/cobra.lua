@@ -1,0 +1,16 @@
+return {
+	id = 'cobra',
+	type = 'npc',
+	name = 'cobra',
+	hd = '1d8',
+	ac = 12,
+	class = '',
+	flags = { '' },
+	sight = 60,
+	speed = 30,
+	equip = { 'bite_0' },
+	texture = 'uf_heroes',
+	anim = { 221, 222, 223, 224 },
+	morale = 0,
+	special = { '' },
+}

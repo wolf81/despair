@@ -1,0 +1,16 @@
+return {
+	id = 'black_drag',
+	type = 'npc',
+	name = 'black dragon',
+	hd = '1d12',
+	ac = 12,
+	class = '',
+	flags = { '' },
+	sight = 60,
+	speed = 30,
+	equip = { 'bite_0' },
+	texture = 'uf_heroes',
+	anim = { 345, 346, 347, 348 },
+	morale = 0,
+	special = { '' },
+}

@@ -28,8 +28,12 @@ local function preload()
         local image = love.graphics.newImage(gfx_dir .. '/' .. file)
         image:setFilter('nearest', 'nearest')
         TextureCache:register(key, image)
-        
-        local quads = QuadGenerator.generate(image, TILE_SIZE, TILE_SIZE)
+
+        -- TODO: ugly to adjust size here for single texture - maybe should configure in data file 
+        -- instead, as part of entities & load later ...
+        local size = key == 'uf_fx' and (TILE_SIZE / 2) or TILE_SIZE 
+
+        local quads = QuadGenerator.generate(image, size, size)
         QuadCache:register(key, quads)
     end
 
@@ -46,6 +50,9 @@ end
 
 function love.load(args)
     preload()
+
+    -- init graphics for pointer device
+    Pointer.init()
 
     success = love.window.setMode(WINDOW_W * SCALE, WINDOW_H * SCALE, {
         highdpi = false,

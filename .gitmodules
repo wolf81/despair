@@ -7,3 +7,6 @@
 [submodule "lib/ndn"]
 	path = lib/ndn
 	url = https://github.com/wolf81/ndn.git
+[submodule "lib/bresenham"]
+	path = lib/bresenham
+	url = https://github.com/wolf81/bresenham.lua.git

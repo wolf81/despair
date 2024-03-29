@@ -5,7 +5,7 @@
 --  info+despair@wolftrail.net
 --]]
 
-local mfloor, lrandom = math.floor, love.math.random
+local mfloor, matan2, lrandom = math.floor, math.atan2, love.math.random
 
 local Level = {}
 
@@ -13,9 +13,11 @@ local function newMonsters(map)
     local monsters = {}
 
     local types = { 
-        'bat', 'spider', 'skeleton', 'skel_mage', 'skel_warr', 
-        'skel_arch', 'snake', 'rat', 'gr_ooze', 'red_drag',
-        'wraith',
+        'bat', 'blk_widow', 'skeleton', 'skel_mage', 'skel_warr', 
+        'skel_arch', 'cobra', 'rat', 'green_ooze', 'red_drag',
+        'wraith', 'vampire', 'vampire_lord', 'lich', 'dire_cobra',
+        'dire_bat', 'blue_drag', 'orc_shaman', 'orc_warrior', 
+        'purple_jelly', 'blk_widow_mat', 'spectator', 'observer'
     }
 
     while #monsters < 10 do
@@ -47,6 +49,7 @@ Level.new = function(dungeon)
     local tiles, stair_up, stair_dn = MazeGenerator.generate(MAP_SIZE, 5)
     local map = Map(tiles, function(id) return id ~= 0 end)
     local map_w, map_h = map:getSize()
+    local player_idx = 0
 
     -- generate stairs using coords from maze generator
     stair_up = EntityFactory.create('dun_14', stair_up)
@@ -70,6 +73,7 @@ Level.new = function(dungeon)
 
     -- add camera
     local camera = Camera(0.0, 0.0, SCALE)
+    local follow = true
 
     -- setup ecs
     local systems = initSystems(entities)
@@ -130,7 +134,7 @@ Level.new = function(dungeon)
             end
         end
 
-        self:moveCamera(coord, duration)
+        camera:move(coord, duration)
 
         if entity.coord ~= coord then 
             if coord == stair_up.coord then
@@ -152,25 +156,44 @@ Level.new = function(dungeon)
         end)
     end
 
-    local onAttack = function(self, entity, target, damage, is_crit, duration)
-        local effect = EntityFactory.create('strike_1', target.coord:clone())
-        self:addEntity(effect)
-        Timer.after(duration, function() self:removeEntity(effect) end)
+    local onAttack = function(self, entity, target, status, duration)
+        if status.proj_id ~= nil and status.proj_id ~= '' then
+            local coord1 = vector(entity.coord.x + 0.5, entity.coord.y + 0.5)
+            local coord2 = vector(target.coord.x + 0.5, target.coord.y + 0.5)
+            local projectile = EntityFactory.create(status.proj_id, coord1)            
+            self:addEntity(projectile)
+            local visual = projectile:getComponent(Visual)
+            local rot = matan2(coord2.x - coord1.x, coord1.y - coord2.y) - math.pi / 2
+            visual:setRotation(rot)
 
-        if damage == 0 then
+            Timer.tween(duration, projectile, { coord = coord2 }, 'linear', function()
+                self:removeEntity(projectile)
+            end)
+        else
+            local effect = EntityFactory.create('strike_1', target.coord:clone())
+            self:addEntity(effect)
+            Timer.after(duration, function() self:removeEntity(effect) end)        
+        end
+
+        if status.damage == 0 then
             print(entity.name .. ' missed attack on ' .. target.name)
         else
             local visual = target:getComponent(Visual)
             visual:colorize(duration)
 
-            if is_crit then
-                print(entity.name .. ' critically hit ' .. target.name .. ' for ' .. damage .. ' hitpoints')
+            if status.is_crit then
+                print(entity.name .. ' critically hit ' .. target.name .. ' for ' .. status.damage .. ' hitpoints')
             else
-                print(entity.name .. ' hit ' .. target.name .. ' for ' .. damage .. ' hitpoints')
+                print(entity.name .. ' hit ' .. target.name .. ' for ' .. status.damage .. ' hitpoints')
             end
         end
 
-        -- TODO: screen shake on critical hits
+        local total = status.roll + status.attack
+        print(total .. ' (' .. status.roll .. ' + ' .. status.attack .. ') vs ' .. status.ac)
+
+        if status.is_crit then
+            camera:shake(duration)
+        end
     end
 
     local onIdle = function(self, entity, duration)
@@ -181,19 +204,30 @@ Level.new = function(dungeon)
         table.insert(entities, entity)
 
         -- a skip list would be useful here, to keep the list auto-sorted
-        table.sort(entities, function(a, b) return a.z_index < b.z_index end)
+        table.sort(entities, function(a, b) return a.z_index < b.z_index end)    
 
         for _, system in ipairs(systems) do
             system:addComponent(entity)
         end
+
+        for idx, entity in ipairs(entities) do
+            if entity.type == 'pc' then
+                player_idx = idx
+            end
+        end
     end
 
     local removeEntity = function(self, entity)         
-        for i, e in ipairs(entities) do
+        for idx, e in ipairs(entities) do
             if e == entity then
-                table.remove(entities, i)
+                if idx < player_idx then
+                    player_idx = player_idx - 1                
+                end
+                table.remove(entities, idx)
             end
         end
+
+        if entity.type == 'pc' then player_idx = 0 end
 
         for _, system in ipairs(systems) do
             system:removeComponent(entity)
@@ -212,6 +246,10 @@ Level.new = function(dungeon)
             system:update(dt, self)
         end
 
+        Pointer.update(camera, self)
+
+        if player_idx == 0 then return end
+
         -- create new turn if needed
         if turn:isFinished() then
             local actors = {} 
@@ -223,30 +261,40 @@ Level.new = function(dungeon)
             end
 
             turn = Turn(self, actors, TURN_DELAY)
+
+            -- heal player 1 hitpoint every 5 turns
+            if turn:getIndex() % 5 == 0 then
+                local player_health = entities[player_idx]:getComponent(Health)
+                player_health:heal(1)
+            end
         end
 
         turn:update(dt)
     end
 
     local draw = function(self)
-        camera:attach()
+        camera:draw(function() 
+            map:draw()
 
-        map:draw()
+            for _, entity in ipairs(entities) do
+                entity:draw()
+            end
 
-        for _, entity in ipairs(entities) do
-            entity:draw()
-        end
-
-        local ox, oy = camera:worldCoords(0, 0)
-        fog:draw(ox, oy)
-
-        camera:detach()
+            local ox, oy = camera:worldCoords(0, 0)
+            fog:draw(ox, oy)
+        end)
     end
 
     local isBlocked = function(self, coord)
         if coord.x < 1 or coord.x > map_w then return true end
         if coord.y < 1 or coord.y > map_h then return true end   
         return map:isBlocked(coord.x, coord.y)
+    end
+
+    local inLineOfSight = function(self, coord1, coord2) 
+        return bresenham.los(coord1.x, coord1.y, coord2.x, coord2.y, function(x, y) 
+            return map:getTile(x, y) == 0
+        end)
     end
 
     local setBlocked = function(self, coord, flag)
@@ -267,6 +315,10 @@ Level.new = function(dungeon)
         return filtered
     end
 
+    local getPlayer = function(self)
+        return (player_idx > 0) and entities[player_idx] or nil
+    end
+
     local handlers = {}
 
     local enter = function(self, player)
@@ -275,9 +327,9 @@ Level.new = function(dungeon)
         self:setBlocked(player.coord, true)
 
         handlers = {
-            ['move'] = function(...) onMove(self, ...) end,
-            ['idle'] = function(...) onIdle(self, ...) end,
-            ['attack'] = function(...) onAttack(self, ...) end,
+            ['move']    = function(...) onMove(self, ...)    end,
+            ['idle']    = function(...) onIdle(self, ...)    end,
+            ['attack']  = function(...) onAttack(self, ...)  end,
             ['destroy'] = function(...) onDestroy(self, ...) end,
         }
 
@@ -296,16 +348,7 @@ Level.new = function(dungeon)
             Signal.remove(key, handler)
         end
     end
-
-    local cam_offset = TILE_SIZE / 2
-    local moveCamera = function(self, coord, duration)
-        local pos = coord * TILE_SIZE
-        Timer.tween(duration, camera, { 
-            x = mfloor(pos.x + cam_offset), 
-            y = mfloor(pos.y + cam_offset),
-        })
-    end
-
+    
     return setmetatable({
         -- properties
         entry_coord     = stair_up.coord,
@@ -315,12 +358,13 @@ Level.new = function(dungeon)
         draw            = draw,
         isBlocked       = isBlocked,
         setBlocked      = setBlocked,
+        inLineOfSight   = inLineOfSight,
         enter           = enter,
         exit            = exit,
         addEntity       = addEntity,
+        getPlayer       = getPlayer,
         getEntities     = getEntities,
         removeEntity    = removeEntity,
-        moveCamera      = moveCamera,
     }, Level)
 end
 
