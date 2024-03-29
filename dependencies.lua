@@ -49,6 +49,7 @@ Entity          = require 'src.ecs.entity'
 System          = require 'src.ecs.system'
 
 -- components
+MoveSpeed       = require 'src.components.move_speed'
 Equipment       = require 'src.components.equipment'
 ExpLevel        = require 'src.components.exp_level'
 Backpack        = require 'src.components.backpack'
