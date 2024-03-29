@@ -9,22 +9,16 @@ local Turn = {}
 
 local index = 1
 
-local function sortByInitiative(actors)
-    for i = 2, #actors, 1 do
-        local c1 = actors[i - 1]:getComponent(Control)
-        local c2 = actors[i]:getComponent(Control)
-
-        if c1:getInitiative() > c2:getInitiative() then
-            actors[i - 1], actors[i] = actors[i], actors[i - 1]
-        end 
-    end
-end
-
 Turn.new = function(level, actors, duration)
     actors = actors or {}
     index = index + 1
 
-    sortByInitiative(actors)
+    -- ensure player is always first
+    for idx, actor in ipairs(actors) do
+        if actor.type == 'pc' then
+            actors[1], actors[idx] = actors[idx], actors[1]
+        end
+    end
 
     local time, active_idx, is_finished = 0, #actors, false
 

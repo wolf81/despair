@@ -58,7 +58,7 @@ Level.new = function(dungeon)
     local entities = { stair_up, stair_dn }
 
     -- handle game turns
-    local turn = Turn(self)
+    local turn = Turn()
 
     -- fog of war
     local fog = Fog(13, 10)

@@ -43,24 +43,10 @@ Control.new = function(entity, def, ...)
         is_enabled = (flag == true)
     end
 
-    local getInitiative = function(self)
-        local base = ndn.dice('1d20').roll()
-        local bonus = 0
-
-        -- maybe not very efficient to do this every turn
-        local stats = entity:getComponent(Stats)
-        if stats ~= nil then
-            bonus = bonus + stats:getBonus('dex')
-        end
-
-        return base + bonus
-    end
-
     return setmetatable({             
         -- methods
-        getAction       = getAction,
-        getInitiative   = getInitiative,
-        setEnabled      = setEnabled,
+        getAction   = getAction,
+        setEnabled  = setEnabled,
     }, Control)
 end
 
