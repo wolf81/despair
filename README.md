@@ -26,26 +26,28 @@ In order to monotize the game, we'll aim for the following approach:
 
 The turn-based mechanic will work a bit different than Microlite20, for the sake of gameplay. The most important changes are as follows ...
 
-Every turn the player acts first. We determine how many time units are required to perform the action.
+Every turn the player acts first. We determine how many action points (AP) are required to perform the action.
 
-Afterwards all other actors receive the time units. The actors either perform an action allowed by the available time units or store the time units for next turn.
+Afterwards all other actors receive the same amount of action points. The actors either perform an action allowed by the available action points or store the action points for next turn.
 
 This approach allows for different movement speeds. The base move speed is 30, which is the default for most NPCs.
 
 But some creatures, player characters might have a lower speed, e.g. due to size.
 
-In order to determine how many time units (TU) are required to move, we can make the following calculations, depending on speed:
+In order to determine how many action points are required to move, we can make the following calculations, depending on speed:
 
-- **speed 30**: base 30 / speed 30 * 30 TU = 30 TU
-- **speed 20**: base 30 / speed 20 * 30 TU = 45 TU
-- **speed 40**: base 30 / speed 45 * 30 TU = 20 TU
+- **speed 30**: base 30 / speed 30 * 30 AP = 30 AP
+- **speed 20**: base 30 / speed 20 * 30 AP = 45 AP
+- **speed 40**: base 30 / speed 45 * 30 AP = 20 AP
+
+### EXAMPLE
 
 Let's follow up with an example. We'll have 4 characters:
 
-- Kendrick (PC): 30 movement speed (30 TU per move)
-- Bat (NPC):     20 movement speed (45 TU per move)
-- Orc (NPC):     30 movement speed (30 TU per move)
-- Wolf (NPC):    45 movement speed (20 TU per move)
+- Kendrick (PC): 30 movement speed (30 AP per move)
+- Bat (NPC):     20 movement speed (45 AP per move)
+- Orc (NPC):     30 movement speed (30 AP per move)
+- Wolf (NPC):    45 movement speed (20 AP per move)
 
   ABCDEFGHI
 1 ·········
@@ -54,26 +56,22 @@ Let's follow up with an example. We'll have 4 characters:
 4 ·······W·
 5 ·········
 
-Turn 1:
+### TURN 1
 
-- Kendrick moves: B3→C3 (30 TU). All NPCs add 30 TU.
-- Bat has 30 TU, but needs 45 to move, so Bat waits (30 TU remaining)
-- Orc uses 30 TU to move: H3→G3 (0 TU remaining)
-- Wolf uses 20 TU to move: H4→G4 (15 TU remaining)
- 
--## TURN-BASED SYSTEM
+- Kendrick moves: B3→C3 (30 AP). All NPCs add 30 AP.
+- Bat has 30 AP, but needs 45 to move, so Bat waits (30 AP remaining)
+- Orc uses 30 AP to move: H3→G3 (0 AP remaining)
+- Wolf uses 20 AP to move: H4→G4 (15 AP remaining)
+
   ABCDEFGHI
 1 ·········
 2 ·······B·
 3 ··K···O··
 4 ······W··
 5 ·········
- 
--The game advances a turn in 2 situations:
-Turn 2:
- 
--- every couple of seconds if the player has not made a move
--- if the player made a move, immediately
+
+### TURN 2
+
 - Kendrink moves C3→D3 (30 TU). All NPCs add 30 TU.
 - Bat uses 45 TU to move: H3→G3 (15 TU remaining)
 - Orc uses 30 TU to move: G3→F3 (0 TU remaining)
@@ -86,4 +84,6 @@ Turn 2:
 4 ····W····
 5 ·········
  
-Turn 3:
+### TURN 3
+
+...
