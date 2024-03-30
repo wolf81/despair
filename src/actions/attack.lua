@@ -20,8 +20,11 @@ Attack.new = function(level, entity, target)
         Signal.emit('attack', entity, target, status, duration)
     end
 
+    local getAP = function() return 30 end
+
     return setmetatable({
         -- methods
+        getAP   = getAP,
         execute = execute,
     }, Attack)
 end

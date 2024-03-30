@@ -36,8 +36,14 @@ Move.new = function(level, entity, coords)
         tween(duration / #coords, entity, coords)
     end
 
+    local getAP = function()
+        local move_speed = entity:getComponent(MoveSpeed)
+        return 30 / move_speed:getValue() * 30
+    end
+
     return setmetatable({
         -- methods
+        getAP   = getAP,
         execute = execute,
     }, Move)
 end

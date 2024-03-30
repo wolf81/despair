@@ -12,7 +12,6 @@ Control.new = function(entity, def, ...)
     assert(#input_modes > 0, 'missing argument(s): "Keyboard", "Mouse" and/or "Cpu"')
 
     local is_enabled = true
-    local time_units = 0
 
     local update = function(self, dt)
         for _, input_mode in ipairs(input_modes) do
@@ -20,11 +19,8 @@ Control.new = function(entity, def, ...)
         end
     end
     
-    local getAction = function(self, level, time_units)
+    local getAction = function(self, level, ap)
         if not is_enabled then return end 
-
-        -- if time_units is nil, choose any action
-        -- otherwise choose action possible by time
 
         local health = entity:getComponent(Health)
         if not health:isAlive() then 
@@ -33,7 +29,9 @@ Control.new = function(entity, def, ...)
 
         for _, input_mode in ipairs(input_modes) do
             local action = input_mode:getAction(level)
-            if action ~= nil then return action end
+            if action ~= nil then 
+                return action 
+            end
         end
 
         return nil

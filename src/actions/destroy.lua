@@ -21,8 +21,11 @@ Destroy.new = function(level, entity)
         visual:fadeOut(duration)
     end
 
+    local getAP = function() return 0 end
+
     return setmetatable({
         -- methods
+        getAP   = getAP,
         execute = execute,
     }, Destroy)
 end

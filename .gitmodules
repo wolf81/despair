@@ -10,3 +10,6 @@
 [submodule "lib/bresenham"]
 	path = lib/bresenham
 	url = https://github.com/wolf81/bresenham.lua.git
+[submodule "lib/pqueue"]
+	path = lib/pqueue
+	url = https://github.com/wolf81/lpriorityqueue

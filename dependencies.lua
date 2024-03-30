@@ -8,6 +8,7 @@
 local Cache = require 'src.util.cache'
 
 -- libraries
+PriorityQueue   = require 'lib.pqueue.PriorityQueue'
 bresenham       = require 'lib.bresenham.bresenham'
 Signal          = require 'lib.hump.signal'
 vector          = require 'lib.hump.vector'

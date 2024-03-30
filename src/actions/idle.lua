@@ -18,8 +18,11 @@ Idle.new = function(level, entity)
         Signal.emit('idle', entity, duration)
     end
 
+    local getAP = function() return 30 end
+
     return setmetatable({
         -- methods
+        getAP   = getAP,
         execute = execute,
     }, Idle)
 end
