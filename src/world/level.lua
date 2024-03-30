@@ -57,9 +57,6 @@ Level.new = function(dungeon)
 
     local entities = { stair_up, stair_dn }
 
-    -- handle game turns
-    local turn = Turn()
-
     -- fog of war
     local fog = Fog(13, 10)
 
@@ -70,6 +67,8 @@ Level.new = function(dungeon)
         local visual = monster:getComponent(Visual)
         visual.alpha = 0.0
     end
+
+    local scheduler = Scheduler(entities)
 
     -- add camera
     local camera = Camera(0.0, 0.0, SCALE)
@@ -204,6 +203,7 @@ Level.new = function(dungeon)
         table.insert(entities, entity)
 
         -- a skip list would be useful here, to keep the list auto-sorted
+        -- or use the priority queue instead
         table.sort(entities, function(a, b) return a.z_index < b.z_index end)    
 
         for _, system in ipairs(systems) do
@@ -215,9 +215,11 @@ Level.new = function(dungeon)
                 player_idx = idx
             end
         end
+
+        scheduler:addEntity(entity)
     end
 
-    local removeEntity = function(self, entity)         
+    local removeEntity = function(self, entity)    
         for idx, e in ipairs(entities) do
             if e == entity then
                 if idx < player_idx then
@@ -232,9 +234,11 @@ Level.new = function(dungeon)
         for _, system in ipairs(systems) do
             system:removeComponent(entity)
         end
+
+        scheduler:removeEntity(entity)
     end
 
-    local update = function(self, dt)
+    local update = function(self, dt)        
         for i = #entities, 1, -1 do
             local entity = entities[i]
             if entity.remove then
@@ -248,6 +252,9 @@ Level.new = function(dungeon)
 
         Pointer.update(camera, self)
 
+        scheduler:update(dt, self)
+
+        --[[
         if player_idx == 0 then return end
 
         -- create new turn if needed
@@ -270,6 +277,7 @@ Level.new = function(dungeon)
         end
 
         turn:update(dt)
+        --]]
     end
 
     local draw = function(self)

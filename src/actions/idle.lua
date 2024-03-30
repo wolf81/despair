@@ -10,20 +10,22 @@ local Idle = {}
 Idle.new = function(level, entity)
     local did_execute = false
 
-    local execute = function(self, duration)
+    local execute = function(self, duration, fn)
         if did_execute then return end
 
         did_execute = true
 
         Signal.emit('idle', entity, duration)
+
+        Timer.after(duration, fn)
     end
 
-    local getAP = function() return 30 end
+    local getCost = function() return 30 end
 
     return setmetatable({
         -- methods
-        getAP   = getAP,
-        execute = execute,
+        getCost = getCost,
+        execute = execute,        
     }, Idle)
 end
 

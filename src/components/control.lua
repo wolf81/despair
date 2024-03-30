@@ -19,7 +19,7 @@ Control.new = function(entity, def, ...)
         end
     end
     
-    local getAction = function(self, level, ap)
+    local getAction = function(self, level)
         if not is_enabled then return end 
 
         local health = entity:getComponent(Health)
