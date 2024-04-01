@@ -20,7 +20,7 @@ local function newMonsters(map)
         'purple_jelly', 'blk_widow_mat', 'spectator', 'observer'
     }
 
-    while #monsters < 1 do
+    while #monsters < 10 do
         local x = lrandom(map.width)
         local y = lrandom(map.height)
 
@@ -47,23 +47,6 @@ end
 Level.new = function(dungeon)
     -- generate a map
     local tiles, stair_up, stair_dn = MazeGenerator.generate(MAP_SIZE, 5)
-
-    tiles = { 
-        { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
-        { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 }, 
-        { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 }, 
-        { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 }, 
-        { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 }, 
-        { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 }, 
-        { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 }, 
-        { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 }, 
-        { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 }, 
-        { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 }, 
-        { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 }, 
-        { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 }, 
-        { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 }, 
-        { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
-    }
 
     local map = Map(tiles, function(id) return id ~= 0 end)
     local map_w, map_h = map:getSize()
@@ -270,32 +253,8 @@ Level.new = function(dungeon)
 
         Pointer.update(camera, self)
 
-        scheduler:update(dt, self)
-
-        --[[
-        if player_idx == 0 then return end
-
-        -- create new turn if needed
-        if turn:isFinished() then
-            local actors = {} 
-            
-            for _, entity in ipairs(entities) do
-                if entity:getComponent(Control) then
-                    table.insert(actors, entity)
-                end
-            end
-
-            turn = Turn(self, actors, TURN_DELAY)
-
-            -- heal player 1 hitpoint every 5 turns
-            if turn:getIndex() % 5 == 0 then
-                local player_health = entities[player_idx]:getComponent(Health)
-                player_health:heal(1)
-            end
-        end
-
-        turn:update(dt)
-        --]]
+        -- only update scheduler if player is alive and in play
+        if player_idx > 0 then scheduler:update(dt, self) end
     end
 
     local draw = function(self)

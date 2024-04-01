@@ -18,9 +18,11 @@ Scheduler.new = function(entities)
     local update = function(self, dt, level)
         local entity = list:shift()
 
-        if not entity or removed[entity] then return end
+        if not entity then return end
 
         local control = entity:getComponent(Control)
+        local health = entity:getComponent(Health)
+        local player = level:getPlayer()
 
         -- add AP in 2 cases: 
         -- * active entity changed; to ensure entity uses up all AP 
@@ -45,12 +47,19 @@ Scheduler.new = function(entities)
             return list:unshift(entity)
         end
 
-        -- we did get an action, so execute
-        action:execute(TURN_DURATION)
+        -- we did get an action, so execute over animation duration or 0 if far away from player
+        local duration = TURN_DURATION
+        if player and player.coord:dist(entity.coord) > 10 then
+            duration = 0
+        end
+        action:execute(duration)
+
+        -- if the entity was scheduled to be removed, don't re-add to list
+        if removed[entity] then return end
 
         -- if we still have AP left after action is performed, move to start of linked list, 
         -- otherwise to end of linked list
-        if control:getAP() >= 0 then
+        if control:getAP() > 0 then
             list:unshift(entity)
         else
             list:push(entity)

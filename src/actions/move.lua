@@ -7,7 +7,7 @@
 
 local Move = {}
 
-local ORDINAL_COST_FACTOR = math.sqrt(2)
+local ORDINAL_COST_FACTOR = 1.4
 
 Move.new = function(level, entity, coord, direction)
     local did_execute, is_finished = false, false
