@@ -29,13 +29,14 @@ Cpu.new = function(entity)
         end
 
         -- try to move in a random direction
-        local next_coord = entity.coord + getRandomDirection()
+        local direction = getRandomDirection()
+        local next_coord = entity.coord + direction
 
         -- ensure entity can move to next coord
         if level:isBlocked(next_coord) then return Idle(level, entity) end 
         if #level:getEntities(next_coord) > 0 then return Idle(level, entity) end
 
-        return Move(level, entity, next_coord)
+        return Move(level, entity, next_coord, direction)
     end
 
     return setmetatable({

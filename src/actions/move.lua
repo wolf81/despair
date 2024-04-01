@@ -7,10 +7,12 @@
 
 local Move = {}
 
-Move.new = function(level, entity, coord)
-    local did_execute = false
+local ORDINAL_COST_FACTOR = math.sqrt(2)
 
-    local execute = function(self, duration, fn)
+Move.new = function(level, entity, coord, direction)
+    local did_execute, is_finished = false, false
+
+    local execute = function(self, duration)
         if did_execute then return end
 
         did_execute = true
@@ -19,19 +21,28 @@ Move.new = function(level, entity, coord)
 
         Timer.tween(duration, entity, { coord = coord }, 'linear', function()
             entity.coord = coord
-            fn()
+            is_finished = true
         end)
     end
 
     local getCost = function()
         local move_speed = entity:getComponent(MoveSpeed)
-        return 30 / move_speed:getValue() * 30
+        local cost = 30 / move_speed:getValue() * 30
+
+        if Direction.isOrdinal(direction) then
+            cost = cost * ORDINAL_COST_FACTOR
+        end
+
+        return cost
     end
+
+    local isFinished = function() return is_finished end
 
     return setmetatable({
         -- methods
-        getCost = getCost,
-        execute = execute,
+        isFinished  = isFinished,
+        getCost     = getCost,
+        execute     = execute,
     }, Move)
 end
 

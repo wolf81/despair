@@ -26,6 +26,7 @@ Map             = require 'src.world.map'
 
 -- util
 Shadowcaster    = require 'src.util.shadowcaster'
+LinkedList      = require 'src.util.linked_list'
 Scheduler       = require 'src.util.scheduler'
 Direction       = require 'src.util.direction'
 Animation       = require 'src.util.animation'

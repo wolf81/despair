@@ -8,9 +8,9 @@
 local Attack = {}
 
 Attack.new = function(level, entity, target)
-    local did_execute = false
+    local did_execute, is_finished = false, false
 
-    local execute = function(self, duration, fn)
+    local execute = function(self, duration)
         if did_execute then return end
 
         did_execute = true
@@ -19,15 +19,20 @@ Attack.new = function(level, entity, target)
 
         Signal.emit('attack', entity, target, status, duration)
 
-        Timer.after(duration, fn)
+        Timer.after(duration, function()
+            is_finished = true
+        end)
     end
 
     local getCost = function() return 30 end
 
+    local isFinished = function() return is_finished end
+
     return setmetatable({
         -- methods
-        getCost = getCost,
-        execute = execute,
+        isFinished  = isFinished,
+        getCost     = getCost,
+        execute     = execute,
     }, Attack)
 end
 

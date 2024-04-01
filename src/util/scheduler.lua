@@ -3,41 +3,48 @@ local Scheduler = {}
 Scheduler.new = function(entities)
     entities = entities or {}
 
-    local removed, time = {}, 0
+    local removed, last_entity = {}, nil
 
-    local pqueue = PriorityQueue('min')
+    -- local pqueue = PriorityQueue('min')
+    local list = LinkedList()
 
     for _, entity in ipairs(entities) do
         local control = entity:getComponent(Control)
         if control == nil then goto continue end
 
-        pqueue:enqueue(entity, 0)
+        list:push(entity)
 
         ::continue::
     end
 
     local update = function(self, dt, level)
-        time = time + dt
+        local entity = list:shift()
 
-        if pqueue:empty() then return end
-
-        local entity, prio = pqueue:dequeue()
-
-        if removed[entity] then 
-            removed[entity] = nil
-            return
-        end
+        if not entity then return end
 
         local control = entity:getComponent(Control)
-        local action = control:getAction(level)
 
-        if action == nil then
-            pqueue:enqueue(entity, 0)
+        if entity ~= last_entity then
+            -- TODO: should skip check if only 1 entity, e.g. player?
+            control:addAP(30)
+            last_entity = entity
+        end
+
+        if control:getAP() >= 0 then
+            local action = control:getAction(level)
+
+            if action then
+                action:execute(TURN_DURATION)     
+                if control:getAP() >= 0 then
+                    list:unshift(entity)
+                else
+                    list:push(entity)
+                end       
+            else
+                list:unshift(entity)
+            end
         else
-            action:execute(TURN_DURATION, function()
-                print('cost', action:getCost())
-                pqueue:enqueue(entity, action:getCost())
-            end)
+            list:push(entity)
         end
     end
 
@@ -45,7 +52,7 @@ Scheduler.new = function(entities)
         local control = entity:getComponent(Control)
 
         if control ~= nil then
-            pqueue:enqueue(entity, 0)
+            list:push(entity)
         end
     end
 
