@@ -25,7 +25,10 @@ Destroy.new = function(level, entity)
         end)
     end
 
-    local getCost = function() return ACTION_BASE_AP_COST end
+    local getCost = function() 
+        local control = entity:getComponent(Control)
+        return control:getAP()
+    end
 
     local isFinished = function() return is_finished end
 

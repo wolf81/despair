@@ -29,7 +29,6 @@ Control.new = function(entity, def, ...)
         local health = entity:getComponent(Health)
         if not health:isAlive() then
             action = Destroy(level, entity) 
-            ap = 0
         else
             for _, input_mode in ipairs(input_modes) do
                 action = input_mode:getAction(level)

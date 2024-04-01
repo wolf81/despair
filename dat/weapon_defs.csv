@@ -9,7 +9,7 @@ cstaff_0    |weapon |uf_items |74    |2h        |Crooked Staff +2     |2       |
 
 ssword_1    |weapon |uf_items |43    |light     |Short Sword +0       |0       |1d6+1   |                   |       |            |
 ssword_2    |weapon |uf_items |43    |light     |Short Sword +4       |4       |1d6+2   |                   |       |            |
-unarmed_1   |weapon |uf_items |42     |light     |Unarmed Strike +9    |9       |1d8+4   |                   |       |            |
+unarmed_1   |weapon |uf_items |42    |light     |Unarmed Strike +9    |9       |1d8+4   |                   |       |            |
 slam_0      |weapon |uf_items |42    |light     |Slam +3              |3       |1d6+1   |                   |       |            |
 slam_1      |weapon |uf_items |42    |light     |Slam +5              |5       |1d6+4   |level_drain_1_dc14 |       |            |
 bite_0      |weapon |uf_items |42    |light     |Bite                 |0       |1d1     |                   |       |            |
