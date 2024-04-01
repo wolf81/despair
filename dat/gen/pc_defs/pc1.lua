@@ -6,7 +6,7 @@ return {
 	race = 'dwarf',
 	level = 4,
 	sight = 60,
-	speed = 25,
+	speed = 30,
 	str = 16,
 	dex = 13,
 	mind = 10,

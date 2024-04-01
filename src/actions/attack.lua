@@ -24,7 +24,7 @@ Attack.new = function(level, entity, target)
         end)
     end
 
-    local getCost = function() return 30 end
+    local getCost = function() return ACTION_BASE_AP_COST end
 
     local isFinished = function() return is_finished end
 

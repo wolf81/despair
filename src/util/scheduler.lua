@@ -3,10 +3,8 @@ local Scheduler = {}
 Scheduler.new = function(entities)
     entities = entities or {}
 
-    local removed, last_entity = {}, nil
-
-    -- local pqueue = PriorityQueue('min')
     local list = LinkedList()
+    local prev_entity, removed = nil, {}
 
     for _, entity in ipairs(entities) do
         local control = entity:getComponent(Control)
@@ -20,39 +18,51 @@ Scheduler.new = function(entities)
     local update = function(self, dt, level)
         local entity = list:shift()
 
-        if not entity then return end
+        if not entity or removed[entity] then return end
 
         local control = entity:getComponent(Control)
 
-        if entity ~= last_entity then
-            -- TODO: should skip check if only 1 entity, e.g. player?
+        -- add AP in 2 cases: 
+        -- * active entity changed; to ensure entity uses up all AP 
+        -- * only 1 entity active; to ensure the entity can perform actions 
+        if list.length == 0 or entity ~= prev_entity then
             control:addAP(30)
-            last_entity = entity
+            prev_entity = entity
         end
 
-        if control:getAP() >= 0 then
-            local action = control:getAction(level)
+        -- if the entity doesn't have enough AP to perform an action, move to end of linked list
+        if control:getAP() < 0 then
+            return list:push(entity)
+        end
 
-            if action then
-                action:execute(TURN_DURATION)     
-                if control:getAP() >= 0 then
-                    list:unshift(entity)
-                else
-                    list:push(entity)
-                end       
-            else
-                list:unshift(entity)
-            end
+        -- perform an action:
+        -- * could be 'nil' while waiting for input
+        -- * if input was received by Control component, will have an action
+        local action = control:getAction(level)
+
+        -- if no action, move to start of list until we get an action
+        if not action then            
+            return list:unshift(entity)
+        end
+
+        -- we did get an action, so execute
+        action:execute(TURN_DURATION)
+
+        -- if we still have AP left after action is performed, move to start of linked list, 
+        -- otherwise to end of linked list
+        if control:getAP() >= 0 then
+            list:unshift(entity)
         else
             list:push(entity)
-        end
+        end       
     end
 
     local addEntity = function(self, entity)
         local control = entity:getComponent(Control)
 
+        -- add new entities at start of linked list
         if control ~= nil then
-            list:push(entity)
+            list:unshift(entity)
         end
     end
 

@@ -22,7 +22,7 @@ Idle.new = function(level, entity)
         end)
     end
 
-    local getCost = function() return 30 end
+    local getCost = function() return ACTION_BASE_AP_COST end
 
     local isFinished = function() return is_finished end
 

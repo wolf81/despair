@@ -2,7 +2,7 @@ return {
 	id = 'lich',
 	type = 'npc',
 	name = 'lich',
-	hd = '1d8',
+	hd = '8d8',
 	ac = 12,
 	class = '',
 	flags = { '' },

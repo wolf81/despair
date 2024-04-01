@@ -27,7 +27,7 @@ Move.new = function(level, entity, coord, direction)
 
     local getCost = function()
         local move_speed = entity:getComponent(MoveSpeed)
-        local cost = 30 / move_speed:getValue() * 30
+        local cost = ACTION_BASE_AP_COST / move_speed:getValue() * ACTION_BASE_AP_COST
 
         if Direction.isOrdinal(direction) then
             cost = cost * ORDINAL_COST_FACTOR
