@@ -59,6 +59,7 @@ Weapon          = require 'src.components.weapon'
 Skills          = require 'src.components.skills'
 Stats           = require 'src.components.stats'
 Armor           = require 'src.components.armor'
+Item            = require 'src.components.item'
 
 -- resolvers
 CombatResolver  = require 'src.resolvers.combat'

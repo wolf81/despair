@@ -28,13 +28,31 @@ end
 local function generateLootTable()
     local loot_table = {}
 
-    local armor_ids = EntityFactory.getIds('armor')
-    for _, id in ipairs(armor_ids) do
+    for _, id in ipairs(EntityFactory.getIds('armor')) do
         loot_table[id] = 2
     end
 
-    local weapon_ids = EntityFactory.getIds('weapon')
-    for _, id in ipairs(weapon_ids) do
+    for _, id in ipairs(EntityFactory.getIds('weapon')) do
+        loot_table[id] = 2
+    end
+
+    for _, id in ipairs(EntityFactory.getIds('ring')) do
+        loot_table[id] = 2
+    end
+
+    for _, id in ipairs(EntityFactory.getIds('potion')) do
+        loot_table[id] = 2
+    end
+
+    for _, id in ipairs(EntityFactory.getIds('necklace')) do
+        loot_table[id] = 2
+    end
+
+    for _, id in ipairs(EntityFactory.getIds('tome')) do
+        loot_table[id] = 2
+    end
+
+    for _, id in ipairs(EntityFactory.getIds('wand')) do
         loot_table[id] = 2
     end
 

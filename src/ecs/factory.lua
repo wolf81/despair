@@ -101,12 +101,36 @@ M.create = function(id, coord)
         entity.z_index      = 5
         entity.kind         = def['kind']
         entity.ac           = def['ac']
+
+        entity:addComponent(Item(entity, def))
     elseif entity.type == 'weapon' then
         entity.z_index      = 5
         entity.kind         = def['kind']
         entity.attack       = def['attack']
         entity.damage       = def['damage']
         entity.projectile   = def['projectile']
+
+        entity:addComponent(Item(entity, def))
+    elseif entity.type == 'ring' then
+        entity.z_index      = 5
+
+        entity:addComponent(Item(entity, def))
+    elseif entity.type == 'necklace' then
+        entity.z_index      = 5
+
+        entity:addComponent(Item(entity, def))
+    elseif entity.type == 'potion' then
+        entity.z_index      = 5
+
+        entity:addComponent(Item(entity, def))
+    elseif entity.type == 'tome' then
+        entity.z_index      = 5
+
+        entity:addComponent(Item(entity, def))
+    elseif entity.type == 'wand' then
+        entity.z_index      = 5
+
+        entity:addComponent(Item(entity, def))
     elseif entity.type == 'effect' then
         entity.z_index      = 20
     end
