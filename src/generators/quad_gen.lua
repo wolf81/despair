@@ -14,8 +14,8 @@ M.generate = function(texture, quad_w, quad_h, ox, oy, ow, oh)
     oy = oy or 0
 
     local texture_w, texture_h = texture:getDimensions()
-    w = ow or texture_w - ox
-    h = oh or texture_h - oy
+    w = ow or (texture_w - ox)
+    h = oh or (texture_h - oy)
 
     local cols = mfloor(w / quad_w)
     local rows = mfloor(h / quad_h)
@@ -26,7 +26,7 @@ M.generate = function(texture, quad_w, quad_h, ox, oy, ow, oh)
         for x = 0, cols - 1 do
             quads[#quads + 1] = love.graphics.newQuad(
                 ox + x * quad_w, 
-                oy + y * quad_w, 
+                oy + y * quad_h, 
                 quad_w,
                 quad_h, 
                 texture

@@ -68,6 +68,10 @@ local function registerInterfaceQuads()
         table.insert(quads, quad)
     end
 
+    for _, quad in ipairs(QuadGenerator.generate(image, 28, 5, 481, 29, 28, 60)) do
+        table.insert(quads, quad)
+    end
+
     QuadCache:register(key, quads)
 end
 
@@ -151,21 +155,30 @@ function love.load(args)
             for key, image in TextureCache:each() do
                 local w, h = image:getDimensions()
 
-                local font = love.graphics.newFont(11)
+                local font = love.graphics.newFont(10)
                 love.graphics.setFont(font)
-
-                print('key', key)
 
                 local canvas = love.graphics.newCanvas(w, h)
                 canvas:renderTo(function() 
                     love.graphics.draw(image, 0, 0)
 
                     local quads = QuadCache:get(key)                    
-                    love.graphics.setColor(1.0, 0.0, 1.0, 1.0)
+
                     for idx, quad in ipairs(quads) do
                         local x, y, w, h = quad:getViewport()
-                        love.graphics.rectangle('line', x, y, w - 1.0, h - 1.0)
-                        love.graphics.print(idx, x + 1.0, y + 1.0)
+
+                        if idx % 10 == 0 then
+                            love.graphics.setColor(0.0, 1.0, 1.0, 0.5)
+                        else
+                            love.graphics.setColor(1.0, 0.0, 1.0, 0.5)
+                        end
+
+                        love.graphics.rectangle('fill', x, y, w, h)
+
+                        if (w >= 24 and h >= 12) or idx % 10 == 0 then
+                            love.graphics.setColor(1.0, 1.0, 0.0, 1.0)
+                            love.graphics.print(idx, x + 1.0, y + 1.0)
+                        end
                     end
                     love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
                 end)
