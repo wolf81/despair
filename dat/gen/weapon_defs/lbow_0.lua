@@ -1,6 +1,8 @@
 return {
 	id = 'lbow_0',
 	type = 'weapon',
+	texture = 'uf_items',
+	anim = { 70 },
 	kind = 'ranged_2h',
 	name = 'Longbow +3',
 	attack = 3,

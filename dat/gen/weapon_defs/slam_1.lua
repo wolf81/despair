@@ -1,6 +1,8 @@
 return {
 	id = 'slam_1',
 	type = 'weapon',
+	texture = 'uf_items',
+	anim = { 42 },
 	kind = 'light',
 	name = 'Slam +5',
 	attack = 5,

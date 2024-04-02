@@ -1,6 +1,8 @@
 return {
 	id = 'bite_3',
 	type = 'weapon',
+	texture = 'uf_items',
+	anim = { 42 },
 	kind = 'light',
 	name = 'Bite +5',
 	attack = 5,

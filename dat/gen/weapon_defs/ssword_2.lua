@@ -1,6 +1,8 @@
 return {
 	id = 'ssword_2',
 	type = 'weapon',
+	texture = 'uf_items',
+	anim = { 43 },
 	kind = 'light',
 	name = 'Short Sword +4',
 	attack = 4,

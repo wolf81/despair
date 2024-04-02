@@ -1,6 +1,8 @@
 return {
 	id = 'inc_touch_1',
 	type = 'weapon',
+	texture = 'uf_items',
+	anim = { 42 },
 	kind = 'light',
 	name = 'Incorporeal Touch +3',
 	attack = 3,
