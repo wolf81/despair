@@ -18,7 +18,7 @@ handaxe      |weapon |uf_items |56    |light     |handaxe        |0       |1d4  
 unarmed      |weapon |uf_items |42    |light     |unarmed strike |0       |1d3     |         |            |
 bite         |weapon |uf_items |42    |light     |bite           |0       |1d3     |         |            |
 
-long_bow     |weapon |uf_items |70    |ranged_2h |longbow        |0       |1d8     |         |arrow       |
-short_bow    |weapon |uf_items |69    |ranged_2h |shortbow       |0       |1d6     |         |arrow       |
+longbow      |weapon |uf_items |70    |ranged_2h |longbow        |0       |1d8     |         |arrow       |
+shortbow     |weapon |uf_items |69    |ranged_2h |shortbow       |0       |1d6     |         |arrow       |
 
 sling        |weapon |uf_items |72    |ranged_1h |sling          |0       |1d4     |         |bullet      |

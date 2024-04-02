@@ -67,6 +67,12 @@ local function addLoot(level, level_idx, loot_table)
     end
 end
 
+local function newLevel(dungeon, level_idx, loot_table)
+    local level = Level(dungeon)
+    addLoot(level, level_idx, loot_table)
+    return level
+end
+
 Dungeon.new = function()
     local loot_table = generateLootTable()
 
@@ -83,9 +89,8 @@ Dungeon.new = function()
     end
 
     local enter = function(self)
-        levels = { Level(self) }
         level_idx = 1
-        addLoot(levels[level_idx], level_idx, loot_table)
+        levels = { newLevel(self, level_idx, loot_table) }
         player.coord = levels[level_idx].entry_coord:clone()
         levels[level_idx]:enter(player)
     end
@@ -103,7 +108,7 @@ Dungeon.new = function()
             -- proceed to next level, generating a new level if needed
             level_idx = level_idx + 1
             if level_idx > #levels then
-                table.insert(levels, Level(self))
+                table.insert(levels, newLevel(self, level_idx, loot_table))
             end
 
             local level = levels[level_idx]
