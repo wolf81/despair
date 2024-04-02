@@ -180,7 +180,6 @@ Level.new = function(dungeon)
         else
             local visual = target:getComponent(Visual)
             visual:colorize(duration)
-
             if status.is_crit then
                 print(entity.name .. ' critically hit ' .. target.name .. ' for ' .. status.damage .. ' hitpoints')
             else
@@ -191,7 +190,8 @@ Level.new = function(dungeon)
         local total = status.roll + status.attack
         print(total .. ' (' .. status.roll .. ' + ' .. status.attack .. ') vs ' .. status.ac)
 
-        if status.is_crit then
+        -- show camera shake effect if player performs a critical hit
+        if status.is_crit and entity == self:getPlayer() then
             camera:shake(duration)
         end
     end
@@ -333,6 +333,8 @@ Level.new = function(dungeon)
             Signal.remove(key, handler)
         end
     end
+
+    local getSize = function(self) return map_w, map_h end
     
     return setmetatable({
         -- properties
@@ -346,6 +348,8 @@ Level.new = function(dungeon)
         inLineOfSight   = inLineOfSight,
         enter           = enter,
         exit            = exit,
+        getSize         = getSize,
+
         addEntity       = addEntity,
         getPlayer       = getPlayer,
         getEntities     = getEntities,
