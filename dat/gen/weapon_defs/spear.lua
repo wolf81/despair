@@ -2,7 +2,7 @@ return {
 	id = 'spear',
 	type = 'weapon',
 	texture = 'uf_items',
-	anim = { 65 },
+	anim = { 68 },
 	kind = '2h',
 	name = 'spear',
 	attack = 0,

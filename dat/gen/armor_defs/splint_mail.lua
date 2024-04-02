@@ -2,7 +2,7 @@ return {
 	id = 'splint_mail',
 	type = 'armor',
 	texture = 'uf_items',
-	anim = { 214 },
+	anim = { 224 },
 	kind = 'chest',
 	name = 'splint mail',
 	ac = 6,

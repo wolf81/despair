@@ -2,7 +2,7 @@ return {
 	id = 'scimitar',
 	type = 'weapon',
 	texture = 'uf_items',
-	anim = { 47 },
+	anim = { 49 },
 	kind = '1h',
 	name = 'scimitar',
 	attack = 0,

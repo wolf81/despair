@@ -2,7 +2,7 @@ return {
 	id = 'bite',
 	type = 'weapon',
 	texture = 'uf_items',
-	anim = { 42 },
+	anim = { 22 },
 	kind = 'light',
 	name = 'bite',
 	attack = 0,

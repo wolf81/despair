@@ -2,7 +2,7 @@ return {
 	id = 'unarmed',
 	type = 'weapon',
 	texture = 'uf_items',
-	anim = { 42 },
+	anim = { 22 },
 	kind = 'light',
 	name = 'unarmed strike',
 	attack = 0,

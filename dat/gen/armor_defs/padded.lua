@@ -2,7 +2,7 @@ return {
 	id = 'padded',
 	type = 'armor',
 	texture = 'uf_items',
-	anim = { 212 },
+	anim = { 222 },
 	kind = 'chest',
 	name = 'padded',
 	ac = 1,

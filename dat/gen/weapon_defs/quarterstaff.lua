@@ -2,7 +2,7 @@ return {
 	id = 'quarterstaff',
 	type = 'weapon',
 	texture = 'uf_items',
-	anim = { 74 },
+	anim = { 77 },
 	kind = '2h',
 	name = 'quarterstaff',
 	attack = 0,

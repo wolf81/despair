@@ -2,7 +2,7 @@ return {
 	id = 'dagger',
 	type = 'weapon',
 	texture = 'uf_items',
-	anim = { 44 },
+	anim = { 46 },
 	kind = 'light',
 	name = 'dagger',
 	attack = 0,

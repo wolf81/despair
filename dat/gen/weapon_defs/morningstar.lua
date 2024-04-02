@@ -2,7 +2,7 @@ return {
 	id = 'morningstar',
 	type = 'weapon',
 	texture = 'uf_items',
-	anim = { 52 },
+	anim = { 54 },
 	kind = '1h',
 	name = 'morningstar',
 	attack = 0,
