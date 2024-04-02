@@ -18,6 +18,84 @@ local function getFilename(path)
     return path:match('^(.*)%.')
 end
 
+local function registerTerrainQuads()
+    local key = 'uf_terrain'
+    local image = TextureCache:get(key)
+    local quads = QuadGenerator.generate(image, 48, 48)
+    QuadCache:register(key, quads)
+end
+
+local function registerItemsQuads()
+    local key = 'uf_items'
+    local image = TextureCache:get(key)
+    local quads = QuadGenerator.generate(image, 48, 48)
+    QuadCache:register(key, quads)
+end
+
+local function registerHeroesQuads()
+    local key = 'uf_heroes'
+    local image = TextureCache:get(key)
+    local quads = QuadGenerator.generate(image, 48, 48)
+    QuadCache:register(key, quads)
+end
+
+local function registerFxQuads()
+    local key = 'uf_fx'
+    local image = TextureCache:get(key)
+    local quads = QuadGenerator.generate(image, 24, 24)
+    QuadCache:register(key, quads)
+end
+
+local function registerFxImpactQuads()
+    local key = 'uf_fx_impact'
+    local image = TextureCache:get(key)
+    local quads = QuadGenerator.generate(image, 48, 48)
+    QuadCache:register(key, quads)
+end
+
+local function registerInterfaceQuads()
+    local key = 'uf_interface'
+    local image = TextureCache:get(key)
+    local image_w, image_h = image:getDimensions()
+
+    local quads = {}
+
+    for _, quad in ipairs(QuadGenerator.generate(image, 8, 9, 584, 6, 264, 30)) do
+        table.insert(quads, quad)
+    end
+
+    for _, quad in ipairs(QuadGenerator.generate(image, 24, 24, 584, 64)) do
+        table.insert(quads, quad)
+    end
+
+    QuadCache:register(key, quads)
+end
+
+local function registerSkillsQuads()
+    local key = 'uf_skills'
+    local image = TextureCache:get(key)
+    local quads = QuadGenerator.generate(image, 24, 24, 584, 64)
+    QuadCache:register(key, quads)
+end
+
+local function registerPortraitsQuads()
+    local key = 'uf_portraits'
+    local image = TextureCache:get(key)
+    local quads = QuadGenerator.generate(image, 24, 24, 584, 64)
+    QuadCache:register(key, quads)
+end
+
+local function registerQuads()
+    registerHeroesQuads()
+    registerFxQuads()
+    registerFxImpactQuads()
+    registerInterfaceQuads()
+    registerTerrainQuads()
+    registerItemsQuads()
+    registerPortraitsQuads()
+    registerSkillsQuads()
+end
+
 local function preload()
     -- register entities with entity factory
     local data_dir = 'dat/gen'
@@ -39,15 +117,10 @@ local function preload()
         image:setFilter('nearest', 'nearest')
         TextureCache:register(key, image)
 
-        -- TODO: ugly to adjust size here for single texture - maybe should configure in data file 
-        -- instead, as part of entities & load later ...
-        local size = key == 'uf_fx' and (TILE_SIZE / 2) or TILE_SIZE 
-
-        local quads = QuadGenerator.generate(image, size, size)
-        QuadCache:register(key, quads)
-
         ::continue::
     end
+
+    registerQuads()
 
     local shd_dir = 'shd'
     local files = love.filesystem.getDirectoryItems(shd_dir)
@@ -81,11 +154,13 @@ function love.load(args)
                 local font = love.graphics.newFont(11)
                 love.graphics.setFont(font)
 
+                print('key', key)
+
                 local canvas = love.graphics.newCanvas(w, h)
                 canvas:renderTo(function() 
                     love.graphics.draw(image, 0, 0)
 
-                    local quads = QuadCache:get(key)
+                    local quads = QuadCache:get(key)                    
                     love.graphics.setColor(1.0, 0.0, 1.0, 1.0)
                     for idx, quad in ipairs(quads) do
                         local x, y, w, h = quad:getViewport()

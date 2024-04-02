@@ -9,13 +9,16 @@ local mfloor = math.floor
 
 local M = {}
 
-M.generate = function(texture, quad_w, quad_h, ox, oy)
+M.generate = function(texture, quad_w, quad_h, ox, oy, ow, oh)
     ox = ox or 0
     oy = oy or 0
 
     local texture_w, texture_h = texture:getDimensions()
-    local cols = mfloor((texture_w - ox) / quad_w)
-    local rows = mfloor((texture_h - oy) / quad_h)
+    w = ow or texture_w - ox
+    h = oh or texture_h - oy
+
+    local cols = mfloor(w / quad_w)
+    local rows = mfloor(h / quad_h)
 
     local quads = {}
 
