@@ -11,7 +11,7 @@ return {
 	dex = 13,
 	mind = 16,
 	flags = { 'DV' },
-	equip = { 'qstaff_1', 'robe_0' },
+	equip = { 'robe', 'quarterstaff' },
 	texture = 'uf_heroes',
 	anim = { 1, 2, 3, 4 },
 }

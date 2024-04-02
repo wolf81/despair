@@ -1,0 +1,12 @@
+return {
+	id = 'heavy_mace',
+	type = 'weapon',
+	texture = 'uf_items',
+	anim = { 53 },
+	kind = '1h',
+	name = 'heavy mace',
+	attack = 0,
+	damage = '1d8',
+	special = { '' },
+	projectile = '',
+}
