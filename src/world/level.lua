@@ -174,14 +174,14 @@ Level.new = function(dungeon)
         else
             local effect = EntityFactory.create('strike_1', target.coord:clone())
             self:addEntity(effect)
-            Timer.after(duration, function() self:removeEntity(effect) end)        
+            Timer.after(0.3, function() self:removeEntity(effect) end)        
         end
 
         if status.damage == 0 then
             print(entity.name .. ' missed attack on ' .. target.name)
         else
             local visual = target:getComponent(Visual)
-            visual:colorize(duration)
+            visual:colorize(0.3)
             if status.is_crit then
                 print(entity.name .. ' critically hit ' .. target.name .. ' for ' .. status.damage .. ' hitpoints')
             else
@@ -194,7 +194,7 @@ Level.new = function(dungeon)
 
         -- show camera shake effect if player performs a critical hit
         if status.is_crit and entity == self:getPlayer() then
-            camera:shake(duration)
+            camera:shake(0.5)
         end
     end
 
@@ -238,7 +238,9 @@ Level.new = function(dungeon)
         end
     end
 
-    local update = function(self, dt)        
+    local update = function(self, dt)  
+        if is_paused == true then return end      
+        
         for i = #entities, 1, -1 do
             local entity = entities[i]
             if entity.remove then

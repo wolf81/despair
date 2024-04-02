@@ -19,10 +19,6 @@ Visual.new = function(entity, def, duration)
 
     duration = duration or ANIM_DURATION
 
-    if entity.type == 'effect' then
-        duration = duration / #frames
-    end
-
     local texture = TextureCache:get(def.texture)
     local quads = QuadCache:get(def.texture)
     local anim = Animation.loop(frames, duration)

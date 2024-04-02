@@ -26,8 +26,6 @@ Keyboard.new = function(entity)
             direction = Direction.SW
         elseif love.keyboard.isDown('c') then
             direction = Direction.SE
-        elseif love.keyboard.isDown('space') then
-            return Idle(level, entity)
         end
 
         if direction == Direction.NONE then return nil end

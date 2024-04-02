@@ -10,7 +10,7 @@ local Idle = {}
 Idle.new = function(level, entity)
     local did_execute, is_finished = false, false
 
-    local duration = ACTION_BASE_AP_COST / 30 / GAME_SPEED
+    local duration = 2.0 / GAME_SPEED
 
     local execute = function(self)
         if did_execute then return end

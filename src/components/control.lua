@@ -21,21 +21,15 @@ Control.new = function(entity, def, ...)
             local health = entity:getComponent(Health)
             if not health:isAlive() then
                 action = Destroy(level, entity)
-                action:execute()
-                return
-            end
-
-            if action == nil or action:isFinished() then
+            else
                 for _, input_mode in ipairs(input_modes) do
                     action = input_mode:getAction(level)
-                    if action then
-                        action:execute()
-                        break
-                    end
+                    if action then break end
                 end
             end
-
         end
+
+        if action then action:execute() end
     end
     
     local setEnabled = function(self, flag)

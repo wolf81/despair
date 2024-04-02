@@ -13,7 +13,7 @@ Move.new = function(level, entity, coord, direction)
     local did_execute, is_finished = false, false
 
     local move_speed = entity:getComponent(MoveSpeed)
-    local duration = ACTION_BASE_AP_COST / move_speed:getValue() * ACTION_BASE_AP_COST / 30 / GAME_SPEED
+    local duration = move_speed:getValue() / GAME_SPEED
 
     if Direction.isOrdinal(direction) then
         duration = duration * ORDINAL_COST_FACTOR
