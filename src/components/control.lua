@@ -12,6 +12,8 @@ Control.new = function(entity, def, ...)
     assert(#input_modes > 0, 'missing argument(s): "Keyboard", "Mouse" and/or "Cpu"')
 
     local is_enabled = true
+    local action = nil
+    local ap = 0
 
     local update = function(self, dt)
         for _, input_mode in ipairs(input_modes) do
@@ -22,41 +24,43 @@ Control.new = function(entity, def, ...)
     local getAction = function(self, level)
         if not is_enabled then return end 
 
+        if action and not action:isFinished() then return action end
+
         local health = entity:getComponent(Health)
-        if not health:isAlive() then 
-            return Destroy(level, entity) 
+        if not health:isAlive() then
+            action = Destroy(level, entity) 
+        else
+            for _, input_mode in ipairs(input_modes) do
+                action = input_mode:getAction(level)
+                if action then break end
+            end
         end
 
-        for _, input_mode in ipairs(input_modes) do
-            local action = input_mode:getAction(level)
-            if action ~= nil then return action end
+        if action then
+            ap = ap - action:getCost()
         end
 
-        return nil
+        return action
     end
 
     local setEnabled = function(self, flag)
         is_enabled = (flag == true)
     end
 
-    local getInitiative = function(self)
-        local base = ndn.dice('1d20').roll()
-        local bonus = 0
+    local addAP = function(self, value)
+        ap = ap + value
+    end
 
-        -- maybe not very efficient to do this every turn
-        local stats = entity:getComponent(Stats)
-        if stats ~= nil then
-            bonus = bonus + stats:getBonus('dex')
-        end
-
-        return base + bonus
+    local getAP = function(self)
+        return ap
     end
 
     return setmetatable({             
         -- methods
-        getAction       = getAction,
-        getInitiative   = getInitiative,
-        setEnabled      = setEnabled,
+        addAP       = addAP,
+        getAP       = getAP,
+        getAction   = getAction,
+        setEnabled  = setEnabled,
     }, Control)
 end
 

@@ -25,11 +25,12 @@ Map             = require 'src.world.map'
 
 -- util
 Shadowcaster    = require 'src.util.shadowcaster'
+LinkedList      = require 'src.util.linked_list'
+Scheduler       = require 'src.util.scheduler'
 Direction       = require 'src.util.direction'
 Animation       = require 'src.util.animation'
 Pointer         = require 'src.util.pointer'
 Camera          = require 'src.util.camera'
-Turn            = require 'src.util.turn'
 Fog             = require 'src.util.fog'
 
 -- actions
@@ -49,6 +50,7 @@ Entity          = require 'src.ecs.entity'
 System          = require 'src.ecs.system'
 
 -- components
+MoveSpeed       = require 'src.components.move_speed'
 Equipment       = require 'src.components.equipment'
 ExpLevel        = require 'src.components.exp_level'
 Backpack        = require 'src.components.backpack'

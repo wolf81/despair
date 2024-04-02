@@ -8,7 +8,7 @@
 local Idle = {}
 
 Idle.new = function(level, entity)
-    local did_execute = false
+    local did_execute, is_finished = false, false
 
     local execute = function(self, duration)
         if did_execute then return end
@@ -16,11 +16,21 @@ Idle.new = function(level, entity)
         did_execute = true
 
         Signal.emit('idle', entity, duration)
+
+        Timer.after(duration, function()
+            is_finished = true
+        end)
     end
+
+    local getCost = function() return ACTION_BASE_AP_COST end
+
+    local isFinished = function() return is_finished end
 
     return setmetatable({
         -- methods
-        execute = execute,
+        isFinished  = isFinished,
+        getCost     = getCost,
+        execute     = execute,
     }, Idle)
 end
 

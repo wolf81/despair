@@ -8,7 +8,7 @@
 local Destroy = {}
 
 Destroy.new = function(level, entity)
-    local did_execute = false
+    local did_execute, is_finished = false, false
 
     local execute = function(self, duration)
         if did_execute then return end
@@ -19,11 +19,24 @@ Destroy.new = function(level, entity)
 
         local visual = entity:getComponent(Visual)
         visual:fadeOut(duration)
+
+        Timer.after(duration, function()
+            is_finished = true
+        end)
     end
+
+    local getCost = function() 
+        local control = entity:getComponent(Control)
+        return control:getAP()
+    end
+
+    local isFinished = function() return is_finished end
 
     return setmetatable({
         -- methods
-        execute = execute,
+        isFinished  = isFinished,
+        getCost     = getCost,
+        execute     = execute,
     }, Destroy)
 end
 

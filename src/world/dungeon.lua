@@ -5,9 +5,77 @@
 --  info+despair@wolftrail.net
 --]]
 
+local lrandom = love.math.random
+
+local MAX_ATTEMPTS = 10
+
 local Dungeon = {}
 
+local function weightedChoice(t)
+    local sum = 0
+    for _, v in pairs(t) do
+        assert(v >= 0, "weight value less than zero")
+        sum = sum + v
+    end
+    assert(sum ~= 0, "all weights are zero")
+    local rnd = lrandom(sum)
+    for k, v in pairs(t) do
+        if rnd < v then return k end
+        rnd = rnd - v
+    end
+end
+
+local function generateLootTable()
+    local loot_table = {}
+
+    local armor_ids = EntityFactory.getIds('armor')
+    for _, id in ipairs(armor_ids) do
+        loot_table[id] = 2
+    end
+
+    local weapon_ids = EntityFactory.getIds('weapon')
+    for _, id in ipairs(weapon_ids) do
+        loot_table[id] = 2
+    end
+
+    return loot_table    
+end
+
+local function addLoot(level, level_idx, loot_table)
+    local item_count = lrandom(5, 10)
+
+    local level_w, level_h = level:getSize()
+
+    for i = 1, item_count do
+        local item_id = weightedChoice(loot_table)
+
+        local attempts = MAX_ATTEMPTS
+        while attempts > 0 do
+            attempts = attempts - 1
+
+            local x = lrandom(1, level_w)
+            local y = lrandom(1, level_h)
+            local coord = vector(x, y)
+
+            if not level:isBlocked(coord) then
+                local item = EntityFactory.create(item_id, coord)
+                print('add ' .. item.name .. ' at coord ' .. tostring(coord))
+                level:addEntity(item)
+                break
+            end
+        end
+    end
+end
+
+local function newLevel(dungeon, level_idx, loot_table)
+    local level = Level(dungeon)
+    addLoot(level, level_idx, loot_table)
+    return level
+end
+
 Dungeon.new = function()
+    local loot_table = generateLootTable()
+
     local player = EntityFactory.create('pc1')
     local levels, level_idx = {}, 0
     local alpha = 1.0
@@ -21,8 +89,8 @@ Dungeon.new = function()
     end
 
     local enter = function(self)
-        levels = { Level(self) }
         level_idx = 1
+        levels = { newLevel(self, level_idx, loot_table) }
         player.coord = levels[level_idx].entry_coord:clone()
         levels[level_idx]:enter(player)
     end
@@ -40,7 +108,7 @@ Dungeon.new = function()
             -- proceed to next level, generating a new level if needed
             level_idx = level_idx + 1
             if level_idx > #levels then
-                table.insert(levels, Level(self))
+                table.insert(levels, newLevel(self, level_idx, loot_table))
             end
 
             local level = levels[level_idx]

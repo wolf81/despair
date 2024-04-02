@@ -1,3 +1,10 @@
+--[[
+--  Dungeon of Despair
+--
+--  Author: Wolfgang Schreurs
+--  info+despair@wolftrail.net
+--]]
+
 local Mouse = {}
 
 local function tryGetEnemy(level, coord)
@@ -58,7 +65,7 @@ Mouse.new = function(entity)
 
         -- if next coord is not blocked, can move in direction
         if not level:isBlocked(next_coord) then
-            return Move(level, entity, next_coord)            
+            return Move(level, entity, next_coord, direction)            
         end
 
         -- direction was blocked - if blocked by enemy entity perform a melee attack

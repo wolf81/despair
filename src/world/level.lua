@@ -47,6 +47,7 @@ end
 Level.new = function(dungeon)
     -- generate a map
     local tiles, stair_up, stair_dn = MazeGenerator.generate(MAP_SIZE, 5)
+
     local map = Map(tiles, function(id) return id ~= 0 end)
     local map_w, map_h = map:getSize()
     local player_idx = 0
@@ -56,9 +57,6 @@ Level.new = function(dungeon)
     stair_dn = EntityFactory.create('dun_13', stair_dn)
 
     local entities = { stair_up, stair_dn }
-
-    -- handle game turns
-    local turn = Turn(self)
 
     -- fog of war
     local fog = Fog(13, 10)
@@ -70,6 +68,8 @@ Level.new = function(dungeon)
         local visual = monster:getComponent(Visual)
         visual.alpha = 0.0
     end
+
+    local scheduler = Scheduler(entities)
 
     -- add camera
     local camera = Camera(0.0, 0.0, SCALE)
@@ -180,7 +180,6 @@ Level.new = function(dungeon)
         else
             local visual = target:getComponent(Visual)
             visual:colorize(duration)
-
             if status.is_crit then
                 print(entity.name .. ' critically hit ' .. target.name .. ' for ' .. status.damage .. ' hitpoints')
             else
@@ -191,7 +190,8 @@ Level.new = function(dungeon)
         local total = status.roll + status.attack
         print(total .. ' (' .. status.roll .. ' + ' .. status.attack .. ') vs ' .. status.ac)
 
-        if status.is_crit then
+        -- show camera shake effect if player performs a critical hit
+        if status.is_crit and entity == self:getPlayer() then
             camera:shake(duration)
         end
     end
@@ -204,6 +204,7 @@ Level.new = function(dungeon)
         table.insert(entities, entity)
 
         -- a skip list would be useful here, to keep the list auto-sorted
+        -- or use the priority queue instead
         table.sort(entities, function(a, b) return a.z_index < b.z_index end)    
 
         for _, system in ipairs(systems) do
@@ -215,9 +216,11 @@ Level.new = function(dungeon)
                 player_idx = idx
             end
         end
+
+        scheduler:addEntity(entity)
     end
 
-    local removeEntity = function(self, entity)         
+    local removeEntity = function(self, entity)    
         for idx, e in ipairs(entities) do
             if e == entity then
                 if idx < player_idx then
@@ -232,9 +235,11 @@ Level.new = function(dungeon)
         for _, system in ipairs(systems) do
             system:removeComponent(entity)
         end
+
+        scheduler:removeEntity(entity)
     end
 
-    local update = function(self, dt)
+    local update = function(self, dt)        
         for i = #entities, 1, -1 do
             local entity = entities[i]
             if entity.remove then
@@ -248,28 +253,8 @@ Level.new = function(dungeon)
 
         Pointer.update(camera, self)
 
-        if player_idx == 0 then return end
-
-        -- create new turn if needed
-        if turn:isFinished() then
-            local actors = {} 
-            
-            for _, entity in ipairs(entities) do
-                if entity:getComponent(Control) then
-                    table.insert(actors, entity)
-                end
-            end
-
-            turn = Turn(self, actors, TURN_DELAY)
-
-            -- heal player 1 hitpoint every 5 turns
-            if turn:getIndex() % 5 == 0 then
-                local player_health = entities[player_idx]:getComponent(Health)
-                player_health:heal(1)
-            end
-        end
-
-        turn:update(dt)
+        -- only update scheduler if player is alive and in play
+        if player_idx > 0 then scheduler:update(dt, self) end
     end
 
     local draw = function(self)
@@ -348,6 +333,8 @@ Level.new = function(dungeon)
             Signal.remove(key, handler)
         end
     end
+
+    local getSize = function(self) return map_w, map_h end
     
     return setmetatable({
         -- properties
@@ -361,6 +348,8 @@ Level.new = function(dungeon)
         inLineOfSight   = inLineOfSight,
         enter           = enter,
         exit            = exit,
+        getSize         = getSize,
+
         addEntity       = addEntity,
         getPlayer       = getPlayer,
         getEntities     = getEntities,

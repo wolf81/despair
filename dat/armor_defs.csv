@@ -1,15 +1,15 @@
-ID$       |TYPE$ |KIND$  |NAME$               |AC# |COST# |
+ID$          |TYPE$ |TEXTURE$ |ANIM@ |KIND$  |NAME$           |AC# |BONUS# |
 
-padded_0  |armor |chest  |Padded              |1   |2     |
-leat_0    |armor |chest  |Leather             |2   |10    |
-sleat_0   |armor |chest  |Studded Leather     |3   |25    |
-scale_0   |armor |chest  |Scale Mail          |4   |50    |
-chain_0   |armor |chest  |Chainmail           |5   |150   |
-splint_0  |armor |chest  |Splint Mail         |6   |200   |
-hplate_0  |armor |chest  |Half Plate          |7   |600   |
-fplate_0  |armor |chest  |Full Plate          |8   |1500  |
-robe_0    |armor |chest  |Robe                |1   |0     |
+padded       |armor |uf_items |212   |chest  |padded          |1   |0      |
+leather      |armor |uf_items |212   |chest  |leather         |2   |0      |
+stud_leather |armor |uf_items |213   |chest  |studded leather |3   |0      |
+scale_mail   |armor |uf_items |214   |chest  |scale mail      |4   |0      |
+chain_mail   |armor |uf_items |214   |chest  |chainmail       |5   |0      |
+splint_mail  |armor |uf_items |214   |chest  |splint mail     |6   |0      |
+half_plate   |armor |uf_items |215   |chest  |half plate      |7   |0      |
+full_plate   |armor |uf_items |216   |chest  |full plate      |8   |0      |
+robe         |armor |uf_items |211   |chest  |robe            |1   |0      |
 
-lshield_0 |armor |shield |Light Wooden Shield |1   |3     |
-hshield_0 |armor |shield |Heavy Wooden Shield |2   |9     |
-tshield_0 |armor |shield |Tower Shield        |4   |30    |
+light_shield |armor |uf_items |56    |shield |light shield    |1   |0      |
+heavy_shield |armor |uf_items |57    |shield |heavy shield    |2   |0      |
+tower_shield |armor |uf_items |59    |shield |tower shield    |4   |0      |

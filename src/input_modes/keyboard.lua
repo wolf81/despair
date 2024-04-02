@@ -1,3 +1,10 @@
+--[[
+--  Dungeon of Despair
+--
+--  Author: Wolfgang Schreurs
+--  info+despair@wolftrail.net
+--]]
+
 local Keyboard = {}
 
 Keyboard.new = function(entity)
@@ -42,12 +49,12 @@ Keyboard.new = function(entity)
             return nil 
         end 
 
-        return Move(level, entity, next_coord)
+        return Move(level, entity, next_coord, direction)
     end
 
     return setmetatable({
         -- methods
-        getAction   = getAction,
+        getAction = getAction,
     }, Keyboard)
 end
 
