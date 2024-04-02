@@ -9,7 +9,7 @@ local mfloor, matan2, lrandom = math.floor, math.atan2, love.math.random
 
 local Level = {}
 
-local function newMonsters(map)
+local function newMonsters(map, blocked_coords)
     local monsters = {}
 
     local types = { 
@@ -25,9 +25,16 @@ local function newMonsters(map)
         local y = lrandom(map.height)
 
         if not map:isBlocked(x, y) then
+            for _, blocked_coord in ipairs(blocked_coords) do
+                local is_blocked = blocked_coord.x == x and blocked_coord.y == y
+                if is_blocked then goto continue end
+            end
+
             local type = types[lrandom(#types)]
             local monster = EntityFactory.create(type, vector(x, y))
             table.insert(monsters, monster)
+
+            ::continue::
         end        
     end
 
@@ -62,7 +69,7 @@ Level.new = function(dungeon)
     -- fog of war
     local fog = Fog(13, 10)
 
-    for _, monster in ipairs(newMonsters(map)) do
+    for _, monster in ipairs(newMonsters(map, { stair_up.coord, stair_dn.coord })) do
         table.insert(entities, monster)
         map:setBlocked(monster.coord.x, monster.coord.y, true)
 
@@ -115,19 +122,23 @@ Level.new = function(dungeon)
                 if not fog:isVisible(x, y) then
                     -- hide any npcs here
                     for _, entity in ipairs(self:getEntities(vector(x, y))) do
-                        if entity:getComponent(Control) then
-                            local visual = entity:getComponent(Visual)
-                            Timer.tween(duration, visual, { alpha = 0.0 }, 'linear')
-                        end
+                        local visual = entity:getComponent(Visual)
+                        if not visual then goto continue end
+
+                        Timer.tween(duration, visual, { alpha = 0.0 }, 'linear')
+
+                        ::continue::
                     end
                 end
 
                 if fog:isVisible(x, y) then
                     for _, entity in ipairs(self:getEntities(vector(x, y))) do
-                        if entity:getComponent(Control) then
-                            local visual = entity:getComponent(Visual)
-                            Timer.tween(duration, visual, { alpha = 1.0 }, 'linear')
-                        end
+                        local visual = entity:getComponent(Visual)
+                        if not visual then goto continue end
+                        
+                        Timer.tween(duration, visual, { alpha = 1.0 }, 'linear')
+
+                        ::continue::
                     end
                 end
             end

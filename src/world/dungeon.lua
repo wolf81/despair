@@ -46,8 +46,10 @@ local function addLoot(level, level_idx, loot_table)
 
     local level_w, level_h = level:getSize()
 
-    for i = 1, item_count do
+    while item_count > 0 do
         local item_id = weightedChoice(loot_table)
+        -- TODO: why is item_id sometimes nil? maybe improve the weightedChoice algorithm?
+        if item_id == nil then goto continue end
 
         local attempts = MAX_ATTEMPTS
         while attempts > 0 do
@@ -61,9 +63,12 @@ local function addLoot(level, level_idx, loot_table)
                 local item = EntityFactory.create(item_id, coord)
                 print('add ' .. item.name .. ' at coord ' .. tostring(coord))
                 level:addEntity(item)
+                item_count = item_count - 1
                 break
             end
         end
+
+        ::continue::
     end
 end
 
