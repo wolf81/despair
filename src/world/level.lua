@@ -97,16 +97,12 @@ Level.new = function(dungeon)
         self:setBlocked(coord, true)
 
         if entity.type ~= 'pc' then 
-            local prev_coord_visible = fog:isVisible(entity.coord.x, entity.coord.y)
-            local next_coord_visible = fog:isVisible(coord.x, coord.y)
-            if next_coord_visible and not prev_coord_visible then
+            if fog:isVisible(coord.x, coord.y) then
                 local visual = entity:getComponent(Visual)
-                Timer.tween(duration, visual, { alpha = 1.0 }, 'linear')
-            end
-
-            if prev_coord_visible and not next_coord_visible then
+                Timer.tween(0.2, visual, { alpha = 1.0 }, 'linear')
+            elseif fog:isVisible(entity.coord.x, entity.coord.y) then
                 local visual = entity:getComponent(Visual)
-                Timer.tween(duration, visual, { alpha = 0.0 }, 'linear')
+                Timer.tween(0.2, visual, { alpha = 0.0 }, 'linear')
             end
 
             return
@@ -125,18 +121,16 @@ Level.new = function(dungeon)
                         local visual = entity:getComponent(Visual)
                         if not visual then goto continue end
 
-                        Timer.tween(duration, visual, { alpha = 0.0 }, 'linear')
+                        Timer.tween(0.2, visual, { alpha = 0.0 }, 'linear')
 
                         ::continue::
                     end
-                end
-
-                if fog:isVisible(x, y) then
+                elseif fog:isVisible(x, y) then
                     for _, entity in ipairs(self:getEntities(vector(x, y))) do
                         local visual = entity:getComponent(Visual)
                         if not visual then goto continue end
                         
-                        Timer.tween(duration, visual, { alpha = 1.0 }, 'linear')
+                        Timer.tween(0.2, visual, { alpha = 1.0 }, 'linear')
 
                         ::continue::
                     end
