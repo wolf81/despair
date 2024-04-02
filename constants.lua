@@ -11,6 +11,7 @@ DUNGEON_LEVELS      = 40
 SCALE               = 0.5
 TURN_DURATION       = 0.2
 TURN_DELAY          = 3.0
+GAME_SPEED          = 4.0
 ANIM_DURATION       = TURN_DURATION
 
 ACTION_BASE_AP_COST = 30

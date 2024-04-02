@@ -20,7 +20,7 @@ local function newMonsters(map)
         'purple_jelly', 'blk_widow_mat', 'spectator', 'observer'
     }
 
-    while #monsters < 10 do
+    while #monsters < 3 do
         local x = lrandom(map.width)
         local y = lrandom(map.height)
 
@@ -35,13 +35,14 @@ local function newMonsters(map)
 end
 
 local function initSystems(entities)
-    local visualSystem = System(Visual)
+    local visual_system, control_system = System(Visual), System(Control)
 
     for _, entity in ipairs(entities) do
-        visualSystem:addComponent(entity)
+        visual_system:addComponent(entity)
+        control_system:addComponent(entity)
     end    
 
-    return { visualSystem }
+    return { visual_system, control_system }
 end
 
 Level.new = function(dungeon)
@@ -68,8 +69,6 @@ Level.new = function(dungeon)
         local visual = monster:getComponent(Visual)
         visual.alpha = 0.0
     end
-
-    local scheduler = Scheduler(entities)
 
     -- add camera
     local camera = Camera(0.0, 0.0, SCALE)
@@ -150,6 +149,9 @@ Level.new = function(dungeon)
     local onDestroy = function(self, entity, duration)
         print(entity.name .. ' is destroyed')
 
+        local visual = entity:getComponent(Visual)
+        visual:fadeOut(duration)
+
         Timer.after(duration, function() 
             self:setBlocked(entity.coord, false)
             entity.remove = true
@@ -214,10 +216,9 @@ Level.new = function(dungeon)
         for idx, entity in ipairs(entities) do
             if entity.type == 'pc' then
                 player_idx = idx
+                break
             end
         end
-
-        scheduler:addEntity(entity)
     end
 
     local removeEntity = function(self, entity)    
@@ -235,8 +236,6 @@ Level.new = function(dungeon)
         for _, system in ipairs(systems) do
             system:removeComponent(entity)
         end
-
-        scheduler:removeEntity(entity)
     end
 
     local update = function(self, dt)        
@@ -252,9 +251,6 @@ Level.new = function(dungeon)
         end
 
         Pointer.update(camera, self)
-
-        -- only update scheduler if player is alive and in play
-        if player_idx > 0 then scheduler:update(dt, self) end
     end
 
     local draw = function(self)
@@ -349,7 +345,6 @@ Level.new = function(dungeon)
         enter           = enter,
         exit            = exit,
         getSize         = getSize,
-
         addEntity       = addEntity,
         getPlayer       = getPlayer,
         getEntities     = getEntities,

@@ -10,7 +10,9 @@ local Attack = {}
 Attack.new = function(level, entity, target)
     local did_execute, is_finished = false, false
 
-    local execute = function(self, duration)
+    local duration = ACTION_BASE_AP_COST / 30 / GAME_SPEED
+
+    local execute = function(self)
         if did_execute then return end
 
         did_execute = true
@@ -24,15 +26,12 @@ Attack.new = function(level, entity, target)
         end)
     end
 
-    local getCost = function() return ACTION_BASE_AP_COST end
-
     local isFinished = function() return is_finished end
 
     return setmetatable({
         -- methods
-        isFinished  = isFinished,
-        getCost     = getCost,
         execute     = execute,
+        isFinished  = isFinished,
     }, Attack)
 end
 

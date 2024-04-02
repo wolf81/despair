@@ -49,6 +49,8 @@ end
 M.create = function(id, coord)
     local def = definitions[id]
 
+    assert(id ~= nil, 'missing parameter: "id"')
+    
     print('create: ' .. id .. ' ' .. tostring(coord))
 
     assert(def ~= nil, 'entity not registered \'' .. id .. '\'')

@@ -12,7 +12,14 @@ local ORDINAL_COST_FACTOR = 1.4
 Move.new = function(level, entity, coord, direction)
     local did_execute, is_finished = false, false
 
-    local execute = function(self, duration)
+    local move_speed = entity:getComponent(MoveSpeed)
+    local duration = ACTION_BASE_AP_COST / move_speed:getValue() * ACTION_BASE_AP_COST / 30 / GAME_SPEED
+
+    if Direction.isOrdinal(direction) then
+        duration = duration * ORDINAL_COST_FACTOR
+    end
+
+    local execute = function(self)
         if did_execute then return end
 
         did_execute = true
@@ -25,24 +32,12 @@ Move.new = function(level, entity, coord, direction)
         end)
     end
 
-    local getCost = function()
-        local move_speed = entity:getComponent(MoveSpeed)
-        local cost = ACTION_BASE_AP_COST / move_speed:getValue() * ACTION_BASE_AP_COST
-
-        if Direction.isOrdinal(direction) then
-            cost = cost * ORDINAL_COST_FACTOR
-        end
-
-        return cost
-    end
-
     local isFinished = function() return is_finished end
 
     return setmetatable({
         -- methods
-        isFinished  = isFinished,
-        getCost     = getCost,
         execute     = execute,
+        isFinished  = isFinished,
     }, Move)
 end
 
