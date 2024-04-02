@@ -14,13 +14,13 @@
 [X] feat: Investigate if smoother movement is possible by setting player direction
 [X] feat: Add level to attack bonus
 [X] feat: Move camera related code to a separate class
-[X] feat: Implement health recovery over turns
 [X] feat: Implement ranged attack for player characters
 [X] feat: Implement custom mouse cursor
+[X] feat: Generate items randomly 
+[X] feat: Implement movement speed
+[ ] feat: Implement health recovery over turns
 [ ] feat: Generate monsters randomly just outside visible area of player
-[ ] feat: Generate items randomly just outside of visible area of player
 [ ] feat: Implement level saving and loading
-[ ] feat: Implement movement speed
 [ ] feat: Improve variety of textures in dungeon
 [ ] feat: Use a Dijkstra map for pathfinding
 [ ] feat: Implement magic missile spell
@@ -33,6 +33,6 @@
 
 ## BUGS 
 
+[X] fix: sometimes monsters stay visible under fog of war
 [ ] fix: sometimes a turn is stuck for a full duration when NPC is destroyed
 [ ] fix: clean-up Visual & Animation classes - should have methods on Visual to change current animation
-[ ] fix: sometimes monsters stay visible under fog of war
