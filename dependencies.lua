@@ -31,7 +31,6 @@ Direction       = require 'src.util.direction'
 Animation       = require 'src.util.animation'
 Pointer         = require 'src.util.pointer'
 Camera          = require 'src.util.camera'
-Turn            = require 'src.util.turn'
 Fog             = require 'src.util.fog'
 
 -- actions
