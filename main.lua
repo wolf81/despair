@@ -10,6 +10,10 @@ io.stdout:setvbuf('no')
 require 'dependencies'
 require 'constants'
 
+local function getExtension(path)
+  return path:match("^.+(%..+)$")
+end
+
 local function preload()
     -- register entities with entity factory
     local data_dir = 'dat/gen'
@@ -23,6 +27,8 @@ local function preload()
     local gfx_dir = 'gfx'
     local files = love.filesystem.getDirectoryItems(gfx_dir)
     for _, file in ipairs(files) do
+        if getExtension(file) ~= '.png' then goto continue end 
+
         local key = file:match('^(.*)%.')
 
         local image = love.graphics.newImage(gfx_dir .. '/' .. file)
@@ -35,16 +41,21 @@ local function preload()
 
         local quads = QuadGenerator.generate(image, size, size)
         QuadCache:register(key, quads)
+
+        ::continue::
     end
 
     local shd_dir = 'shd'
     local files = love.filesystem.getDirectoryItems(shd_dir)
     for _, file in ipairs(files) do
+        if getExtension(file) ~= '.glsl' then goto continue end 
+
         local key = file:match('^(.*)%.')
 
         local shader = love.graphics.newShader(shd_dir .. '/' .. file)
         ShaderCache:register(key, shader)
-        print('shader', key)
+
+        ::continue::
     end
 end
 
