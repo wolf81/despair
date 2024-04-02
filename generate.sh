@@ -3,7 +3,8 @@
 # the script directory
 DIR="$(dirname "$0")"
 
-TARGET_DIR="${DIR}/gen"
+DATA_DIR="${DIR}/dat"
+TARGET_DIR="${DATA_DIR}/gen"
 
 # arrays to manage CSV column names & related type info
 COL_NAMES=()
@@ -157,7 +158,7 @@ function generateEntities() {
 	if [[ -d ${TARGET_DIR} ]]; then rm -Rf ${TARGET_DIR}; fi
 
 	# parse CSV files
-	for FILE_PATH in "${DIR}"/*.csv; do
+	for FILE_PATH in "${DATA_DIR}"/*.csv; do
 		configureColumns "$FILE_PATH"
 		parseCSV "$FILE_PATH"
 	done

@@ -1,5 +1,5 @@
 return {
-	id = 'short_bow',
+	id = 'shortbow',
 	type = 'weapon',
 	texture = 'uf_items',
 	anim = { 69 },
