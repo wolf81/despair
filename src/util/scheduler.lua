@@ -32,8 +32,8 @@ Scheduler.new = function(entities)
         local player = level:getPlayer()
 
         -- add AP in 2 cases: 
-        -- * active entity changed; to ensure entity uses up all AP 
-        -- * only 1 entity active; to ensure the entity can perform actions 
+        -- • active entity changed; to ensure entity uses up all AP 
+        -- • only 1 entity active; to ensure the entity can perform actions 
         if list.length == 0 or entity ~= prev_entity then
             control:addAP(30)
             prev_entity = entity
@@ -45,8 +45,8 @@ Scheduler.new = function(entities)
         end
 
         -- perform an action:
-        -- * could be 'nil' while waiting for input
-        -- * if input was received by Control component, will have an action
+        -- • could be 'nil' while waiting for input
+        -- • if input was received by Control component, will have an action
         local action = control:getAction(level)
 
         -- if no action, move to start of list until we get an action
@@ -56,7 +56,7 @@ Scheduler.new = function(entities)
 
         -- we did get an action, so execute over animation duration or 0 if far away from player
         local duration = TURN_DURATION
-        if player and player.coord:dist(entity.coord) > 10 then
+        if player and player.coord:dist(entity.coord) > 8 then
             duration = 0
         end
         action:execute(duration)
