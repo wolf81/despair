@@ -7,6 +7,15 @@
 
 local Dungeon = {}
 
+local LOOT_TABLE = {
+    ['padded_0'] = 1, 
+    ['leat_0'] = 1, 
+    ['sleat_0'] = 1, 
+    ['scale_0'] = 1, 
+    ['chain_0'] = 1, 
+    ['padded_0'] = 1, 
+}
+
 Dungeon.new = function()
     local player = EntityFactory.create('pc1')
     local levels, level_idx = {}, 0
