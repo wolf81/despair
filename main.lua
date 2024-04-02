@@ -78,6 +78,9 @@ function love.load(args)
             for key, image in TextureCache:each() do
                 local w, h = image:getDimensions()
 
+                local font = love.graphics.newFont(11)
+                love.graphics.setFont(font)
+
                 local canvas = love.graphics.newCanvas(w, h)
                 canvas:renderTo(function() 
                     love.graphics.draw(image, 0, 0)
@@ -86,8 +89,8 @@ function love.load(args)
                     love.graphics.setColor(1.0, 0.0, 1.0, 1.0)
                     for idx, quad in ipairs(quads) do
                         local x, y, w, h = quad:getViewport()
-                        love.graphics.rectangle('line', x, y, w, h)
-                        love.graphics.print(idx, x + 2, y + 2)
+                        love.graphics.rectangle('line', x, y, w - 1.0, h - 1.0)
+                        love.graphics.print(idx, x + 1.0, y + 1.0)
                     end
                     love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
                 end)
