@@ -14,6 +14,10 @@ local function getExtension(path)
   return path:match("^.+(%..+)$")
 end
 
+local function getFilename(path)
+    return path:match('^(.*)%.')
+end
+
 local function preload()
     -- register entities with entity factory
     local data_dir = 'dat/gen'
@@ -29,7 +33,7 @@ local function preload()
     for _, file in ipairs(files) do
         if getExtension(file) ~= '.png' then goto continue end 
 
-        local key = file:match('^(.*)%.')
+        local key = getFilename(file)
 
         local image = love.graphics.newImage(gfx_dir .. '/' .. file)
         image:setFilter('nearest', 'nearest')
@@ -50,7 +54,7 @@ local function preload()
     for _, file in ipairs(files) do
         if getExtension(file) ~= '.glsl' then goto continue end 
 
-        local key = file:match('^(.*)%.')
+        local key = getFilename(file)
 
         local shader = love.graphics.newShader(shd_dir .. '/' .. file)
         ShaderCache:register(key, shader)
@@ -68,6 +72,33 @@ function love.load(args)
     success = love.window.setMode(WINDOW_W * SCALE, WINDOW_H * SCALE, {
         highdpi = false,
     })
+
+    for _, arg in ipairs(args) do
+        if arg == '--quadsheet' then
+            for key, image in TextureCache:each() do
+                local w, h = image:getDimensions()
+
+                local canvas = love.graphics.newCanvas(w, h)
+                canvas:renderTo(function() 
+                    love.graphics.draw(image, 0, 0)
+
+                    local quads = QuadCache:get(key)
+                    love.graphics.setColor(1.0, 0.0, 1.0, 1.0)
+                    for idx, quad in ipairs(quads) do
+                        local x, y, w, h = quad:getViewport()
+                        love.graphics.rectangle('line', x, y, w, h)
+                        love.graphics.print(idx, x + 2, y + 2)
+                    end
+                    love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
+                end)
+
+                local image_data = canvas:newImageData()
+                image_data:encode('png', key .. '.png')
+            end
+
+            love.event.quit()
+        end
+    end
 
     game = Game()
 end

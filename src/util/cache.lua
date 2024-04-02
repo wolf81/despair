@@ -24,7 +24,7 @@ Cache.new = function()
 
         return function()
             key, value = next(cache, key)
-            return value
+            return key, value
         end
     end
 
