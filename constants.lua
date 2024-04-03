@@ -34,3 +34,5 @@ RACES = {
 }
 
 FONT_CHARS = "1234567890!#$%&*()-+=[]:;\"'<>,.?/abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+FONT = love.graphics.newImageFont('gfx/image_font.png', FONT_CHARS)

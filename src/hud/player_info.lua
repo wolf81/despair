@@ -6,14 +6,13 @@ PlayerInfo.new = function(player)
     local portrait = Portrait(player)
     local portrait_w, portrait_h = portrait:getSize() 
 
-    local font = love.graphics.newImageFont('gfx/image_font.png', FONT_CHARS)
-    love.graphics.setFont(font)
-
     local update = function(self)
         -- body
     end
 
     local draw = function(self, x, y, w, h)
+        love.graphics.setFont(FONT)
+
         love.graphics.setColor(0.1, 0.1, 0.1, 1.0)
         love.graphics.rectangle('fill', x, y, w, h)
 
@@ -37,7 +36,6 @@ PlayerInfo.new = function(player)
         love.graphics.print("SUBT: " .. skills:getValue('subt'), ox, oy + 100)
         love.graphics.print("KNOW: " .. skills:getValue('know'), ox, oy + 120)
         love.graphics.print("COMM: " .. skills:getValue('comm'), ox, oy + 140)
- 
     end
 
     return setmetatable({
