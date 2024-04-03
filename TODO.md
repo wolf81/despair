@@ -19,6 +19,7 @@
 [X] feat: Generate items randomly 
 [X] feat: Implement movement speed
 [ ] feat: Implement health recovery over turns
+[ ] feat: Implement hunger
 [ ] feat: Generate monsters randomly just outside visible area of player
 [ ] feat: Implement level saving and loading
 [ ] feat: Improve variety of textures in dungeon

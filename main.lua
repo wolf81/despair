@@ -53,6 +53,13 @@ local function registerFxImpactQuads()
     QuadCache:register(key, quads)
 end
 
+local function registerProjectilesQuads()
+    local key = 'projectiles'
+    local image = TextureCache:get(key)
+    local quads = QuadGenerator.generate(image, 24, 24)
+    QuadCache:register(key, quads)
+end
+
 local function registerInterfaceQuads()
     local key = 'uf_interface'
     local image = TextureCache:get(key)
@@ -98,6 +105,7 @@ local function registerQuads()
     registerItemsQuads()
     registerPortraitsQuads()
     registerSkillsQuads()
+    registerProjectilesQuads()
 end
 
 local function preload()

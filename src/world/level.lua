@@ -92,6 +92,10 @@ Level.new = function(dungeon)
         function(x, y) fog:reveal(x, y) end
     )
 
+    local onPut = function(self, entity)
+        print(entity.name .. ' added to backpack')
+    end
+
     local onMove = function(self, entity, coord, duration)
         self:setBlocked(entity.coord, false)
         self:setBlocked(coord, true)
@@ -141,6 +145,18 @@ Level.new = function(dungeon)
         camera:move(coord, duration)
 
         if entity.coord ~= coord then 
+            local entities = self:getEntities(coord)
+            if #entities > 0 then
+                local target = entities[1]
+                local item = target:getComponent(Item)
+                local backpack = entity:getComponent(Backpack)
+
+                if item then
+                    self:removeEntity(target)
+                    backpack:put(target)
+                end
+            end
+
             if coord == stair_up.coord then
                 self:setBlocked(coord, false)
                 dungeon:prevLevel()
@@ -315,6 +331,7 @@ Level.new = function(dungeon)
         self:setBlocked(player.coord, true)
 
         handlers = {
+            ['put']     = function(...) onPut(self, ...)     end,
             ['move']    = function(...) onMove(self, ...)    end,
             ['idle']    = function(...) onIdle(self, ...)    end,
             ['attack']  = function(...) onAttack(self, ...)  end,

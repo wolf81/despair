@@ -26,6 +26,13 @@ Keyboard.new = function(entity)
             direction = Direction.SW
         elseif love.keyboard.isDown('c') then
             direction = Direction.SE
+        elseif love.keyboard.isDown('b') then
+            local backpack = entity:getComponent(Backpack)
+            local item = backpack:takeLast()
+            if item then
+                item.coord = entity.coord:clone()
+                level:addEntity(item)
+            end
         end
 
         if direction == Direction.NONE then return nil end
