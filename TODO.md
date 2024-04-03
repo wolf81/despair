@@ -28,6 +28,7 @@
 [ ] feat: Improve variety of textures in dungeon
 [ ] feat: Use a Dijkstra map for pathfinding
 [ ] feat: Implement magic missile spell
+[ ] feat: Make generic bar view class that can be used for health, hunger, mana, ...
 
 ## LIB
 
@@ -36,6 +37,6 @@
 
 ## BUGS 
 
-[X] fix: sometimes monsters stay visible under fog of war
 [X] fix: clean-up Visual & Animation classes - should have methods on Visual to change current animation
 [X] fix: sometimes a turn is stuck for a full duration when NPC is destroyed
+[ ] fix: sometimes monsters stay visible under fog of war
