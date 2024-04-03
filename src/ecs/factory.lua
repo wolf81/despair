@@ -81,6 +81,7 @@ M.create = function(id, coord)
         entity:addComponent(Weapon(entity, def))
         entity:addComponent(ExpLevel(entity, def))
         entity:addComponent(MoveSpeed(entity, def))
+        entity:addComponent(HealthBar(entity, def))
 
         -- equip all from backpack
         entity:getComponent(Equipment):equipAll()
@@ -94,6 +95,7 @@ M.create = function(id, coord)
         entity:addComponent(Armor(entity, def))
         entity:addComponent(Weapon(entity, def))
         entity:addComponent(MoveSpeed(entity, def))
+        entity:addComponent(HealthBar(entity, def))
 
         -- equip all from backpack
         entity:getComponent(Equipment):equipAll()

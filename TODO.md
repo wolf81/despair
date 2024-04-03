@@ -18,7 +18,8 @@
 [X] feat: Implement custom mouse cursor
 [X] feat: Generate items randomly 
 [X] feat: Implement movement speed
-[ ] feat: Implement health recovery over turns
+[ ] feat: Move alpha related code from Animation to Visual component
+[ ] feat: Implement health recovery over time
 [ ] feat: Implement hunger
 [ ] feat: Generate monsters randomly just outside visible area of player
 [ ] feat: Implement level saving and loading

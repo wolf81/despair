@@ -42,6 +42,9 @@ Visual.new = function(entity, def, duration)
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
 
         love.graphics.setShader()
+
+        local health_bar = entity:getComponent(HealthBar)
+        if health_bar then health_bar:draw() end
     end
 
     colorize = function(self, duration)
@@ -57,31 +60,25 @@ Visual.new = function(entity, def, duration)
             ['alpha']       = 1.0,
         }
 
-        local half_duration = duration / 2
-        Timer.tween(
-            -- fade in the color
-            half_duration, 
-            shader_info.params, 
-            {
-                ['blendColor'] = { 1.0, 0.0, 0.0, 0.8 }, 
-                ['alpha'] = 1.0,
-            }, 
-            'out-quad', 
-            function() 
-                Timer.tween(
-                    -- fade out the color
-                    half_duration,
-                    shader_info.params,
-                    {
-                        ['blendColor'] = { 1.0, 0.0, 0.0, 0.0 }, 
-                        ['alpha'] = 1.0,                        
-                    },
-                    'in-quad',
-                    function()                        
-                        shader_info.shader = nil
-                    end
-                )
+        local fade_in_params = {
+            ['blendColor'] = { 1.0, 0.0, 0.0, 0.8 }, 
+            ['alpha'] = 1.0,
+        }
+
+        local fade_out_params = {
+            ['blendColor'] = { 1.0, 0.0, 0.0, 0.0 }, 
+            ['alpha'] = 1.0,                        
+        }
+
+        local time = duration / 2
+
+        -- fade in to color ...
+        Timer.tween(time, shader_info.params, fade_in_params, 'out-quad', function() 
+            -- fade out to color ...
+            Timer.tween(time, shader_info.params, fade_out_params, 'in-quad', function() 
+                shader_info.shader = nil 
             end)
+        end)
     end
 
     fadeOut = function(self, duration)

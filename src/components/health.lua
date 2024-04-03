@@ -58,7 +58,17 @@ Health.new = function(entity, def)
     -- get current & total health value
     local getValue = function(self) return current, total end
 
+    local time = 0
+    local update = function(self, dt)
+        time = time + dt
+        if time > 5.0 then
+            time = time - 5.0
+            self:heal(1)
+        end
+    end
+
     return setmetatable({
+        update      = update,
         getValue    = getValue,
         isAlive     = isAlive,
         harm        = harm,
