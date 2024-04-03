@@ -28,13 +28,15 @@ Game.new = function()
         end
     end
 
+    local player_info_w = 140
+
     local draw = function(self) 
-        dungeon:draw(0, 0, WINDOW_W - 160, WINDOW_H) 
+        dungeon:draw(0, 0, WINDOW_W - player_info_w, WINDOW_H) 
 
         love.graphics.setColor(0.1, 0.1, 0.1, 1.0)
-        love.graphics.rectangle('fill', WINDOW_W - 160, 0, 160, WINDOW_H)
+        love.graphics.rectangle('fill', WINDOW_W - player_info_w, 0, player_info_w, WINDOW_H)
 
-        player_info:draw(WINDOW_W - 160, 0, 160, WINDOW_H)
+        player_info:draw(WINDOW_W - player_info_w, 0, player_info_w, WINDOW_H)
     end
 
     local togglePaused = function(self) is_paused = (not is_paused) end
