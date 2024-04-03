@@ -98,10 +98,11 @@ local function newLevel(dungeon, level_idx, loot_table)
     return level
 end
 
-Dungeon.new = function()
+Dungeon.new = function(player)
+    assert(player ~= nil, 'missing parameter: "player"')
+    
     local loot_table = generateLootTable()
 
-    local player = EntityFactory.create('pc1')
     local levels, level_idx = {}, 0
     local alpha = 1.0
 

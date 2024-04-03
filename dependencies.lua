@@ -23,11 +23,14 @@ Dungeon             = require 'src.world.dungeon'
 Level               = require 'src.world.level'
 Map                 = require 'src.world.map'
 
+-- hud
+PlayerInfo          = require 'src.hud.player_info'
+Portrait            = require 'src.hud.portrait'
+
 -- util
 Shadowcaster        = require 'src.util.shadowcaster'
 Direction           = require 'src.util.direction'
 Animation           = require 'src.util.animation'
-Portrait            = require 'src.util.portrait'
 Pointer             = require 'src.util.pointer'
 Camera              = require 'src.util.camera'
 Fog                 = require 'src.util.fog'
@@ -72,6 +75,7 @@ ShaderCache         = Cache()
 QuadCache           = Cache()
 
 -- generators
+FontSheetGenerator  = require 'src.generators.font_sheet_gen'
 QuadSheetGenerator  = require 'src.generators.quad_sheet_gen'
 QuadGenerator       = require 'src.generators.quad_gen'
 MazeGenerator       = require 'src.generators.maze_gen'

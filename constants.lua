@@ -32,3 +32,5 @@ RACES = {
     ['dwarf']       = true,
     ['elf']         = true,
 }
+
+FONT_CHARS = "1234567890!#$%&*()-+=[]:;\"'<>,.?/abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"

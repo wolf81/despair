@@ -67,7 +67,7 @@ local function registerInterfaceQuads()
 
     local quads = {}
 
-    for _, quad in ipairs(QuadGenerator.generate(image, 8, 9, 584, 6, 264, 30)) do
+    for _, quad in ipairs(QuadGenerator.generate(image, 8, 8, 584, 8, 264, 30)) do
         table.insert(quads, quad)
     end
 
@@ -163,6 +163,9 @@ function love.load(args)
     for _, arg in ipairs(args) do
         if arg == '--quadsheet' then
             QuadSheetGenerator.generate()
+            love.event.quit()
+        elseif arg == '--imagefont' then
+            FontSheetGenerator.generate()            
             love.event.quit()
         end
     end

@@ -12,7 +12,10 @@ local Game = {}
 Game.new = function()
     love.math.setRandomSeed(1)
 
-    local dungeon = Dungeon()
+    local player = EntityFactory.create('pc1')
+    local player_info = PlayerInfo(player)
+
+    local dungeon = Dungeon(player)
     dungeon:enter()
 
     local is_paused = false
@@ -31,9 +34,7 @@ Game.new = function()
         love.graphics.setColor(0.1, 0.1, 0.1, 1.0)
         love.graphics.rectangle('fill', WINDOW_W - 160, 0, 160, WINDOW_H)
 
-        love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
-        local portrait_w, _ = portrait:getSize()
-        portrait:draw(WINDOW_W - 160 + mfloor(160 - portrait_w) / 2, 10)
+        player_info:draw(WINDOW_W - 160, 0, 160, WINDOW_H)
     end
 
     local togglePaused = function(self) is_paused = (not is_paused) end

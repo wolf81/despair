@@ -2,10 +2,12 @@ local lrandom = love.math.random
 
 local Portrait = {}
 
-Portrait.new = function()
+Portrait.new = function(player)
     local key = 'uf_portraits'
     local texture = TextureCache:get(key)
     local quads = QuadCache:get(key)
+
+    -- TODO: adjust clothes, accessories for player race and/or class
 
     local hair_idx = lrandom(27, 46)
     local face_idx = lrandom(51, 65)
