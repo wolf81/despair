@@ -2,7 +2,7 @@ return {
 	id = 'club',
 	type = 'weapon',
 	texture = 'uf_items',
-	anim = { 52 },
+	anim = { 58 },
 	kind = '1h',
 	name = 'club',
 	attack = 0,

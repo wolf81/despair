@@ -32,9 +32,8 @@ M.init = function()
 
     -- create a mouse cursor from a quad
     local texture = TextureCache:get('uf_interface')
-    assert(texture ~= nil, 'TextureCache is missing texture: "uf_interface"')
-    local quads = QuadGenerator.generate(texture, 24, 24, 8, 16)
-    local image_data = newImageData(texture, quads[272])
+    local quads = QuadCache:get('uf_interface')
+    local image_data = newImageData(texture, quads[157])
     local cursor = love.mouse.newCursor(image_data, 6, 6)
 
     -- and set the mouse cursor

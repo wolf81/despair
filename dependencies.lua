@@ -25,8 +25,6 @@ Map             = require 'src.world.map'
 
 -- util
 Shadowcaster    = require 'src.util.shadowcaster'
-LinkedList      = require 'src.util.linked_list'
-Scheduler       = require 'src.util.scheduler'
 Direction       = require 'src.util.direction'
 Animation       = require 'src.util.animation'
 Pointer         = require 'src.util.pointer'
@@ -61,6 +59,7 @@ Weapon          = require 'src.components.weapon'
 Skills          = require 'src.components.skills'
 Stats           = require 'src.components.stats'
 Armor           = require 'src.components.armor'
+Item            = require 'src.components.item'
 
 -- resolvers
 CombatResolver  = require 'src.resolvers.combat'

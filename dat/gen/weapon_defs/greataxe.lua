@@ -2,7 +2,7 @@ return {
 	id = 'greataxe',
 	type = 'weapon',
 	texture = 'uf_items',
-	anim = { 51 },
+	anim = { 53 },
 	kind = '2h',
 	name = 'greataxe',
 	attack = 0,

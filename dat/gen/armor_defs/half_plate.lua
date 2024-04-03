@@ -2,7 +2,7 @@ return {
 	id = 'half_plate',
 	type = 'armor',
 	texture = 'uf_items',
-	anim = { 215 },
+	anim = { 225 },
 	kind = 'chest',
 	name = 'half plate',
 	ac = 7,

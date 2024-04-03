@@ -2,7 +2,7 @@ return {
 	id = 'greatsword',
 	type = 'weapon',
 	texture = 'uf_items',
-	anim = { 67 },
+	anim = { 70 },
 	kind = '2h',
 	name = 'greatsword',
 	attack = 0,

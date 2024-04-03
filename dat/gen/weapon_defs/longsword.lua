@@ -2,7 +2,7 @@ return {
 	id = 'longsword',
 	type = 'weapon',
 	texture = 'uf_items',
-	anim = { 48 },
+	anim = { 50 },
 	kind = '1h',
 	name = 'longsword',
 	attack = 0,

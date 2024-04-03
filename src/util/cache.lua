@@ -19,10 +19,20 @@ Cache.new = function()
         return cache[key]
     end
 
+    local each = function(self)
+        local key, value = nil, nil
+
+        return function()
+            key, value = next(cache, key)
+            return key, value
+        end
+    end
+
     return setmetatable({
         -- methods
         register    = register,
         get         = get,
+        each        = each,
     }, Cache)
 end
 

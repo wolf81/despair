@@ -2,7 +2,7 @@ return {
 	id = 'battleaxe',
 	type = 'weapon',
 	texture = 'uf_items',
-	anim = { 57 },
+	anim = { 52 },
 	kind = '1h',
 	name = 'battleaxe',
 	attack = 0,

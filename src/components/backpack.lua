@@ -8,7 +8,7 @@
 local Backpack = {}
 
 function Backpack.new(entity, def)
-    local items = {}
+    local items, last_item_id = {}, nil
 
     -- add all items to backpack
     for _, id in ipairs(def['equip']) do
@@ -19,7 +19,12 @@ function Backpack.new(entity, def)
     -- insert an item into backpack
     local put = function(self, item)
         if item == nil then return end
-        items[tostring(item.id)] = item
+
+        local item_id = tostring(item.id)
+        items[item_id] = item
+        last_item_id = item_id
+
+        Signal.emit('put', item)
     end
 
     -- remove an item from backpack, either by id or using a filter function
@@ -59,11 +64,24 @@ function Backpack.new(entity, def)
         end
     end
 
+    local takeLast = function(self)
+        local item = nil
+
+        if last_item_id ~= nil then
+            item = items[last_item_id]
+            items[last_item_id] = nil
+            last_item_id = nil
+        end
+
+        return item
+    end
+
     return setmetatable({
         -- methods
-        put     = put,
-        take    = take,
-        each    = each,
+        put         = put,
+        take        = take,
+        takeLast    = takeLast,
+        each        = each,
     }, Backpack)
 end
 

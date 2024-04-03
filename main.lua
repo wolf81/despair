@@ -10,6 +10,104 @@ io.stdout:setvbuf('no')
 require 'dependencies'
 require 'constants'
 
+local function getExtension(path)
+  return path:match("^.+(%..+)$")
+end
+
+local function getFilename(path)
+    return path:match('^(.*)%.')
+end
+
+local function registerTerrainQuads()
+    local key = 'uf_terrain'
+    local image = TextureCache:get(key)
+    local quads = QuadGenerator.generate(image, 48, 48)
+    QuadCache:register(key, quads)
+end
+
+local function registerItemsQuads()
+    local key = 'uf_items'
+    local image = TextureCache:get(key)
+    local quads = QuadGenerator.generate(image, 48, 48)
+    QuadCache:register(key, quads)
+end
+
+local function registerHeroesQuads()
+    local key = 'uf_heroes'
+    local image = TextureCache:get(key)
+    local quads = QuadGenerator.generate(image, 48, 48)
+    QuadCache:register(key, quads)
+end
+
+local function registerFxQuads()
+    local key = 'uf_fx'
+    local image = TextureCache:get(key)
+    local quads = QuadGenerator.generate(image, 24, 24)
+    QuadCache:register(key, quads)
+end
+
+local function registerFxImpactQuads()
+    local key = 'uf_fx_impact'
+    local image = TextureCache:get(key)
+    local quads = QuadGenerator.generate(image, 48, 48)
+    QuadCache:register(key, quads)
+end
+
+local function registerProjectilesQuads()
+    local key = 'projectiles'
+    local image = TextureCache:get(key)
+    local quads = QuadGenerator.generate(image, 24, 24)
+    QuadCache:register(key, quads)
+end
+
+local function registerInterfaceQuads()
+    local key = 'uf_interface'
+    local image = TextureCache:get(key)
+    local image_w, image_h = image:getDimensions()
+
+    local quads = {}
+
+    for _, quad in ipairs(QuadGenerator.generate(image, 8, 9, 584, 6, 264, 30)) do
+        table.insert(quads, quad)
+    end
+
+    for _, quad in ipairs(QuadGenerator.generate(image, 24, 24, 584, 64)) do
+        table.insert(quads, quad)
+    end
+
+    for _, quad in ipairs(QuadGenerator.generate(image, 28, 5, 481, 29, 28, 60)) do
+        table.insert(quads, quad)
+    end
+
+    QuadCache:register(key, quads)
+end
+
+local function registerSkillsQuads()
+    local key = 'uf_skills'
+    local image = TextureCache:get(key)
+    local quads = QuadGenerator.generate(image, 24, 24, 584, 64)
+    QuadCache:register(key, quads)
+end
+
+local function registerPortraitsQuads()
+    local key = 'uf_portraits'
+    local image = TextureCache:get(key)
+    local quads = QuadGenerator.generate(image, 24, 24, 584, 64)
+    QuadCache:register(key, quads)
+end
+
+local function registerQuads()
+    registerHeroesQuads()
+    registerFxQuads()
+    registerFxImpactQuads()
+    registerInterfaceQuads()
+    registerTerrainQuads()
+    registerItemsQuads()
+    registerPortraitsQuads()
+    registerSkillsQuads()
+    registerProjectilesQuads()
+end
+
 local function preload()
     -- register entities with entity factory
     local data_dir = 'dat/gen'
@@ -23,28 +121,30 @@ local function preload()
     local gfx_dir = 'gfx'
     local files = love.filesystem.getDirectoryItems(gfx_dir)
     for _, file in ipairs(files) do
-        local key = file:match('^(.*)%.')
+        if getExtension(file) ~= '.png' then goto continue end 
+
+        local key = getFilename(file)
 
         local image = love.graphics.newImage(gfx_dir .. '/' .. file)
         image:setFilter('nearest', 'nearest')
         TextureCache:register(key, image)
 
-        -- TODO: ugly to adjust size here for single texture - maybe should configure in data file 
-        -- instead, as part of entities & load later ...
-        local size = key == 'uf_fx' and (TILE_SIZE / 2) or TILE_SIZE 
-
-        local quads = QuadGenerator.generate(image, size, size)
-        QuadCache:register(key, quads)
+        ::continue::
     end
+
+    registerQuads()
 
     local shd_dir = 'shd'
     local files = love.filesystem.getDirectoryItems(shd_dir)
     for _, file in ipairs(files) do
-        local key = file:match('^(.*)%.')
+        if getExtension(file) ~= '.glsl' then goto continue end 
+
+        local key = getFilename(file)
 
         local shader = love.graphics.newShader(shd_dir .. '/' .. file)
         ShaderCache:register(key, shader)
-        print('shader', key)
+
+        ::continue::
     end
 end
 
@@ -57,6 +157,47 @@ function love.load(args)
     success = love.window.setMode(WINDOW_W * SCALE, WINDOW_H * SCALE, {
         highdpi = false,
     })
+
+    for _, arg in ipairs(args) do
+        if arg == '--quadsheet' then
+            for key, image in TextureCache:each() do
+                local w, h = image:getDimensions()
+
+                local font = love.graphics.newFont(10)
+                love.graphics.setFont(font)
+
+                local canvas = love.graphics.newCanvas(w, h)
+                canvas:renderTo(function() 
+                    love.graphics.draw(image, 0, 0)
+
+                    local quads = QuadCache:get(key)                    
+
+                    for idx, quad in ipairs(quads) do
+                        local x, y, w, h = quad:getViewport()
+
+                        if idx % 10 == 0 then
+                            love.graphics.setColor(0.0, 1.0, 1.0, 0.5)
+                        else
+                            love.graphics.setColor(1.0, 0.0, 1.0, 0.5)
+                        end
+
+                        love.graphics.rectangle('fill', x, y, w, h)
+
+                        if (w >= 24 and h >= 12) or idx % 10 == 0 then
+                            love.graphics.setColor(1.0, 1.0, 0.0, 1.0)
+                            love.graphics.print(idx, x + 1.0, y + 1.0)
+                        end
+                    end
+                    love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
+                end)
+
+                local image_data = canvas:newImageData()
+                image_data:encode('png', key .. '.png')
+            end
+
+            love.event.quit()
+        end
+    end
 
     game = Game()
 end
@@ -73,5 +214,9 @@ end
 function love.keypressed(key, scancode, isrepeat)
     if key == "escape" then
         love.event.quit()
+    end
+
+    if key == 'space' then
+        game:togglePaused()
     end
 end

@@ -9,13 +9,16 @@ local mfloor = math.floor
 
 local M = {}
 
-M.generate = function(texture, quad_w, quad_h, ox, oy)
+M.generate = function(texture, quad_w, quad_h, ox, oy, ow, oh)
     ox = ox or 0
     oy = oy or 0
 
     local texture_w, texture_h = texture:getDimensions()
-    local cols = mfloor((texture_w - ox) / quad_w)
-    local rows = mfloor((texture_h - oy) / quad_h)
+    w = ow or (texture_w - ox)
+    h = oh or (texture_h - oy)
+
+    local cols = mfloor(w / quad_w)
+    local rows = mfloor(h / quad_h)
 
     local quads = {}
 
@@ -23,7 +26,7 @@ M.generate = function(texture, quad_w, quad_h, ox, oy)
         for x = 0, cols - 1 do
             quads[#quads + 1] = love.graphics.newQuad(
                 ox + x * quad_w, 
-                oy + y * quad_w, 
+                oy + y * quad_h, 
                 quad_w,
                 quad_h, 
                 texture

@@ -28,13 +28,31 @@ end
 local function generateLootTable()
     local loot_table = {}
 
-    local armor_ids = EntityFactory.getIds('armor')
-    for _, id in ipairs(armor_ids) do
+    for _, id in ipairs(EntityFactory.getIds('armor')) do
         loot_table[id] = 2
     end
 
-    local weapon_ids = EntityFactory.getIds('weapon')
-    for _, id in ipairs(weapon_ids) do
+    for _, id in ipairs(EntityFactory.getIds('weapon')) do
+        loot_table[id] = 2
+    end
+
+    for _, id in ipairs(EntityFactory.getIds('ring')) do
+        loot_table[id] = 2
+    end
+
+    for _, id in ipairs(EntityFactory.getIds('potion')) do
+        loot_table[id] = 2
+    end
+
+    for _, id in ipairs(EntityFactory.getIds('necklace')) do
+        loot_table[id] = 2
+    end
+
+    for _, id in ipairs(EntityFactory.getIds('tome')) do
+        loot_table[id] = 2
+    end
+
+    for _, id in ipairs(EntityFactory.getIds('wand')) do
         loot_table[id] = 2
     end
 
@@ -46,8 +64,10 @@ local function addLoot(level, level_idx, loot_table)
 
     local level_w, level_h = level:getSize()
 
-    for i = 1, item_count do
+    while item_count > 0 do
         local item_id = weightedChoice(loot_table)
+        -- TODO: why is item_id sometimes nil? maybe improve the weightedChoice algorithm?
+        if item_id == nil then goto continue end
 
         local attempts = MAX_ATTEMPTS
         while attempts > 0 do
@@ -57,13 +77,18 @@ local function addLoot(level, level_idx, loot_table)
             local y = lrandom(1, level_h)
             local coord = vector(x, y)
 
-            if not level:isBlocked(coord) then
+            if (not level:isBlocked(coord) 
+                and coord ~= level.entry_coord 
+                and control ~= level.exit_coord) then
                 local item = EntityFactory.create(item_id, coord)
                 print('add ' .. item.name .. ' at coord ' .. tostring(coord))
                 level:addEntity(item)
+                item_count = item_count - 1
                 break
             end
         end
+
+        ::continue::
     end
 end
 

@@ -2,7 +2,7 @@ return {
 	id = 'chain_mail',
 	type = 'armor',
 	texture = 'uf_items',
-	anim = { 214 },
+	anim = { 224 },
 	kind = 'chest',
 	name = 'chainmail',
 	ac = 5,

@@ -9,7 +9,7 @@ local mfloor, matan2, lrandom = math.floor, math.atan2, love.math.random
 
 local Level = {}
 
-local function newMonsters(map)
+local function newMonsters(map, blocked_coords)
     local monsters = {}
 
     local types = { 
@@ -20,14 +20,21 @@ local function newMonsters(map)
         'purple_jelly', 'blk_widow_mat', 'spectator', 'observer'
     }
 
-    while #monsters < 10 do
+    while #monsters < 3 do
         local x = lrandom(map.width)
         local y = lrandom(map.height)
 
         if not map:isBlocked(x, y) then
+            for _, blocked_coord in ipairs(blocked_coords) do
+                local is_blocked = blocked_coord.x == x and blocked_coord.y == y
+                if is_blocked then goto continue end
+            end
+
             local type = types[lrandom(#types)]
             local monster = EntityFactory.create(type, vector(x, y))
             table.insert(monsters, monster)
+
+            ::continue::
         end        
     end
 
@@ -35,13 +42,14 @@ local function newMonsters(map)
 end
 
 local function initSystems(entities)
-    local visualSystem = System(Visual)
+    local visual_system, control_system = System(Visual), System(Control)
 
     for _, entity in ipairs(entities) do
-        visualSystem:addComponent(entity)
+        visual_system:addComponent(entity)
+        control_system:addComponent(entity)
     end    
 
-    return { visualSystem }
+    return { visual_system, control_system }
 end
 
 Level.new = function(dungeon)
@@ -61,15 +69,13 @@ Level.new = function(dungeon)
     -- fog of war
     local fog = Fog(13, 10)
 
-    for _, monster in ipairs(newMonsters(map)) do
+    for _, monster in ipairs(newMonsters(map, { stair_up.coord, stair_dn.coord })) do
         table.insert(entities, monster)
         map:setBlocked(monster.coord.x, monster.coord.y, true)
 
         local visual = monster:getComponent(Visual)
         visual.alpha = 0.0
     end
-
-    local scheduler = Scheduler(entities)
 
     -- add camera
     local camera = Camera(0.0, 0.0, SCALE)
@@ -86,21 +92,21 @@ Level.new = function(dungeon)
         function(x, y) fog:reveal(x, y) end
     )
 
+    local onPut = function(self, entity)
+        print(entity.name .. ' added to backpack')
+    end
+
     local onMove = function(self, entity, coord, duration)
         self:setBlocked(entity.coord, false)
         self:setBlocked(coord, true)
 
         if entity.type ~= 'pc' then 
-            local prev_coord_visible = fog:isVisible(entity.coord.x, entity.coord.y)
-            local next_coord_visible = fog:isVisible(coord.x, coord.y)
-            if next_coord_visible and not prev_coord_visible then
+            if fog:isVisible(coord.x, coord.y) then
                 local visual = entity:getComponent(Visual)
-                Timer.tween(duration, visual, { alpha = 1.0 }, 'linear')
-            end
-
-            if prev_coord_visible and not next_coord_visible then
+                Timer.tween(0.2, visual, { alpha = 1.0 }, 'linear')
+            elseif fog:isVisible(entity.coord.x, entity.coord.y) then
                 local visual = entity:getComponent(Visual)
-                Timer.tween(duration, visual, { alpha = 0.0 }, 'linear')
+                Timer.tween(0.2, visual, { alpha = 0.0 }, 'linear')
             end
 
             return
@@ -116,19 +122,21 @@ Level.new = function(dungeon)
                 if not fog:isVisible(x, y) then
                     -- hide any npcs here
                     for _, entity in ipairs(self:getEntities(vector(x, y))) do
-                        if entity:getComponent(Control) then
-                            local visual = entity:getComponent(Visual)
-                            Timer.tween(duration, visual, { alpha = 0.0 }, 'linear')
-                        end
-                    end
-                end
+                        local visual = entity:getComponent(Visual)
+                        if not visual then goto continue end
 
-                if fog:isVisible(x, y) then
+                        Timer.tween(0.2, visual, { alpha = 0.0 }, 'linear')
+
+                        ::continue::
+                    end
+                elseif fog:isVisible(x, y) then
                     for _, entity in ipairs(self:getEntities(vector(x, y))) do
-                        if entity:getComponent(Control) then
-                            local visual = entity:getComponent(Visual)
-                            Timer.tween(duration, visual, { alpha = 1.0 }, 'linear')
-                        end
+                        local visual = entity:getComponent(Visual)
+                        if not visual then goto continue end
+                        
+                        Timer.tween(0.2, visual, { alpha = 1.0 }, 'linear')
+
+                        ::continue::
                     end
                 end
             end
@@ -137,6 +145,18 @@ Level.new = function(dungeon)
         camera:move(coord, duration)
 
         if entity.coord ~= coord then 
+            local entities = self:getEntities(coord)
+            if #entities > 0 then
+                local target = entities[1]
+                local item = target:getComponent(Item)
+                local backpack = entity:getComponent(Backpack)
+
+                if item then
+                    self:removeEntity(target)
+                    backpack:put(target)
+                end
+            end
+
             if coord == stair_up.coord then
                 self:setBlocked(coord, false)
                 dungeon:prevLevel()
@@ -149,6 +169,9 @@ Level.new = function(dungeon)
 
     local onDestroy = function(self, entity, duration)
         print(entity.name .. ' is destroyed')
+
+        local visual = entity:getComponent(Visual)
+        visual:fadeOut(duration)
 
         Timer.after(duration, function() 
             self:setBlocked(entity.coord, false)
@@ -172,14 +195,14 @@ Level.new = function(dungeon)
         else
             local effect = EntityFactory.create('strike_1', target.coord:clone())
             self:addEntity(effect)
-            Timer.after(duration, function() self:removeEntity(effect) end)        
+            Timer.after(0.3, function() self:removeEntity(effect) end)        
         end
 
         if status.damage == 0 then
             print(entity.name .. ' missed attack on ' .. target.name)
         else
             local visual = target:getComponent(Visual)
-            visual:colorize(duration)
+            visual:colorize(0.3)
             if status.is_crit then
                 print(entity.name .. ' critically hit ' .. target.name .. ' for ' .. status.damage .. ' hitpoints')
             else
@@ -192,7 +215,7 @@ Level.new = function(dungeon)
 
         -- show camera shake effect if player performs a critical hit
         if status.is_crit and entity == self:getPlayer() then
-            camera:shake(duration)
+            camera:shake(0.5)
         end
     end
 
@@ -214,10 +237,9 @@ Level.new = function(dungeon)
         for idx, entity in ipairs(entities) do
             if entity.type == 'pc' then
                 player_idx = idx
+                break
             end
         end
-
-        scheduler:addEntity(entity)
     end
 
     local removeEntity = function(self, entity)    
@@ -235,11 +257,11 @@ Level.new = function(dungeon)
         for _, system in ipairs(systems) do
             system:removeComponent(entity)
         end
-
-        scheduler:removeEntity(entity)
     end
 
-    local update = function(self, dt)        
+    local update = function(self, dt)  
+        if is_paused == true then return end      
+        
         for i = #entities, 1, -1 do
             local entity = entities[i]
             if entity.remove then
@@ -252,9 +274,6 @@ Level.new = function(dungeon)
         end
 
         Pointer.update(camera, self)
-
-        -- only update scheduler if player is alive and in play
-        if player_idx > 0 then scheduler:update(dt, self) end
     end
 
     local draw = function(self)
@@ -312,6 +331,7 @@ Level.new = function(dungeon)
         self:setBlocked(player.coord, true)
 
         handlers = {
+            ['put']     = function(...) onPut(self, ...)     end,
             ['move']    = function(...) onMove(self, ...)    end,
             ['idle']    = function(...) onIdle(self, ...)    end,
             ['attack']  = function(...) onAttack(self, ...)  end,
@@ -349,7 +369,6 @@ Level.new = function(dungeon)
         enter           = enter,
         exit            = exit,
         getSize         = getSize,
-
         addEntity       = addEntity,
         getPlayer       = getPlayer,
         getEntities     = getEntities,

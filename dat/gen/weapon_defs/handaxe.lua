@@ -2,7 +2,7 @@ return {
 	id = 'handaxe',
 	type = 'weapon',
 	texture = 'uf_items',
-	anim = { 56 },
+	anim = { 51 },
 	kind = 'light',
 	name = 'handaxe',
 	attack = 0,

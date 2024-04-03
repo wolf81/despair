@@ -1,24 +1,25 @@
 ID$          |TYPE$  |TEXTURE$ |ANIM@ |KIND$     |NAME$          |ATTACK# |DAMAGE$ |SPECIAL@ |PROJECTILE$ |
 
-quarterstaff |weapon |uf_items |74    |2h        |quarterstaff   |0       |1d6     |         |            |
-greatsword   |weapon |uf_items |67    |2h        |greatsword     |0       |2d6     |         |            |
-greataxe     |weapon |uf_items |51    |2h        |greataxe       |0       |1d10    |         |            |
-spear        |weapon |uf_items |65    |2h        |spear          |0       |1d8     |         |            |
+quarterstaff |weapon |uf_items |77    |2h        |quarterstaff   |0       |1d6     |         |            |
+greatsword   |weapon |uf_items |70    |2h        |greatsword     |0       |2d6     |         |            |
+greataxe     |weapon |uf_items |53    |2h        |greataxe       |0       |1d10    |         |            |
+spear        |weapon |uf_items |68    |2h        |spear          |0       |1d8     |         |            |
 
-longsword    |weapon |uf_items |48    |1h        |longsword      |0       |1d8     |         |            |
-heavy_mace   |weapon |uf_items |53    |1h        |heavy mace     |0       |1d8     |         |            |
-morningstar  |weapon |uf_items |52    |1h        |morningstar    |0       |1d8     |         |            |
-battleaxe    |weapon |uf_items |57    |1h        |battleaxe      |0       |1d8     |         |            |
-scimitar     |weapon |uf_items |47    |1h        |scimitar       |0       |1d6     |         |            |
-club         |weapon |uf_items |52    |1h        |club           |0       |1d6     |         |            |
+longsword    |weapon |uf_items |50    |1h        |longsword      |0       |1d8     |         |            |
+heavy_mace   |weapon |uf_items |55    |1h        |heavy mace     |0       |1d8     |         |            |
+morningstar  |weapon |uf_items |54    |1h        |morningstar    |0       |1d8     |         |            |
+battleaxe    |weapon |uf_items |52    |1h        |battleaxe      |0       |1d8     |         |            |
+scimitar     |weapon |uf_items |49    |1h        |scimitar       |0       |1d6     |         |            |
+club         |weapon |uf_items |58    |1h        |club           |0       |1d6     |         |            |
 
-short_sword  |weapon |uf_items |43    |light     |short sword    |0       |1d6     |         |            |
-dagger       |weapon |uf_items |44    |light     |dagger         |0       |1d4     |         |            |
-handaxe      |weapon |uf_items |56    |light     |handaxe        |0       |1d4     |         |            |
-unarmed      |weapon |uf_items |42    |light     |unarmed strike |0       |1d3     |         |            |
-bite         |weapon |uf_items |42    |light     |bite           |0       |1d3     |         |            |
+short_sword  |weapon |uf_items |45    |light     |short sword    |0       |1d6     |         |            |
+dagger       |weapon |uf_items |46    |light     |dagger         |0       |1d4     |         |            |
+handaxe      |weapon |uf_items |51    |light     |handaxe        |0       |1d4     |         |            |
+unarmed      |weapon |uf_items |22    |light     |unarmed strike |0       |1d3     |         |            |
+bite         |weapon |uf_items |22    |light     |bite           |0       |1d3     |         |            |
 
-longbow      |weapon |uf_items |70    |ranged_2h |longbow        |0       |1d8     |         |arrow       |
-shortbow     |weapon |uf_items |69    |ranged_2h |shortbow       |0       |1d6     |         |arrow       |
+crossbow     |weapon |uf_items |74    |ranged_2h |crossbow       |0       |1d10    |         |arrow       |
+shortbow     |weapon |uf_items |73    |ranged_2h |shortbow       |0       |1d6     |         |arrow       |
+longbow      |weapon |uf_items |72    |ranged_2h |longbow        |0       |1d8     |         |arrow       |
 
-sling        |weapon |uf_items |72    |ranged_1h |sling          |0       |1d4     |         |bullet      |
+sling        |weapon |uf_items |75    |ranged_1h |sling          |0       |1d4     |         |bullet      |

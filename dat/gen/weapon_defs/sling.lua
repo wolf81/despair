@@ -2,7 +2,7 @@ return {
 	id = 'sling',
 	type = 'weapon',
 	texture = 'uf_items',
-	anim = { 72 },
+	anim = { 75 },
 	kind = 'ranged_1h',
 	name = 'sling',
 	attack = 0,

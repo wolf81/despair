@@ -10,7 +10,9 @@ local Idle = {}
 Idle.new = function(level, entity)
     local did_execute, is_finished = false, false
 
-    local execute = function(self, duration)
+    local duration = 2.0 / GAME_SPEED
+
+    local execute = function(self)
         if did_execute then return end
 
         did_execute = true
@@ -22,15 +24,13 @@ Idle.new = function(level, entity)
         end)
     end
 
-    local getCost = function() return ACTION_BASE_AP_COST end
-
     local isFinished = function() return is_finished end
 
     return setmetatable({
         -- methods
-        isFinished  = isFinished,
-        getCost     = getCost,
         execute     = execute,
+        getDuration = getDuration,
+        isFinished  = isFinished,
     }, Idle)
 end
 
