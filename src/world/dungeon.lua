@@ -107,9 +107,9 @@ Dungeon.new = function()
 
     local update = function(self, dt) levels[level_idx]:update(dt) end
 
-    local draw = function(self)
+    local draw = function(self, x, y, w, h)
         love.graphics.setColor(1.0, 1.0, 1.0, self.alpha) 
-        levels[level_idx]:draw() 
+        levels[level_idx]:draw(x, y, w, h) 
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0) 
     end
 

@@ -20,7 +20,7 @@ local function newMonsters(map, blocked_coords)
         'purple_jelly', 'blk_widow_mat', 'spectator', 'observer'
     }
 
-    while #monsters < 3 do
+    while #monsters < 10 do
         local x = lrandom(map.width)
         local y = lrandom(map.height)
 
@@ -279,7 +279,7 @@ Level.new = function(dungeon)
         Pointer.update(camera, self)
     end
 
-    local draw = function(self)
+    local draw = function(self, x, y, w, h)
         camera:draw(function() 
             map:draw()
 
@@ -289,7 +289,7 @@ Level.new = function(dungeon)
 
             local ox, oy = camera:worldCoords(0, 0)
             fog:draw(ox, oy)
-        end)
+        end, x, y, w, h)
     end
 
     local isBlocked = function(self, coord)

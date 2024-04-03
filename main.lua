@@ -92,7 +92,7 @@ end
 local function registerPortraitsQuads()
     local key = 'uf_portraits'
     local image = TextureCache:get(key)
-    local quads = QuadGenerator.generate(image, 24, 24, 584, 64)
+    local quads = QuadGenerator.generate(image, 50, 50)
     QuadCache:register(key, quads)
 end
 
