@@ -43,7 +43,7 @@ HealthBar.preload = function()
     end
 end
 
-HealthBar.new = function(entity, def)
+HealthBar.new = function(entity, def, alpha)
     local health = entity:getComponent(Health)
     assert(health ~= nil, 'missing component: "Health"')
 
@@ -54,9 +54,9 @@ HealthBar.new = function(entity, def)
         bar_idx = mfloor(current / max * 10)
     end
 
-    local draw = function(self) 
+    local draw = function(self, alpha) 
         local pos = entity.coord * TILE_SIZE
-        love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
+        love.graphics.setColor(1.0, 1.0, 1.0, alpha or 1.0)
         love.graphics.draw(HealthBars[bar_idx], mfloor(pos.x), mfloor(pos.y))
     end
 

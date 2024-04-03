@@ -105,11 +105,9 @@ Level.new = function(dungeon)
 
         if entity.type ~= 'pc' then 
             if fog:isVisible(coord.x, coord.y) then
-                local visual = entity:getComponent(Visual)
-                Timer.tween(0.2, visual, { alpha = 1.0 }, 'linear')
+                entity:getComponent(Visual):fadeIn(0.2)
             elseif fog:isVisible(entity.coord.x, entity.coord.y) then
-                local visual = entity:getComponent(Visual)
-                Timer.tween(0.2, visual, { alpha = 0.0 }, 'linear')
+                entity:getComponent(Visual):fadeOut(0.2)
             end
 
             return
@@ -128,7 +126,7 @@ Level.new = function(dungeon)
                         local visual = entity:getComponent(Visual)
                         if not visual then goto continue end
 
-                        Timer.tween(0.2, visual, { alpha = 0.0 }, 'linear')
+                        visual:fadeOut(0.2)
 
                         ::continue::
                     end
@@ -136,9 +134,9 @@ Level.new = function(dungeon)
                     for _, entity in ipairs(self:getEntities(vector(x, y))) do
                         local visual = entity:getComponent(Visual)
                         if not visual then goto continue end
-                        
-                        Timer.tween(0.2, visual, { alpha = 1.0 }, 'linear')
 
+                        visual:fadeIn(0.2)
+                        
                         ::continue::
                     end
                 end

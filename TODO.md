@@ -18,15 +18,16 @@
 [X] feat: Implement custom mouse cursor
 [X] feat: Generate items randomly 
 [X] feat: Implement movement speed
-[ ] feat: Move alpha related code from Animation to Visual component
-[ ] feat: Implement health recovery over time
+[X] feat: Implement health recovery over time
+[X] feat: Add proper arrow image for bows 
+[X] feat: Move alpha related code from Animation to Visual component
+[ ] feat: Prevent stairs from being hidden under fog of war
 [ ] feat: Implement hunger
 [ ] feat: Generate monsters randomly just outside visible area of player
 [ ] feat: Implement level saving and loading
 [ ] feat: Improve variety of textures in dungeon
 [ ] feat: Use a Dijkstra map for pathfinding
 [ ] feat: Implement magic missile spell
-[ ] feat: Add proper arrow image for bows 
 
 ## LIB
 
@@ -36,5 +37,5 @@
 ## BUGS 
 
 [X] fix: sometimes monsters stay visible under fog of war
-[ ] fix: sometimes a turn is stuck for a full duration when NPC is destroyed
-[ ] fix: clean-up Visual & Animation classes - should have methods on Visual to change current animation
+[X] fix: clean-up Visual & Animation classes - should have methods on Visual to change current animation
+[X] fix: sometimes a turn is stuck for a full duration when NPC is destroyed

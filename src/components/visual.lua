@@ -21,11 +21,13 @@ Visual.new = function(entity, def, duration)
 
     local texture = TextureCache:get(def.texture)
     local quads = QuadCache:get(def.texture)
-    local anim = Animation.loop(frames, duration)
+    local anim = Animation(frames, duration)
     local rot, ox, oy = 0, 0, 0
 
+    local anim_handle = nil
+
     update = function(self, dt, level) 
-        self.anim:update(dt)
+        anim:update(dt)
     end
 
     draw = function(self)
@@ -38,13 +40,13 @@ Visual.new = function(entity, def, duration)
 
         love.graphics.setColor(1.0, 1.0, 1.0, self.alpha)
         local pos = entity.coord * TILE_SIZE
-        self.anim:draw(texture, quads, pos, rot, ox, oy)
+        anim:draw(texture, quads, pos, rot, ox, oy)
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
 
         love.graphics.setShader()
 
         local health_bar = entity:getComponent(HealthBar)
-        if health_bar then health_bar:draw() end
+        if health_bar then health_bar:draw(self.alpha) end
     end
 
     colorize = function(self, duration)
@@ -82,7 +84,19 @@ Visual.new = function(entity, def, duration)
     end
 
     fadeOut = function(self, duration)
-        self.anim = Animation.fadeOut(def['anim'] or { 1 }, duration)
+        if anim_handle then Timer.cancel(anim_handle) end
+
+        anim_handle = Timer.tween(duration, self, { alpha = 0.0 }, 'linear', function()
+            anim_handle = nil 
+        end)
+    end
+
+    fadeIn = function(self, duration)
+        if anim_handle then Timer.cancel(anim_handle) end
+
+        anim_handle = Timer.tween(duration, self, { alpha = 1.0 }, 'linear', function() 
+            anim_handle = nil
+        end)
     end
 
     setRotation = function(self, angle)
@@ -92,20 +106,19 @@ Visual.new = function(entity, def, duration)
             local _, _, quad_w, quad_h = quads[1]:getViewport()
             ox, oy = mfloor(quad_w / 2), mfloor(quad_h / 2)
         end
-
     end
 
     return setmetatable({
         -- properties
         alpha       = 1.0,
-        anim        = anim,
         -- methods
-        setRotation = setRotation,
         update      = update,
         draw        = draw,
+        fadeIn      = fadeIn,
         fadeOut     = fadeOut,
-        setShader   = setShader,
         colorize    = colorize,
+        setShader   = setShader,
+        setRotation = setRotation,
     }, Visual)
 end
 
