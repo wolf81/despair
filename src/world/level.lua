@@ -43,13 +43,16 @@ end
 
 local function initSystems(entities)
     local visual_system, control_system = System(Visual), System(Control)
+    local health_system, health_bar_system = System(Health), System(HealthBar)
 
     for _, entity in ipairs(entities) do
         visual_system:addComponent(entity)
         control_system:addComponent(entity)
+        health_system:addComponent(entity)
+        health_bar_system:addComponent(entity)
     end    
 
-    return { visual_system, control_system }
+    return { visual_system, control_system, health_system, health_bar_system }
 end
 
 Level.new = function(dungeon)
