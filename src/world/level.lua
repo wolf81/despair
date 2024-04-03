@@ -153,8 +153,10 @@ Level.new = function(dungeon)
                 local backpack = entity:getComponent(Backpack)
 
                 if item then
-                    self:removeEntity(target)
-                    backpack:put(target)
+                    Timer.after(duration, function()
+                        self:removeEntity(target)
+                        backpack:put(target)
+                    end)
                 end
             end
 
