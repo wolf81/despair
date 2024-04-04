@@ -99,7 +99,7 @@ local function newLevel(dungeon, level_idx, loot_table)
 end
 
 Dungeon.new = function(player)
-    assert(player ~= nil, 'missing parameter: "player"')
+    assert(player ~= nil, 'missing argument: "player"')
     
     local loot_table = generateLootTable()
 

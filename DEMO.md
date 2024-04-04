@@ -4,8 +4,8 @@ Highlights for demo.
 
 ## ECS 
 
-* Don't use any subclasses anymore
-* Instead using ECS: an Entity is a generic container for components and components inside an entity are based on type property
+* Don't use any subclasses anymore, try to avoid in whole project
+* Instead using ECS: an Entity is a generic container for components and components inside an entity are added based on "type" property
 * EntityFactory adds components when creating a new entity
 * Currently we have the following components:
 	- Backpack

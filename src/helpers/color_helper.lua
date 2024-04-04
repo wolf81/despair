@@ -1,3 +1,10 @@
+--[[
+--  Dungeon of Despair
+--
+--  Author: Wolfgang Schreurs
+--  info+despair@wolftrail.net
+--]]
+
 local M = {}
 
 M.getColors = function(image, quad, is_sorted)

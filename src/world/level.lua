@@ -168,6 +168,9 @@ Level.new = function(dungeon)
                 dungeon:nextLevel()
             end
         end
+
+        -- every step the player makes, consumes some energy
+        entity:getComponent(Energy):expend()        
     end
 
     local onDestroy = function(self, entity, duration)
@@ -220,6 +223,10 @@ Level.new = function(dungeon)
         if status.is_crit and entity == self:getPlayer() then
             camera:shake(0.5)
         end
+    end
+
+    local onEnergy = function(self, entity, message)
+        print(message)
     end
 
     local onIdle = function(self, entity, duration)
@@ -339,6 +346,7 @@ Level.new = function(dungeon)
             ['idle']    = function(...) onIdle(self, ...)    end,
             ['attack']  = function(...) onAttack(self, ...)  end,
             ['destroy'] = function(...) onDestroy(self, ...) end,
+            ['energy']  = function(...) onEnergy(self, ...)  end,
         }
 
         for key, handler in pairs(handlers) do

@@ -49,7 +49,7 @@ end
 M.create = function(id, coord)
     local def = definitions[id]
 
-    assert(id ~= nil, 'missing parameter: "id"')
+    assert(id ~= nil, 'missing argument: "id"')
     
     print('create: ' .. id .. ' ' .. tostring(coord))
 
@@ -82,6 +82,7 @@ M.create = function(id, coord)
         entity:addComponent(ExpLevel(entity, def))
         entity:addComponent(MoveSpeed(entity, def))
         entity:addComponent(HealthBar(entity, def))
+        entity:addComponent(Energy(entity, def))
 
         -- equip all from backpack
         entity:getComponent(Equipment):equipAll()
