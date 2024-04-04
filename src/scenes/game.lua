@@ -31,6 +31,9 @@ Game.new = function()
     local player_info_w = 140
 
     local draw = function(self) 
+        love.graphics.push()
+        love.graphics.scale(SCALE)
+
         dungeon:draw(0, 0, WINDOW_W - player_info_w, WINDOW_H) 
 
         love.graphics.setColor(0.1, 0.1, 0.1, 1.0)
@@ -55,6 +58,8 @@ Game.new = function()
 
             love.graphics.printf('PAUSED', text_x, text_y, text_w, 'left')
         end
+
+        love.graphics.pop()
     end
 
     local togglePaused = function(self) is_paused = (not is_paused) end

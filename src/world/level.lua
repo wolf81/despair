@@ -81,7 +81,7 @@ Level.new = function(dungeon)
     end
 
     -- add camera
-    local camera = Camera(0.0, 0.0, SCALE)
+    local camera = Camera(0.0, 0.0, 1.0)
     local follow = true
 
     -- setup ecs
