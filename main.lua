@@ -87,6 +87,10 @@ local function registerInterfaceQuads()
         table.insert(quads, quad)
     end
 
+    for _, quad in ipairs(QuadGenerator.generate(image, 16, 16, 480, 256, 96, 144)) do
+        table.insert(quads, quad)
+    end
+
     QuadCache:register(key, quads)
 end
 

@@ -26,6 +26,10 @@ Map                 = require 'src.world.map'
 -- hud
 PlayerInfo          = require 'src.hud.player_info'
 Portrait            = require 'src.hud.portrait'
+Minimap             = require 'src.hud.minimap'
+
+-- helpers
+ColorHelper         = require 'src.helpers.color_helper'
 
 -- util
 Shadowcaster        = require 'src.util.shadowcaster'

@@ -1,3 +1,10 @@
+--[[
+--  Dungeon of Despair
+--
+--  Author: Wolfgang Schreurs
+--  info+despair@wolftrail.net
+--]]
+
 local mfloor = math.floor
 
 local PlayerInfo = {}
@@ -5,6 +12,9 @@ local PlayerInfo = {}
 PlayerInfo.new = function(player)
     local portrait = Portrait(player)
     local portrait_w, portrait_h = portrait:getSize() 
+
+    local minimap = Minimap(player)
+    local minimap_w, minimap_h = minimap:getSize()
 
     local update = function(self)
         -- body
@@ -36,6 +46,9 @@ PlayerInfo.new = function(player)
         love.graphics.print("SUBT: " .. skills:getValue('subt'), ox, oy + 100)
         love.graphics.print("KNOW: " .. skills:getValue('know'), ox, oy + 120)
         love.graphics.print("COMM: " .. skills:getValue('comm'), ox, oy + 140)
+
+        ox = mfloor((w - minimap_w) / 2)        
+        minimap:draw(x + ox, oy + 160)
     end
 
     return setmetatable({
