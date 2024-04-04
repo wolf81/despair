@@ -29,6 +29,7 @@
 [ ] feat: Use a Dijkstra map for pathfinding
 [ ] feat: Implement magic missile spell
 [ ] feat: Make generic bar view class that can be used for health, hunger, mana, ...
+[ ] feat: MAP_SIZE should use absolute value, e.g. 100, for use with minimap
 
 ## LIB
 
