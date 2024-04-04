@@ -42,7 +42,7 @@ local function generateBackgroundTexture(size)
 
         local color_info = ColorHelper.getColors(texture, quads[270], true)[1]
         love.graphics.setColor(unpack(color_info.color))
-        love.graphics.rectangle('fill', quad_w, quad_h, quad_w * (size - 1), quad_h * (size - 1))        
+        love.graphics.rectangle('fill', quad_w, quad_h, quad_w * (size - 2), quad_h * (size - 2))        
     end)
 
     return canvas

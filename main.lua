@@ -163,6 +163,8 @@ local function preload()
 end
 
 function love.load(args)
+    love.window.setTitle('Dungeon of Despair')
+
     preload()
 
     -- init graphics for pointer device

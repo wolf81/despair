@@ -16,8 +16,8 @@ ANIM_DURATION       = TURN_DURATION
 
 ACTION_BASE_AP_COST = 30
 
-WINDOW_W            = 640
-WINDOW_H            = 480
+WINDOW_W            = 800
+WINDOW_H            = 450
 
 CLASSES = {
     ['fighter']     = true,
