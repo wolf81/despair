@@ -7,55 +7,55 @@
 
 local Minimap = {}
 
-Minimap.new = function(player)
+local function generateBackgroundTexture()
     local key = 'uf_interface'
     local texture = TextureCache:get(key)
     local quads = QuadCache:get(key)
 
-    local _, _, quad_w, quad_h = quads[270]:getViewport()
-
-    local colors = ColorHelper.getColors(texture, quads[270], true)
-    local fill_color = colors[1].color
-
-    local update = function(self, dt)
-        -- body
+    local draw_info = {}
+    for y = 0, 4 do
+        for x = 0, 4 do
+            if y == 0 then
+                draw_info[vector(x, y)] = (x == 0 and 270) or (x == 4 and 275) or 271 
+            elseif y == 4 then
+                draw_info[vector(x, y)] = (x == 0 and 280) or (x == 4 and 279) or 277
+            elseif x == 0 then
+                draw_info[vector(x, y)] = 278
+            elseif x == 4 then
+                draw_info[vector(x, y)] = 272
+            end
+        end
     end
 
-    local draw_info = {
-        [vector(0, 0)] = 270,
-        [vector(1, 0)] = 271,
-        [vector(2, 0)] = 271,
-        [vector(3, 0)] = 271,
-        [vector(4, 0)] = 275,
-        [vector(0, 1)] = 278,
-        [vector(4, 1)] = 272,
-        [vector(0, 2)] = 278,
-        [vector(4, 2)] = 272,
-        [vector(0, 3)] = 278,
-        [vector(4, 3)] = 272,
-        [vector(0, 4)] = 280,
-        [vector(1, 4)] = 277,
-        [vector(2, 4)] = 277,
-        [vector(3, 4)] = 277,
-        [vector(4, 4)] = 279,
-
-    }
-
-    local draw = function(self, x, y)
+    local _, _, quad_w, quad_h = quads[270]:getViewport()
+    local canvas = love.graphics.newCanvas(quad_w * 5, quad_h * 5)
+    canvas:renderTo(function() 
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
 
         for coord, quad_idx in pairs(draw_info) do
-            local ox = coord.x * quad_w
-            local oy = coord.y * quad_h
-            love.graphics.draw(texture, quads[quad_idx], x + ox, y + oy)
+            local x = coord.x * quad_w
+            local y = coord.y * quad_h
+            love.graphics.draw(texture, quads[quad_idx], x, y)            
         end
 
-        love.graphics.setColor(unpack(fill_color))
-        love.graphics.rectangle('fill', x + quad_w, y + quad_h, quad_w * 3, quad_h * 3)
+        local color_info = ColorHelper.getColors(texture, quads[270], true)[1]
+        love.graphics.setColor(unpack(color_info.color))
+        love.graphics.rectangle('fill', quad_w, quad_h, quad_w * 3, quad_h * 3)        
+    end)
+
+    return canvas
+end
+
+Minimap.new = function(player)
+    local background = generateBackgroundTexture()
+
+    local draw = function(self, x, y)
+        love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
+        love.graphics.draw(background, x, y)
     end
 
     local getSize = function()
-        return quad_w * 5, quad_h * 5
+        return background:getDimensions()
     end
 
     return setmetatable({
