@@ -31,24 +31,26 @@ PlayerInfo.new = function(player)
         love.graphics.line(x + 0.5, 0, x + 0.5, h)
 
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0) 
-        portrait:draw(x + mfloor((w - portrait_w) / 2), 20)
+        portrait:draw(x + 20, 20)
+        -- portrait:draw(x + mfloor((w - portrait_w) / 2), 20)
 
+        local ox = x + 20
+        local oy = minimap_h + 40
         local stats = player:getComponent(Stats)
-
-        local ox = x + 40
-        local oy = portrait_h + 40
-        love.graphics.print("STR:  " .. stats:getValue('str'), ox, oy)
-        love.graphics.print("DEX:  " .. stats:getValue('dex'), ox, oy + 20)
-        love.graphics.print("MIND: " .. stats:getValue('mind'), ox, oy + 40)
+        love.graphics.print("STATS", ox, oy)
+        love.graphics.print("STR:  " .. stats:getValue('str'), ox, oy + 20)
+        love.graphics.print("DEX:  " .. stats:getValue('dex'), ox, oy + 40)
+        love.graphics.print("MIND: " .. stats:getValue('mind'), ox, oy + 60)
 
         local skills = player:getComponent(Skills)
-        love.graphics.print("PHYS: " .. skills:getValue('phys'), ox, oy + 80)
-        love.graphics.print("SUBT: " .. skills:getValue('subt'), ox, oy + 100)
-        love.graphics.print("KNOW: " .. skills:getValue('know'), ox, oy + 120)
-        love.graphics.print("COMM: " .. skills:getValue('comm'), ox, oy + 140)
+        love.graphics.print("SKILLS", WINDOW_W - 100, oy)
+        love.graphics.print("PHYS: " .. skills:getValue('phys'), WINDOW_W - 100, oy + 20)
+        love.graphics.print("SUBT: " .. skills:getValue('subt'), WINDOW_W - 100, oy + 40)
+        love.graphics.print("KNOW: " .. skills:getValue('know'), WINDOW_W - 100, oy + 60)
+        love.graphics.print("COMM: " .. skills:getValue('comm'), WINDOW_W - 100, oy + 80)
 
         ox = mfloor((w - minimap_w) / 2)        
-        minimap:draw(x + ox, oy + 160)
+        minimap:draw(WINDOW_W - minimap_w - 20, 20)
     end
 
     return setmetatable({
