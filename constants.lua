@@ -6,7 +6,7 @@
 --]]
 
 TILE_SIZE           = 48
-MAP_SIZE            = 100
+MAP_SIZE            = 40
 DUNGEON_LEVELS      = 40
 SCALE               = 1.0
 TURN_DURATION       = 0.2

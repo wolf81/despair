@@ -114,7 +114,8 @@ M.generate = function(map_size, corr_size)
                 end
             end
 
-            -- always add south-east corner tile
+            -- always add north-west & south-east corner tiles
+            tiles[y1 - 1][x1 - 1] = 1
             tiles[y2][x2] = 1
 
             -- north blocked: add wall tiles

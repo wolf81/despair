@@ -57,7 +57,7 @@ end
 
 Level.new = function(dungeon)
     -- generate a map
-    local tiles, stair_up, stair_dn = MazeGenerator.generate(MAP_SIZE, 8)
+    local tiles, stair_up, stair_dn = MazeGenerator.generate(MAP_SIZE, 9)
 
     local map = Map(tiles, function(id) return id ~= 0 end)
     local map_w, map_h = map:getSize()
@@ -115,7 +115,7 @@ Level.new = function(dungeon)
 
         -- update fog of war
         fog:cover()     
-        local radius = 6   
+        local radius = 7
         shadowcaster:castLight(coord.x, coord.y, radius)    
 
         for y = coord.y - radius - 1, coord.y + radius + 1 do
