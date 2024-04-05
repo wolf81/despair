@@ -28,7 +28,7 @@ Game.new = function()
         end
     end
 
-    local player_info_w = 200
+    local player_info_w = INFO_PANEL_WIDTH
 
     local draw = function(self) 
         love.graphics.push()

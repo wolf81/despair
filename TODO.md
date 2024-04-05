@@ -43,5 +43,6 @@
 
 [X] fix: clean-up Visual & Animation classes - should have methods on Visual to change current animation
 [X] fix: sometimes a turn is stuck for a full duration when NPC is destroyed
+[X] fix: mouse pointer positioning / coord calculations due to addition of side panel
 [ ] fix: sometimes monsters stay visible under fog of war
 [ ] fix: rendering is buggy if 2 items with same z-index (e.g. tomes) are stacked on top of each other
