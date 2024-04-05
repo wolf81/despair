@@ -106,10 +106,10 @@ Level.new = function(dungeon, level_idx)
         self:setBlocked(entity.coord, false)
         self:setBlocked(coord, true)
 
-        if entity.type ~= 'pc' then 
+        if entity.type ~= 'pc' then
             if fog:isVisible(coord.x, coord.y) then
                 entity:getComponent(Visual):fadeIn(0.2)
-            elseif fog:isVisible(entity.coord.x, entity.coord.y) then
+            else
                 entity:getComponent(Visual):fadeOut(0.2)
             end
 
@@ -124,27 +124,23 @@ Level.new = function(dungeon, level_idx)
         local cartographer = entity:getComponent(Cartographer)
         cartographer:updateChart(coord, map)
 
-        for y = coord.y - radius - 1, coord.y + radius + 1 do
-            for x = coord.x - radius - 1, coord.x + radius + 1 do
-                if not fog:isVisible(x, y) then
-                    -- hide any npcs here
-                    for _, entity in ipairs(self:getEntities(vector(x, y))) do
-                        local visual = entity:getComponent(Visual)
-                        if not visual then goto continue end
+        for y = coord.y - radius - 3, coord.y + radius + 3 do
+            for x = coord.x - radius - 3, coord.x + radius + 3 do
+                local coord = vector(x, y)
+                local is_visible = fog:isVisible(x, y)
 
-                        visual:fadeOut(0.2)
+                for _, entity in ipairs(self:getEntities(coord)) do
+                    local visual = entity:getComponent(Visual)
 
-                        ::continue::
+                    if not visual then goto continue end
+
+                    if is_visible then
+                        visual:fadeIn(0)
+                    else
+                        visual:fadeOut(0)
                     end
-                elseif fog:isVisible(x, y) then
-                    for _, entity in ipairs(self:getEntities(vector(x, y))) do
-                        local visual = entity:getComponent(Visual)
-                        if not visual then goto continue end
 
-                        visual:fadeIn(0.2)
-                        
-                        ::continue::
-                    end
+                    ::continue::
                 end
             end
         end
