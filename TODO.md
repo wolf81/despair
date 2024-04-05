@@ -30,6 +30,9 @@
 [ ] feat: Implement magic missile spell
 [ ] feat: Make generic bar view class that can be used for health, hunger, mana, ...
 [ ] feat: MAP_SIZE should use absolute value, e.g. 100, for use with minimap
+[ ] feat: For systems, add a draw method and optional sort method, to use for rendering & allow removal of draw method in Entity class
+[ ] feat: HealthBar system should not be drawn from Visual system after making above change
+[ ] feat: Get experience for killing monsters and level up
 
 ## LIB
 
