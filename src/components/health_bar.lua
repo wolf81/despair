@@ -17,7 +17,7 @@ local HealthBars = {
     [10] = nil,
 }
 
-local function renderBar(texture, empty_quad, filled_quad, value)
+local function generateBarTexture(texture, empty_quad, filled_quad, value)
     local _, _, quad_w, quad_h = empty_quad:getViewport()
     local canvas = love.graphics.newCanvas(TILE_SIZE, quad_h)
     local x = mfloor(mmax((TILE_SIZE - quad_w) / 2, 0))
@@ -39,7 +39,7 @@ HealthBar.preload = function()
     local empty_quad, filled_quad = quads[255], quads[254]
 
     for i = 0, 10 do
-        HealthBars[i] = renderBar(texture, empty_quad, filled_quad, i)
+        HealthBars[i] = generateBarTexture(texture, empty_quad, filled_quad, i)
     end
 end
 

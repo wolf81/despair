@@ -7,16 +7,16 @@
 
 local mmax = math.max
 
-local Weapon = {}
+local Offense = {}
 
-Weapon.new = function(entity, def)
+Offense.new = function(entity, def)
     local equipment = entity:getComponent(Equipment)
     assert(equipment ~= nil, 'missing component: "Equipment"')
 
     -- TODO: it should not be possible to have no weapon equipped, mainly important for players, 
     -- maybe humanoids - to use fist weapons if other weapons are unequipped
 
-    local getAttack = function(self)
+    local getAttackValue = function(self)
         local weapon = equipment:getItem('mainhand')
         local base = weapon ~= 0 and weapon.attack or 0
         local bonus = 0
@@ -51,7 +51,7 @@ Weapon.new = function(entity, def)
         return base + bonus
     end
 
-    local getDamage = function(self, is_crit)
+    local getDamageValue = function(self, is_crit)
         is_crit = (is_crit == true) or false
 
         local base, bonus = 0, 0
@@ -77,11 +77,11 @@ Weapon.new = function(entity, def)
 
     return setmetatable({
         -- methods
-        getAttack   = getAttack,
-        getDamage   = getDamage,
-    }, Weapon)
+        getAttackValue  = getAttackValue,
+        getDamageValue  = getDamageValue,
+    }, Offense)
 end
 
-return setmetatable(Weapon, {
-    __call = function(_, ...) return Weapon.new(...) end,
+return setmetatable(Offense, {
+    __call = function(_, ...) return Offense.new(...) end,
 })

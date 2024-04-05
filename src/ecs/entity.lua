@@ -29,12 +29,6 @@ Entity.new = function(def, coord)
         return components[T]
     end
 
-    -- update entity with delta time and level state
-    -- currently an empty implementation as the component system handles updating of components
-    local update = function(self, dt, level)
-        -- body
-    end
-
     -- draw the entity
     local draw = function(self)
         -- TODO: all entities should have at least a "dummy" Visual component
@@ -54,7 +48,6 @@ Entity.new = function(def, coord)
         getComponent    = getComponent,
         removeComponent = removeComponent,
         addComponent    = addComponent,
-        update          = update,
         draw            = draw,
     }, Entity)
 end
