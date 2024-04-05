@@ -12,7 +12,7 @@ local Game = {}
 Game.new = function()
     -- love.math.setRandomSeed(1)
 
-    local player = EntityFactory.create('pc3')
+    local player = EntityFactory.create('pc2')
     local player_info = PlayerInfo(player)
 
     local dungeon = Dungeon(player)

@@ -21,8 +21,9 @@
 [X] feat: Implement health recovery over time
 [X] feat: Add proper arrow image for bows 
 [X] feat: Move alpha related code from Animation to Visual component
+[X] feat: Implement hunger
+[ ] feat: Implement food, food should increase energy
 [ ] feat: Prevent stairs from being hidden under fog of war
-[ ] feat: Implement hunger
 [ ] feat: Generate monsters randomly just outside visible area of player
 [ ] feat: Implement level saving and loading
 [ ] feat: Improve variety of textures in dungeon
