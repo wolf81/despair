@@ -6,18 +6,20 @@
 --]]
 
 TILE_SIZE           = 48
-MAP_SIZE            = 4
+MAP_SIZE            = 40
 DUNGEON_LEVELS      = 40
 SCALE               = 1.0
 TURN_DURATION       = 0.2
 TURN_DELAY          = 3.0
-GAME_SPEED          = 4.0
+GAME_SPEED          = 5.0
 ANIM_DURATION       = TURN_DURATION
 
 ACTION_BASE_AP_COST = 30
 
-WINDOW_W            = 640
-WINDOW_H            = 480
+WINDOW_W            = 800
+WINDOW_H            = 450
+
+INFO_PANEL_WIDTH    = 260
 
 CLASSES = {
     ['fighter']     = true,
@@ -32,3 +34,7 @@ RACES = {
     ['dwarf']       = true,
     ['elf']         = true,
 }
+
+FONT_CHARS = "1234567890!#$%&*()-+=[]:;\"'<>,.?/abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+FONT = love.graphics.newImageFont('gfx/image_font.png', FONT_CHARS)

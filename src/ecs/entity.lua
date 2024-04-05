@@ -9,8 +9,8 @@ local Entity = {}
 
 -- create a new entity based on a definition and a coordinate
 Entity.new = function(def, coord)
-    assert(def ~= nil, 'missing parameter "def"')
-    assert(coord ~= nil, 'missing parameter "coord"')
+    assert(def ~= nil, 'missing argument "def"')
+    assert(coord ~= nil, 'missing argument "coord"')
     
     local components = {}
 
@@ -27,12 +27,6 @@ Entity.new = function(def, coord)
     -- get a component by type
     local getComponent = function(self, T)
         return components[T]
-    end
-
-    -- update entity with delta time and level state
-    -- currently an empty implementation as the component system handles updating of components
-    local update = function(self, dt, level)
-        -- body
     end
 
     -- draw the entity
@@ -54,7 +48,6 @@ Entity.new = function(def, coord)
         getComponent    = getComponent,
         removeComponent = removeComponent,
         addComponent    = addComponent,
-        update          = update,
         draw            = draw,
     }, Entity)
 end

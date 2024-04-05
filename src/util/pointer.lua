@@ -42,7 +42,8 @@ end
 
 M.update = function(camera, level)
     local mx, my = love.mouse.getPosition()
-    
+    mx = mx + INFO_PANEL_WIDTH / 2
+
     -- unhide mouse pointer if mouse moved and was hidden
     if not love.mouse.isVisible() and (mouse.pos.x ~= mx and mouse.pos.y ~= my) then 
         love.mouse.setVisible(true)

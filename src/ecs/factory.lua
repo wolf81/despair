@@ -49,7 +49,7 @@ end
 M.create = function(id, coord)
     local def = definitions[id]
 
-    assert(id ~= nil, 'missing parameter: "id"')
+    assert(id ~= nil, 'missing argument: "id"')
     
     print('create: ' .. id .. ' ' .. tostring(coord))
 
@@ -76,12 +76,14 @@ M.create = function(id, coord)
         entity:addComponent(Equipment(entity, def))
         entity:addComponent(Skills(entity, def))
         entity:addComponent(Stats(entity, def))
+        entity:addComponent(Cartographer(entity, def))
         entity:addComponent(Health(entity, def))
-        entity:addComponent(Armor(entity, def))
-        entity:addComponent(Weapon(entity, def))
+        entity:addComponent(Offense(entity, def))
+        entity:addComponent(Defense(entity, def))
         entity:addComponent(ExpLevel(entity, def))
         entity:addComponent(MoveSpeed(entity, def))
         entity:addComponent(HealthBar(entity, def))
+        entity:addComponent(Energy(entity, def))
 
         -- equip all from backpack
         entity:getComponent(Equipment):equipAll()
@@ -92,8 +94,8 @@ M.create = function(id, coord)
         entity:addComponent(Equipment(entity, def))
         entity:addComponent(Skills(entity, def))
         entity:addComponent(Health(entity, def))
-        entity:addComponent(Armor(entity, def))
-        entity:addComponent(Weapon(entity, def))
+        entity:addComponent(Offense(entity, def))
+        entity:addComponent(Defense(entity, def))
         entity:addComponent(MoveSpeed(entity, def))
         entity:addComponent(HealthBar(entity, def))
 
@@ -114,27 +116,31 @@ M.create = function(id, coord)
 
         entity:addComponent(Item(entity, def))
     elseif entity.type == 'ring' then
-        entity.z_index      = 5
+        entity.z_index = 5
 
         entity:addComponent(Item(entity, def))
     elseif entity.type == 'necklace' then
-        entity.z_index      = 5
+        entity.z_index = 5
 
         entity:addComponent(Item(entity, def))
     elseif entity.type == 'potion' then
-        entity.z_index      = 5
+        entity.z_index = 5
 
         entity:addComponent(Item(entity, def))
     elseif entity.type == 'tome' then
-        entity.z_index      = 5
+        entity.z_index = 5
 
         entity:addComponent(Item(entity, def))
     elseif entity.type == 'wand' then
-        entity.z_index      = 5
+        entity.z_index = 5
 
         entity:addComponent(Item(entity, def))
+    elseif entity.type == 'food' then
+        entity.z_index = 5
+
+        entity:addComponent(Item(entity, def))        
     elseif entity.type == 'effect' then
-        entity.z_index      = 20
+        entity.z_index = 20
     end
 
     return entity

@@ -3,7 +3,7 @@ local MoveSpeed = {}
 MoveSpeed.new = function(entity, def)
     local speed = def.speed
 
-    local getValue = function() return speed / 30 end
+    local getValue = function() return 30 / speed end
 
     return setmetatable({
         -- methods

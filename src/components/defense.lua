@@ -5,15 +5,15 @@
 --  info+despair@wolftrail.net
 --]]
 
-local Armor = {}
+local Defense = {}
 
-Armor.new = function(entity, def)
+Defense.new = function(entity, def)
     local equipment = entity:getComponent(Equipment)
     assert(equipment ~= nil, 'missing component: "Equipment"')
 
     local base = def['ac'] or 0
 
-    local getValue = function(self)
+    local getArmorValue = function(self)
         local bonus = 0
 
         local chest = equipment:getItem('chest')
@@ -38,10 +38,10 @@ Armor.new = function(entity, def)
 
     return setmetatable({
         -- methods
-        getValue    = getValue,
-    }, Armor)
+        getArmorValue   = getArmorValue,
+    }, Defense)
 end
 
-return setmetatable(Armor, {
-    __call = function(_, ...) return Armor.new(...) end,
+return setmetatable(Defense, {
+    __call = function(_, ...) return Defense.new(...) end,
 })

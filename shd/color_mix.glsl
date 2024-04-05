@@ -1,3 +1,10 @@
+/*
+ * Dungeon of Despair
+ *
+ * Author: Wolfgang Schreurs
+ * info+despair@wolftrail.net
+ */
+
 extern vec4 blendColor;
 extern float alpha;
 

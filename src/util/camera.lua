@@ -15,8 +15,8 @@ Camera.new = function(x, y, scale)
     local camera = HumpCamera(x or 0, y or 0, scale or 1.0)
     local follow = true
 
-    local draw = function(self, fn)
-        camera:attach()
+    local draw = function(self, fn, x, y, w, h)
+        camera:attach(x, y, w, h)
         fn()
         camera:detach()
     end

@@ -56,6 +56,10 @@ local function generateLootTable()
         loot_table[id] = 2
     end
 
+    for _, id in ipairs(EntityFactory.getIds('food')) do
+        loot_table[id] = 6
+    end
+
     return loot_table    
 end
 
@@ -77,7 +81,7 @@ local function addLoot(level, level_idx, loot_table)
             local y = lrandom(1, level_h)
             local coord = vector(x, y)
 
-            if (not level:isBlocked(coord) 
+            if ((not level:isBlocked(coord)) 
                 and coord ~= level.entry_coord 
                 and control ~= level.exit_coord) then
                 local item = EntityFactory.create(item_id, coord)
@@ -93,23 +97,24 @@ local function addLoot(level, level_idx, loot_table)
 end
 
 local function newLevel(dungeon, level_idx, loot_table)
-    local level = Level(dungeon)
+    local level = Level(dungeon, level_idx)
     addLoot(level, level_idx, loot_table)
     return level
 end
 
-Dungeon.new = function()
+Dungeon.new = function(player)
+    assert(player ~= nil, 'missing argument: "player"')
+    
     local loot_table = generateLootTable()
 
-    local player = EntityFactory.create('pc1')
     local levels, level_idx = {}, 0
     local alpha = 1.0
 
     local update = function(self, dt) levels[level_idx]:update(dt) end
 
-    local draw = function(self)
+    local draw = function(self, x, y, w, h)
         love.graphics.setColor(1.0, 1.0, 1.0, self.alpha) 
-        levels[level_idx]:draw() 
+        levels[level_idx]:draw(x, y, w, h) 
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0) 
     end
 

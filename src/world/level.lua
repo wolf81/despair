@@ -20,7 +20,7 @@ local function newMonsters(map, blocked_coords)
         'purple_jelly', 'blk_widow_mat', 'spectator', 'observer'
     }
 
-    while #monsters < 3 do
+    while #monsters < 10 do
         local x = lrandom(map.width)
         local y = lrandom(map.height)
 
@@ -55,9 +55,12 @@ local function initSystems(entities)
     return { visual_system, control_system, health_system, health_bar_system }
 end
 
-Level.new = function(dungeon)
+Level.new = function(dungeon, level_idx)
+    assert(dungeon ~= nil, 'missing argument "dungeon"')
+    assert(level_idx ~= nil, 'missing argument "level_idx"')
+
     -- generate a map
-    local tiles, stair_up, stair_dn = MazeGenerator.generate(MAP_SIZE, 5)
+    local tiles, stair_up, stair_dn = MazeGenerator.generate(MAP_SIZE, 9)
 
     local map = Map(tiles, function(id) return id ~= 0 end)
     local map_w, map_h = map:getSize()
@@ -70,7 +73,7 @@ Level.new = function(dungeon)
     local entities = { stair_up, stair_dn }
 
     -- fog of war
-    local fog = Fog(13, 10)
+    local fog = Fog(15, 10)
 
     for _, monster in ipairs(newMonsters(map, { stair_up.coord, stair_dn.coord })) do
         table.insert(entities, monster)
@@ -81,7 +84,7 @@ Level.new = function(dungeon)
     end
 
     -- add camera
-    local camera = Camera(0.0, 0.0, SCALE)
+    local camera = Camera(0.0, 0.0, 1.0)
     local follow = true
 
     -- setup ecs
@@ -90,7 +93,7 @@ Level.new = function(dungeon)
     -- setup line of sight
     local shadowcaster = Shadowcaster(
         -- is visible
-        function(x, y) return map:getTile(x, y) == 0 end, 
+        function(x, y) return map:getTile(x, y) ~= 1 end, 
         -- cast light
         function(x, y) fog:reveal(x, y) end
     )
@@ -105,20 +108,21 @@ Level.new = function(dungeon)
 
         if entity.type ~= 'pc' then 
             if fog:isVisible(coord.x, coord.y) then
-                local visual = entity:getComponent(Visual)
-                Timer.tween(0.2, visual, { alpha = 1.0 }, 'linear')
+                entity:getComponent(Visual):fadeIn(0.2)
             elseif fog:isVisible(entity.coord.x, entity.coord.y) then
-                local visual = entity:getComponent(Visual)
-                Timer.tween(0.2, visual, { alpha = 0.0 }, 'linear')
+                entity:getComponent(Visual):fadeOut(0.2)
             end
 
             return
         end
 
         -- update fog of war
-        fog:cover()     
-        local radius = 6   
-        shadowcaster:castLight(coord.x, coord.y, radius)    
+        fog:cover()
+        local radius = 7
+        shadowcaster:castLight(coord.x, coord.y, radius)
+
+        local cartographer = entity:getComponent(Cartographer)
+        cartographer:updateChart(coord, map)
 
         for y = coord.y - radius - 1, coord.y + radius + 1 do
             for x = coord.x - radius - 1, coord.x + radius + 1 do
@@ -128,7 +132,7 @@ Level.new = function(dungeon)
                         local visual = entity:getComponent(Visual)
                         if not visual then goto continue end
 
-                        Timer.tween(0.2, visual, { alpha = 0.0 }, 'linear')
+                        visual:fadeOut(0.2)
 
                         ::continue::
                     end
@@ -136,9 +140,9 @@ Level.new = function(dungeon)
                     for _, entity in ipairs(self:getEntities(vector(x, y))) do
                         local visual = entity:getComponent(Visual)
                         if not visual then goto continue end
-                        
-                        Timer.tween(0.2, visual, { alpha = 1.0 }, 'linear')
 
+                        visual:fadeIn(0.2)
+                        
                         ::continue::
                     end
                 end
@@ -155,8 +159,10 @@ Level.new = function(dungeon)
                 local backpack = entity:getComponent(Backpack)
 
                 if item then
-                    self:removeEntity(target)
-                    backpack:put(target)
+                    Timer.after(duration, function()
+                        self:removeEntity(target)
+                        backpack:put(target)
+                    end)
                 end
             end
 
@@ -168,6 +174,9 @@ Level.new = function(dungeon)
                 dungeon:nextLevel()
             end
         end
+
+        -- every step the player makes, consumes some energy
+        entity:getComponent(Energy):expend()        
     end
 
     local onDestroy = function(self, entity, duration)
@@ -220,6 +229,10 @@ Level.new = function(dungeon)
         if status.is_crit and entity == self:getPlayer() then
             camera:shake(0.5)
         end
+    end
+
+    local onEnergy = function(self, entity, message)
+        print(message)
     end
 
     local onIdle = function(self, entity, duration)
@@ -279,7 +292,7 @@ Level.new = function(dungeon)
         Pointer.update(camera, self)
     end
 
-    local draw = function(self)
+    local draw = function(self, x, y, w, h)
         camera:draw(function() 
             map:draw()
 
@@ -289,7 +302,7 @@ Level.new = function(dungeon)
 
             local ox, oy = camera:worldCoords(0, 0)
             fog:draw(ox, oy)
-        end)
+        end, x, y, w, h)
     end
 
     local isBlocked = function(self, coord)
@@ -339,11 +352,18 @@ Level.new = function(dungeon)
             ['idle']    = function(...) onIdle(self, ...)    end,
             ['attack']  = function(...) onAttack(self, ...)  end,
             ['destroy'] = function(...) onDestroy(self, ...) end,
+            ['energy']  = function(...) onEnergy(self, ...)  end,
         }
 
         for key, handler in pairs(handlers) do
             Signal.register(key, handler)
         end
+
+        local cartographer = player:getComponent(Cartographer)
+        cartographer:setLevel(level_idx, function(x, y) 
+            return fog:isVisible(x, y)
+        end)
+        cartographer:updateChart(player.coord, map)
 
         -- focus on player
         onMove(self, player, player.coord, 0)

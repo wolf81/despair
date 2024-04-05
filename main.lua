@@ -67,7 +67,7 @@ local function registerInterfaceQuads()
 
     local quads = {}
 
-    for _, quad in ipairs(QuadGenerator.generate(image, 8, 9, 584, 6, 264, 30)) do
+    for _, quad in ipairs(QuadGenerator.generate(image, 8, 8, 584, 8, 264, 30)) do
         table.insert(quads, quad)
     end
 
@@ -76,6 +76,18 @@ local function registerInterfaceQuads()
     end
 
     for _, quad in ipairs(QuadGenerator.generate(image, 28, 5, 481, 29, 28, 60)) do
+        table.insert(quads, quad)
+    end
+
+    for _, quad in ipairs(QuadGenerator.generate(image, 48, 12, 168, 10, 96, 12)) do
+        table.insert(quads, quad)
+    end
+
+    for _, quad in ipairs(QuadGenerator.generate(image, 48, 12, 168, 26, 96, 12)) do
+        table.insert(quads, quad)
+    end
+
+    for _, quad in ipairs(QuadGenerator.generate(image, 16, 16, 480, 256, 96, 144)) do
         table.insert(quads, quad)
     end
 
@@ -92,7 +104,7 @@ end
 local function registerPortraitsQuads()
     local key = 'uf_portraits'
     local image = TextureCache:get(key)
-    local quads = QuadGenerator.generate(image, 24, 24, 584, 64)
+    local quads = QuadGenerator.generate(image, 50, 50)
     QuadCache:register(key, quads)
 end
 
@@ -151,6 +163,8 @@ local function preload()
 end
 
 function love.load(args)
+    love.window.setTitle('Dungeon of Despair')
+
     preload()
 
     -- init graphics for pointer device
@@ -163,6 +177,9 @@ function love.load(args)
     for _, arg in ipairs(args) do
         if arg == '--quadsheet' then
             QuadSheetGenerator.generate()
+            love.event.quit()
+        elseif arg == '--imagefont' then
+            FontSheetGenerator.generate()            
             love.event.quit()
         end
     end

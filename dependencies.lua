@@ -23,6 +23,14 @@ Dungeon             = require 'src.world.dungeon'
 Level               = require 'src.world.level'
 Map                 = require 'src.world.map'
 
+-- hud
+PlayerInfo          = require 'src.hud.player_info'
+Portrait            = require 'src.hud.portrait'
+Minimap             = require 'src.hud.minimap'
+
+-- helpers
+ColorHelper         = require 'src.helpers.color_helper'
+
 -- util
 Shadowcaster        = require 'src.util.shadowcaster'
 Direction           = require 'src.util.direction'
@@ -48,18 +56,20 @@ Entity              = require 'src.ecs.entity'
 System              = require 'src.ecs.system'
 
 -- components
+Cartographer        = require 'src.components.cartographer'
 HealthBar           = require 'src.components.health_bar'
 MoveSpeed           = require 'src.components.move_speed'
 Equipment           = require 'src.components.equipment'
 ExpLevel            = require 'src.components.exp_level'
 Backpack            = require 'src.components.backpack'
 Control             = require 'src.components.control'
+Offense             = require 'src.components.offense'
+Defense             = require 'src.components.defense'
+Energy              = require 'src.components.energy'
 Visual              = require 'src.components.visual'
 Health              = require 'src.components.health'
-Weapon              = require 'src.components.weapon'
 Skills              = require 'src.components.skills'
 Stats               = require 'src.components.stats'
-Armor               = require 'src.components.armor'
 Item                = require 'src.components.item'
 
 -- resolvers
@@ -71,6 +81,7 @@ ShaderCache         = Cache()
 QuadCache           = Cache()
 
 -- generators
+FontSheetGenerator  = require 'src.generators.font_sheet_gen'
 QuadSheetGenerator  = require 'src.generators.quad_sheet_gen'
 QuadGenerator       = require 'src.generators.quad_gen'
 MazeGenerator       = require 'src.generators.maze_gen'

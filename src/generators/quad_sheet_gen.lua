@@ -1,3 +1,10 @@
+--[[
+--  Dungeon of Despair
+--
+--  Author: Wolfgang Schreurs
+--  info+despair@wolftrail.net
+--]]
+
 local M = {}
 
 M.generate = function()
@@ -11,7 +18,9 @@ M.generate = function()
         canvas:renderTo(function() 
             love.graphics.draw(image, 0, 0)
 
-            local quads = QuadCache:get(key)                    
+            local quads = QuadCache:get(key)
+
+            if not quads then goto continue end                    
 
             for idx, quad in ipairs(quads) do
                 local x, y, w, h = quad:getViewport()
@@ -30,6 +39,8 @@ M.generate = function()
                 end
             end
             love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
+
+            ::continue::
         end)
 
         local image_data = canvas:newImageData()

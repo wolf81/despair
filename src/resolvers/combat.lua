@@ -9,20 +9,20 @@ local M = {}
 
 M.resolve = function(entity, target)
     local health = target:getComponent(Health)
-    local armor = target:getComponent(Armor)
-    local weapon = entity:getComponent(Weapon)
+    local defense = target:getComponent(Defense)
+    local offense = entity:getComponent(Offense)
     local equipment = entity:getComponent(Equipment)
 
     local roll = ndn.dice('1d20').roll()
     local is_crit = roll == 20 -- critical hit, dealing maximum damage
     local is_miss = roll == 1 -- critical miss
-    local attack = weapon:getAttack()
-    local ac = armor:getValue()
+    local attack = offense:getAttackValue()
+    local ac = defense:getArmorValue()
     local is_hit = (is_crit == true)
     if not (is_miss and is_crit) then
         is_hit = (roll + attack) > ac
     end
-    local damage = is_hit and weapon:getDamage(is_crit) or 0
+    local damage = is_hit and offense:getDamageValue(is_crit) or 0
 
     if is_hit then
         health:harm(damage)

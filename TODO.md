@@ -18,15 +18,22 @@
 [X] feat: Implement custom mouse cursor
 [X] feat: Generate items randomly 
 [X] feat: Implement movement speed
-[ ] feat: Move alpha related code from Animation to Visual component
-[ ] feat: Implement health recovery over time
-[ ] feat: Implement hunger
+[X] feat: Implement health recovery over time
+[X] feat: Add proper arrow image for bows 
+[X] feat: Move alpha related code from Animation to Visual component
+[X] feat: Implement hunger
+[ ] feat: Implement food, food should increase energy
+[ ] feat: Prevent stairs from being hidden under fog of war
 [ ] feat: Generate monsters randomly just outside visible area of player
 [ ] feat: Implement level saving and loading
 [ ] feat: Improve variety of textures in dungeon
 [ ] feat: Use a Dijkstra map for pathfinding
 [ ] feat: Implement magic missile spell
-[ ] feat: Add proper arrow image for bows 
+[ ] feat: Make generic bar view class that can be used for health, hunger, mana, ...
+[ ] feat: MAP_SIZE should use absolute value, e.g. 100, for use with minimap
+[ ] feat: For systems, add a draw method and optional sort method, to use for rendering & allow removal of draw method in Entity class
+[ ] feat: HealthBar system should not be drawn from Visual system after making above change
+[ ] feat: Get experience for killing monsters and level up
 
 ## LIB
 
@@ -35,6 +42,8 @@
 
 ## BUGS 
 
-[X] fix: sometimes monsters stay visible under fog of war
-[ ] fix: sometimes a turn is stuck for a full duration when NPC is destroyed
-[ ] fix: clean-up Visual & Animation classes - should have methods on Visual to change current animation
+[X] fix: clean-up Visual & Animation classes - should have methods on Visual to change current animation
+[X] fix: sometimes a turn is stuck for a full duration when NPC is destroyed
+[X] fix: mouse pointer positioning / coord calculations due to addition of side panel
+[ ] fix: sometimes monsters stay visible under fog of war
+[ ] fix: rendering is buggy if 2 items with same z-index (e.g. tomes) are stacked on top of each other
