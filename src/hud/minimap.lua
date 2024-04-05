@@ -5,6 +5,8 @@
 --  info+despair@wolftrail.net
 --]]
 
+local mfloor = math.floor
+
 local Minimap = {}
 
 local function generateBackgroundTexture(size)
@@ -51,9 +53,19 @@ end
 Minimap.new = function(player)
     local background = generateBackgroundTexture(7)
 
+    local cartographer = player:getComponent(Cartographer)
+
     local draw = function(self, x, y)
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
         love.graphics.draw(background, x, y)
+
+        local w, h = self:getSize()
+
+        local chart = cartographer:getChartImage()
+        local chart_w, chart_h = cartographer:getSize()
+        local chart_x, chart_y = (w - chart_w) / 2, (h - chart_h) / 2
+
+        love.graphics.draw(chart, x + chart_x, y + chart_y)
     end
 
     local getSize = function()

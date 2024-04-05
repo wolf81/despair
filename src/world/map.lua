@@ -7,16 +7,14 @@
 
 local Map = {}
 
-Map.new = function(tiles, fn)
-    fn = fn or function(id) return false end
-
+Map.new = function(tiles)
     local height, width = #tiles, #tiles[1]
     local blocked = {}
 
     for y = 1, height do
         blocked[y] = {}
         for x = 1, width do
-            blocked[y][x] = fn(tiles[y][x]) == true
+            blocked[y][x] = tiles[y][x] == 1
         end
     end
 
@@ -50,9 +48,9 @@ Map.new = function(tiles, fn)
 
                 if tile_id == math.huge then goto continue end
 
-                local quad_idx = 22
-
-                if tile_id ~= 0 then
+                -- draw walls
+                local quad_idx = 22                
+                if tile_id == 1 then
                     quad_idx = 342
                     if y < height and tiles[y + 1][x] == 1 then
                         quad_idx = 322

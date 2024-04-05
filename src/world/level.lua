@@ -93,7 +93,7 @@ Level.new = function(dungeon, level_idx)
     -- setup line of sight
     local shadowcaster = Shadowcaster(
         -- is visible
-        function(x, y) return map:getTile(x, y) == 0 end, 
+        function(x, y) return map:getTile(x, y) ~= 1 end, 
         -- cast light
         function(x, y) fog:reveal(x, y) end
     )
@@ -122,7 +122,7 @@ Level.new = function(dungeon, level_idx)
         shadowcaster:castLight(coord.x, coord.y, radius)
 
         local cartographer = entity:getComponent(Cartographer)
-        cartographer:updateMap(coord)
+        cartographer:updateChart(coord, map)
 
         for y = coord.y - radius - 1, coord.y + radius + 1 do
             for x = coord.x - radius - 1, coord.x + radius + 1 do
@@ -360,8 +360,10 @@ Level.new = function(dungeon, level_idx)
         end
 
         local cartographer = player:getComponent(Cartographer)
-        cartographer:setLevel(level_idx, map, self.entry_coord, self.exit_coord)
-        cartographer:updateMap(player.coord)
+        cartographer:setLevel(level_idx, function(x, y) 
+            return fog:isVisible(x, y)
+        end)
+        cartographer:updateChart(player.coord, map)
 
         -- focus on player
         onMove(self, player, player.coord, 0)

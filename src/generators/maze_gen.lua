@@ -152,7 +152,7 @@ M.generate = function(map_size, corr_size)
 
     -- generate coords for stairs up & stairs down
     local stairs = {}
-    for i = 1, 2 do
+    for i = 2, 3 do
         local coord = table.remove(coords, lrandom(#coords))
         local x, y = coord:unpack()
 
@@ -161,7 +161,10 @@ M.generate = function(map_size, corr_size)
         local x1 = (x - 1) * scale + 2
         local x2 = x1 + scale - 2
 
-        table.insert(stairs, vector(lrandom(x1, x2), lrandom(y1, y2)))
+        local x, y = lrandom(x1, x2), lrandom(y1, y2)
+        tiles[y][x] = i
+
+        table.insert(stairs, vector(x, y))
     end
 
     return tiles, unpack(stairs)
