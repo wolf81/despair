@@ -55,7 +55,10 @@ local function initSystems(entities)
     return { visual_system, control_system, health_system, health_bar_system }
 end
 
-Level.new = function(dungeon)
+Level.new = function(dungeon, level_idx)
+    assert(dungeon ~= nil, 'missing argument "dungeon"')
+    assert(level_idx ~= nil, 'missing argument "level_idx"')
+
     -- generate a map
     local tiles, stair_up, stair_dn = MazeGenerator.generate(MAP_SIZE, 9)
 
@@ -114,9 +117,12 @@ Level.new = function(dungeon)
         end
 
         -- update fog of war
-        fog:cover()     
+        fog:cover()
         local radius = 7
-        shadowcaster:castLight(coord.x, coord.y, radius)    
+        shadowcaster:castLight(coord.x, coord.y, radius)
+
+        local cartographer = entity:getComponent(Cartographer)
+        cartographer:updateMap(coord)
 
         for y = coord.y - radius - 1, coord.y + radius + 1 do
             for x = coord.x - radius - 1, coord.x + radius + 1 do
@@ -352,6 +358,10 @@ Level.new = function(dungeon)
         for key, handler in pairs(handlers) do
             Signal.register(key, handler)
         end
+
+        local cartographer = player:getComponent(Cartographer)
+        cartographer:setLevel(level_idx, map, self.entry_coord, self.exit_coord)
+        cartographer:updateMap(player.coord)
 
         -- focus on player
         onMove(self, player, player.coord, 0)

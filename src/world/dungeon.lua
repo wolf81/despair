@@ -93,7 +93,7 @@ local function addLoot(level, level_idx, loot_table)
 end
 
 local function newLevel(dungeon, level_idx, loot_table)
-    local level = Level(dungeon)
+    local level = Level(dungeon, level_idx)
     addLoot(level, level_idx, loot_table)
     return level
 end
