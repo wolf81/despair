@@ -116,27 +116,31 @@ M.create = function(id, coord)
 
         entity:addComponent(Item(entity, def))
     elseif entity.type == 'ring' then
-        entity.z_index      = 5
+        entity.z_index = 5
 
         entity:addComponent(Item(entity, def))
     elseif entity.type == 'necklace' then
-        entity.z_index      = 5
+        entity.z_index = 5
 
         entity:addComponent(Item(entity, def))
     elseif entity.type == 'potion' then
-        entity.z_index      = 5
+        entity.z_index = 5
 
         entity:addComponent(Item(entity, def))
     elseif entity.type == 'tome' then
-        entity.z_index      = 5
+        entity.z_index = 5
 
         entity:addComponent(Item(entity, def))
     elseif entity.type == 'wand' then
-        entity.z_index      = 5
+        entity.z_index = 5
 
         entity:addComponent(Item(entity, def))
+    elseif entity.type == 'food' then
+        entity.z_index = 5
+
+        entity:addComponent(Item(entity, def))        
     elseif entity.type == 'effect' then
-        entity.z_index      = 20
+        entity.z_index = 20
     end
 
     return entity
