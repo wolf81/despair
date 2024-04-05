@@ -10,7 +10,7 @@ local Attack = {}
 Attack.new = function(level, entity, target)
     local did_execute, is_finished = false, false
 
-    local duration = 2.0 / GAME_SPEED
+    local duration = 5.0 / GAME_SPEED
 
     local execute = function(self)
         if did_execute then return end
