@@ -25,6 +25,7 @@ Map                 = require 'src.world.map'
 
 -- hud
 PlayerInfo          = require 'src.hud.player_info'
+Inventory           = require 'src.hud.inventory'
 Portrait            = require 'src.hud.portrait'
 Minimap             = require 'src.hud.minimap'
 

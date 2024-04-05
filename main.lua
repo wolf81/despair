@@ -201,7 +201,5 @@ function love.keypressed(key, scancode, isrepeat)
         love.event.quit()
     end
 
-    if key == 'space' then
-        game:togglePaused()
-    end
+    game:keyPressed(key, scancode)
 end
