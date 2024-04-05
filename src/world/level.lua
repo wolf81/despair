@@ -57,7 +57,7 @@ end
 
 Level.new = function(dungeon)
     -- generate a map
-    local tiles, stair_up, stair_dn = MazeGenerator.generate(MAP_SIZE, 5)
+    local tiles, stair_up, stair_dn = MazeGenerator.generate(MAP_SIZE, 8)
 
     local map = Map(tiles, function(id) return id ~= 0 end)
     local map_w, map_h = map:getSize()
@@ -70,7 +70,7 @@ Level.new = function(dungeon)
     local entities = { stair_up, stair_dn }
 
     -- fog of war
-    local fog = Fog(13, 10)
+    local fog = Fog(15, 10)
 
     for _, monster in ipairs(newMonsters(map, { stair_up.coord, stair_dn.coord })) do
         table.insert(entities, monster)

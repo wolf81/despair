@@ -57,11 +57,17 @@ local function newGrid(size, fn)
     return grid
 end
 
-M.generate = function(size, scale)
-    scale = math.max(scale or 1, 1)
+M.generate = function(map_size, corr_size)
+    -- scale = math.max(scale or 1, 1)
+    corr_size = math.max(corr_size, 1)
+
+    -- scale the grid by taking into account corridor wall tiles
+    local scale = corr_size + 1
+
+    local grid_size = math.floor(map_size / scale)
 
     -- create a maze using recursive backtracker algorithm
-    local grid = newGrid(size)
+    local grid = newGrid(grid_size)
     carvePassage(1, 1, grid)
 
     -- remove some dead-ends 
@@ -81,64 +87,65 @@ M.generate = function(size, scale)
         end
     end
 
-    -- factor takes into account tile border
-    local factor = scale + 1
-
     -- keep track of empty coords, so we can add stairs later
     local coords = {}
 
-    -- create tiles array and set initial borders
-    local tiles = newGrid(size * factor + 1, function(x, y) return math.huge end)
+    -- create tiles array and set initial borders - reserve room for north and west wall tiles
+    local tiles = newGrid(grid_size * scale + 2, function(x, y) return math.huge end)
 
     -- configure tiles in tiles array, based on grid
-    for y = 1, size do
-        for x = 1, size do
+    for y = 1, grid_size do
+        for x = 1, grid_size do
             local v = grid[y][x]
 
-            if v ~= 0 then
-                -- possible grid coords for stairs
-                table.insert(coords, vector(x, y))
+            if v == 0 then goto continue end
 
-                local y1, y2 = (y - 1) * factor + 1, y * factor + 1
-                local x1, x2 = (x - 1) * factor + 1, x * factor + 1
+            table.insert(coords, vector(x, y))
 
-                -- add ground tiles
-                for ny = y1, y2 do
-                    for nx = x1, x2 do
-                        if tiles[ny][nx] == math.huge then
-                            tiles[ny][nx] = 0
-                        end
-                    end
-                end
-                
-                -- north blocked: add wall tiles
-                if bband(v, Dir.N) == 0 then
-                    for nx = x1, x2 do
-                        tiles[y1][nx] = 1 
-                    end
-                end
+            local y1 = (y - 1) * scale + 2
+            local y2 = y1 + scale - 1
+            local x1 = (x - 1) * scale + 2
+            local x2 = x1 + scale - 1
 
-                -- south blocked: add wall tiles
-                if bband(v, Dir.S) == 0 then
-                    for nx = x1, x2 do
-                        tiles[y2][nx] = 1 
-                    end
-                end
-
-                -- east blocked: add wall tiles
-                if bband(v, Dir.E) == 0 then
-                    for ny = y1, y2 do
-                        tiles[ny][x2] = 1 
-                    end
-                end
-
-                -- west blocked: add wall tiles
-                if bband(v, Dir.W) == 0 then
-                    for ny = y1, y2 do
-                        tiles[ny][x1] = 1 
-                    end
+            -- add floor tiles
+            for ny = y1, y2 do
+                for nx = x1, x2 do
+                    tiles[ny][nx] = 0
                 end
             end
+
+            -- always add south-east corner tile
+            tiles[y2][x2] = 1
+
+            -- north blocked: add wall tiles
+            if bband(v, Dir.N) == 0 then
+                for nx = x1, x2 do
+                    tiles[y1 - 1][nx] = 1 
+                end
+            end
+
+            -- west blocked: add wall tiles
+            if bband(v, Dir.W) == 0 then
+                for ny = y1, y2 do
+                    tiles[ny][x1 - 1] = 1 
+                end
+            end
+
+            -- south blocked: add wall tiles
+            if bband(v, Dir.S) == 0 then
+                for nx = x1, x2 do
+                    tiles[y2][nx] = 1 
+                end
+            end
+
+            -- east blocked: add wall tiles
+            if bband(v, Dir.E) == 0 then
+                for ny = y1, y2 do
+                    tiles[ny][x2] = 1 
+                end
+            end
+
+            ::continue::
         end
     end
 
@@ -147,8 +154,12 @@ M.generate = function(size, scale)
     for i = 1, 2 do
         local coord = table.remove(coords, lrandom(#coords))
         local x, y = coord:unpack()
-        local y1, y2 = (y - 1) * factor + 2, y * factor
-        local x1, x2 = (x - 1) * factor + 2, x * factor
+
+        local y1 = (y - 1) * scale + 2
+        local y2 = y1 + scale - 2
+        local x1 = (x - 1) * scale + 2
+        local x2 = x1 + scale - 2
+
         table.insert(stairs, vector(lrandom(x1, x2), lrandom(y1, y2)))
     end
 

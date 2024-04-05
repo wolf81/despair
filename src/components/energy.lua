@@ -7,7 +7,7 @@
 
 local Energy = {}
 
-local MAX_ENERGY = 100
+local MAX_ENERGY = 200
 
 Energy.new = function(entity, def)
     local health = entity:getComponent(Health)
