@@ -46,7 +46,7 @@ Game.new = function()
         if show_inventory then
             local inv_w, inv_h = inventory:getSize()
             local inv_x = mfloor((WINDOW_W - player_info_w - inv_w) / 2)
-            local inv_y = WINDOW_H - inv_h - 25
+            local inv_y = mfloor((WINDOW_H - inv_h) / 2)
             inventory:draw(inv_x, inv_y, inv_w, inv_h)
         end
 

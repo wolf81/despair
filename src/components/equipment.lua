@@ -12,7 +12,15 @@ local Equipment = {}
 local SLOTS = { 
     ['mainhand']    = true, 
     ['offhand']     = true, 
+    ['head']        = true,
+    ['back']        = true, -- cloak
     ['chest']       = true,
+    ['hands']       = true,
+    ['legs']        = true,
+    ['feet']        = true,
+    ['neck']        = true, -- necklace
+    ['ring1']       = true,
+    ['ring2']       = true,
 }
 
 Equipment.new = function(entity, def)
@@ -122,9 +130,19 @@ Equipment.new = function(entity, def)
                 self:unequip('offhand')
                 equip.mainhand = item
                 return true
-            elseif item.kind == '1h' or item.kind == 'light' then
+            elseif item.kind == 'light' then
+                if equip.mainhand ~= nil and equip.offhand == nil then
+                    print('eq offhand')
+                    equip.offhand = item
+                else
+                    print('eq mainhand')
+                    self:unequip('mainhand')
+                    equip.mainhand = item                    
+                end
+                return true
+            elseif item.kind == '1h' then
                 self:unequip('mainhand')
-                equip.mainhand = item
+                equip.mainhand = item                    
                 return true
             elseif item.kind == 'ranged_1h' then
                 self:unequip('mainhand')

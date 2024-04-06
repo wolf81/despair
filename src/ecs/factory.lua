@@ -150,4 +150,8 @@ M.getIds = function(type_name)
     return type_info[type_name]
 end
 
+M.getDefinition = function(id)
+    return definitions[id]
+end
+
 return M
