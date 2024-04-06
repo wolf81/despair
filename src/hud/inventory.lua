@@ -1,3 +1,5 @@
+local mfloor = math.floor
+
 local Inventory = {}
 
 local function drawItem(item, x, y)
@@ -11,6 +13,20 @@ end
 local function drawBackpack(x, y, w, h)
 	love.graphics.setColor(1.0, 0.0, 1.0, 1.0)
 	love.graphics.rectangle('line', x, y, w, h)
+
+	local grid_w = 48 * 6
+	local grid_h = 48 * 5
+
+	local x1 = x + mfloor((w - grid_w) / 2)
+	local x2 = x1 + grid_w
+	local y1 = y + 10
+	local y2 = y1 + grid_h
+
+	for y = y1, y2 - 48, 48 do
+		for x = x1, x2 - 48, 48 do
+			love.graphics.rectangle('line', x, y, 48, 48)
+		end		
+	end
 end
 
 local function drawEquipment(x, y, w, h, equipment) 
@@ -43,6 +59,8 @@ local function drawEquipment(x, y, w, h, equipment)
 	love.graphics.rectangle('line', x + x3, y + y4, size, size)
 	love.graphics.rectangle('line', x + x2, y + y5, size, size)
 
+	love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
+
 	local item = equipment:getItem('mainhand')
 	if item ~= nil then	
 		drawItem(item, x + x1, y + y2)
@@ -59,9 +77,35 @@ local function drawEquipment(x, y, w, h, equipment)
 	end
 end
 
-local function drawCombatStats(x, y, w, h)
+local function getDamageText(damage_info)
+	local dice = ndn.dice(damage_info.weapon)
+	local min, max = dice:range()
+	return min + damage_info.bonus .. '-' .. max + damage_info.bonus
+end
+
+local function drawCombatStats(player, x, y, w, h)
+	local offense = player:getComponent(Offense)
+	local defense = player:getComponent(Defense)
+
 	love.graphics.setColor(1.0, 0.0, 1.0, 1.0)
 	love.graphics.rectangle('line', x, y, w, h)	
+
+	local text_h = FONT:getHeight()
+
+	local att_value = 'ATTACK BONUS: ' .. offense:getAttackValue()
+	
+	local _, damage_info = offense:getDamageValue()
+
+	local dmg_value = 'DAMAGE:       ' .. getDamageText(damage_info)
+	local ac_value  = 'ARMOR CLASS:  ' .. defense:getArmorValue()
+
+	local y1 = y + h - 20 * 4
+
+	love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
+	love.graphics.print('COMBAT STATS', x + 10, y1 - 20)
+	love.graphics.print(att_value, x + 10, y1 + 20)
+	love.graphics.print(dmg_value, x + 10, y1 + 40)
+	love.graphics.print(ac_value, x + 10, y1 + 60)
 end
 
 Inventory.new = function(player)
@@ -74,12 +118,12 @@ Inventory.new = function(player)
 	end
 
 	local draw = function(self, x, y)
-		love.graphics.setColor(1.0, 0.0, 1.0, 0.5)
-		love.graphics.rectangle('line', x, y, w, h)
+		love.graphics.setColor(0.1, 0.1, 0.1, 0.5)
+		love.graphics.rectangle('fill', x, y, w, h)
 
 		drawEquipment(x, y, 184, 300, equipment)
 		drawBackpack(x + 184, y, 316, 300)
-		drawCombatStats(x, y + 300, 184, 110)
+		drawCombatStats(player, x, y + 300, 184, 110)
 	end
 
 	local getSize = function(self) 
