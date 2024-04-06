@@ -118,12 +118,12 @@ Inventory.new = function(player)
 	end
 
 	local draw = function(self, x, y)
-		love.graphics.setColor(0.1, 0.1, 0.1, 0.5)
-		love.graphics.rectangle('fill', x, y, w, h)
+		love.graphics.setColor(0.1, 0.1, 0.1, 1.0)
+		love.graphics.rectangle('fill', x + 0.5, y + 0.5, w, h)
 
-		drawEquipment(x, y, 184, 300, equipment)
-		drawBackpack(x + 184, y, 316, 300)
-		drawCombatStats(player, x, y + 300, 184, 110)
+		drawEquipment(x + 0.5, y + 0.5, 184, 300, equipment)
+		drawBackpack(x + 184 + 0.5, y + 0.5, 316, 300)
+		drawCombatStats(player, x + 0.5, y + 300 + 0.5, 184, 110)
 	end
 
 	local getSize = function(self) 
