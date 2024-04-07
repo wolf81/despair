@@ -18,7 +18,7 @@ Offense.new = function(entity, def)
 
     local getAttackValue = function(self)
         local weapon = equipment:getItem('mainhand')
-        local base = weapon ~= 0 and weapon.attack or 0
+        local base = weapon ~= nil and weapon.attack or 0
         local bonus = 0
 
         -- add bonuses for player characters

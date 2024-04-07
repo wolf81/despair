@@ -162,7 +162,7 @@ Equipment.new = function(entity, def)
     -- equip all items from backpack
     local equipAll = function(self)
         for item in backpack:each() do
-            self:equip(item)
+            self:equip(backpack:take(item.gid))
         end
     end
 

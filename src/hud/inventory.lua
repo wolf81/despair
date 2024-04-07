@@ -8,18 +8,18 @@ local function drawItemContainer(x, y)
 	local texture = TextureCache:get('uf_interface')
 	local quads = QuadCache:get('uf_interface')
 
-	love.graphics.draw(texture, quads[344], x, y)
-	love.graphics.draw(texture, quads[345], x + 16, y)
+	love.graphics.draw(texture, quads[334], x, y)
+	love.graphics.draw(texture, quads[335], x + 16, y)
 	love.graphics.draw(texture, quads[338], x + 32, y)
 
-	love.graphics.draw(texture, quads[346], x, y + 16)
-	love.graphics.draw(texture, quads[351], x + 32, y + 16)
+	love.graphics.draw(texture, quads[336], x, y + 16)
+	love.graphics.draw(texture, quads[341], x + 32, y + 16)
 
 	love.graphics.draw(texture, quads[339], x, y + 32)
-	love.graphics.draw(texture, quads[350], x + 16, y + 32)
-	love.graphics.draw(texture, quads[353], x + 32, y + 32)
+	love.graphics.draw(texture, quads[340], x + 16, y + 32)
+	love.graphics.draw(texture, quads[343], x + 32, y + 32)
 
-	local color_info = ColorHelper.getColors(texture, quads[344], true)[1]
+	local color_info = ColorHelper.getColors(texture, quads[334], true)[1]
 	love.graphics.setColor(color_info.color)
 	love.graphics.rectangle('fill', x + 16, y + 16, 16, 16)
 end
@@ -63,10 +63,12 @@ local function drawItem(item, x, y)
 	local texture = TextureCache:get(def.texture)
 	local quads = QuadCache:get(def.texture)
 	local frame = def.anim[1]
+
+	love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
 	love.graphics.draw(texture, quads[frame], x, y)
 end
 
-local function drawBackpack(x, y, w, h)
+local function drawBackpack(backpack, x, y, w, h)
 	local spacing = 2
 
 	local ox = 48 + spacing
@@ -78,9 +80,22 @@ local function drawBackpack(x, y, w, h)
 	local x1, x2 = x, x + ox * 5
 	local y1, y2 = y + 25, y + ox * 4 + 25
 
+	local items = {}
+	for item in backpack:each() do
+		table.insert(items, item)
+	end
+
+	local i = 1
 	for y = y1, y2, ox do
 		for x = x1, x2, ox do
 			drawItemContainer(x, y)
+
+			local item = items[i]
+			if item ~= nil then
+				drawItem(item, x, y)
+
+				i = i + 1
+			end
 		end		
 	end
 
@@ -88,7 +103,7 @@ local function drawBackpack(x, y, w, h)
 	love.graphics.print('BACKPACK', x, y + 10)
 end
 
-local function drawEquipment(x, y, w, h, equipment) 
+local function drawEquipment(equipment, x, y, w, h) 
 	local spacing, size = 2, 48
 
 	local x_offsets = {}
@@ -104,8 +119,6 @@ local function drawEquipment(x, y, w, h, equipment)
 	local y1, y2, y3, y4, y5 = unpack(y_offsets)
 
 	drawItemContainer(x + x2, y + y1)
-
-	-- love.graphics.rectangle('line', x + x2, y + y1, size, size)
 	drawItemContainer(x + x1, y + y2)
 	drawItemContainer(x + x2, y + y2)
 	drawItemContainer(x + x3, y + y2)
@@ -166,9 +179,10 @@ local function drawCombatStats(player, x, y, w, h)
 end
 
 Inventory.new = function(player)
-	local w, h = 496, 400
+	local w, h = 496, 384
 
 	local equipment = player:getComponent(Equipment)
+	local backpack = player:getComponent(Backpack)
 
 	local background = generateBackgroundTexture(w, h)
 
@@ -180,12 +194,9 @@ Inventory.new = function(player)
 		love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
 		love.graphics.draw(background, x, y)
 
-		-- love.graphics.setColor(0.1, 0.1, 0.1, 0.8)
-		-- love.graphics.rectangle('fill', x + 0.5, y + 0.5, w, h)
-
-		drawEquipment(x, y, 184, 320, equipment)
-		drawBackpack(x + 184, y, 316, 320)
-		drawCombatStats(player, x, y + 320, 184, 90)
+		drawEquipment(equipment, x, y, 184, 320)
+		drawBackpack(backpack, x + 184, y, 316, 320)
+		drawCombatStats(player, x, y + 304, 184, 90)
 	end
 
 	local getSize = function(self) 

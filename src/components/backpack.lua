@@ -48,7 +48,9 @@ function Backpack.new(entity, def)
 
             return removed
         elseif arg_type == 'number' then
-            return items[tostring(arg)]
+            local item = items[tostring(arg)]
+            items[tostring(arg)] = nil
+            return item
         end
 
         error('invalid argument type "' .. arg_type .. '"')
