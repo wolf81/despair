@@ -15,6 +15,7 @@ Control.new = function(entity, def, ...)
     local action = nil
 
     local update = function(self, dt, level)
+        --[[
         if not is_enabled then return end
 
         if action == nil or action:isFinished() then
@@ -30,6 +31,27 @@ Control.new = function(entity, def, ...)
         end
 
         if action then action:execute() end
+        --]]
+    end
+
+    local performAction = function(self, level)
+        if not is_enabled then return false end
+
+        if action == nil or action:isFinished() then
+            local health = entity:getComponent(Health)
+            if not health:isAlive() then
+                action = Destroy(level, entity)
+            else
+                for _, input_mode in ipairs(input_modes) do
+                    action = input_mode:getAction(level)
+                    if action then break end
+                end
+            end
+        end
+
+        if action then action:execute() end
+
+        return action ~= nil
     end
     
     local setEnabled = function(self, flag)
@@ -38,8 +60,9 @@ Control.new = function(entity, def, ...)
 
     return setmetatable({             
         -- methods
-        update      = update,
-        setEnabled  = setEnabled,
+        update          = update,
+        setEnabled      = setEnabled,
+        performAction   = performAction,
     }, Control)
 end
 

@@ -19,7 +19,7 @@ local function drawBackpack(x, y, w, h)
 
 	local x1 = x + mfloor((w - grid_w) / 2)
 	local x2 = x1 + grid_w
-	local y1 = y + 10
+	local y1 = y + 10 + 20
 	local y2 = y1 + grid_h
 
 	for y = y1, y2 - 48, 48 do
@@ -27,6 +27,9 @@ local function drawBackpack(x, y, w, h)
 			love.graphics.rectangle('line', x, y, 48, 48)
 		end		
 	end
+
+	love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
+	love.graphics.print('BACKPACK', x + 10.5, y + 10.5)
 end
 
 local function drawEquipment(x, y, w, h, equipment) 
@@ -43,7 +46,7 @@ local function drawEquipment(x, y, w, h, equipment)
 
 	local y_offsets = {}
 	for i = 1, 5 do
-		table.insert(y_offsets, i * spacing + (i - 1) * size)
+		table.insert(y_offsets, i * spacing + (i - 1) * size + 20)
 	end
 	local y1, y2, y3, y4, y5 = unpack(y_offsets)
 
@@ -60,6 +63,8 @@ local function drawEquipment(x, y, w, h, equipment)
 	love.graphics.rectangle('line', x + x2, y + y5, size, size)
 
 	love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
+
+	love.graphics.print('EQUIPMENT', x + 10.5, y + 10.5)
 
 	local item = equipment:getItem('mainhand')
 	if item ~= nil then	
@@ -102,10 +107,10 @@ local function drawCombatStats(player, x, y, w, h)
 	local y1 = y + h - 20 * 4
 
 	love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
-	love.graphics.print('COMBAT STATS', x + 10, y1 - 20)
-	love.graphics.print(att_value, x + 10, y1 + 20)
-	love.graphics.print(dmg_value, x + 10, y1 + 40)
-	love.graphics.print(ac_value, x + 10, y1 + 60)
+	love.graphics.print('COMBAT STATS', x + 10.5, y1 - 0.5)
+	love.graphics.print(att_value, x + 10.5, y1 + 20.5)
+	love.graphics.print(dmg_value, x + 10.5, y1 + 40.5)
+	love.graphics.print(ac_value, x + 10.5, y1 + 60.5)
 end
 
 Inventory.new = function(player)
@@ -118,12 +123,12 @@ Inventory.new = function(player)
 	end
 
 	local draw = function(self, x, y)
-		love.graphics.setColor(0.1, 0.1, 0.1, 1.0)
+		love.graphics.setColor(0.1, 0.1, 0.1, 0.8)
 		love.graphics.rectangle('fill', x + 0.5, y + 0.5, w, h)
 
-		drawEquipment(x + 0.5, y + 0.5, 184, 300, equipment)
-		drawBackpack(x + 184 + 0.5, y + 0.5, 316, 300)
-		drawCombatStats(player, x + 0.5, y + 300 + 0.5, 184, 110)
+		drawEquipment(x + 0.5, y + 0.5, 184, 320, equipment)
+		drawBackpack(x + 184 + 0.5, y + 0.5, 316, 320)
+		drawCombatStats(player, x + 0.5, y + 320 + 0.5, 184, 90)
 	end
 
 	local getSize = function(self) 

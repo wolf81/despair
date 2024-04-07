@@ -72,6 +72,8 @@ Level.new = function(dungeon, level_idx)
 
     local entities = { stair_up, stair_dn }
 
+    local scheduler = Scheduler()
+
     -- fog of war
     local fog = Fog(15, 10)
 
@@ -81,6 +83,8 @@ Level.new = function(dungeon, level_idx)
 
         local visual = monster:getComponent(Visual)
         visual.alpha = 0.0
+
+        scheduler:addEntity(monster)
     end
 
     -- add camera
@@ -235,6 +239,10 @@ Level.new = function(dungeon, level_idx)
         print(entity.name .. ' is idling')
     end
 
+    local onTurn = function(self, turn_idx)
+        print('TURN ' .. turn_idx)
+    end
+
     local addEntity = function(self, entity)
         table.insert(entities, entity)
 
@@ -252,6 +260,8 @@ Level.new = function(dungeon, level_idx)
                 break
             end
         end
+
+        scheduler:addEntity(entity)
     end
 
     local removeEntity = function(self, entity)    
@@ -265,6 +275,8 @@ Level.new = function(dungeon, level_idx)
         end
 
         if entity.type == 'pc' then player_idx = 0 end
+
+        scheduler:removeEntity(entity)
 
         for _, system in ipairs(systems) do
             system:removeComponent(entity)
@@ -286,6 +298,8 @@ Level.new = function(dungeon, level_idx)
         end
 
         Pointer.update(camera, self)
+
+        scheduler:update(dt, self)
     end
 
     local draw = function(self, x, y, w, h)
@@ -349,6 +363,7 @@ Level.new = function(dungeon, level_idx)
             ['attack']  = function(...) onAttack(self, ...)  end,
             ['destroy'] = function(...) onDestroy(self, ...) end,
             ['energy']  = function(...) onEnergy(self, ...)  end,
+            ['turn']    = function(...) onTurn(self, ...)    end,
         }
 
         for key, handler in pairs(handlers) do
