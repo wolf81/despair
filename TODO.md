@@ -6,7 +6,7 @@
 [x] feat: If player performs an action, turn is advanced for all entities
 [X] feat: Allow player to proceed to next level by moving on exit stairs
 [X] feat: Allow player to proceed to previous level by moving on entrance stairs
-[X] feat: Implement turn-based mechanism with auto-advancing of turns every 4 seconds
+[X] feat: Implement turn-based mechanism
 [X] feat: Implement smooth level transitions
 [X] feat: Implement fade-out animation for Destroy action
 [X] feat: Implement line of sight
@@ -17,11 +17,11 @@
 [X] feat: Implement ranged attack for player characters
 [X] feat: Implement custom mouse cursor
 [X] feat: Generate items randomly 
-[X] feat: Implement movement speed
 [X] feat: Implement health recovery over time
 [X] feat: Add proper arrow image for bows 
 [X] feat: Move alpha related code from Animation to Visual component
 [X] feat: Implement hunger
+[ ] feat: Implement movement speed
 [ ] feat: Implement food, food should increase energy
 [ ] feat: Prevent stairs from being hidden under fog of war
 [ ] feat: Generate monsters randomly just outside visible area of player

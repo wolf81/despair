@@ -15,23 +15,7 @@ Control.new = function(entity, def, ...)
     local action = nil
 
     local update = function(self, dt, level)
-        --[[
-        if not is_enabled then return end
-
-        if action == nil or action:isFinished() then
-            local health = entity:getComponent(Health)
-            if not health:isAlive() then
-                action = Destroy(level, entity)
-            else
-                for _, input_mode in ipairs(input_modes) do
-                    action = input_mode:getAction(level)
-                    if action then break end
-                end
-            end
-        end
-
-        if action then action:execute() end
-        --]]
+        -- body
     end
 
     local getAction = function(self, level)
