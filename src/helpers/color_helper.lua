@@ -13,6 +13,7 @@ M.getColors = function(image, quad, is_sorted)
     -- draw image & quad on a canvas, so we can get the image data
     local canvas = love.graphics.newCanvas(w, h)
     canvas:renderTo(function() 
+        love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
         love.graphics.draw(image, quad)
     end) 
     local image_data = canvas:newImageData()
@@ -35,8 +36,6 @@ M.getColors = function(image, quad, is_sorted)
     -- convert numeric color values into rgba components and store in table
     local colors = {}
     for rgba, count in pairs(color_info) do
-        colors[rgba] = nil
-
         local r = bit.band(bit.rshift(rgba, 24), 0xFF) / 255
         local g = bit.band(bit.rshift(rgba, 16), 0xFF) / 255
         local b = bit.band(bit.rshift(rgba, 8), 0xFF) / 255

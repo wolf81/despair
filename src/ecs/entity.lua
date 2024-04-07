@@ -37,7 +37,8 @@ Entity.new = function(def, coord)
 
     return setmetatable({
         -- properties
-        id              = IdGenerator.generate(),
+        id              = def.id,
+        gid             = IdGenerator.generate(),
         coord           = coord,
         type            = def.type,
         name            = def.name or 'Unknown',

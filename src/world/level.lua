@@ -72,6 +72,8 @@ Level.new = function(dungeon, level_idx)
 
     local entities = { stair_up, stair_dn }
 
+    local scheduler = Scheduler()
+
     -- fog of war
     local fog = Fog(15, 10)
 
@@ -81,6 +83,8 @@ Level.new = function(dungeon, level_idx)
 
         local visual = monster:getComponent(Visual)
         visual.alpha = 0.0
+
+        scheduler:addEntity(monster)
     end
 
     -- add camera
@@ -103,13 +107,10 @@ Level.new = function(dungeon, level_idx)
     end
 
     local onMove = function(self, entity, coord, duration)
-        self:setBlocked(entity.coord, false)
-        self:setBlocked(coord, true)
-
-        if entity.type ~= 'pc' then 
+        if entity.type ~= 'pc' then
             if fog:isVisible(coord.x, coord.y) then
                 entity:getComponent(Visual):fadeIn(0.2)
-            elseif fog:isVisible(entity.coord.x, entity.coord.y) then
+            else
                 entity:getComponent(Visual):fadeOut(0.2)
             end
 
@@ -124,27 +125,23 @@ Level.new = function(dungeon, level_idx)
         local cartographer = entity:getComponent(Cartographer)
         cartographer:updateChart(coord, map)
 
-        for y = coord.y - radius - 1, coord.y + radius + 1 do
-            for x = coord.x - radius - 1, coord.x + radius + 1 do
-                if not fog:isVisible(x, y) then
-                    -- hide any npcs here
-                    for _, entity in ipairs(self:getEntities(vector(x, y))) do
-                        local visual = entity:getComponent(Visual)
-                        if not visual then goto continue end
+        for y = coord.y - radius - 3, coord.y + radius + 3 do
+            for x = coord.x - radius - 3, coord.x + radius + 3 do
+                local coord = vector(x, y)
+                local is_visible = fog:isVisible(x, y)
 
-                        visual:fadeOut(0.2)
+                for _, entity in ipairs(self:getEntities(coord)) do
+                    local visual = entity:getComponent(Visual)
 
-                        ::continue::
+                    if not visual then goto continue end
+
+                    if is_visible then
+                        visual:fadeIn(0)
+                    else
+                        visual:fadeOut(0)
                     end
-                elseif fog:isVisible(x, y) then
-                    for _, entity in ipairs(self:getEntities(vector(x, y))) do
-                        local visual = entity:getComponent(Visual)
-                        if not visual then goto continue end
 
-                        visual:fadeIn(0.2)
-                        
-                        ::continue::
-                    end
+                    ::continue::
                 end
             end
         end
@@ -186,7 +183,6 @@ Level.new = function(dungeon, level_idx)
         visual:fadeOut(duration)
 
         Timer.after(duration, function() 
-            self:setBlocked(entity.coord, false)
             entity.remove = true
         end)
     end
@@ -227,7 +223,7 @@ Level.new = function(dungeon, level_idx)
 
         -- show camera shake effect if player performs a critical hit
         if status.is_crit and entity == self:getPlayer() then
-            camera:shake(0.5)
+            camera:shake(0.2)
         end
     end
 
@@ -236,7 +232,13 @@ Level.new = function(dungeon, level_idx)
     end
 
     local onIdle = function(self, entity, duration)
-        print(entity.name .. ' is idling')
+        if fog:isVisible(entity.coord.x, entity.coord.y) then
+            print(entity.name .. ' is idling')
+        end
+    end
+
+    local onTurn = function(self, turn_idx)
+        print('TURN ' .. turn_idx)
     end
 
     local addEntity = function(self, entity)
@@ -256,6 +258,8 @@ Level.new = function(dungeon, level_idx)
                 break
             end
         end
+
+        scheduler:addEntity(entity)
     end
 
     local removeEntity = function(self, entity)    
@@ -269,6 +273,8 @@ Level.new = function(dungeon, level_idx)
         end
 
         if entity.type == 'pc' then player_idx = 0 end
+
+        scheduler:removeEntity(entity)
 
         for _, system in ipairs(systems) do
             system:removeComponent(entity)
@@ -290,6 +296,8 @@ Level.new = function(dungeon, level_idx)
         end
 
         Pointer.update(camera, self)
+
+        scheduler:update(dt, self)
     end
 
     local draw = function(self, x, y, w, h)
@@ -315,6 +323,10 @@ Level.new = function(dungeon, level_idx)
         return bresenham.los(coord1.x, coord1.y, coord2.x, coord2.y, function(x, y) 
             return map:getTile(x, y) == 0
         end)
+    end
+
+    local isVisible = function(self, coord)
+        return fog:isVisible(coord.x, coord.y)
     end
 
     local setBlocked = function(self, coord, flag)
@@ -353,6 +365,7 @@ Level.new = function(dungeon, level_idx)
             ['attack']  = function(...) onAttack(self, ...)  end,
             ['destroy'] = function(...) onDestroy(self, ...) end,
             ['energy']  = function(...) onEnergy(self, ...)  end,
+            ['turn']    = function(...) onTurn(self, ...)    end,
         }
 
         for key, handler in pairs(handlers) do
@@ -389,6 +402,7 @@ Level.new = function(dungeon, level_idx)
         isBlocked       = isBlocked,
         setBlocked      = setBlocked,
         inLineOfSight   = inLineOfSight,
+        isVisible       = isVisible,
         enter           = enter,
         exit            = exit,
         getSize         = getSize,

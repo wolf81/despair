@@ -79,16 +79,35 @@ local function registerInterfaceQuads()
         table.insert(quads, quad)
     end
 
-    for _, quad in ipairs(QuadGenerator.generate(image, 48, 12, 168, 10, 96, 12)) do
-        table.insert(quads, quad)
-    end
-
-    for _, quad in ipairs(QuadGenerator.generate(image, 48, 12, 168, 26, 96, 12)) do
-        table.insert(quads, quad)
-    end
-
     for _, quad in ipairs(QuadGenerator.generate(image, 16, 16, 480, 256, 96, 144)) do
         table.insert(quads, quad)
+    end
+
+    -- UI: gray, blue, brown
+    for _, x in ipairs({ 8, 168, 328 }) do
+
+        -- health, mana, energy bars
+        for _, y in ipairs({ 10, 26 }) do
+            for _, quad in ipairs(QuadGenerator.generate(image, 48, 12, x, y, 96, 12)) do
+                table.insert(quads, quad)
+            end
+        end
+
+        -- panels
+        for y = 56, 136, 16 do
+            for _, quad in ipairs(QuadGenerator.generate(image, 16, 16, x, y, 48, 16)) do
+                table.insert(quads, quad)
+            end
+
+            for _, quad in ipairs(QuadGenerator.generate(image, 8, 16, x + 48, y, 8, 16)) do
+                table.insert(quads, quad)
+            end
+
+            for _, quad in ipairs(QuadGenerator.generate(image, 16, 16, x + 56, y, 16, 16)) do
+                table.insert(quads, quad)
+            end
+        end
+
     end
 
     QuadCache:register(key, quads)
@@ -201,7 +220,5 @@ function love.keypressed(key, scancode, isrepeat)
         love.event.quit()
     end
 
-    if key == 'space' then
-        game:togglePaused()
-    end
+    game:keyPressed(key, scancode)
 end

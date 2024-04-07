@@ -18,7 +18,7 @@ Offense.new = function(entity, def)
 
     local getAttackValue = function(self)
         local weapon = equipment:getItem('mainhand')
-        local base = weapon ~= 0 and weapon.attack or 0
+        local base = weapon ~= nil and weapon.attack or 0
         local bonus = 0
 
         -- add bonuses for player characters
@@ -42,7 +42,7 @@ Offense.new = function(entity, def)
             end
         end
 
-        -- add experience level bonus, if applicable
+        -- add level bonus, if applicable
         local exp_level = entity:getComponent(ExpLevel)
         if exp_level ~= nil then
             bonus = bonus + exp_level:getValue()
@@ -72,7 +72,12 @@ Offense.new = function(entity, def)
             bonus = bonus + (weapon.kind == '2h' and str_bonus * 2 or str_bonus)
         end
 
-        return mmax(base + bonus, 1)
+        local damage_info = {
+            weapon = weapon and weapon.damage or nil, 
+            bonus = bonus             
+        }
+
+        return mmax(base + bonus, 1), damage_info
     end
 
     return setmetatable({

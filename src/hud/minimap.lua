@@ -20,18 +20,18 @@ local function generateBackgroundTexture(size)
     for y = 1, size do
         for x = 1, size do
             if y == 1 then
-                draw_info[vector(x, y)] = (x == 1 and 270) or (x == size and 275) or 271 
+                draw_info[vector(x, y)] = (x == 1 and 266) or (x == size and 271) or 267 
             elseif y == size then
-                draw_info[vector(x, y)] = (x == 1 and 280) or (x == size and 279) or 277
+                draw_info[vector(x, y)] = (x == 1 and 276) or (x == size and 275) or 273
             elseif x == 1 then
-                draw_info[vector(x, y)] = 278
+                draw_info[vector(x, y)] = 274
             elseif x == size then
-                draw_info[vector(x, y)] = 272
+                draw_info[vector(x, y)] = 268
             end
         end
     end
 
-    local _, _, quad_w, quad_h = quads[270]:getViewport()
+    local _, _, quad_w, quad_h = quads[266]:getViewport()
     local canvas = love.graphics.newCanvas(quad_w * size, quad_h * size)
     canvas:renderTo(function() 
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
@@ -42,7 +42,7 @@ local function generateBackgroundTexture(size)
             love.graphics.draw(texture, quads[quad_idx], x, y)            
         end
 
-        local color_info = ColorHelper.getColors(texture, quads[270], true)[1]
+        local color_info = ColorHelper.getColors(texture, quads[266], true)[1]
         love.graphics.setColor(unpack(color_info.color))
         love.graphics.rectangle('fill', quad_w, quad_h, quad_w * (size - 2), quad_h * (size - 2))        
     end)

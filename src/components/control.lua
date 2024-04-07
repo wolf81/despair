@@ -15,7 +15,11 @@ Control.new = function(entity, def, ...)
     local action = nil
 
     local update = function(self, dt, level)
-        if not is_enabled then return end
+        -- body
+    end
+
+    local getAction = function(self, level)
+        if not is_enabled then return false end
 
         if action == nil or action:isFinished() then
             local health = entity:getComponent(Health)
@@ -29,7 +33,7 @@ Control.new = function(entity, def, ...)
             end
         end
 
-        if action then action:execute() end
+        return action
     end
     
     local setEnabled = function(self, flag)
@@ -40,6 +44,7 @@ Control.new = function(entity, def, ...)
         -- methods
         update      = update,
         setEnabled  = setEnabled,
+        getAction   = getAction,
     }, Control)
 end
 

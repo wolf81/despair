@@ -84,6 +84,8 @@ Visual.new = function(entity, def, duration)
     end
 
     fadeOut = function(self, duration)
+        if self.alpha == 0.0 then return end
+
         if anim_handle then Timer.cancel(anim_handle) end
 
         anim_handle = Timer.tween(duration, self, { alpha = 0.0 }, 'linear', function()
@@ -92,6 +94,8 @@ Visual.new = function(entity, def, duration)
     end
 
     fadeIn = function(self, duration)
+        if self.alpha == 1.0 then return end
+
         if anim_handle then Timer.cancel(anim_handle) end
 
         anim_handle = Timer.tween(duration, self, { alpha = 1.0 }, 'linear', function() 

@@ -25,6 +25,7 @@ Map                 = require 'src.world.map'
 
 -- hud
 PlayerInfo          = require 'src.hud.player_info'
+Inventory           = require 'src.hud.inventory'
 Portrait            = require 'src.hud.portrait'
 Minimap             = require 'src.hud.minimap'
 
@@ -35,8 +36,10 @@ ColorHelper         = require 'src.helpers.color_helper'
 Shadowcaster        = require 'src.util.shadowcaster'
 Direction           = require 'src.util.direction'
 Animation           = require 'src.util.animation'
+Scheduler           = require 'src.util.scheduler'
 Pointer             = require 'src.util.pointer'
 Camera              = require 'src.util.camera'
+Turn                = require 'src.util.turn'
 Fog                 = require 'src.util.fog'
 
 -- actions
