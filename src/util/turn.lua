@@ -12,9 +12,8 @@ Turn.new = function(entities, level)
     local entity_count = #entities
     local actions = {}
 
-    table.sort(entities, function(a, b) 
-        return a.type ~= 'pc' and b.type == 'pc' 
-    end)
+    -- player should always start first, until we can implement proper initiative
+    table.sort(entities, function(a, b) return a.type == 'pc' and b.type ~= 'pc' end)
 
     local update = function(self)
         if is_finished then return end
