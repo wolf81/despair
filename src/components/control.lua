@@ -37,8 +37,6 @@ Control.new = function(entity, def, ...)
     local performAction = function(self, level)
         if not is_enabled then return false end
 
-        if action and not action:isFinished() then return false end
-
         if action == nil or action:isFinished() then
             local health = entity:getComponent(Health)
             if not health:isAlive() then
