@@ -21,7 +21,6 @@
 [X] feat: Add proper arrow image for bows 
 [X] feat: Move alpha related code from Animation to Visual component
 [X] feat: Implement hunger
-[ ] feat: Implement movement speed
 [ ] feat: Implement food, food should increase energy
 [ ] feat: Prevent stairs from being hidden under fog of war
 [ ] feat: Generate monsters randomly just outside visible area of player
@@ -35,6 +34,7 @@
 [ ] feat: HealthBar system should not be drawn from Visual system after making above change
 [ ] feat: Get experience for killing monsters and level up
 [ ] feat: Backpack should be a fixed size array, so we can make a proper inventory UI
+[ ] feat: Implement energy system, so we can properly implement movement speed for scheduler. The system should work as follows: all actions the player does, use some energy. Other entities gain this energy and use it to perform an action. In case of a move action, can move multiple times until energy is gone.  
 
 ## LIB
 
