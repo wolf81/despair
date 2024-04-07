@@ -67,36 +67,39 @@ local function drawItem(item, x, y)
 end
 
 local function drawBackpack(x, y, w, h)
-	local grid_w = 48 * 6
-	local grid_h = 48 * 5
+	local spacing = 2
 
-	local x1 = x + mfloor((w - grid_w) / 2)
-	local x2 = x1 + grid_w
-	local y1 = y + 10 + 20
-	local y2 = y1 + grid_h
+	local ox = 48 + spacing
+	local oy = 48 + spacing
 
-	for y = y1, y2 - 48, 48 do
-		for x = x1, x2 - 48, 48 do
+	local grid_w = ox * 6
+	local grid_h = ox * 5
+
+	local x1, x2 = x, x + ox * 5
+	local y1, y2 = y + 25, y + ox * 4 + 25
+
+	for y = y1, y2, ox do
+		for x = x1, x2, ox do
 			drawItemContainer(x, y)
 		end		
 	end
 
 	love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
-	love.graphics.print('BACKPACK', x + 10.5, y + 10.5)
+	love.graphics.print('BACKPACK', x, y + 10)
 end
 
 local function drawEquipment(x, y, w, h, equipment) 
-	local spacing, size = 10, 48
+	local spacing, size = 2, 48
 
 	local x_offsets = {}
 	for i = 1, 3 do
-		table.insert(x_offsets, i * spacing + (i - 1) * size)
+		table.insert(x_offsets, i * spacing + (i - 1) * size + 5)
 	end
 	local x1, x2, x3 = unpack(x_offsets)
 
 	local y_offsets = {}
 	for i = 1, 5 do
-		table.insert(y_offsets, i * spacing + (i - 1) * size + 20)
+		table.insert(y_offsets, i * spacing + (i - 1) * size + 25)
 	end
 	local y1, y2, y3, y4, y5 = unpack(y_offsets)
 
@@ -116,7 +119,7 @@ local function drawEquipment(x, y, w, h, equipment)
 
 	love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
 
-	love.graphics.print('EQUIPMENT', x + 10.5, y + 10.5)
+	love.graphics.print('EQUIPMENT', x + 10, y + 10)
 
 	local item = equipment:getItem('mainhand')
 	if item ~= nil then	
@@ -156,10 +159,10 @@ local function drawCombatStats(player, x, y, w, h)
 	local y1 = y + h - 20 * 4
 
 	love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
-	love.graphics.print('COMBAT STATS', x + 10.5, y1 - 0.5)
-	love.graphics.print(att_value, x + 10.5, y1 + text_h - 0.5)
-	love.graphics.print(dmg_value, x + 10.5, y1 + text_h * 2 - 0.5)
-	love.graphics.print(ac_value, x + 10.5, y1 + text_h * 3 - 0.5)
+	love.graphics.print('COMBAT STATS', x + 10, y1)
+	love.graphics.print(att_value, x + 10, y1 + text_h)
+	love.graphics.print(dmg_value, x + 10, y1 + text_h * 2)
+	love.graphics.print(ac_value, x + 10, y1 + text_h * 3)
 end
 
 Inventory.new = function(player)
@@ -180,9 +183,9 @@ Inventory.new = function(player)
 		-- love.graphics.setColor(0.1, 0.1, 0.1, 0.8)
 		-- love.graphics.rectangle('fill', x + 0.5, y + 0.5, w, h)
 
-		drawEquipment(x + 0.5, y + 0.5, 184, 320, equipment)
-		drawBackpack(x + 184 + 0.5, y + 0.5, 316, 320)
-		drawCombatStats(player, x + 0.5, y + 320 + 0.5, 184, 90)
+		drawEquipment(x, y, 184, 320, equipment)
+		drawBackpack(x + 184, y, 316, 320)
+		drawCombatStats(player, x, y + 320, 184, 90)
 	end
 
 	local getSize = function(self) 
