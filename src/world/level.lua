@@ -236,7 +236,9 @@ Level.new = function(dungeon, level_idx)
     end
 
     local onIdle = function(self, entity, duration)
-        print(entity.name .. ' is idling')
+        if fog:isVisible(entity.coord.x, entity.coord.y) then
+            print(entity.name .. ' is idling')
+        end
     end
 
     local onTurn = function(self, turn_idx)
@@ -327,6 +329,10 @@ Level.new = function(dungeon, level_idx)
         end)
     end
 
+    local isVisible = function(self, coord)
+        return fog:isVisible(coord.x, coord.y)
+    end
+
     local setBlocked = function(self, coord, flag)
         map:setBlocked(coord.x, coord.y, flag)
     end
@@ -400,6 +406,7 @@ Level.new = function(dungeon, level_idx)
         isBlocked       = isBlocked,
         setBlocked      = setBlocked,
         inLineOfSight   = inLineOfSight,
+        isVisible       = isVisible,
         enter           = enter,
         exit            = exit,
         getSize         = getSize,

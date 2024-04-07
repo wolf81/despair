@@ -2,6 +2,7 @@ local Scheduler = {}
 
 Scheduler.new = function()
     local turn_idx, turn_finished = 0, true
+    local turn = nil
     local entities, entity_idx = {}, 0
 
     local addEntity = function(self, entity)
@@ -23,28 +24,15 @@ Scheduler.new = function()
     local update = function(self, dt, level)
         if #entities == 0 then return end
 
-        if turn_finished then
-            turn_idx = turn_idx + 1
-            entity_idx = 1
+        if not turn or turn:isFinished() then turn = Turn(entities, level) end
 
-            Signal.emit('turn', turn_idx)
-
-            -- TODO: sort entities by initiative
-            -- table.sort(entities, function(a, b) return true end)
+        if not turn:isFinished() then 
+            turn:update(dt)
+        else
+            Signal.emit('turn', turn:getIndex())            
         end
 
-        local entity = entities[entity_idx]
-        local control = entity:getComponent(Control)
-        local success = control:performAction(level)
-
-        if success then
-            turn_finished = entity_idx == #entities
-            entity_idx = entity_idx + 1
-
-            if not turn_finished then
-                self:update(dt, level)
-            end
-        end
+        -- turn:update(dt)            
     end
 
     local getTurnIndex = function(self) return turn_idx end

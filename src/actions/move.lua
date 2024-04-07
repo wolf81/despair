@@ -19,6 +19,10 @@ Move.new = function(level, entity, coord, direction)
         duration = duration * ORDINAL_COST_FACTOR
     end
 
+    if not level:isVisible(entity.coord) and not level:isVisible(coord) then
+        duration = 0
+    end
+
     local execute = function(self)
         if did_execute then return end
 
