@@ -13,7 +13,7 @@ Turn.new = function(entities, level)
     local actions = {}
 
     table.sort(entities, function(a, b) 
-        return a.type == 'pc' and b.type ~= 'pc' 
+        return a.type ~= 'pc' and b.type == 'pc' 
     end)
 
     local update = function(self)
@@ -24,7 +24,13 @@ Turn.new = function(entities, level)
             local control = entity:getComponent(Control)
             local action = control:getAction(level)
             if action then 
-                table.insert(actions, action) 
+                if getmetatable(action) == Destroy then
+                    action:execute(0.2)
+                    entity_count = entity_count - 1
+                else
+                    table.insert(actions, action) 
+                end
+
                 table.remove(entities, i)
             end
         end

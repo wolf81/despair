@@ -183,7 +183,6 @@ Level.new = function(dungeon, level_idx)
         visual:fadeOut(duration)
 
         Timer.after(duration, function() 
-            self:setBlocked(entity.coord, false)
             entity.remove = true
         end)
     end
@@ -224,7 +223,7 @@ Level.new = function(dungeon, level_idx)
 
         -- show camera shake effect if player performs a critical hit
         if status.is_crit and entity == self:getPlayer() then
-            camera:shake(0.5)
+            camera:shake(0.2)
         end
     end
 

@@ -10,7 +10,7 @@ local Destroy = {}
 Destroy.new = function(level, entity)
     local did_execute, is_finished = false, false
 
-    local duration = 2.0 / GAME_SPEED
+    level:setBlocked(entity.coord, false)
 
     local execute = function(self, duration)
         if did_execute then return end
