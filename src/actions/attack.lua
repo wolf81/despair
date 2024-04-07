@@ -12,7 +12,7 @@ Attack.new = function(level, entity, target)
 
     local duration = 5.0 / GAME_SPEED
 
-    local execute = function(self)
+    local execute = function(self, duration)
         if did_execute then return end
 
         did_execute = true

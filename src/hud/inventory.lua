@@ -93,7 +93,6 @@ local function drawBackpack(backpack, x, y, w, h)
 			local item = items[i]
 			if item ~= nil then
 				drawItem(item, x, y)
-
 				i = i + 1
 			end
 		end		
@@ -187,7 +186,9 @@ Inventory.new = function(player)
 	local background = generateBackgroundTexture(w, h)
 
 	local update = function(self, dt) 
-		-- body
+		local mx, my = love.mouse.getPosition()
+		-- TODO: on mouse over show information? Or on left-click
+		-- TODO: use right mouse click or drag to equip?
 	end
 
 	local draw = function(self, x, y)

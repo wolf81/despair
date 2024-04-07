@@ -34,7 +34,7 @@ Control.new = function(entity, def, ...)
         --]]
     end
 
-    local performAction = function(self, level)
+    local getAction = function(self, level)
         if not is_enabled then return false end
 
         if action == nil or action:isFinished() then
@@ -49,9 +49,7 @@ Control.new = function(entity, def, ...)
             end
         end
 
-        if action then action:execute() end
-
-        return action ~= nil
+        return action
     end
     
     local setEnabled = function(self, flag)
@@ -60,9 +58,9 @@ Control.new = function(entity, def, ...)
 
     return setmetatable({             
         -- methods
-        update          = update,
-        setEnabled      = setEnabled,
-        performAction   = performAction,
+        update      = update,
+        setEnabled  = setEnabled,
+        getAction   = getAction,
     }, Control)
 end
 

@@ -34,6 +34,7 @@
 [ ] feat: For systems, add a draw method and optional sort method, to use for rendering & allow removal of draw method in Entity class
 [ ] feat: HealthBar system should not be drawn from Visual system after making above change
 [ ] feat: Get experience for killing monsters and level up
+[ ] feat: Backpack should be a fixed size array, so we can make a proper inventory UI
 
 ## LIB
 

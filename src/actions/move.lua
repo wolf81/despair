@@ -15,6 +15,9 @@ Move.new = function(level, entity, coord, direction)
     local move_speed = entity:getComponent(MoveSpeed)
     local duration = move_speed:getValue() / GAME_SPEED
 
+    level:setBlocked(entity.coord, false)
+    level:setBlocked(coord, true)
+
     if Direction.isOrdinal(direction) then
         duration = duration * ORDINAL_COST_FACTOR
     end
@@ -23,7 +26,7 @@ Move.new = function(level, entity, coord, direction)
         duration = 0
     end
 
-    local execute = function(self)
+    local execute = function(self, duration)
         if did_execute then return end
 
         did_execute = true

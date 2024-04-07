@@ -26,7 +26,11 @@ Game.new = function()
 
     local update = function(self, dt) 
         if (not is_paused) and (not show_inventory) then
-            dungeon:update(dt) 
+            dungeon:update(dt)
+        end
+
+        if show_inventory then
+            inventory:update(dt)
         end
     end
 

@@ -24,15 +24,14 @@ Scheduler.new = function()
     local update = function(self, dt, level)
         if #entities == 0 then return end
 
-        if not turn or turn:isFinished() then turn = Turn(entities, level) end
-
-        if not turn:isFinished() then 
-            turn:update(dt)
-        else
+        if not turn or turn:isFinished() then 
+            turn = Turn(entities, level) 
             Signal.emit('turn', turn:getIndex())            
         end
 
-        -- turn:update(dt)            
+        if not turn:isFinished() then 
+            turn:update(dt)
+        end
     end
 
     local getTurnIndex = function(self) return turn_idx end
