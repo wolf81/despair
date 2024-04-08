@@ -12,7 +12,7 @@ Destroy.new = function(level, entity)
 
     level:setBlocked(entity.coord, false)
 
-    local execute = function(self, duration)
+    local execute = function(self, duration, fn)
         if did_execute then return end
 
         did_execute = true
@@ -21,6 +21,8 @@ Destroy.new = function(level, entity)
 
         Timer.after(duration, function()
             is_finished = true
+            
+            if fn then fn() end
         end)
     end
 

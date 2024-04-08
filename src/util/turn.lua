@@ -37,12 +37,20 @@ Turn.new = function(entities, level)
         -- ensure the player always performs the first action
         if is_waiting_for_player then
             local control = player:getComponent(Control)
+            
+            local ap = control:getAP()
+            if ap < 0 then control:addAP(-ap) end
+
             local action = control:getAction(level)
             if action then
-                local ap = action:getCost()
+                ap = action:getCost()
                 -- always immediately execute player action
                 action:execute(TURN_DURATION)
                 is_waiting_for_player = false
+
+                for _, entity in ipairs(entities) do
+                    entity:getComponent(Control):addAP(ap)
+                end
             end  
         end
 

@@ -45,6 +45,7 @@ Fog                 = require 'src.util.fog'
 -- actions
 Destroy             = require 'src.actions.destroy'
 Attack              = require 'src.actions.attack'
+Group               = require 'src.actions.group'
 Move                = require 'src.actions.move'
 Idle                = require 'src.actions.idle'
 

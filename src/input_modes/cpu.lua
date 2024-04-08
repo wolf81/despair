@@ -15,59 +15,56 @@ local function getRandomDirection()
 end
 
 Cpu.new = function(entity)
-    local ap = -1
+    local action = nil
 
-    local getAction = function(self, level)
-        if ap < 0 then return nil end
-
-        local action = nil
-
+    local getAction = function(self, level, ap)
         local player = level:getPlayer()
-        
+
         local distance = player.coord:dist(entity.coord)
         if distance < 2 then
             local equip = entity:getComponent(Equipment)
             if equip:equipMelee() then
-                action = Attack(level, entity, player)
+                return Attack(level, entity, player)
             end
         elseif distance < 10 then
             local equip = entity:getComponent(Equipment)
             if equip:equipRanged() then
                 -- check line of sight
                 if level:inLineOfSight(entity.coord, player.coord) then
-                    action = Attack(level, entity, player)
+                    return Attack(level, entity, player)
                 end
             end
         end
 
-        if not action then
+        local moves = {}
+        while ap > 0 do    
             -- try to move in a random direction
             local direction = getRandomDirection()
             local next_coord = entity.coord + direction
 
-            -- ensure entity can move to next coord
             if not level:isBlocked(next_coord) and #level:getEntities(next_coord) == 0 then
-                action = Move(level, entity, next_coord, direction)
+                local move = Move(level, entity, next_coord, direction)
+                ap = ap - move:getCost()
+                table.insert(moves, move)
             else
-                action = Idle(level, entity)
+                local move = Idle(level, entity)
+                ap = ap - move:getCost()
+                table.insert(moves, move)
             end
         end
 
-        if action then 
-            ap = ap - action:getCost() 
+        if #moves == 1 then return moves[1] end
+
+        if #moves > 1 then
+            return Group(level, entity, moves)
         end
 
-        return action
-    end
-
-    local addAP = function(self, value)
-        ap = ap + value
+        return nil
     end
 
     return setmetatable({
         -- methods
         getAction   = getAction,
-        addAP       = addAP,
     }, Cpu)
 end
 

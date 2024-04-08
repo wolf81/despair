@@ -14,10 +14,7 @@ local ORDINAL_COST_FACTOR = 1.4
 Move.new = function(level, entity, coord, direction)
     local did_execute, is_finished = false, false
 
-    level:setBlocked(entity.coord, false)
-    level:setBlocked(coord, true)
-
-    local execute = function(self, duration)
+    local execute = function(self, duration, fn)
         if did_execute then return end
 
         did_execute = true
@@ -27,6 +24,8 @@ Move.new = function(level, entity, coord, direction)
         Timer.tween(duration, entity, { coord = coord }, 'linear', function()
             entity.coord = coord
             is_finished = true
+
+            if fn then fn() end
         end)
     end
 

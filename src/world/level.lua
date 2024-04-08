@@ -107,6 +107,9 @@ Level.new = function(dungeon, level_idx)
     end
 
     local onMove = function(self, entity, coord, duration)
+        self:setBlocked(entity.coord, false)
+        self:setBlocked(coord, true)
+
         if entity.type ~= 'pc' then
             if fog:isVisible(coord.x, coord.y) then
                 entity:getComponent(Visual):fadeIn(0.2)

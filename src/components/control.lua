@@ -14,6 +14,8 @@ Control.new = function(entity, def, ...)
     local is_enabled = true
     local action = nil
 
+    local ap = -1
+
     local update = function(self, dt, level)
         -- body
     end
@@ -26,9 +28,14 @@ Control.new = function(entity, def, ...)
             if not health:isAlive() then
                 action = Destroy(level, entity)
             else
+                if ap < 0 then return nil end
+
                 for _, input_mode in ipairs(input_modes) do
-                    action = input_mode:getAction(level)
-                    if action then break end
+                    action = input_mode:getAction(level, ap)                
+                    if action then
+                        ap = ap - action:getCost()
+                        break 
+                    end
                 end
             end
         end
@@ -40,11 +47,19 @@ Control.new = function(entity, def, ...)
         is_enabled = (flag == true)
     end
 
+    local addAP = function(self, value)
+        ap = ap + value
+    end
+
+    local getAP = function(self) return ap end
+
     return setmetatable({             
         -- methods
         update      = update,
         setEnabled  = setEnabled,
         getAction   = getAction,
+        addAP       = addAP,
+        getAP       = getAP,
     }, Control)
 end
 

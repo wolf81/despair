@@ -38,7 +38,7 @@ local isWeaponKindEquipped = function(entity, ...)
 end
 
 Mouse.new = function(entity)
-    local getAction = function(self, level)
+    local getAction = function(self, level, ap)
         if not love.mouse.isDown(1) then return end
 
         local mouse_coord = Pointer.getCoord()
