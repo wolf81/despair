@@ -5,7 +5,7 @@
 --  info+despair@wolftrail.net
 --]]
 
-local lrandom = love.math.random
+local lrandom, mfloor = love.math.random, math.floor
 
 local Cpu = {}
 
@@ -36,27 +36,33 @@ Cpu.new = function(entity)
             end
         end
 
-        local moves = {}
+        local move_speed = entity:getComponent(MoveSpeed)
+        local ap_cost = move_speed:getValue()
+
+        local coord = entity.coord
+        local coords = {}
         while ap > 0 do    
             -- try to move in a random direction
             local direction = getRandomDirection()
-            local next_coord = entity.coord + direction
+            local next_coord = coord + direction
 
             if not level:isBlocked(next_coord) and #level:getEntities(next_coord) == 0 then
-                local move = Move(level, entity, next_coord, direction)
-                ap = ap - move:getCost()
-                table.insert(moves, move)
+                table.insert(coords, next_coord)
+                coord = next_coord
+
+                if Direction.isOrdinal(direction) then
+                    ap = ap - mfloor(ap_cost * 1.4)
+                else
+                    ap = ap - ap_cost
+                end
             else
-                local move = Idle(level, entity)
-                ap = ap - move:getCost()
-                table.insert(moves, move)
+                table.insert(coords, coord)
+                ap = ap - ap_cost
             end
         end
 
-        if #moves == 1 then return moves[1] end
-
-        if #moves > 1 then
-            return Group(level, entity, moves)
+        if #coords > 0 then
+            return Move(level, entity, unpack(coords))
         end
 
         return nil

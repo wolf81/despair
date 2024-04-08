@@ -54,7 +54,7 @@ Keyboard.new = function(entity)
             return nil 
         end 
 
-        return Move(level, entity, next_coord, direction)
+        return Move(level, entity, next_coord)
     end
 
     return setmetatable({
