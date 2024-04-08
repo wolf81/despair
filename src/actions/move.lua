@@ -5,6 +5,8 @@
 --  info+despair@wolftrail.net
 --]]
 
+local mfloor = math.floor
+
 local Move = {}
 
 local ORDINAL_COST_FACTOR = 1.4
@@ -28,11 +30,22 @@ Move.new = function(level, entity, coord, direction)
         end)
     end
 
-    local isFinished = function() return is_finished end
+    local getCost = function(self) 
+        local cost = entity:getComponent(MoveSpeed):getValue()
+
+        if Direction.isOrdinal(direction) then
+            cost = mfloor(cost * ORDINAL_COST_FACTOR)
+        end
+
+        return cost
+    end
+
+    local isFinished = function(self) return is_finished end
 
     return setmetatable({
         -- methods
         execute     = execute,
+        getCost     = getCost,
         isFinished  = isFinished,
     }, Move)
 end

@@ -24,11 +24,14 @@ Attack.new = function(level, entity, target)
         end)
     end
 
-    local isFinished = function() return is_finished end
+    local getCost = function(self) return 30 end
+
+    local isFinished = function(self) return is_finished end
 
     return setmetatable({
         -- methods
         execute     = execute,
+        getCost     = getCost,
         isFinished  = isFinished,
     }, Attack)
 end
