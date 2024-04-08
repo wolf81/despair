@@ -39,6 +39,7 @@ Turn.new = function(entities, level)
             local control = player:getComponent(Control)
             local action = control:getAction(level)
             if action then
+                local ap = action:getCost()
                 -- always immediately execute player action
                 action:execute(TURN_DURATION)
                 is_waiting_for_player = false
