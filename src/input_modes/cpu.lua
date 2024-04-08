@@ -14,8 +14,26 @@ local function getRandomDirection()
     return dirs[lrandom(#dirs)]
 end
 
+local function getDirectionToPlayer(level, coord)
+    local dirs = { Direction.N, Direction.E, Direction.S, Direction.W, Direction.NW, Direction.SW, Direction.NE, Direction.SE }
+    local next_dir = Direction.NONE
+
+    local dist = math.huge
+    for _, dir in ipairs(dirs) do
+        local next_coord = coord + dir
+        local next_dist = level:getDistToPlayer(next_coord)
+        if next_dist < dist then
+            dist = next_dist
+            next_dir = dir
+        end
+    end    
+
+    return next_dir
+end
+
 Cpu.new = function(entity)
     local action = nil
+    local is_chasing_player = false
 
     local getAction = function(self, level, ap)
         local player = level:getPlayer()
@@ -42,8 +60,15 @@ Cpu.new = function(entity)
         local coord = entity.coord
         local coords = {}
         while ap > 0 do    
-            -- try to move in a random direction
+            if level:inLineOfSight(coord, player.coord) then
+                is_chasing_player = true
+            end
+
             local direction = getRandomDirection()
+            if is_chasing_player then
+                direction = getDirectionToPlayer(level, coord)
+            end
+
             local next_coord = coord + direction
 
             if not level:isBlocked(next_coord) and #level:getEntities(next_coord) == 0 then

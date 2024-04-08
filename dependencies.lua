@@ -42,6 +42,9 @@ Camera              = require 'src.util.camera'
 Turn                = require 'src.util.turn'
 Fog                 = require 'src.util.fog'
 
+-- dijkstra
+Dijkstra            = require 'src.dijkstra.dijkstra'
+
 -- actions
 Destroy             = require 'src.actions.destroy'
 Attack              = require 'src.actions.attack'

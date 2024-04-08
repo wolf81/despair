@@ -66,6 +66,10 @@ Level.new = function(dungeon, level_idx)
     local map_w, map_h = map:getSize()
     local player_idx = 0
 
+    local dijkstra_map = Dijkstra(tiles, 1, 1, 
+        function(x, y) return tiles[y][x] ~= 0 end, 
+    true)
+
     -- generate stairs using coords from maze generator
     stair_up = EntityFactory.create('dun_14', stair_up)
     stair_dn = EntityFactory.create('dun_13', stair_dn)
@@ -119,6 +123,8 @@ Level.new = function(dungeon, level_idx)
 
             return
         end
+
+        dijkstra_map:update(coord.x, coord.y)
 
         -- update fog of war
         fog:cover()
@@ -394,6 +400,10 @@ Level.new = function(dungeon, level_idx)
     end
 
     local getSize = function(self) return map_w, map_h end
+
+    local getDistToPlayer = function(self, coord)
+        return dijkstra_map:getDistance(coord.x, coord.y)
+    end
     
     return setmetatable({
         -- properties
@@ -413,6 +423,7 @@ Level.new = function(dungeon, level_idx)
         getPlayer       = getPlayer,
         getEntities     = getEntities,
         removeEntity    = removeEntity,
+        getDistToPlayer = getDistToPlayer,
     }, Level)
 end
 
