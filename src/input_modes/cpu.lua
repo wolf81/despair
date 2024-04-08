@@ -17,22 +17,19 @@ end
 Cpu.new = function(entity)
     local getAction = function(self, level)
         local player = level:getPlayer()
-        if not player then return Idle(level, entity) end
-
-        if player ~= nil then
-            local distance = player.coord:dist(entity.coord)
-            if distance < 2 then
-                local equip = entity:getComponent(Equipment)
-                if equip:equipMelee() then
+        
+        local distance = player.coord:dist(entity.coord)
+        if distance < 2 then
+            local equip = entity:getComponent(Equipment)
+            if equip:equipMelee() then
+                return Attack(level, entity, player)
+            end
+        elseif distance < 10 then
+            local equip = entity:getComponent(Equipment)
+            if equip:equipRanged() then
+                -- check line of sight
+                if level:inLineOfSight(entity.coord, player.coord) then
                     return Attack(level, entity, player)
-                end
-            elseif distance < 10 then
-                local equip = entity:getComponent(Equipment)
-                if equip:equipRanged() then
-                    -- check line of sight
-                    if level:inLineOfSight(entity.coord, player.coord) then
-                        return Attack(level, entity, player)
-                    end
                 end
             end
         end

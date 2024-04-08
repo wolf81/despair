@@ -1,3 +1,10 @@
+--[[
+--  Dungeon of Despair
+--
+--  Author: Wolfgang Schreurs
+--  info+despair@wolftrail.net
+--]]
+
 local Turn = {}
 
 local turn_idx = 0
@@ -5,43 +12,48 @@ local turn_idx = 0
 Turn.new = function(entities, level)
     turn_idx = turn_idx + 1
 
+    -- create a shallow clone of entities table, to prevent modifying entities in Scheduler
     local entities = { unpack(entities) }
-    local entity_idx = #entities
-    local is_finished = #entities == 0
 
-    local entity_count = #entities
-    local actions = {}
+    -- remove player from entity list, as player will always start first
+    local player = nil
+    for idx, entity in ipairs(entities) do
+        if entity.type == 'pc' then
+            player = table.remove(entities, idx)
+            break
+        end
+    end
 
-    -- player should always start first, until we can implement proper initiative
-    table.sort(entities, function(a, b) return a.type == 'pc' and b.type ~= 'pc' end)
+    -- keep track if turn is finished (performed actions for all all entities)
+    local is_finished = false
+
+    -- keep track if player performed an action
+    local is_waiting_for_player = true
 
     local update = function(self)
-        if is_finished then return end
+        -- ensure a player is in play (not destroyed) and turn is not finished
+        if (not player) or is_finished then return end
 
-        for i = #entities, 1, -1 do
-            local entity = entities[i]
-            local control = entity:getComponent(Control)
+        -- ensure the player always performs the first action
+        if is_waiting_for_player then
+            local control = player:getComponent(Control)
             local action = control:getAction(level)
-            if action then 
-                if getmetatable(action) == Destroy then
-                    action:execute(0.2)
-                    entity_count = entity_count - 1
-                else
-                    table.insert(actions, action) 
-                end
-
-                table.remove(entities, i)
-            end
+            if action then
+                -- always immediately execute player action
+                action:execute(TURN_DURATION)
+                is_waiting_for_player = false
+            end  
         end
 
-        if #actions == entity_count then
-            for _, action in ipairs(actions) do
-                action:execute(0.2)
+        -- after player performed an action, other entities can perform an action
+        if not is_waiting_for_player then
+            for _, entity in ipairs(entities) do
+                local control = entity:getComponent(Control)
+                local action = control:getAction(level)
+                if action then action:execute(TURN_DURATION) end
             end
 
-            Timer.after(0.2, function() 
-                is_finished = true
-            end)
+            Timer.after(TURN_DURATION, function() is_finished = true end)
         end
     end
 
