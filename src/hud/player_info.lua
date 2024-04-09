@@ -16,8 +16,12 @@ PlayerInfo.new = function(player)
     local minimap = Minimap(player)
     local minimap_w, minimap_h = minimap:getSize()
 
-    local update = function(self)
-        -- body
+    local health_bar = ResourceBar(player, 'health')
+    local energy_bar = ResourceBar(player, 'energy')
+
+    local update = function(self, dt)
+        health_bar:update(dt)
+        energy_bar:update(dt)
     end
 
     local draw = function(self, x, y, w, h)
@@ -32,7 +36,9 @@ PlayerInfo.new = function(player)
 
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0) 
         portrait:draw(x + 20, 20)
-        -- portrait:draw(x + mfloor((w - portrait_w) / 2), 20)
+
+        health_bar:draw(x + 20, 20 + portrait_h + 20)
+        energy_bar:draw(x + 20, 20 + portrait_h + 40)
 
         local ox = x + 20
         local oy = minimap_h + 40

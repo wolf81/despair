@@ -24,6 +24,7 @@ Level               = require 'src.world.level'
 Map                 = require 'src.world.map'
 
 -- hud
+ResourceBar         = require 'src.hud.resource_bar'
 PlayerInfo          = require 'src.hud.player_info'
 Inventory           = require 'src.hud.inventory'
 Portrait            = require 'src.hud.portrait'

@@ -32,6 +32,8 @@ Game.new = function()
         if show_inventory then
             inventory:update(dt)
         end
+
+        player_info:update(dt)
     end
 
     local player_info_w = INFO_PANEL_WIDTH
