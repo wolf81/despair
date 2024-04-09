@@ -19,6 +19,8 @@ PlayerInfo.new = function(player)
     local health_bar = ResourceBar(player, 'health')
     local energy_bar = ResourceBar(player, 'energy')
 
+    local bar_w, bar_h = health_bar:getSize()
+
     local update = function(self, dt)
         health_bar:update(dt)
         energy_bar:update(dt)
@@ -37,8 +39,12 @@ PlayerInfo.new = function(player)
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0) 
         portrait:draw(x + 20, 20)
 
-        health_bar:draw(x + 20, 20 + portrait_h + 20)
-        energy_bar:draw(x + 20, 20 + portrait_h + 40)
+        local bar_x = x + 21 + mfloor((portrait_w - bar_w) / 2)
+        local bar_y = 20 + portrait_h + 10
+        love.graphics.print("HEALTH", bar_x, bar_y)
+        health_bar:draw(bar_x, bar_y + 10)
+        love.graphics.print("HUNGER", bar_x, bar_y + 30)
+        energy_bar:draw(bar_x, bar_y + 40)
 
         local ox = x + 20
         local oy = minimap_h + 40

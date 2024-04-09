@@ -6,6 +6,7 @@
 --]]
 
 local mfloor, mmax = math.floor, math.max
+local SEGMENT_COUNT = 20
 
 local ResourceBar = {}
 
@@ -21,7 +22,7 @@ local function generateBarTexture(texture, empty_quad, filled_quad, value)
     canvas:renderTo(function() 
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
         love.graphics.draw(texture, empty_quad, 0, 0)
-        love.graphics.setScissor(0, 0, quad_w * (value / 10), quad_h)
+        love.graphics.setScissor(0, 0, quad_w * (value / SEGMENT_COUNT), quad_h)
         love.graphics.draw(texture, filled_quad, 0, 0)
         love.graphics.setScissor()
     end)
@@ -43,7 +44,7 @@ ResourceBar.new = function(entity, type)
     local texture_idx = 0
     local _, _, w, h = empty_quad:getViewport()
 
-    for i = 0, 10 do
+    for i = 0, SEGMENT_COUNT do
         textures[i] = generateBarTexture(texture, empty_quad, filled_quad, i)
     end
 
@@ -56,7 +57,7 @@ ResourceBar.new = function(entity, type)
 
     local update = function(self)
         local current, total = resource:getValue()
-        texture_idx = mfloor(current / total * 10)
+        texture_idx = mfloor(current / total * SEGMENT_COUNT)
     end
 
     local draw = function(self, x, y) 
