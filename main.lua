@@ -141,7 +141,7 @@ end
 
 local function preload()
     -- register entities with entity factory
-    local data_dir = 'dat/gen'
+    local data_dir = 'gen'
     local dirs = love.filesystem.getDirectoryItems(data_dir)
     for _, dir in ipairs(dirs) do
         EntityFactory.register(data_dir .. '/' .. dir)
