@@ -31,7 +31,7 @@ Move.new = function(level, entity, ...)
 
     local coord = coords[1]
 
-    local cost = ActionHelper.getMoveCost(entity, ...)
+    local ap = ActionHelper.getMoveCost(entity, unpack(coords))
 
     local execute = function(self, duration, fn)
         if did_execute then return end
@@ -45,14 +45,14 @@ Move.new = function(level, entity, ...)
         end)
     end
 
-    local getCost = function(self) return cost end
+    local getAP = function(self) return ap end
 
     local isFinished = function(self) return is_finished end
 
     return setmetatable({
         -- methods
+        getAP       = getAP,
         execute     = execute,
-        getCost     = getCost,
         isFinished  = isFinished,
     }, Move)
 end

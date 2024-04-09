@@ -26,14 +26,14 @@ Attack.new = function(level, entity, target)
         end)
     end
 
-    local getCost = function(self) return ActionHelper.getAttackCost(entity) end
+    local getAP = function(self) return ActionHelper.getAttackCost(entity) end
 
     local isFinished = function(self) return is_finished end
 
     return setmetatable({
         -- methods
+        getAP       = getAP,
         execute     = execute,
-        getCost     = getCost,
         isFinished  = isFinished,
     }, Attack)
 end

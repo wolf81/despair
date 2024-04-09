@@ -24,14 +24,14 @@ Idle.new = function(level, entity)
         end)
     end
 
-    local getCost = function(self) return ActionHelper.getIdleCost(entity) end
+    local getAP = function(self) return ActionHelper.getIdleCost(entity) end
 
     local isFinished = function(self) return is_finished end
 
     return setmetatable({
         -- methods
+        getAP       = getAP,
         execute     = execute,
-        getCost     = getCost,
         isFinished  = isFinished,
     }, Idle)
 end

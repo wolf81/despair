@@ -7,6 +7,8 @@
 
 local mfloor, mmax = math.floor, math.max
 
+local BASE_ACTION_COST = 30
+
 local M = {}
 
 M.getMoveCost = function(entity, ...)
@@ -33,18 +35,10 @@ M.getMoveCost = function(entity, ...)
     return ap
 end
 
-M.getAttackCost = function(entity)
-    return 30
-end
+M.getAttackCost = function(entity) return BASE_ACTION_COST end
 
-M.getDestroyCost = function(entity)
-    local control = entity:getComponent(Control)
-    local ap = control:getAP()
-    return mmax(ap, 0)
-end
+M.getDestroyCost = function(entity) return mmax(entity:getComponent(Control):getAP(), 0) end
 
-M.getIdleCost = function(entity)
-    return 30
-end
+M.getIdleCost = function(entity) return BASE_ACTION_COST end
 
 return M

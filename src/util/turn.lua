@@ -38,18 +38,18 @@ Turn.new = function(entities, level)
         if is_waiting_for_player then
             local control = player:getComponent(Control)
             
+            -- ensure the player has enough action points to perform a move, so AP > 0
             local ap = control:getAP()
-            if ap < 0 then control:addAP(-ap) end
+            if ap <= 0 then control:addAP(-ap + 1) end
 
             local action = control:getAction(level)
             if action then
-                ap = action:getCost()
                 -- always immediately execute player action
                 action:execute(TURN_DURATION)
                 is_waiting_for_player = false
 
                 for _, entity in ipairs(entities) do
-                    entity:getComponent(Control):addAP(ap)
+                    entity:getComponent(Control):addAP(action:getAP())
                 end
             end  
         end

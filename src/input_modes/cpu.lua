@@ -69,17 +69,17 @@ Cpu.new = function(entity)
         local path, coord = {}, entity.coord
         while ap > 0 do
             -- start chase player when player enters line of sight
-            if not is_chasing_player and level:inLineOfSight(coord, player.coord) then
+            if (not is_chasing_player) and level:inLineOfSight(coord, player.coord) then
                 is_chasing_player = true
             end
 
             local direction = Direction.NONE
 
             -- if not standing next to player, either move randomly or towards player if chasing
-            if coord:dist(player.coord) > ORDINAL_MOVE_FACTOR then 
-                direction = (is_chasing_player and 
-                    getDirectionToPlayer(level, coord) or 
-                    getRandomDirection(level, coord))
+            if coord:dist(player.coord) > ORDINAL_MOVE_FACTOR and is_chasing_player then 
+                direction = getDirectionToPlayer(level, coord) 
+            else
+                direction = getRandomDirection(level, coord)
             end 
 
             -- add next coord to path if not blocked, otherwise add current coord to path
