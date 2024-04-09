@@ -6,7 +6,7 @@ return {
 	ac = 12,
 	class = '',
 	flags = { '' },
-	speed = 30,
+	speed = 50,
 	equip = { 'bite' },
 	texture = 'uf_heroes',
 	anim = { 129, 130, 131, 132 },

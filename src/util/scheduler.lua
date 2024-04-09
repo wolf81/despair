@@ -1,3 +1,10 @@
+--[[
+--  Dungeon of Despair
+--
+--  Author: Wolfgang Schreurs
+--  info+despair@wolftrail.net
+--]]
+
 local Scheduler = {}
 
 Scheduler.new = function()
@@ -24,14 +31,12 @@ Scheduler.new = function()
     local update = function(self, dt, level)
         if #entities == 0 then return end
 
-        if not turn or turn:isFinished() then 
+        if (not turn) or turn:isFinished() then 
             turn = Turn(entities, level) 
             Signal.emit('turn', turn:getIndex())            
         end
 
-        if not turn:isFinished() then 
-            turn:update(dt)
-        end
+        if not turn:isFinished() then turn:update(dt) end
     end
 
     local getTurnIndex = function(self) return turn_idx end

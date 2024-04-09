@@ -12,7 +12,7 @@ Destroy.new = function(level, entity)
 
     level:setBlocked(entity.coord, false)
 
-    local execute = function(self, duration)
+    local execute = function(self, duration, fn)
         if did_execute then return end
 
         did_execute = true
@@ -21,13 +21,18 @@ Destroy.new = function(level, entity)
 
         Timer.after(duration, function()
             is_finished = true
+            
+            if fn then fn() end
         end)
     end
 
-    local isFinished = function() return is_finished end
+    local getAP = function(self) return ActionHelper.getDestroyCost(entity) end
+
+    local isFinished = function(self) return is_finished end
 
     return setmetatable({
         -- methods
+        getAP       = getAP,
         execute     = execute,
         isFinished  = isFinished,
     }, Destroy)

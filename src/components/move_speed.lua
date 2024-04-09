@@ -1,9 +1,16 @@
+--[[
+--  Dungeon of Despair
+--
+--  Author: Wolfgang Schreurs
+--  info+despair@wolftrail.net
+--]]
+
 local MoveSpeed = {}
 
 MoveSpeed.new = function(entity, def)
     local speed = def.speed
 
-    local getValue = function() return 30 / speed end
+    local getValue = function() return 30 / speed * 30 end
 
     return setmetatable({
         -- methods

@@ -30,6 +30,7 @@ Portrait            = require 'src.hud.portrait'
 Minimap             = require 'src.hud.minimap'
 
 -- helpers
+ActionHelper        = require 'src.helpers.action_helper'
 ColorHelper         = require 'src.helpers.color_helper'
 
 -- util
@@ -41,6 +42,9 @@ Pointer             = require 'src.util.pointer'
 Camera              = require 'src.util.camera'
 Turn                = require 'src.util.turn'
 Fog                 = require 'src.util.fog'
+
+-- dijkstra
+DijkstraMap         = require 'src.dijkstra.dijkstra'
 
 -- actions
 Destroy             = require 'src.actions.destroy'

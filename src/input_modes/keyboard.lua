@@ -8,7 +8,7 @@
 local Keyboard = {}
 
 Keyboard.new = function(entity)
-    local getAction = function(self, level)         
+    local getAction = function(self, level, ap)         
         local direction = Direction.NONE
         if love.keyboard.isDown('left') or love.keyboard.isDown('a') then
             direction = Direction.W
@@ -54,7 +54,7 @@ Keyboard.new = function(entity)
             return nil 
         end 
 
-        return Move(level, entity, next_coord, direction)
+        return Move(level, entity, next_coord)
     end
 
     return setmetatable({

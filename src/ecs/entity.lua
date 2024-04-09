@@ -31,20 +31,19 @@ Entity.new = function(def, coord)
 
     -- draw the entity
     local draw = function(self)
-        -- TODO: all entities should have at least a "dummy" Visual component
         self:getComponent(Visual):draw()
     end
 
     return setmetatable({
         -- properties
-        id              = def.id,
-        gid             = IdGenerator.generate(),
-        coord           = coord,
-        type            = def.type,
-        name            = def.name or 'Unknown',
+        id              = def.id,                   -- subtype identifier (see type)
+        gid             = IdGenerator.generate(),   -- global unique id
+        coord           = coord,                    -- tile coord
+        type            = def.type,                 -- type as defined in data file
+        name            = def.name or 'unknown',
         flags           = 0,
-        z_index         = 1,
-        remove          = false,
+        z_index         = 1,                        -- z-index for rendering
+        remove          = false,                    -- set to true to remove from play
         -- methods
         getComponent    = getComponent,
         removeComponent = removeComponent,

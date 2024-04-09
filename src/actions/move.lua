@@ -5,33 +5,53 @@
 --  info+despair@wolftrail.net
 --]]
 
+local mfloor = math.floor
+
 local Move = {}
 
-local ORDINAL_COST_FACTOR = 1.4
+local function tweenMoves(duration, entity, coords, fn)
+    local coord = table.remove(coords, 1)
 
-Move.new = function(level, entity, coord, direction)
+    Timer.tween(duration, entity, { coord = coord }, 'linear', function()
+        entity.coord = coord
+
+        if #coords > 0 then
+            tweenMoves(duration, entity, coords, fn)
+        else
+            fn()
+        end    
+    end)
+end
+
+Move.new = function(level, entity, ...)
     local did_execute, is_finished = false, false
 
-    level:setBlocked(entity.coord, false)
-    level:setBlocked(coord, true)
+    local coords = {...}
+    assert(#coords > 0, 'missing variable arguments for coords')
 
-    local execute = function(self, duration)
+    local coord = coords[1]
+
+    local ap = ActionHelper.getMoveCost(entity, unpack(coords))
+
+    local execute = function(self, duration, fn)
         if did_execute then return end
 
         did_execute = true
 
-        Signal.emit('move', entity, coord, duration)
+        Signal.emit('move', entity, coords[#coords], duration)
 
-        Timer.tween(duration, entity, { coord = coord }, 'linear', function()
-            entity.coord = coord
+        tweenMoves(duration / #coords, entity, coords, function() 
             is_finished = true
         end)
     end
 
-    local isFinished = function() return is_finished end
+    local getAP = function(self) return ap end
+
+    local isFinished = function(self) return is_finished end
 
     return setmetatable({
         -- methods
+        getAP       = getAP,
         execute     = execute,
         isFinished  = isFinished,
     }, Move)

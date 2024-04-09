@@ -1,10 +1,19 @@
 #!/bin/bash
 
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+# 							  #
+#  Dungeon of Despair		  #
+# 							  #
+#  Author: Wolfgang Schreurs  #
+#  info+despair@wolftrail.net #
+# 							  #
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+
 # the script directory
 DIR="$(dirname "$0")"
 
 DATA_DIR="${DIR}/dat"
-TARGET_DIR="${DATA_DIR}/gen"
+TARGET_DIR="${DIR}/gen"
 
 # arrays to manage CSV column names & related type info
 COL_NAMES=()

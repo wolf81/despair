@@ -10,7 +10,6 @@ However, there will be several areas in which this game will differ, some exampl
 
 - No initiative rolls, the player is always first to act
 - Movement speed limited to 1 tile per turn
-- There is no sleep mechanic in the game, instead the player heals slowly over time
 - The game is mostly combat focused, as such, skills will find little use outside of combat.
 
 ## MONETIZATION
@@ -32,13 +31,13 @@ Afterwards all other actors receive the same amount of action points. The actors
 
 This approach allows for different movement speeds. The base move speed is 30, which is the default for most NPCs.
 
-But some creatures, player characters might have a lower speed, e.g. due to size.
+But some creatures & player characters might have a lower speed, e.g. due to race or size.
 
 In order to determine how many action points are required to move, we can make the following calculations, depending on speed:
 
 - **speed 30**: base 30 / speed 30 * 30 AP = 30 AP
 - **speed 20**: base 30 / speed 20 * 30 AP = 45 AP
-- **speed 40**: base 30 / speed 45 * 30 AP = 20 AP
+- **speed 45**: base 30 / speed 45 * 30 AP = 20 AP
 
 ### EXAMPLE
 
@@ -72,7 +71,7 @@ Let's follow up with an example. We'll have 4 characters:
 
 ### TURN 2
 
-- Kendrink moves C3→D3 (30 TU). All NPCs add 30 TU.
+- Kendrick moves C3→D3 (30 TU). All NPCs add 30 TU.
 - Bat uses 45 TU to move: H3→G3 (15 TU remaining)
 - Orc uses 30 TU to move: G3→F3 (0 TU remaining)
 - Wolf uses 40 TU to move 2 times: H4→G4→F4 (5 TU remaining)
@@ -84,6 +83,3 @@ Let's follow up with an example. We'll have 4 characters:
 4 ····W····
 5 ·········
  
-### TURN 3
-
-...

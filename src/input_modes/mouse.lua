@@ -38,7 +38,7 @@ local isWeaponKindEquipped = function(entity, ...)
 end
 
 Mouse.new = function(entity)
-    local getAction = function(self, level)
+    local getAction = function(self, level, ap)
         if not love.mouse.isDown(1) then return end
 
         local mouse_coord = Pointer.getCoord()
@@ -65,7 +65,7 @@ Mouse.new = function(entity)
 
         -- if next coord is not blocked, can move in direction
         if not level:isBlocked(next_coord) then
-            return Move(level, entity, next_coord, direction)            
+            return Move(level, entity, next_coord)            
         end
 
         -- direction was blocked - if blocked by enemy entity perform a melee attack
