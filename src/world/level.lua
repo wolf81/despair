@@ -66,7 +66,12 @@ Level.new = function(dungeon, level_idx)
     local map_w, map_h = map:getSize()
     local player_idx = 0
 
-    local player_dist_map = DijkstraMap(tiles, true, function(x, y) return tiles[y][x] ~= 0 end)
+    -- generate a Dijkstra map for monsters movement towards / away from player
+    local player_dist_map = DijkstraMap(
+        tiles,                                      -- 2D tile map
+        function(x, y) return tiles[y][x] ~= 0 end, -- check whether tile is blocked
+        true,                                       -- include diagonal movement
+        ORDINAL_MOVE_FACTOR)                        -- cost of diagonal moves
 
     -- generate stairs using coords from maze generator
     stair_up = EntityFactory.create('dun_14', stair_up)

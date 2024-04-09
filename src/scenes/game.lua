@@ -10,7 +10,7 @@ local mfloor, lrandom = math.floor, love.math.random
 local Game = {}
 
 Game.new = function()
-    -- love.math.setRandomSeed(1)
+    love.math.setRandomSeed(1)
 
     local player = EntityFactory.create('pc' .. lrandom(1, 4))
     local player_info = PlayerInfo(player)

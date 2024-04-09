@@ -24,7 +24,7 @@ Idle.new = function(level, entity)
         end)
     end
 
-    local getCost = function(self) return 30 end
+    local getCost = function(self) return ActionHelper.getIdleCost(entity) end
 
     local isFinished = function(self) return is_finished end
 

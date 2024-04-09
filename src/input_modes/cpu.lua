@@ -44,62 +44,53 @@ local function getDirectionToPlayer(level, coord)
     return dir
 end
 
-local function getMoveCost(entity, direction)
-    local move_speed = entity:getComponent(MoveSpeed)
-    local ap = move_speed:getValue()
-
-    if Direction.isOrdinal(direction) then
-        return mfloor(ap * ORDINAL_MOVE_FACTOR)
-    end
-
-    return ap
-end
-
 Cpu.new = function(entity)
-    local action = nil
     local is_chasing_player = false
 
     local getAction = function(self, level, ap)
         local player = level:getPlayer()
 
         local distance = player.coord:dist(entity.coord)
-        if distance < 2 then
+        if distance <= ORDINAL_MOVE_FACTOR then
             local equip = entity:getComponent(Equipment)
             if equip:tryEquipMelee() then
                 return Attack(level, entity, player)
             end
-        elseif distance < 10 then
+        elseif distance < 8 then
             local equip = entity:getComponent(Equipment)
             if equip:tryEquipRanged() then
-                -- check line of sight
                 if level:inLineOfSight(entity.coord, player.coord) then
                     return Attack(level, entity, player)
                 end
             end
         end
 
-        local move_speed = entity:getComponent(MoveSpeed)
-        local ap_cost = move_speed:getValue()
-
+        -- a path is a list of coords; also keep track of current coord
         local path, coord = {}, entity.coord
-        while ap > 0 do    
+        while ap > 0 do
+            -- start chase player when player enters line of sight
             if not is_chasing_player and level:inLineOfSight(coord, player.coord) then
                 is_chasing_player = true
             end
 
-            local direction = (is_chasing_player and 
-                getDirectionToPlayer(level, coord) or 
-                getRandomDirection(level, coord))
+            local direction = Direction.NONE
 
+            -- if not standing next to player, either move randomly or towards player if chasing
+            if coord:dist(player.coord) > ORDINAL_MOVE_FACTOR then 
+                direction = (is_chasing_player and 
+                    getDirectionToPlayer(level, coord) or 
+                    getRandomDirection(level, coord))
+            end 
+
+            -- add next coord to path if not blocked, otherwise add current coord to path
             local next_coord = coord + direction
-
             if not level:isBlocked(next_coord) and #level:getEntities(next_coord) == 0 then
                 table.insert(path, next_coord)
-                ap = ap - getMoveCost(entity, direction)
+                ap = ap - ActionHelper.getMoveCost(entity, next_coord)
                 coord = next_coord
             else
                 table.insert(path, coord)
-                ap = ap - getMoveCost(entity, Direction.NONE)
+                ap = ap - ActionHelper.getMoveCost(entity, entity.coord)
             end
         end
 

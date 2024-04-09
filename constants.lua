@@ -11,7 +11,7 @@ DUNGEON_LEVELS      = 40
 SCALE               = 1.0
 TURN_DURATION       = 0.2
 ANIM_DURATION       = TURN_DURATION
-ORDINAL_MOVE_FACTOR = 1.4 -- ~(math.sqrt(2))
+ORDINAL_MOVE_FACTOR = 1.4 -- ~math.sqrt(2)
 
 ACTION_BASE_AP_COST = 30
 
@@ -34,6 +34,7 @@ RACES = {
     ['elf']         = true,
 }
 
-FONT_CHARS = "1234567890!#$%&*()-+=[]:;\"'<>,.?/abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-
-FONT = love.graphics.newImageFont('gfx/image_font.png', FONT_CHARS)
+FONT = love.graphics.newImageFont('gfx/image_font.png', 
+    "1234567890!#$%&*()-+=[]:;\"'<" +
+    ">,.?/abcdefghijklmnopqrstuvwx" + 
+    "yz ABCDEFGHIJKLMNOPQRSTUVWXYZ")

@@ -30,6 +30,7 @@ Portrait            = require 'src.hud.portrait'
 Minimap             = require 'src.hud.minimap'
 
 -- helpers
+ActionHelper        = require 'src.helpers.action_helper'
 ColorHelper         = require 'src.helpers.color_helper'
 
 -- util

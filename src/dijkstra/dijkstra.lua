@@ -37,9 +37,7 @@ end
 
 -- generate a key based on x & y value
 -- PLEASE NOTE: x and y values should be in range 1 .. 2^16
-local function getKey(x, y) 
-    return blshift(y, 16) + x
-end
+local function getKey(x, y) return blshift(y, 16) + x end
 
 local function newMap(w, h, value)
     local map = {}
@@ -52,20 +50,24 @@ local function newMap(w, h, value)
     return map
 end
 
-Dijkstra.new = function(map, incl_diagonal, blocked, x, y)
+-- create a new Dijkstra map, optionally allow for diagonal movement with diagonal cost
+Dijkstra.new = function(map, blocked, incl_diagonal, diagonal_cost)
     local getNeighbors = incl_diagonal and getNeighborsCO or getNeighborsC
     local map_h, map_w = #map, #map[1]
+    local incl_diagonal = (incl_diagonal == true)
+    local diagonal_cost = diagonal_cost or 1
+
+    -- dijkstra map will be stored here after update is called
     local d_map = nil
 
     local update = function(self, x, y)
         local start = { x = x, y = y }
 
+        -- create an empty Dijkstra map, with all tile distances set to math.huge
         d_map = newMap(map_w, map_h, math.huge)
 
+        -- add reachable tile coords to the unvisited queue
         local unvisited = PriorityQueue()
-
-        -- create an empty Dijkstra map, all tile distances are set to math.huge
-        -- all reachable areas will be added to the unvisited queue
         for y = 1, map_h do
             for x = 1, map_w do
                 d_map[y][x] = math.huge
@@ -83,19 +85,19 @@ Dijkstra.new = function(map, incl_diagonal, blocked, x, y)
         -- process all unvisited tiles
         while not unvisited:empty() do
             local key, dist = unvisited:dequeue()
+
             -- decode x and y value from the key
-            local x = bband(key, 0xFF)
-            local y = brshift(key, 16)
+            local x, y = bband(key, 0xFF), brshift(key, 16)
 
             -- process each neighbor for current x and y value
-            for _, neighbor in ipairs(getNeighbors(x, y)) do
+            for idx, neighbor in ipairs(getNeighbors(x, y)) do
                 local n_x, n_y = unpack(neighbor)
                 local n_key = getKey(n_x, n_y)
 
                 -- only process tiles not visited previously
-                if unvisited:contains(n_key) then  
-                    -- calculate distance and update the unvisited neighbor tile
-                    local n_dist = mmin(d_map[n_y][n_x], dist + 1)
+                if unvisited:contains(n_key) then 
+                    -- calculate and update the distance of unvisited neighbor tile
+                    local n_dist = mmin(d_map[n_y][n_x], dist + (idx > 4 and diagonal_cost or 1))
                     unvisited:update(n_key, n_dist)
                 end
             end
@@ -108,11 +110,8 @@ Dijkstra.new = function(map, incl_diagonal, blocked, x, y)
         end
     end
 
-    if x ~= nil and y ~= nil then
-        update(nil, x, y)
-    end
-
     -- get the distance value for a given coord
+    -- will return math.huge is coord is unreachable
     local getDistance = function(self, x, y)
         if (y < 1) or (y > map_h - 1) or (x < 1) or (x > map_w - 1) then 
             return math.huge 

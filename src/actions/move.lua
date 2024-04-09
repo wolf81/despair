@@ -9,8 +9,6 @@ local mfloor = math.floor
 
 local Move = {}
 
-local ORDINAL_COST_FACTOR = 1.4
-
 local function tweenMoves(duration, entity, coords, fn)
     local coord = table.remove(coords, 1)
 
@@ -25,27 +23,6 @@ local function tweenMoves(duration, entity, coords, fn)
     end)
 end
 
-local function getTotalMoveCost(entity, coords)
-    local cost = 0
-
-    local move_speed = entity:getComponent(MoveSpeed)
-    
-    local prev_coord = entity.coord
-    for _, coord in ipairs(coords) do
-        local dxy = entity.coord - prev_coord
-        local direction = Direction.fromHeading(dxy.x, dxy.y)        
-        if Direction.isOrdinal(direction) then
-            cost = cost + mfloor(move_speed:getValue() * ORDINAL_COST_FACTOR)
-        else
-            cost = cost + move_speed:getValue()
-        end
-
-        prev_coord = coord
-    end
-
-    return cost
-end
-
 Move.new = function(level, entity, ...)
     local did_execute, is_finished = false, false
 
@@ -54,7 +31,7 @@ Move.new = function(level, entity, ...)
 
     local coord = coords[1]
 
-    local cost = getTotalMoveCost(entity, coords)
+    local cost = ActionHelper.getMoveCost(entity, ...)
 
     local execute = function(self, duration, fn)
         if did_execute then return end
