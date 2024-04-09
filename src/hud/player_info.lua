@@ -21,6 +21,8 @@ PlayerInfo.new = function(player)
 
     local bar_w, bar_h = health_bar:getSize()
 
+    local background = TextureGenerator.generatePanelTexture(INFO_PANEL_WIDTH, WINDOW_H - 2)
+
     local update = function(self, dt)
         health_bar:update(dt)
         energy_bar:update(dt)
@@ -29,14 +31,9 @@ PlayerInfo.new = function(player)
     local draw = function(self, x, y, w, h)
         love.graphics.setFont(FONT)
 
-        love.graphics.setColor(0.1, 0.1, 0.1, 1.0)
-        love.graphics.rectangle('fill', x, y, w, h)
+        love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
 
-        love.graphics.setLineWidth(1.0)
-        love.graphics.setColor(0.3, 0.3, 0.3, 1.0)
-        love.graphics.line(x + 0.5, 0, x + 0.5, h)
-
-        love.graphics.setColor(1.0, 1.0, 1.0, 1.0) 
+        love.graphics.draw(background, WINDOW_W - INFO_PANEL_WIDTH, 1)
         portrait:draw(x + 20, 20)
 
         local bar_x = x + 21 + mfloor((portrait_w - bar_w) / 2)

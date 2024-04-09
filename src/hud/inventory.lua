@@ -31,40 +31,6 @@ local function drawItemContainer(x, y)
 	love.graphics.rectangle('fill', x + 16, y + 16, 16, 16)
 end
 
-local function generateBackgroundTexture(w, h)
-	local texture = TextureCache:get('uf_interface')
-	local quads = QuadCache:get('uf_interface')
-
-	local color_info = ColorHelper.getColors(texture, quads[326], true)[1]
-
-	local canvas = love.graphics.newCanvas(w, h)
-	canvas:renderTo(function()
-		love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
-
-		love.graphics.draw(texture, quads[324], 0, 0)
-		love.graphics.draw(texture, quads[328], w - 16, 0)
-		love.graphics.draw(texture, quads[329], 0, h - 16)
-		love.graphics.draw(texture, quads[333], w - 16, h - 16)
-
-		-- top & bottom rows
-		for x = 16, w - 32, 8 do
-			love.graphics.draw(texture, quads[325], x, 0)
-			love.graphics.draw(texture, quads[330], x, h - 16)
-		end
-
-		-- middle
-		for y = 16, h - 32, 16 do
-			love.graphics.draw(texture, quads[326], x, y)
-			love.graphics.draw(texture, quads[331], w - 16, y)
-		end
-
-		love.graphics.setColor(unpack(color_info.color))
-		love.graphics.rectangle('fill', 16, 16, w - 32, h - 32)
-	end)
-
-	return canvas
-end
-
 local function drawItem(item, x, y)
 	local def = EntityFactory.getDefinition(item.id)
 	local texture = TextureCache:get(def.texture)
@@ -190,7 +156,7 @@ Inventory.new = function(player)
 	local equipment = player:getComponent(Equipment)
 	local backpack = player:getComponent(Backpack)
 
-	local background = generateBackgroundTexture(w, h)
+	local background = TextureGenerator.generatePanelTexture(w, h)
 
 	local update = function(self, dt) 
 		local mx, my = love.mouse.getPosition()

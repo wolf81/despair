@@ -91,6 +91,7 @@ QuadCache           = Cache()
 -- generators
 FontSheetGenerator  = require 'src.generators.font_sheet_gen'
 QuadSheetGenerator  = require 'src.generators.quad_sheet_gen'
+TextureGenerator    = require 'src.generators.texture_gen'
 QuadGenerator       = require 'src.generators.quad_gen'
 MazeGenerator       = require 'src.generators.maze_gen'
 IdGenerator         = require 'src.generators.id_gen'

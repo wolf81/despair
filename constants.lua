@@ -18,7 +18,7 @@ ACTION_BASE_AP_COST = 30
 WINDOW_W            = 800
 WINDOW_H            = 450
 
-INFO_PANEL_WIDTH    = 260
+INFO_PANEL_WIDTH    = 240
 
 CLASSES = {
     ['fighter']     = true,
