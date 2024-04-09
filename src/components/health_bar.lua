@@ -30,7 +30,7 @@ local function generateBarTexture(texture, empty_quad, filled_quad, value)
     local x = mfloor(mmax((TILE_SIZE - quad_w) / 2, 0))
 
     canvas:renderTo(function() 
-        love.graphics.setColor(1.0, 0.0, 0.0, 1.0)
+        love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
         love.graphics.draw(texture, empty_quad, x, 0)
         love.graphics.setScissor(x, 0, quad_w * (value / 10), quad_h)
         love.graphics.draw(texture, filled_quad, x, 0)
