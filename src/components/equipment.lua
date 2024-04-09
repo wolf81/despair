@@ -45,7 +45,7 @@ Equipment.new = function(entity, def)
 
     -- equip the first melee item that can be found in backpack
     -- do nothing if a melee item is already equipped
-    local equipMelee = function(self) 
+    local tryEquipMelee = function(self) 
         local filter = function(item) 
             return item.type == 'weapon' and item.kind ~= 'ranged_1h' and item.kind ~= 'ranged_2h' 
         end
@@ -73,7 +73,7 @@ Equipment.new = function(entity, def)
 
     -- equip the first ranged item that can be found in backpack
     -- do nothing if a ranged item is already equipped
-    local equipRanged = function(self)
+    local tryEquipRanged = function(self)
         local filter = function(item) 
             return item.type == 'weapon' and (item.kind == 'ranged_1h' or item.kind == 'ranged_2h') 
         end
@@ -168,13 +168,13 @@ Equipment.new = function(entity, def)
 
     return setmetatable({
         -- methods
-        equipRanged = equipRanged,
-        equipMelee  = equipMelee,
-        equipAll    = equipAll,
-        didEquip    = didEquip,
-        unequip     = unequip,
-        getItem     = getItem,
-        equip       = equip,
+        tryEquipRanged  = tryEquipRanged,
+        tryEquipMelee   = tryEquipMelee,
+        equipAll        = equipAll,
+        didEquip        = didEquip,
+        unequip         = unequip,
+        getItem         = getItem,
+        equip           = equip,
     }, Equipment)
 end
 

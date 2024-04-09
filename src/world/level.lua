@@ -66,9 +66,7 @@ Level.new = function(dungeon, level_idx)
     local map_w, map_h = map:getSize()
     local player_idx = 0
 
-    local dijkstra_map = Dijkstra(tiles, 1, 1, 
-        function(x, y) return tiles[y][x] ~= 0 end, 
-    true)
+    local player_dist_map = DijkstraMap(tiles, true, function(x, y) return tiles[y][x] ~= 0 end)
 
     -- generate stairs using coords from maze generator
     stair_up = EntityFactory.create('dun_14', stair_up)
@@ -124,7 +122,7 @@ Level.new = function(dungeon, level_idx)
             return
         end
 
-        dijkstra_map:update(coord.x, coord.y)
+        player_dist_map:update(coord.x, coord.y)
 
         -- update fog of war
         fog:cover()
@@ -401,29 +399,29 @@ Level.new = function(dungeon, level_idx)
 
     local getSize = function(self) return map_w, map_h end
 
-    local getDistToPlayer = function(self, coord)
-        return dijkstra_map:getDistance(coord.x, coord.y)
+    local getPlayerDistance = function(self, coord)
+        return player_dist_map:getDistance(coord.x, coord.y)
     end
     
     return setmetatable({
         -- properties
-        entry_coord     = stair_up.coord,
-        exit_coord      = stair_dn.coord,
+        entry_coord         = stair_up.coord,
+        exit_coord          = stair_dn.coord,
         -- methods
-        update          = update,
-        draw            = draw,
-        isBlocked       = isBlocked,
-        setBlocked      = setBlocked,
-        inLineOfSight   = inLineOfSight,
-        isVisible       = isVisible,
-        enter           = enter,
-        exit            = exit,
-        getSize         = getSize,
-        addEntity       = addEntity,
-        getPlayer       = getPlayer,
-        getEntities     = getEntities,
-        removeEntity    = removeEntity,
-        getDistToPlayer = getDistToPlayer,
+        update              = update,
+        draw                = draw,
+        isBlocked           = isBlocked,
+        setBlocked          = setBlocked,
+        inLineOfSight       = inLineOfSight,
+        isVisible           = isVisible,
+        enter               = enter,
+        exit                = exit,
+        getSize             = getSize,
+        addEntity           = addEntity,
+        getPlayer           = getPlayer,
+        getEntities         = getEntities,
+        removeEntity        = removeEntity,
+        getPlayerDistance   = getPlayerDistance,
     }, Level)
 end
 

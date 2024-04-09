@@ -11,6 +11,7 @@ DUNGEON_LEVELS      = 40
 SCALE               = 1.0
 TURN_DURATION       = 0.2
 ANIM_DURATION       = TURN_DURATION
+ORDINAL_MOVE_FACTOR = 1.4 -- ~(math.sqrt(2))
 
 ACTION_BASE_AP_COST = 30
 
