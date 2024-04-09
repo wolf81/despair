@@ -1,5 +1,14 @@
 #!/bin/bash
 
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+# 							  #
+#  Dungeon of Despair		  #
+# 							  #
+#  Author: Wolfgang Schreurs  #
+#  info+despair@wolftrail.net #
+# 							  #
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+
 # the script directory
 DIR="$(dirname "$0")"
 

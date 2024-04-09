@@ -102,7 +102,7 @@ Cpu.new = function(entity)
 
     return setmetatable({
         -- methods
-        getAction   = getAction,
+        getAction = getAction,
     }, Cpu)
 end
 

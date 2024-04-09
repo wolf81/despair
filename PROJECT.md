@@ -26,6 +26,53 @@ This document outlines technical choices regarding this project.
     /world          game world related classes: level, map, dungeon, ...
 ```
 
+## CLASSES
+
+This project doesn't make use a class library. Instead we create our own classes. The main reason here is to keep the project as maintainable as possible and I believe that having real privacy inside classes can help in this regard.
+
+So classes follow this general pattern
+
+```lua
+local MyClass = {} -- class name
+
+-- this is a private class method; no reference to `self`
+local privateMethod1 = function(value) return 2 * value end
+
+-- this is a public class method; no reference to `self`
+MyClass.publicMethod = function() end
+
+-- constructor
+MyClass.new = function(...)
+    -- private property, will not be added to public interface
+    local private_prop = 1
+    -- public property, will be added to public interface
+    local public_prop = 5
+
+    -- a private method is not added to interface
+    -- can use self to call other public methods
+    local privateMethod2 = function(self) 
+        return private_prop + privateMethod1(public_prop)   -- returns: 11
+    end
+
+    -- a public method is defined same as private, but also added to interface
+    local publicMethod = function(self) 
+        -- use `self` reference to access public methods internally
+        return private_prop + self:privateMethod2()         -- returns: 12
+    end
+    
+    -- public interface
+    return setmetatable({
+        public_prop     = public_prop,              
+        publicMethod    = publicMethod,             
+    }, MyClass)
+end
+
+return setmetatable(MyClass, {
+    -- automatically call constructor when instantiating as such: MyClass()
+    __call = function(_, ...) return MyClass.new(...) end, 
+})
+```
+
 ## ECS
 
 We make use of a custom ECS system, as I found various third-party libraries problematic for a variety of reasons. This ECS is rather simple.
