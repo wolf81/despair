@@ -127,6 +127,7 @@ Level.new = function(dungeon, level_idx)
             return
         end
 
+        -- update the player distance map, to help NPCs find player
         player_dist_map:update(coord.x, coord.y)
 
         -- update fog of war
@@ -333,7 +334,7 @@ Level.new = function(dungeon, level_idx)
 
     local inLineOfSight = function(self, coord1, coord2) 
         return bresenham.los(coord1.x, coord1.y, coord2.x, coord2.y, function(x, y) 
-            return map:getTile(x, y) == 0
+            return map:getTile(x, y) ~= 1
         end)
     end
 

@@ -50,19 +50,19 @@ Cpu.new = function(entity)
     local getAction = function(self, level, ap)
         local player = level:getPlayer()
 
-        local distance = player.coord:dist(entity.coord)
-        if distance <= ORDINAL_MOVE_FACTOR then
-            local equip = entity:getComponent(Equipment)
-            if equip:tryEquipMelee() then
-                return Attack(level, entity, player)
-            end
-        elseif distance < 8 then
+        local distance = mfloor(player.coord:dist(entity.coord))
+        if distance > 1 and distance < 8 then
             local equip = entity:getComponent(Equipment)
             if equip:tryEquipRanged() then
                 if level:inLineOfSight(entity.coord, player.coord) then
                     return Attack(level, entity, player)
                 end
             end
+        elseif distance == 1 then
+            local equip = entity:getComponent(Equipment)
+            if equip:tryEquipMelee() then
+                return Attack(level, entity, player)
+            end            
         end
 
         -- a path is a list of coords; also keep track of current coord
@@ -76,7 +76,8 @@ Cpu.new = function(entity)
             local direction = Direction.NONE
 
             -- if not standing next to player, either move randomly or towards player if chasing
-            if coord:dist(player.coord) > ORDINAL_MOVE_FACTOR and is_chasing_player then 
+            local distance = mfloor(coord:dist(player.coord))
+            if distance > 1 and is_chasing_player then 
                 direction = getDirectionToPlayer(level, coord) 
             else
                 direction = getRandomDirection(level, coord)
@@ -89,8 +90,7 @@ Cpu.new = function(entity)
                 ap = ap - ActionHelper.getMoveCost(entity, next_coord)
                 coord = next_coord
             else
-                table.insert(path, coord)
-                ap = ap - ActionHelper.getMoveCost(entity, entity.coord)
+                ap = ap - ActionHelper.getMoveCost(entity, coord)
             end
         end
 
