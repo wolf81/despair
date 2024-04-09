@@ -48,12 +48,14 @@ Let's follow up with an example. We'll have 4 characters:
 - Orc (NPC):     30 movement speed (30 AP per move)
 - Wolf (NPC):    45 movement speed (20 AP per move)
 
+```
   ABCDEFGHI
 1 ·········
 2 ·······B·
 3 ·K·····O·
 4 ·······W·
 5 ·········
+```
 
 ### TURN 1
 
@@ -62,12 +64,14 @@ Let's follow up with an example. We'll have 4 characters:
 - Orc uses 30 AP to move: H3→G3 (0 AP remaining)
 - Wolf uses 20 AP to move: H4→G4 (15 AP remaining)
 
+```
   ABCDEFGHI
 1 ·········
 2 ·······B·
 3 ··K···O··
 4 ······W··
 5 ·········
+```
 
 ### TURN 2
 
@@ -75,11 +79,12 @@ Let's follow up with an example. We'll have 4 characters:
 - Bat uses 45 TU to move: H3→G3 (15 TU remaining)
 - Orc uses 30 TU to move: G3→F3 (0 TU remaining)
 - Wolf uses 40 TU to move 2 times: H4→G4→F4 (5 TU remaining)
- 
+
+```
   ABCDEFGHI
 1 ·········
 2 ······B··
 3 ···K·O···
 4 ····W····
 5 ·········
- 
+```
