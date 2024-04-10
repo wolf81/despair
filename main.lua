@@ -202,17 +202,24 @@ function love.load(args)
             love.event.quit()
         end
     end
+    love.graphics.scale(SCALE)
 
-    game = Game()
+    local game = Game()
+
+    Gamestate.registerEvents()
+    Gamestate.switch(game)
+
+    -- game = Game()
 end
 
 function love.update(dt)
     Timer.update(dt)
-    game:update(dt)
+    -- game:update(dt)
 end
 
 function love.draw()
-    game:draw()
+
+    -- game:draw()
 end
 
 function love.keypressed(key, scancode, isrepeat)
@@ -220,5 +227,5 @@ function love.keypressed(key, scancode, isrepeat)
         love.event.quit()
     end
 
-    game:keyPressed(key, scancode)
+    -- game:keyPressed(key, scancode)
 end

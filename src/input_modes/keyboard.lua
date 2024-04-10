@@ -8,7 +8,20 @@
 local Keyboard = {}
 
 Keyboard.new = function(entity)
-    local getAction = function(self, level, ap)         
+    local was_pressed = {}
+
+    local getAction = function(self, level, ap)
+        for key in pairs(was_pressed) do
+            if not love.keyboard.isDown(key) then
+                if key == 'b' then
+                    local backpack = entity:getComponent(Backpack)
+                    backpack:dropItem(backpack:takeLast(), level)
+                end
+            end
+        end
+
+        was_pressed = {}
+
         local direction = Direction.NONE
         if love.keyboard.isDown('left') or love.keyboard.isDown('a') then
             direction = Direction.W
@@ -27,12 +40,7 @@ Keyboard.new = function(entity)
         elseif love.keyboard.isDown('c') then
             direction = Direction.SE
         elseif love.keyboard.isDown('b') then
-            local backpack = entity:getComponent(Backpack)
-            local item = backpack:takeLast()
-            if item then
-                item.coord = entity.coord:clone()
-                level:addEntity(item)
-            end
+            was_pressed['b'] = true
         end
 
         if direction == Direction.NONE then return nil end

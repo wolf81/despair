@@ -16,23 +16,32 @@ PlayerInfo.new = function(player)
     local minimap = Minimap(player)
     local minimap_w, minimap_h = minimap:getSize()
 
-    local update = function(self)
-        -- body
+    local health_bar = ResourceBar(player, 'health')
+    local energy_bar = ResourceBar(player, 'energy')
+
+    local bar_w, bar_h = health_bar:getSize()
+
+    local background = TextureGenerator.generatePanelTexture(INFO_PANEL_WIDTH, WINDOW_H - 2)
+
+    local update = function(self, dt)
+        health_bar:update(dt)
+        energy_bar:update(dt)
     end
 
     local draw = function(self, x, y, w, h)
         love.graphics.setFont(FONT)
 
-        love.graphics.setColor(0.1, 0.1, 0.1, 1.0)
-        love.graphics.rectangle('fill', x, y, w, h)
+        love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
 
-        love.graphics.setLineWidth(1.0)
-        love.graphics.setColor(0.3, 0.3, 0.3, 1.0)
-        love.graphics.line(x + 0.5, 0, x + 0.5, h)
-
-        love.graphics.setColor(1.0, 1.0, 1.0, 1.0) 
+        love.graphics.draw(background, WINDOW_W - INFO_PANEL_WIDTH, 1)
         portrait:draw(x + 20, 20)
-        -- portrait:draw(x + mfloor((w - portrait_w) / 2), 20)
+
+        local bar_x = x + 21 + mfloor((portrait_w - bar_w) / 2)
+        local bar_y = 20 + portrait_h + 10
+        love.graphics.print("HEALTH", bar_x, bar_y)
+        health_bar:draw(bar_x, bar_y + 10)
+        love.graphics.print("HUNGER", bar_x, bar_y + 30)
+        energy_bar:draw(bar_x, bar_y + 40)
 
         local ox = x + 20
         local oy = minimap_h + 40

@@ -9,27 +9,13 @@ local mfloor = math.floor
 
 local Move = {}
 
-local function tweenMoves(duration, entity, coords, fn)
-    local coord = table.remove(coords, 1)
-
-    Timer.tween(duration, entity, { coord = coord }, 'linear', function()
-        entity.coord = coord
-
-        if #coords > 0 then
-            tweenMoves(duration, entity, coords, fn)
-        else
-            fn()
-        end    
-    end)
-end
-
 Move.new = function(level, entity, ...)
     local did_execute, is_finished = false, false
 
     local coords = {...}
     assert(#coords > 0, 'missing variable arguments for coords')
 
-    local coord = coords[1]
+    local coord = coords[#coords]
 
     local ap = ActionHelper.getMoveCost(entity, unpack(coords))
 
@@ -38,9 +24,11 @@ Move.new = function(level, entity, ...)
 
         did_execute = true
 
-        Signal.emit('move', entity, coords[#coords], duration)
+        Signal.emit('move', entity, coord, duration)
 
-        tweenMoves(duration / #coords, entity, coords, function() 
+        Timer.tween(duration, entity, { coord = coord }, 'linear', function()
+            entity.coord = coord
+
             is_finished = true
         end)
     end

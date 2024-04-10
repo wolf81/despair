@@ -13,9 +13,8 @@ local getKey = function(x, y)
     return x .. ':' .. y
 end
 
-Fog.new = function(width, height)
-    -- 13, 10
-    local visible = {}
+Fog.new = function(width, height) 
+   local visible = {}
     local revealed = {}
     local last_visible = {}
 

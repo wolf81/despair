@@ -1,6 +1,6 @@
-ID$ |TYPE$ |NAME$    |CLASS$  |RACE$    |LEVEL# |SIGHT# |SPEED# |STR# |DEX# |MIND# |FLAGS@ |EQUIP@                               |TEXTURE$  |ANIM@       |
+ID$ |TYPE$ |NAME$    |CLASS$  |RACE$    |LEVEL# |SIGHT# |SPEED# |STR# |DEX# |MIND# |FLAGS@ |EQUIP@                                             |TEXTURE$  |ANIM@       |
 
-pc1 |pc    |Kendrick |fighter |dwarf    |4      |60     |25     |16   |13   |10    |DV     |chain_mail,light_shield,longsword    |uf_heroes |21,22,23,24 |
-pc2 |pc    |Morris   |rogue   |human    |3      |60     |30     |12   |15   |12    |       |stud_leather,short_sword,short_sword |uf_heroes |29,30,31,32 |
-pc3 |pc    |Cholmer  |mage    |elf      |1      |60     |30     |12   |13   |16    |DV     |robe,quarterstaff                    |uf_heroes |1,2,3,4     |
-pc4 |pc    |Barnabas |cleric  |halfling |2      |60     |25     |10   |16   |13    |       |chain_mail,morningstar               |uf_heroes |17,18,19,20 |
+pc1 |pc    |Kendrick |fighter |dwarf    |4      |60     |25     |16   |13   |10    |DV     |chain_mail,light_shield,longsword,food_1,food_1    |uf_heroes |21,22,23,24 |
+pc2 |pc    |Morris   |rogue   |human    |3      |60     |30     |12   |15   |12    |       |stud_leather,short_sword,short_sword,food_1,food_1 |uf_heroes |29,30,31,32 |
+pc3 |pc    |Cholmer  |mage    |elf      |1      |60     |30     |12   |13   |16    |DV     |robe,quarterstaff,food_1,food_1                    |uf_heroes |1,2,3,4     |
+pc4 |pc    |Barnabas |cleric  |halfling |2      |60     |25     |10   |16   |13    |       |chain_mail,morningstar,food_1,food_1               |uf_heroes |17,18,19,20 |

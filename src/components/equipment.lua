@@ -34,6 +34,8 @@ Equipment.new = function(entity, def)
     end
 
     local getItem = function(self, slot, fn)
+        if slot == nil then return nil end
+        
         assert(SLOTS[slot] ~= nil, 'invalid slot "' .. slot .. '"')
 
         fn = fn or function(item) return true end
@@ -154,23 +156,27 @@ Equipment.new = function(entity, def)
                 equip.mainhand = item
                 return true
             end
+        elseif item.type == 'necklace' then
+            self:unequip('neck')
+            equip.neck = item
+            return true
+        elseif item.type == 'ring' then
+            if equip.ring1 ~= nil and equip.ring2 == nil then
+                equip.ring2 = item
+            else
+                self:unequip('ring1')
+                equip.ring1 = item                
+            end
+            return true
         end
 
         return false
-    end
-
-    -- equip all items from backpack
-    local equipAll = function(self)
-        for item in backpack:each() do
-            self:equip(backpack:take(item.gid))
-        end
     end
 
     return setmetatable({
         -- methods
         tryEquipRanged  = tryEquipRanged,
         tryEquipMelee   = tryEquipMelee,
-        equipAll        = equipAll,
         didEquip        = didEquip,
         unequip         = unequip,
         getItem         = getItem,

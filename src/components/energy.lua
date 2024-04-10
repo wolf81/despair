@@ -27,7 +27,7 @@ Energy.new = function(entity, def)
 
     local eatFood = function(self, amount)
         assert(amount ~= nil, 'missing argument "amount"')
-        energy = energy + amount
+        energy = energy + amount * 15
 
         -- when eating too much, the stomach explodes
         if energy > MAX_ENERGY then
