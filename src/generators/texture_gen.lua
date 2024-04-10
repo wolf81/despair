@@ -2,6 +2,52 @@ local mfloor = math.floor
 
 local M = {}
 
+M.generatePaperTexture = function(width, height)
+    assert(w ~= nil, 'missing argument: "width')
+
+    height = height or width
+
+    local texture = TextureCache:get('uf_interface')
+    local quads = QuadCache:get('uf_interface')
+    local _, _, quad_w, quad_h = quads[266]:getViewport()
+
+    local cols = mfloor(width / quad_w)
+    local rows = mfloor(height / quad_h) 
+
+    local draw_info = {}
+    for y = 1, rows do
+        for x = 1, cols do
+            if y == 1 then
+                draw_info[vector(x, y)] = (x == 1 and 266) or (x == cols and 271) or 267 
+            elseif y == rows then
+                draw_info[vector(x, y)] = (x == 1 and 276) or (x == cols and 275) or 273
+            elseif x == 1 then
+                draw_info[vector(x, y)] = 274
+            elseif x == cols then
+                draw_info[vector(x, y)] = 268
+            end
+        end
+    end
+
+    local _, _, quad_w, quad_h = quads[266]:getViewport()
+    local canvas = love.graphics.newCanvas(quad_w * cols, quad_h * rows)
+    canvas:renderTo(function() 
+        love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
+
+        for coord, quad_idx in pairs(draw_info) do
+            local x = (coord.x - 1) * quad_w
+            local y = (coord.y - 1) * quad_h
+            love.graphics.draw(texture, quads[quad_idx], x, y)            
+        end
+
+        local color_info = ColorHelper.getColors(texture, quads[266], true)[1]
+        love.graphics.setColor(unpack(color_info.color))
+        love.graphics.rectangle('fill', quad_w, quad_h, quad_w * (cols - 2), quad_h * (rows - 2))        
+    end)
+
+    return canvas
+end
+
 M.generateContainerTexture = function() 
     local texture = TextureCache:get('uf_interface')
     local quads = QuadCache:get('uf_interface')

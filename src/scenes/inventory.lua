@@ -68,8 +68,8 @@ local function drawItem(item, x, y)
     love.graphics.draw(texture, quads[frame], x, y)
 end
 
-local newBackground = function()
-    local texture = TextureGenerator.generatePanelTexture(500, 390)
+local newBackground = function(width, height)
+    local texture = TextureGenerator.generatePanelTexture(width, height)
     local w, h = texture:getDimensions()
     local x = mfloor((WINDOW_W - w) / 2)
     local y = mfloor((WINDOW_H - h) / 2)
@@ -97,6 +97,8 @@ end
 local function drawCombatStats(offense, defense, x, y)
     local text_h = FONT:getHeight() + 8
 
+    local background = TextureGenerator.generatePaperTexture(230, 90)
+
     local att_value = 'ATTACK BONUS: ' .. offense:getAttackValue()
     
     local _, damage_info = offense:getDamageValue()
@@ -104,13 +106,13 @@ local function drawCombatStats(offense, defense, x, y)
     local dmg_value = 'DAMAGE:       ' .. getDamageText(damage_info)
     local ac_value  = 'ARMOR CLASS:  ' .. defense:getArmorValue()
 
-    local y1 = y + h - 20 * 4
+    love.graphics.draw(background, x - 10, y - 10)
 
-    love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
-    love.graphics.print('COMBAT STATS', x, y1)
-    love.graphics.print(att_value, x, y1 + text_h)
-    love.graphics.print(dmg_value, x, y1 + text_h * 2)
-    love.graphics.print(ac_value, x, y1 + text_h * 3)
+    love.graphics.setColor(0.0, 0.0, 0.0, 0.7)
+    love.graphics.print('COMBAT STATS', x, y)
+    love.graphics.print(att_value, x, y + text_h)
+    love.graphics.print(dmg_value, x, y + text_h * 2)
+    love.graphics.print(ac_value, x, y + text_h * 3)
 end
 
 -- TODO: need title bar and close button
@@ -124,7 +126,7 @@ Inventory.new = function(player)
     local defense = player:getComponent(Defense)
 
     -- the background & item containers
-    local background = newBackground()
+    local background = newBackground(500, 380)
     local container = TextureGenerator.generateContainerTexture()
 
     -- equipment & backpack slots
@@ -134,7 +136,7 @@ Inventory.new = function(player)
         equipment, equip_x, background.y + 20,
         backpack, backpack_x, background.y + 20)
 
-    local stats_y = background.y + background.h - 16
+    local stats_y = background.y + background.h - 80
 
     local hover_slot_info = nil
 
