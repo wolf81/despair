@@ -68,15 +68,16 @@ Cpu.new = function(entity)
         -- a path is a list of coords; also keep track of current coord
         local path, coord = {}, entity.coord
         while ap > 0 do
+            local distance = mfloor(coord:dist(player.coord))
+
             -- start chase player when player enters line of sight
-            if (not is_chasing_player) and level:inLineOfSight(coord, player.coord) then
-                is_chasing_player = true
+            if (not is_chasing_player) and distance < 10 then
+                is_chasing_player = level:inLineOfSight(coord, player.coord)
             end
 
             local direction = Direction.NONE
 
             -- if not standing next to player, either move randomly or towards player if chasing
-            local distance = mfloor(coord:dist(player.coord))
             if distance > 1 and is_chasing_player then 
                 direction = getDirectionToPlayer(level, coord) 
             else
