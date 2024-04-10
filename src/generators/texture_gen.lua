@@ -1,5 +1,32 @@
 local M = {}
 
+M.generateContainerTexture = function() 
+    local texture = TextureCache:get('uf_interface')
+    local quads = QuadCache:get('uf_interface')
+    local color_info = ColorHelper.getColors(texture, quads[334], true)[1]
+
+    local canvas = love.graphics.newCanvas(48, 48)
+    canvas:renderTo(function() 
+        love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
+
+        love.graphics.draw(texture, quads[334], 0, 0)
+        love.graphics.draw(texture, quads[335], 16, 0)
+        love.graphics.draw(texture, quads[338], 32, 0)
+
+        love.graphics.draw(texture, quads[336], 0, 16)
+        love.graphics.draw(texture, quads[341], 32, 16)
+
+        love.graphics.draw(texture, quads[339], 0, 32)
+        love.graphics.draw(texture, quads[340], 16, 32)
+        love.graphics.draw(texture, quads[343], 32, 32)
+
+        love.graphics.setColor(color_info.color)
+        love.graphics.rectangle('fill', 16, 16, 16, 16)
+    end)
+
+    return canvas
+end
+
 M.generatePanelTexture = function(w, h)
     local texture = TextureCache:get('uf_interface')
     local quads = QuadCache:get('uf_interface')

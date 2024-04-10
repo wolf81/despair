@@ -34,6 +34,8 @@ Equipment.new = function(entity, def)
     end
 
     local getItem = function(self, slot, fn)
+        if slot == nil then return nil end
+        
         assert(SLOTS[slot] ~= nil, 'invalid slot "' .. slot .. '"')
 
         fn = fn or function(item) return true end

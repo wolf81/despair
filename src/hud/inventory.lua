@@ -9,91 +9,58 @@ local mfloor = math.floor
 
 local Inventory = {}
 
-local function drawItemContainer(x, y, item)	
-	love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
+local function generateSlots(equipment, equip_x, equip_y, backpack, backpack_x, backpack_y)
+	local slots = {}
 
-	local texture = TextureCache:get('uf_interface')
-	local quads = QuadCache:get('uf_interface')
-
-	love.graphics.draw(texture, quads[334], x, y)
-	love.graphics.draw(texture, quads[335], x + 16, y)
-	love.graphics.draw(texture, quads[338], x + 32, y)
-
-	love.graphics.draw(texture, quads[336], x, y + 16)
-	love.graphics.draw(texture, quads[341], x + 32, y + 16)
-
-	love.graphics.draw(texture, quads[339], x, y + 32)
-	love.graphics.draw(texture, quads[340], x + 16, y + 32)
-	love.graphics.draw(texture, quads[343], x + 32, y + 32)
-
-	local color_info = ColorHelper.getColors(texture, quads[334], true)[1]
-	love.graphics.setColor(color_info.color)
-	love.graphics.rectangle('fill', x + 16, y + 16, 16, 16)
-
-	if item ~= nil then
-		local def = EntityFactory.getDefinition(item.id)
-		local texture = TextureCache:get(def.texture)
-		local quads = QuadCache:get(def.texture)
-		local frame = def.anim[1]
-
-		love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
-		love.graphics.draw(texture, quads[frame], x, y)
-	end
-end
-
-local function drawBackpack(backpack, x, y, w, h)
-	local spacing = 2
-
-	local ox = 48 + spacing
-	local oy = 48 + spacing
-
-	local grid_w = ox * 6
-	local grid_h = ox * 5
-
-	local x1, x2 = x, x + ox * 5
-	local y1, y2 = y + 25, y + ox * 4 + 25
-
-	local idx = 1
-	for y = y1, y2, ox do
-		for x = x1, x2, ox do
-			drawItemContainer(x, y, backpack:peek(idx))
-			idx = idx + 1
-		end		
-	end
-
-	love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
-	love.graphics.print('BACKPACK', x, y + 10)
-end
-
-local function drawEquipment(equipment, x, y, w, h) 
 	local spacing, size = 2, 48
 
-	local x_offsets = {}
-	for i = 1, 3 do
-		table.insert(x_offsets, i * spacing + (i - 1) * size + 5)
-	end
-	local x1, x2, x3 = unpack(x_offsets)
+	-- generate slots for equipment
 
-	local y_offsets = {}
-	for i = 1, 5 do
-		table.insert(y_offsets, i * spacing + (i - 1) * size + 25)
-	end
-	local y1, y2, y3, y4, y5 = unpack(y_offsets)
+	equip_slot_info = {
+		[2] = 'mainhand',
+		[4] = 'offhand',
+		[6] = 'chest',
+	}
 
-	drawItemContainer(x + x2, y + y1)
-	drawItemContainer(x + x1, y + y2, equipment:getItem('mainhand'))
-	drawItemContainer(x + x2, y + y2)
-	drawItemContainer(x + x3, y + y2, equipment:getItem('offhand'))
-	drawItemContainer(x + x1, y + y3)
-	drawItemContainer(x + x2, y + y3, equipment:getItem('chest'))
-	drawItemContainer(x + x3, y + y3)
-	drawItemContainer(x + x1, y + y4)
-	drawItemContainer(x + x2, y + y4)
-	drawItemContainer(x + x3, y + y4)
-	drawItemContainer(x + x2, y + y5)
+	for i = 1, 11 do
+		x = (i == 1 or i == 11) and 2 or (1 + (i + 1) % 3)
+		y = (i == 11) and 5 or (i > 1) and mfloor((1 + i) / 3 + 1) or 1
+
+		print(i, x, y)
+
+		local i = #slots
+		local ox = (x - 1) * (spacing + size)
+		local oy = (y - 1) * (spacing + size)
+
+		table.insert(slots, { 
+			x = equip_x + ox,
+			y = equip_y + oy,
+			key = equip_slot_info[i],
+		})
+	end
+
+	-- generate slots for backpack
+
+	local _, max_size = backpack:size()
+	for i = 1, max_size do
+		local y = backpack_y + mfloor((i - 1) / 6) * (size + spacing)
+		local x = backpack_x + ((i  - 1) % 6) * (size + spacing)
+		table.insert(slots, { x = x, y = y, key = i })
+	end
+
+	return slots	
+end
+
+local function drawItem(item, x, y)
+	if not item then return end
+
+	local def = EntityFactory.getDefinition(item.id)
+	local texture = TextureCache:get(def.texture)
+	local quads = QuadCache:get(def.texture)
+	local frame = def.anim[1]
 
 	love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
-	love.graphics.print('EQUIPMENT', x + 10, y + 10)
+	love.graphics.draw(texture, quads[frame], x, y)
 end
 
 local function getDamageText(damage_info)
@@ -132,24 +99,52 @@ Inventory.new = function(player)
 
 	local background = TextureGenerator.generatePanelTexture(w, h)
 
+	local equip_x, equip_y = 5, 25
+	local backpack_x, backpack_y = 184, 25
+
+	local slots = generateSlots(
+		equipment, equip_x, equip_y, 
+		backpack, backpack_x, backpack_y)
+
 	local update = function(self, dt) 
 		local mx, my = love.mouse.getPosition()
+
+		mx = mx / SCALE
+		my = my / SCALE
+
+		for idx, slot in ipairs(slots) do
+			local x1, x2, y1, y2 = slot.x, slot.x + 48, slot.y, slot.y + 48
+			if mx > x1 and mx < x2 and my > y1 and my < y2 then
+				print('hovering over slot ' .. idx)
+			end
+		end
+
 		-- TODO: on mouse over show information? Or on left-click
 		-- TODO: use right mouse click or drag to equip?
 	end
+
+	local container_image = TextureGenerator.generateContainerTexture()
 
 	local draw = function(self, x, y)
 		love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
 		love.graphics.draw(background, x, y)
 
-		drawEquipment(equipment, x, y, 184, 320)
-		drawBackpack(backpack, x + 184, y, 316, 320)
+		love.graphics.print('EQUIPMENT', equip_x, y + 10)
+		love.graphics.print('BACKPACK', backpack_x, y + 10)
+		for idx, slot in ipairs(slots) do			
+			love.graphics.draw(container_image, x + slot.x, y + slot.y)
+
+			if idx > 11 then
+				drawItem(backpack:peek(slot.key), x + slot.x, y + slot.y)
+			else
+				drawItem(equipment:getItem(slot.key), x + slot.x, y + slot.y)
+			end
+		end
+
 		drawCombatStats(player, x, y + 304, 184, 90)
 	end
 
-	local getSize = function(self) 
-		return w, h 
-	end
+	local getSize = function(self) return w, h end
 	
 	return setmetatable({
 		-- methods

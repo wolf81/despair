@@ -18,7 +18,7 @@ M.getColors = function(image, quad, is_sorted)
     end) 
     local image_data = canvas:newImageData()
 
-    -- store color and related occurences in a table
+    -- store color and related pixel count in a table
     local color_info = {}
     for y = 0, h - 1 do
         for x = 0, w - 1 do
