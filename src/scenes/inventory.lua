@@ -207,11 +207,18 @@ Inventory.new = function(player)
             local item_idx = hover_slot_info.idx - 11
 
             local item = backpack:peek(item_idx)
+            local usable = item:getComponent(Usable)
+            local equippable = item:getComponent(Equippable)
 
-            -- TODO: how to easily check if item type is equippable? 
-            if item.type == 'weapon' or item.type == 'armor' or item.type == 'necklace' or item.type == 'ring' then
-                item = backpack:take(item_idx)
-                equipment:equip(item)
+            if usable then 
+                local success, remaining = usable:use(player)
+                if remaining == 0 then
+                    backpack:take(item_idx)
+                end 
+            elseif equippable then
+                if equippable:equip(player) then
+                    backpack:take(item_idx)
+                end
             end
         else
             if backpack:isFull() then
@@ -219,10 +226,12 @@ Inventory.new = function(player)
             end
 
             equipment:unequip(hover_slot_info.slot.key)
-
-
-            print('try to move item to backpack')
         end
+
+        -- if player died after using a harmful item, hide inventory
+        if not player:getComponent(Health):isAlive() then
+            Gamestate.pop()
+        end                
     end
 
     return setmetatable({

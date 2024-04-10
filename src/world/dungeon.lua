@@ -60,7 +60,7 @@ local function generateLootTable()
     end
 
     for _, id in ipairs(EntityFactory.getIds('food')) do
-        loot_table[id] = 6
+        loot_table[id] = 10
     end
 
     return loot_table    

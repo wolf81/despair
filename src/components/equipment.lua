@@ -173,18 +173,10 @@ Equipment.new = function(entity, def)
         return false
     end
 
-    -- equip all items from backpack
-    local equipAll = function(self)
-        for idx = backpack:size(), 1, -1 do
-            self:equip(backpack:take(idx))
-        end
-    end
-
     return setmetatable({
         -- methods
         tryEquipRanged  = tryEquipRanged,
         tryEquipMelee   = tryEquipMelee,
-        equipAll        = equipAll,
         didEquip        = didEquip,
         unequip         = unequip,
         getItem         = getItem,

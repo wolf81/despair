@@ -70,6 +70,16 @@ function Backpack.new(entity, def)
         level:addEntity(item)
     end
 
+    local equipAll = function(self)
+        for idx = #items, 1, -1 do
+            local item = items[idx]
+            local equippable = item:getComponent(Equippable)
+            if equippable and equippable:equip(entity) then
+                self:take(idx)
+            end
+        end
+    end
+
     -- add all items to backpack
     for _, id in ipairs(def['equip']) do
         put(nil, EntityFactory.create(id))
@@ -84,6 +94,7 @@ function Backpack.new(entity, def)
         isFull      = isFull,
         takeLast    = takeLast,
         dropItem    = dropItem,
+        equipAll    = equipAll,
     }, Backpack)
 end
 

@@ -86,7 +86,7 @@ M.create = function(id, coord)
         entity:addComponent(Energy(entity, def))
 
         -- equip all from backpack
-        entity:getComponent(Equipment):equipAll()
+        entity:getComponent(Backpack):equipAll()
     elseif entity.type == 'npc' then
         entity.z_index = 10        
         entity:addComponent(Control(entity, def, Cpu(entity)))
@@ -100,13 +100,14 @@ M.create = function(id, coord)
         entity:addComponent(HealthBar(entity, def))
 
         -- equip all from backpack
-        entity:getComponent(Equipment):equipAll()
+        entity:getComponent(Backpack):equipAll()
     elseif entity.type == 'armor' then
         entity.z_index      = 5
         entity.kind         = def['kind']
         entity.ac           = def['ac']
 
         entity:addComponent(Item(entity, def))
+        entity:addComponent(Equippable(entity, def))
     elseif entity.type == 'weapon' then
         entity.z_index      = 5
         entity.kind         = def['kind']
@@ -115,17 +116,21 @@ M.create = function(id, coord)
         entity.projectile   = def['projectile']
 
         entity:addComponent(Item(entity, def))
+        entity:addComponent(Equippable(entity, def))
     elseif entity.type == 'ring' then
         entity.z_index = 5
 
         entity:addComponent(Item(entity, def))
+        entity:addComponent(Equippable(entity, def))
     elseif entity.type == 'necklace' then
         entity.z_index = 5
 
         entity:addComponent(Item(entity, def))
+        entity:addComponent(Equippable(entity, def))
     elseif entity.type == 'potion' then
         entity.z_index = 5
 
+        entity:addComponent(Usable(entity, def))
         entity:addComponent(Item(entity, def))
     elseif entity.type == 'tome' then
         entity.z_index = 5
@@ -138,6 +143,7 @@ M.create = function(id, coord)
     elseif entity.type == 'food' then
         entity.z_index = 5
 
+        entity:addComponent(Usable(entity, def))
         entity:addComponent(Item(entity, def))        
     elseif entity.type == 'effect' then
         entity.z_index = 20
