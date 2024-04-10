@@ -136,22 +136,22 @@ Inventory.new = function(player)
 
     local stats_y = background.y + background.h - 16
 
+    local hover_slot_info = nil
+
     local update = function(self, dt)
         local mx, my = love.mouse.getPosition()
 
-        local hover_idx = nil
+        hover_slot_info = nil
+
         for idx, slot in ipairs(slots) do
             local x1, x2, y1, y2 = slot.x, slot.x + 48, slot.y, slot.y + 48
             if mx > x1 and mx < x2 and my > y1 and my < y2 then
-                hover_idx = idx
+                hover_slot_info = {
+                    idx = idx,
+                    slot = slot,
+                }
                 break
             end
-        end
-
-        if hover_idx then
-            print('hovering over slot ' .. hover_idx)
-        else
-            print()
         end
     end
 
@@ -198,12 +198,23 @@ Inventory.new = function(player)
         if key == 'i' then Gamestate.pop() end
     end
 
+    local mouseReleased = function(self, x, y, mouse_btn)
+        if not (hover_slot_info and mouse_btn == 2) then return end
+
+        if hover_slot_info.idx > 11 then
+            print('try equip or use item from backpack')
+        else
+            print('try to move item to backpack')
+        end
+    end
+
     return setmetatable({
-        keypressed  = keyPressed,
-        update      = update,
-        enter       = enter,
-        leave       = leave,
-        draw        = draw,
+        mousereleased   = mouseReleased,
+        keypressed      = keyPressed,
+        update          = update,
+        enter           = enter,
+        leave           = leave,
+        draw            = draw,
     }, Inventory)
 end
 
