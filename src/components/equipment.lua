@@ -122,6 +122,10 @@ Equipment.new = function(entity, def)
                 equip.chest = item
                 return true
             elseif item.kind == 'shield' then
+                -- can't carry 2h weapon with shield, so unquip if needed
+                if equip.mainhand ~= nil and equip.mainhand.kind == '2h' then
+                    self:unequip('mainhand')
+                end
                 self:unequip('offhand')
                 equip.offhand = item
                 return true
