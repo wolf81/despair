@@ -17,8 +17,9 @@ lume                = require 'lib.lume.lume'
 ndn                 = require 'lib.ndn'
 
 -- scenes
-Game                = require 'src.scenes.game'
 Inventory           = require 'src.scenes.inventory'
+Loading             = require 'src.scenes.loading'
+Game                = require 'src.scenes.game'
 
 -- world
 Dungeon             = require 'src.world.dungeon'
@@ -35,6 +36,7 @@ Overlay             = require 'src.hud.overlay'
 -- helpers
 ActionHelper        = require 'src.helpers.action_helper'
 ColorHelper         = require 'src.helpers.color_helper'
+PathHelper          = require 'src.helpers.path_helper'
 
 -- util
 Shadowcaster        = require 'src.util.shadowcaster'

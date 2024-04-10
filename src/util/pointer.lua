@@ -30,13 +30,11 @@ end
 M.init = function()
     if not love.mouse.isCursorSupported() then return end
 
-    -- create a mouse cursor from a quad
-    local texture = TextureCache:get('uf_interface')
-    local quads = QuadCache:get('uf_interface')
-    local image_data = newImageData(texture, quads[157])
+    -- create a new cursor ...
+    local image_data = love.image.newImageData('gfx/pointer.png')
     local cursor = love.mouse.newCursor(image_data, 6, 6)
 
-    -- and set the mouse cursor
+    -- ... and set the new cursor
     love.mouse.setCursor(cursor)
 end
 

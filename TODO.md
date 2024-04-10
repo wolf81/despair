@@ -5,7 +5,7 @@
 * feat: Implement food, food should increase energy
 * feat: Prevent stairs from being hidden under fog of war
 * feat: Generate monsters randomly just outside visible area of player
-* feat: Implement level saving and loading
+* feat: Implement level saving and loadingb
 * feat: Improve variety of textures in dungeon
 * feat: Implement magic missile spell
 * feat: Make generic bar view class that can be used for health, hunger, mana, ...
