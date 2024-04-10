@@ -10,9 +10,17 @@ local function generateSlots(equipment, equip_x, equip_y, backpack, backpack_x, 
     -- generate slots for equipment
 
     equip_slot_info = {
-        [2] = 'mainhand',
-        [4] = 'offhand',
-        [6] = 'chest',
+        [1]     = 'head',
+        [2]     = 'mainhand',
+        [3]     = 'neck',
+        [4]     = 'offhand',
+        [5]     = 'back',
+        [6]     = 'chest',
+        [7]     = 'hands',
+        [8]     = 'ring1',
+        [9]     = 'legs',
+        [10]    = 'ring2',
+        [11]    = 'feet',
     }
 
     for i = 1, 11 do
@@ -26,7 +34,7 @@ local function generateSlots(equipment, equip_x, equip_y, backpack, backpack_x, 
         table.insert(slots, { 
             x   = equip_x + x,
             y   = equip_y + y,
-            key = equip_slot_info[#slots],
+            key = equip_slot_info[#slots + 1],
         })
     end
 
