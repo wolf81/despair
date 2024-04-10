@@ -101,10 +101,10 @@ local function getDamageText(damage_info)
     return min + damage_info.bonus .. '-' .. max + damage_info.bonus
 end
 
-local function drawCombatStats(offense, defense, x, y)
+local function drawCombatStats(offense, defense, x, y, w, h)
     local text_h = FONT:getHeight() + 8
 
-    local background = TextureGenerator.generatePaperTexture(230, 90)
+    local background = TextureGenerator.generatePaperTexture(w, h)
 
     local att_value = 'ATTACK BONUS: ' .. offense:getAttackValue()
     
@@ -113,13 +113,19 @@ local function drawCombatStats(offense, defense, x, y)
     local dmg_value = 'DAMAGE:       ' .. getDamageText(damage_info)
     local ac_value  = 'ARMOR CLASS:  ' .. defense:getArmorValue()
 
-    love.graphics.draw(background, x - 10, y - 10)
+    love.graphics.draw(background, x, y)
 
     love.graphics.setColor(0.0, 0.0, 0.0, 0.7)
-    love.graphics.print('COMBAT STATS', x, y)
-    love.graphics.print(att_value, x, y + text_h)
-    love.graphics.print(dmg_value, x, y + text_h * 2)
-    love.graphics.print(ac_value, x, y + text_h * 3)
+    love.graphics.print('COMBAT STATS', x + 10, y + 10)
+    love.graphics.print(att_value, x + 10, y + text_h + 10)
+    love.graphics.print(dmg_value, x + 10, y + text_h * 2 + 10)
+    love.graphics.print(ac_value, x + 10, y + text_h * 3 + 10)
+end
+
+local function drawItemInfo(x, y, w, h)
+    local background = TextureGenerator.generatePaperTexture(w, h)
+    love.graphics.draw(background, x, y)
+
 end
 
 -- TODO: need title bar and close button
@@ -141,9 +147,10 @@ Inventory.new = function(player)
     local equip_y, backpack_y = background.y + 16, background.y + 16
     local slots = generateSlots(
         equipment, equip_x, background.y + 20,
-        backpack, backpack_x, background.y + 20)
+        backpack, backpack_x, background.y + 20)    
 
-    local stats_y = background.y + background.h - 80
+    local stats_w, stats_h = mfloor(background.w / 2 - 20), 90
+    local stats_y = background.y + background.h - stats_h
 
     local hover_slot_info = nil
 
@@ -200,7 +207,10 @@ Inventory.new = function(player)
             end
         end
 
-        drawCombatStats(offense, defense, equip_x + 4, stats_y)
+        local mid_x = WINDOW_W / 2
+        local ox = mfloor((background.w / 2 - stats_w) / 3)
+        drawCombatStats(offense, defense, mid_x - stats_w - ox, stats_y, stats_w, stats_h)        
+        drawItemInfo(mid_x + ox, stats_y, stats_w, stats_h)
     end
 
     local keyReleased = function(self, key, scancode)
