@@ -12,7 +12,7 @@ local mfloor = math.floor
 local Camera = {}
 
 Camera.new = function(x, y, scale)
-    local camera = HumpCamera(x or 0, y or 0, scale or 1.0)
+    local camera = HumpCamera(x or 0, y or 0, 1.0)
     local follow = true
 
     local draw = function(self, fn, x, y, w, h)

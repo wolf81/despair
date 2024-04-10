@@ -24,6 +24,8 @@ Game.new = function()
 
     local portrait = Portrait()
 
+    local overlay = Overlay()
+
     local update = function(self, dt) 
         if (not is_paused) and (not show_inventory) then
             dungeon:update(dt)
@@ -40,7 +42,6 @@ Game.new = function()
 
     local draw = function(self) 
         love.graphics.push()
-        love.graphics.scale(SCALE)
 
         dungeon:draw(0, 0, WINDOW_W - player_info_w, WINDOW_H) 
 
@@ -75,18 +76,31 @@ Game.new = function()
         end
 
         love.graphics.pop()
+
+        overlay:draw()
     end
+
+    local inv = Inventory(player)
 
     local keyPressed = function(self, key, scancode)
         if key == 'space' then is_paused = (not is_paused) end
-        if key == 'i' then show_inventory = (not show_inventory) end
+        
+        if key == 'i' then
+            Gamestate.push(inv)
+        end
     end
+
+    local showOverlay = function(self) overlay:fadeIn() end
+
+    local hideOverlay = function(self) overlay:fadeOut() end
 
     return setmetatable({
         -- methods
-        update          = update,
         draw            = draw,
-        keyPressed      = keyPressed,
+        update          = update,
+        keypressed      = keyPressed,
+        showOverlay     = showOverlay,
+        hideOverlay     = hideOverlay,
     }, Game)
 end
 

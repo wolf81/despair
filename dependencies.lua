@@ -9,6 +9,7 @@ local Cache = require 'src.util.cache'
 
 -- libraries
 bresenham           = require 'lib.bresenham.bresenham'
+Gamestate           = require 'lib.hump.gamestate'
 Signal              = require 'lib.hump.signal'
 vector              = require 'lib.hump.vector'
 Timer               = require 'lib.hump.timer'
@@ -17,6 +18,7 @@ ndn                 = require 'lib.ndn'
 
 -- scenes
 Game                = require 'src.scenes.game'
+Inventory           = require 'src.scenes.inventory'
 
 -- world
 Dungeon             = require 'src.world.dungeon'
@@ -26,9 +28,9 @@ Map                 = require 'src.world.map'
 -- hud
 ResourceBar         = require 'src.hud.resource_bar'
 PlayerInfo          = require 'src.hud.player_info'
-Inventory           = require 'src.hud.inventory'
 Portrait            = require 'src.hud.portrait'
 Minimap             = require 'src.hud.minimap'
+Overlay             = require 'src.hud.overlay'
 
 -- helpers
 ActionHelper        = require 'src.helpers.action_helper'
