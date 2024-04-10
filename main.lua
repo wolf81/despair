@@ -221,11 +221,3 @@ function love.draw()
 
     -- game:draw()
 end
-
-function love.keypressed(key, scancode, isrepeat)
-    if key == "escape" then
-        love.event.quit()
-    end
-
-    -- game:keyPressed(key, scancode)
-end

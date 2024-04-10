@@ -1,3 +1,10 @@
+--[[
+--  Dungeon of Despair
+--
+--  Author: Wolfgang Schreurs
+--  info+despair@wolftrail.net
+--]]
+
 local mfloor = math.floor
 
 local Inventory = {}
@@ -196,8 +203,10 @@ Inventory.new = function(player)
         drawCombatStats(offense, defense, equip_x + 4, stats_y)
     end
 
-    local keyPressed = function(self, key, scancode)
-        if key == 'i' then Gamestate.pop() end
+    local keyReleased = function(self, key, scancode)
+        if key == "escape" then
+            Gamestate.pop()
+        end
     end
 
     local mouseReleased = function(self, x, y, mouse_btn)
@@ -238,7 +247,7 @@ Inventory.new = function(player)
 
     return setmetatable({
         mousereleased   = mouseReleased,
-        keypressed      = keyPressed,
+        keyreleased     = keyReleased,
         update          = update,
         enter           = enter,
         leave           = leave,

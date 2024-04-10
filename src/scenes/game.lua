@@ -49,9 +49,13 @@ Game.new = function()
         overlay:draw()
     end
 
-    local keyPressed = function(self, key, scancode)        
+    local keyReleased = function(self, key, scancode)        
         if key == 'i' and player:getComponent(Health):isAlive() then
             Gamestate.push(Inventory(player))
+        end
+
+        if Gamestate.current() == self and key == "escape" then
+            love.event.quit()
         end
     end
 
@@ -63,7 +67,7 @@ Game.new = function()
         -- methods
         draw            = draw,
         update          = update,
-        keypressed      = keyPressed,
+        keyreleased     = keyReleased,
         showOverlay     = showOverlay,
         hideOverlay     = hideOverlay,
     }, Game)
