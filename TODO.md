@@ -14,6 +14,8 @@
 * feat: Get experience for killing monsters and level up
 * feat: Backpack should be a fixed size array, so we can make a proper inventory UI
 * feat: Implement dual-wield attacks
+* feat: Implement sleep & health recovery over sleep, remove automatic health recovery
+* feat: Perhaps food should recover a small amount of health (?)
 
 ## BUGS 
 
