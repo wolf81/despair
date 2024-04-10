@@ -7,24 +7,22 @@
 
 local Backpack = {}
 
-function Backpack.new(entity, def)
-    local items, last_item_gid = {}, nil
+local MAX_BACKPACK_SIZE = 30
 
-    -- add all items to backpack
-    for _, id in ipairs(def['equip']) do
-        local item = EntityFactory.create(id)
-        items[tostring(item.gid)] = item
-    end
+function Backpack.new(entity, def)
+    local items = {}
 
     -- insert an item into backpack
     local put = function(self, item)
         if item == nil then return end
 
-        local item_gid = tostring(item.gid)
-        items[item_gid] = item
-        last_item_gid = item_gid
+        if #items >= MAX_BACKPACK_SIZE then return false end
 
         Signal.emit('put', item)
+
+        table.insert(items, item)
+
+        return true
     end
 
     -- remove an item from backpack, either by id or using a filter function
@@ -36,54 +34,53 @@ function Backpack.new(entity, def)
         if arg_type == 'function' then
             local removed = {}
 
-            for gid, item in pairs(items) do
-                if not arg(item) then goto continue end
-
-                local item = items[gid]
-                items[gid] = nil
-                table.insert(removed, item)
-
-                ::continue::
+            for idx, item in ipairs(items) do
+                if arg(item) then
+                    table.insert(removed, table.remove(items, idx))
+                end
             end
 
             return removed
         elseif arg_type == 'number' then
-            local item = items[tostring(arg)]
-            items[tostring(arg)] = nil
-            return item
+            assert(arg > 0 and arg <= MAX_BACKPACK_SIZE, 
+                'index ' .. arg .. ' out of bounds, should be between 1 and ' .. MAX_BACKPACK_SIZE)
+
+            return table.remove(items, arg)
         end
 
         error('invalid argument type "' .. arg_type .. '"')
     end
 
-    -- iterate through all items in the backpack
-    local each = function(self)
-        local gid, item = nil, nil
+    local peek = function(self, idx) return items[idx] end
 
-        return function()
-            gid, item = next(items, gid)
-            return item
+    local size = function(self) return #items, MAX_BACKPACK_SIZE end
+
+    local takeLast = function(self)
+        if #items > 0 then
+            return table.remove(items, #items)
         end
     end
 
-    local takeLast = function(self)
-        local item = nil
+    local dropItem = function(self, item, level)
+        if not item then return end
 
-        if last_item_gid ~= nil then
-            item = items[last_item_gid]
-            items[last_item_gid] = nil
-            last_item_gid = nil
-        end
+        item.coord = entity.coord:clone()
+        level:addEntity(item)
+    end
 
-        return item
+    -- add all items to backpack
+    for _, id in ipairs(def['equip']) do
+        put(nil, EntityFactory.create(id))
     end
 
     return setmetatable({
         -- methods
         put         = put,
+        peek        = peek,
         take        = take,
+        size        = size,
         takeLast    = takeLast,
-        each        = each,
+        dropItem    = dropItem,
     }, Backpack)
 end
 

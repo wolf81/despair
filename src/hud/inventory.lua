@@ -9,7 +9,7 @@ local mfloor = math.floor
 
 local Inventory = {}
 
-local function drawItemContainer(x, y)	
+local function drawItemContainer(x, y, item)	
 	love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
 
 	local texture = TextureCache:get('uf_interface')
@@ -29,16 +29,16 @@ local function drawItemContainer(x, y)
 	local color_info = ColorHelper.getColors(texture, quads[334], true)[1]
 	love.graphics.setColor(color_info.color)
 	love.graphics.rectangle('fill', x + 16, y + 16, 16, 16)
-end
 
-local function drawItem(item, x, y)
-	local def = EntityFactory.getDefinition(item.id)
-	local texture = TextureCache:get(def.texture)
-	local quads = QuadCache:get(def.texture)
-	local frame = def.anim[1]
+	if item ~= nil then
+		local def = EntityFactory.getDefinition(item.id)
+		local texture = TextureCache:get(def.texture)
+		local quads = QuadCache:get(def.texture)
+		local frame = def.anim[1]
 
-	love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
-	love.graphics.draw(texture, quads[frame], x, y)
+		love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
+		love.graphics.draw(texture, quads[frame], x, y)
+	end
 end
 
 local function drawBackpack(backpack, x, y, w, h)
@@ -53,21 +53,11 @@ local function drawBackpack(backpack, x, y, w, h)
 	local x1, x2 = x, x + ox * 5
 	local y1, y2 = y + 25, y + ox * 4 + 25
 
-	local items = {}
-	for item in backpack:each() do
-		table.insert(items, item)
-	end
-
-	local i = 1
+	local idx = 1
 	for y = y1, y2, ox do
 		for x = x1, x2, ox do
-			drawItemContainer(x, y)
-
-			local item = items[i]
-			if item ~= nil then
-				drawItem(item, x, y)
-				i = i + 1
-			end
+			drawItemContainer(x, y, backpack:peek(idx))
+			idx = idx + 1
 		end		
 	end
 
@@ -91,11 +81,11 @@ local function drawEquipment(equipment, x, y, w, h)
 	local y1, y2, y3, y4, y5 = unpack(y_offsets)
 
 	drawItemContainer(x + x2, y + y1)
-	drawItemContainer(x + x1, y + y2)
+	drawItemContainer(x + x1, y + y2, equipment:getItem('mainhand'))
 	drawItemContainer(x + x2, y + y2)
-	drawItemContainer(x + x3, y + y2)
+	drawItemContainer(x + x3, y + y2, equipment:getItem('offhand'))
 	drawItemContainer(x + x1, y + y3)
-	drawItemContainer(x + x2, y + y3)
+	drawItemContainer(x + x2, y + y3, equipment:getItem('chest'))
 	drawItemContainer(x + x3, y + y3)
 	drawItemContainer(x + x1, y + y4)
 	drawItemContainer(x + x2, y + y4)
@@ -103,23 +93,7 @@ local function drawEquipment(equipment, x, y, w, h)
 	drawItemContainer(x + x2, y + y5)
 
 	love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
-
 	love.graphics.print('EQUIPMENT', x + 10, y + 10)
-
-	local item = equipment:getItem('mainhand')
-	if item ~= nil then	
-		drawItem(item, x + x1, y + y2)
-	end
-
-	item = equipment:getItem('offhand')
-	if item ~= nil then	
-		drawItem(item, x + x3, y + y2)
-	end
-
-	item = equipment:getItem('chest')
-	if item ~= nil then	
-		drawItem(item, x + x2, y + y3)
-	end
 end
 
 local function getDamageText(damage_info)
