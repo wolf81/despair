@@ -55,6 +55,8 @@ function Backpack.new(entity, def)
 
     local size = function(self) return #items, MAX_BACKPACK_SIZE end
 
+    local isFull = function(self) return #items == MAX_BACKPACK_SIZE end
+
     local takeLast = function(self)
         if #items > 0 then
             return table.remove(items, #items)
@@ -79,6 +81,7 @@ function Backpack.new(entity, def)
         peek        = peek,
         take        = take,
         size        = size,
+        isFull      = isFull,
         takeLast    = takeLast,
         dropItem    = dropItem,
     }, Backpack)

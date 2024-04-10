@@ -203,7 +203,24 @@ Inventory.new = function(player)
 
         if hover_slot_info.idx > 11 then
             print('try equip or use item from backpack')
+
+            local item_idx = hover_slot_info.idx - 11
+
+            local item = backpack:peek(item_idx)
+
+            -- TODO: how to easily check if item type is equippable? 
+            if item.type == 'weapon' or item.type == 'armor' or item.type == 'necklace' or item.type == 'ring' then
+                item = backpack:take(item_idx)
+                equipment:equip(item)
+            end
         else
+            if backpack:isFull() then
+                error('backpack reached max limit')
+            end
+
+            equipment:unequip(hover_slot_info.slot.key)
+
+
             print('try to move item to backpack')
         end
     end

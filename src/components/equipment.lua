@@ -156,6 +156,18 @@ Equipment.new = function(entity, def)
                 equip.mainhand = item
                 return true
             end
+        elseif item.type == 'necklace' then
+            self:unequip('neck')
+            equip.neck = item
+            return true
+        elseif item.type == 'ring' then
+            if equip.ring1 ~= nil and equip.ring2 == nil then
+                equip.ring2 = item
+            else
+                self:unequip('ring1')
+                equip.ring1 = item                
+            end
+            return true
         end
 
         return false

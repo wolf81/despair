@@ -50,7 +50,7 @@ Game.new = function()
     end
 
     local keyPressed = function(self, key, scancode)        
-        if key == 'i' then
+        if key == 'i' and player:getComponent(Health):isAlive() then
             Gamestate.push(Inventory(player))
         end
     end
