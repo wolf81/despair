@@ -25,41 +25,6 @@ local EQUIP_SLOT_INFO = TableHelper.readOnly({
     [11]    = 'feet',
 })
 
-local function formatItemInfo(item_info)
-    local key_len = 0
-    local val_len = 0
-
-    -- Determine key_len based on longest key length while appending colon and space, for example:
-    -- • given the keys 'Armor Class', 'Damage', 'Name', the key_len would be 11
-    -- • but when displaying in a string, we would add colon and space, hence key_len will be 13
-    -- • when displayed in string might look as such with right padding based on key_len:
-    --     Name:        John
-    --     Armor Class: 15
-    --     Damage:      1d8+2
-    for _, info in ipairs(item_info) do
-        for k, v in pairs(info) do
-            key_len = math.max(key_len, k:len())
-            val_len = math.max(val_len, v:len())
-        end
-    end
-
-    -- reserve length for 2 characters: `: `
-    key_len = key_len + 2 
-
-    local s = ''
-    for _, info in ipairs(item_info) do
-        for k, v in pairs(info) do
-            s = (s .. 
-                StringHelper.padRight(k .. ':', key_len) .. 
-                StringHelper.padLeft(tostring(v), val_len) .. 
-                '\n')
-        end
-    end
-
-    -- trim newline seperator at end of string
-    return lume.trim(s)
-end
-
 local function generateSlots(equipment, equip_x, equip_y, backpack, backpack_x, backpack_y)
     local slots = {}
 
@@ -258,14 +223,14 @@ Inventory.new = function(player)
 
             local info = item:getComponent(Info)
             love.graphics.print(info:getName(), mid_x + ox + 10, stats_y + 10)
-            love.graphics.print(info:getInfo(), mid_x + ox + 10, stats_y + 20)
+            love.graphics.print(info:getDescription(), mid_x + ox + 10, stats_y + 20)
         else
             local item = equipment:getItem(hover_slot_info.slot.key)
             if not item then return end
 
             local info = item:getComponent(Info)
             love.graphics.print(info:getName(), mid_x + ox + 10, stats_y + 10)
-            love.graphics.print(formatItemInfo(info:getInfo()), mid_x + ox + 10, stats_y + 20)
+            love.graphics.printf(info:getDescription(), mid_x + ox + 10, stats_y + 20)
         end
     end
 
