@@ -34,6 +34,8 @@ function love.load(args)
 
     love.graphics.scale(SCALE)
 
+    FONT:setLineHeight(15)
+
     Gamestate.registerEvents()
     Gamestate.switch(Loading())
 end

@@ -8,9 +8,7 @@
 local Item = {}
 
 Item.new = function(entity, def)
-    return setmetatable({
-        -- methods
-    }, Item)
+    return setmetatable({}, Item)
 end
 
 return setmetatable(Item, {

@@ -9,27 +9,63 @@ local mfloor = math.floor
 
 local Inventory = {}
 
+local TEXT_COLOR = { 0.0, 0.0, 0.0, 0.7 }
+
+local EQUIP_SLOT_INFO = TableHelper.readOnly({
+    [1]     = 'head',
+    [2]     = 'mainhand',
+    [3]     = 'neck',
+    [4]     = 'offhand',
+    [5]     = 'back',
+    [6]     = 'chest',
+    [7]     = 'hands',
+    [8]     = 'ring1',
+    [9]     = 'legs',
+    [10]    = 'ring2',
+    [11]    = 'feet',
+})
+
+local function formatItemInfo(item_info)
+    local key_len = 0
+    local val_len = 0
+
+    -- Determine key_len based on longest key length while appending colon and space, for example:
+    -- • given the keys 'Armor Class', 'Damage', 'Name', the key_len would be 11
+    -- • but when displaying in a string, we would add colon and space, hence key_len will be 13
+    -- • when displayed in string might look as such with right padding based on key_len:
+    --     Name:        John
+    --     Armor Class: 15
+    --     Damage:      1d8+2
+    for _, info in ipairs(item_info) do
+        for k, v in pairs(info) do
+            key_len = math.max(key_len, k:len())
+            val_len = math.max(val_len, v:len())
+        end
+    end
+
+    -- reserve length for 2 characters: `: `
+    key_len = key_len + 2 
+
+    local s = ''
+    for _, info in ipairs(item_info) do
+        for k, v in pairs(info) do
+            s = (s .. 
+                StringHelper.padRight(k .. ':', key_len) .. 
+                StringHelper.padLeft(tostring(v), val_len) .. 
+                '\n')
+        end
+    end
+
+    -- trim newline seperator at end of string
+    return lume.trim(s)
+end
+
 local function generateSlots(equipment, equip_x, equip_y, backpack, backpack_x, backpack_y)
     local slots = {}
 
     local spacing, size = 2, 48
 
     -- generate slots for equipment
-
-    equip_slot_info = {
-        [1]     = 'head',
-        [2]     = 'mainhand',
-        [3]     = 'neck',
-        [4]     = 'offhand',
-        [5]     = 'back',
-        [6]     = 'chest',
-        [7]     = 'hands',
-        [8]     = 'ring1',
-        [9]     = 'legs',
-        [10]    = 'ring2',
-        [11]    = 'feet',
-    }
-
     for i = 1, 11 do
         local x = (i == 1 or i == 11) and 2 or (1 + (i + 1) % 3)
         local y = (i == 11) and 5 or (i > 1) and mfloor((1 + i) / 3 + 1) or 1
@@ -41,12 +77,11 @@ local function generateSlots(equipment, equip_x, equip_y, backpack, backpack_x, 
         table.insert(slots, { 
             x   = equip_x + x,
             y   = equip_y + y,
-            key = equip_slot_info[#slots + 1],
+            key = EQUIP_SLOT_INFO[#slots + 1],
         })
     end
 
     -- generate slots for backpack
-
     local _, max_size = backpack:size()
     for i = 1, max_size do
         -- convert index to pixel coords
@@ -86,13 +121,13 @@ local newBackground = function(width, height)
         love.graphics.draw(texture, x, y)
     end
 
-    return {
+    return TableHelper.readOnly({
         x = x,
         y = y,
         w = w,
         h = h,
         draw = draw,
-    }
+    })
 end
 
 local function getDamageText(damage_info)
@@ -115,7 +150,7 @@ local function drawCombatStats(offense, defense, x, y, w, h)
 
     love.graphics.draw(background, x, y)
 
-    love.graphics.setColor(0.0, 0.0, 0.0, 0.7)
+    love.graphics.setColor(unpack(TEXT_COLOR))
     love.graphics.print('COMBAT STATS', x + 10, y + 10)
     love.graphics.print(att_value, x + 10, y + text_h + 10)
     love.graphics.print(dmg_value, x + 10, y + text_h * 2 + 10)
@@ -211,6 +246,27 @@ Inventory.new = function(player)
         local ox = mfloor((background.w / 2 - stats_w) / 3)
         drawCombatStats(offense, defense, mid_x - stats_w - ox, stats_y, stats_w, stats_h)        
         drawItemInfo(mid_x + ox, stats_y, stats_w, stats_h)
+
+        if not hover_slot_info then return end
+
+        love.graphics.setColor(unpack(TEXT_COLOR))
+
+        if hover_slot_info.idx > 11 then
+            local item = backpack:peek(hover_slot_info.idx - 11)
+
+            if not item then return end
+
+            local info = item:getComponent(Info)
+            love.graphics.print(info:getName(), mid_x + ox + 10, stats_y + 10)
+            love.graphics.print(info:getInfo(), mid_x + ox + 10, stats_y + 20)
+        else
+            local item = equipment:getItem(hover_slot_info.slot.key)
+            if not item then return end
+
+            local info = item:getComponent(Info)
+            love.graphics.print(info:getName(), mid_x + ox + 10, stats_y + 10)
+            love.graphics.print(formatItemInfo(info:getInfo()), mid_x + ox + 10, stats_y + 20)
+        end
     end
 
     local keyReleased = function(self, key, scancode)

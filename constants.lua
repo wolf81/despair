@@ -20,19 +20,19 @@ WINDOW_H            = 450
 
 INFO_PANEL_WIDTH    = 240
 
-CLASSES = {
+CLASSES = TableHelper.readOnly({
     ['fighter']     = true,
     ['cleric']      = true,
     ['rogue']       = true,
     ['mage']        = true,
-}
+})
 
-RACES = {
+RACES = TableHelper.readOnly({
     ['halfling']    = true,
     ['human']       = true,
     ['dwarf']       = true,
     ['elf']         = true,
-}
+})
 
 FONT = love.graphics.newImageFont('gfx/image_font.png', 
     "1234567890!#$%&*()-+=[]:;\"'<" ..

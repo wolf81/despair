@@ -6,14 +6,15 @@
 --]]
 
 local mfloor, mmax = math.floor, math.max
-local SEGMENT_COUNT = 20
 
 local ResourceBar = {}
 
-local quad_info = {
+local SEGMENT_COUNT = 20
+
+local QUAD_INFO = TableHelper.readOnly({
     ['health'] = { 354, 356 },
     ['energy'] = { 388, 390 },
-}
+})
 
 local function generateBarTexture(texture, empty_quad, filled_quad, value)
     local _, _, quad_w, quad_h = empty_quad:getViewport()
@@ -33,13 +34,13 @@ end
 ResourceBar.new = function(entity, type)
     assert(entity ~= nil, 'missing argument: "entity"')
     assert(type ~= nil, 'missing argument: "type"')
-    assert(quad_info[type] ~= nil, 'invalid argument for "type", expected "health" or "energy"')
+    assert(QUAD_INFO[type] ~= nil, 'invalid argument for "type", expected "health" or "energy"')
 
     local textures = {}
 
     local texture = TextureCache:get('uf_interface')
     local quads = QuadCache:get('uf_interface')
-    local frames = quad_info[type]
+    local frames = QUAD_INFO[type]
     local empty_quad, filled_quad = quads[frames[1]], quads[frames[2]]
     local texture_idx = 0
     local _, _, w, h = empty_quad:getViewport()
@@ -48,12 +49,9 @@ ResourceBar.new = function(entity, type)
         textures[i] = generateBarTexture(texture, empty_quad, filled_quad, i)
     end
 
-    local resource = nil
-    if type == 'health' then
-        resource = entity:getComponent(Health)
-    else
-        resource = entity:getComponent(Energy)
-    end
+    local resource = ((type == 'health') and 
+        entity:getComponent(Health) or 
+        entity:getComponent(Energy))
 
     local update = function(self)
         local current, total = resource:getValue()

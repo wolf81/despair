@@ -9,7 +9,7 @@ local mmax = math.max
 
 local Equipment = {}
 
-local SLOTS = { 
+local SLOTS = TableHelper.readOnly({ 
     ['mainhand']    = true, 
     ['offhand']     = true, 
     ['head']        = true,
@@ -21,7 +21,7 @@ local SLOTS = {
     ['neck']        = true, -- necklace
     ['ring1']       = true,
     ['ring2']       = true,
-}
+})
 
 Equipment.new = function(entity, def)
     local backpack = entity:getComponent(Backpack)
@@ -120,11 +120,13 @@ Equipment.new = function(entity, def)
         if item == nil then return false end
 
         if item.type == 'armor' then
-            if item.kind == 'chest' then
+            local armor = item:getComponent(Armor)
+
+            if armor.kind == 'chest' then
                 self:unequip('chest')
                 equip.chest = item
                 return true
-            elseif item.kind == 'shield' then
+            elseif armor.kind == 'shield' then
                 -- can't carry 2h weapon with shield, so unquip if needed
                 if equip.mainhand ~= nil and equip.mainhand.kind == '2h' then
                     self:unequip('mainhand')

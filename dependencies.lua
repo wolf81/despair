@@ -16,6 +16,13 @@ Timer               = require 'lib.hump.timer'
 lume                = require 'lib.lume.lume'
 ndn                 = require 'lib.ndn'
 
+-- helpers
+ActionHelper        = require 'src.helpers.action_helper'
+StringHelper        = require 'src.helpers.string_helper'
+ColorHelper         = require 'src.helpers.color_helper'
+TableHelper         = require 'src.helpers.table_helper'
+PathHelper          = require 'src.helpers.path_helper'
+
 -- scenes
 Inventory           = require 'src.scenes.inventory'
 Loading             = require 'src.scenes.loading'
@@ -32,11 +39,6 @@ PlayerInfo          = require 'src.hud.player_info'
 Portrait            = require 'src.hud.portrait'
 Minimap             = require 'src.hud.minimap'
 Overlay             = require 'src.hud.overlay'
-
--- helpers
-ActionHelper        = require 'src.helpers.action_helper'
-ColorHelper         = require 'src.helpers.color_helper'
-PathHelper          = require 'src.helpers.path_helper'
 
 -- util
 Shadowcaster        = require 'src.util.shadowcaster'
@@ -78,13 +80,16 @@ Backpack            = require 'src.components.backpack'
 Control             = require 'src.components.control'
 Offense             = require 'src.components.offense'
 Defense             = require 'src.components.defense'
+Weapon              = require 'src.components.weapon'
 Usable              = require 'src.components.usable'
 Energy              = require 'src.components.energy'
 Visual              = require 'src.components.visual'
 Health              = require 'src.components.health'
 Skills              = require 'src.components.skills'
+Armor               = require 'src.components.armor'
 Stats               = require 'src.components.stats'
 Item                = require 'src.components.item'
+Info                = require 'src.components.info'
 
 -- resolvers
 CombatResolver      = require 'src.resolvers.combat'

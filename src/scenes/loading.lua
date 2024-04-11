@@ -5,7 +5,7 @@
 --  info+despair@wolftrail.net
 --]]
 
-local mfloor = math.floor
+local mfloor, mmax = math.floor, math.max
 
 local MINIMUM_LOAD_DURATION = 0.2
 
@@ -121,14 +121,14 @@ local function registerPortraitsQuads()
 end
 
 local function registerQuads()
-    registerHeroesQuads()
     registerFxQuads()
+    registerItemsQuads()
+    registerHeroesQuads()
+    registerSkillsQuads()
+    registerTerrainQuads()
     registerFxImpactQuads()
     registerInterfaceQuads()
-    registerTerrainQuads()
-    registerItemsQuads()
     registerPortraitsQuads()
-    registerSkillsQuads()
     registerProjectilesQuads()
 end
 
@@ -184,6 +184,11 @@ local function newPreloader()
     return preloader
 end
 
+local getMessage = function(preloader) 
+    local _, message = coroutine.resume(preloader)
+    return message or 'done'
+end
+
 Loading.new = function()
     local background = love.graphics.newImage('gfx/loading.png')
     local background_w, background_h = background:getDimensions()
@@ -204,13 +209,12 @@ Loading.new = function()
     end
 
     local update = function(self, dt)
-        time = math.max(time - dt, 0)
+        time = mmax(time - dt, 0)
 
         local preloader_status = coroutine.status(preloader)
 
-        if preloader_status == 'suspended' then 
-            local status, msg = coroutine.resume(preloader)
-            message = msg or 'done'
+        if preloader_status == 'suspended' then
+            message = getMessage(preloader)
             message_x = mfloor((WINDOW_W - FONT:getWidth(message)) / 2)
         elseif preloader_status == 'dead' and time == 0 then
             Gamestate.switch(Game())
