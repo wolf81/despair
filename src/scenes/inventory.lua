@@ -216,21 +216,20 @@ Inventory.new = function(player)
 
         love.graphics.setColor(unpack(TEXT_COLOR))
 
+        local item = nil
         if hover_slot_info.idx > 11 then
-            local item = backpack:peek(hover_slot_info.idx - 11)
-
-            if not item then return end
-
-            local info = item:getComponent(Info)
-            love.graphics.print(info:getName(), mid_x + ox + 10, stats_y + 10)
-            love.graphics.print(info:getDescription(), mid_x + ox + 10, stats_y + 20)
+            item = backpack:peek(hover_slot_info.idx - 11)
         else
-            local item = equipment:getItem(hover_slot_info.slot.key)
-            if not item then return end
+            item = equipment:getItem(hover_slot_info.slot.key)
+        end
 
+        if item then
             local info = item:getComponent(Info)
             love.graphics.print(info:getName(), mid_x + ox + 10, stats_y + 10)
-            love.graphics.printf(info:getDescription(), mid_x + ox + 10, stats_y + 20)
+            local lines = lume.split(info:getDescription(), '\n')
+            for idx, line in ipairs(lines) do
+                love.graphics.print(string.upper(line), mid_x + ox + 10, stats_y + idx * 15 + 10)
+            end
         end
     end
 

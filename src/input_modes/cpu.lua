@@ -9,12 +9,12 @@ local lrandom, mfloor = love.math.random, math.floor
 
 local Cpu = {}
 
-local DIRS = TableHelper.readOnly({
+local DIRS = {
     Direction.N, Direction.NW,
     Direction.E, Direction.NE,
     Direction.S, Direction.SW,
     Direction.W, Direction.SE,
-})
+}
 
 local function getRandomDirection(level, coord)
     local dirs = lume.shuffle(DIRS)
