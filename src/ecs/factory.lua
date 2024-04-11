@@ -99,15 +99,16 @@ M.create = function(id, coord)
         entity:addComponent(Offense(entity, def))
         entity:addComponent(Defense(entity, def))
         entity:addComponent(MoveSpeed(entity, def))
-    entity:addComponent(HealthBar(entity, def))
-        entity:addComponent(Armor(entity, def))
+        entity:addComponent(HealthBar(entity, def))
 
         -- equip all from backpack
         entity:getComponent(Backpack):equipAll()
     elseif entity.type == 'armor' then
         entity.z_index      = 5
+        entity.kind         = def['kind']
+        entity.ac           = def['ac']
+
         entity:addComponent(Item(entity, def))
-        entity:addComponent(Armor(entity, def))
         entity:addComponent(Equippable(entity, def))
     elseif entity.type == 'weapon' then
         entity.z_index      = 5
@@ -119,7 +120,6 @@ M.create = function(id, coord)
         entity.projectile   = def['projectile']
 
         entity:addComponent(Item(entity, def))
-        entity:addComponent(Weapon(entity, def))
         entity:addComponent(Equippable(entity, def))
     elseif entity.type == 'ring' then
         entity.z_index = 5

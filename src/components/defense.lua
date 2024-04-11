@@ -7,30 +7,27 @@
 
 local Defense = {}
 
-local function getAC(entity)
-    if not entity then return 0 end
-
-    local armor = entity:getComponent(Armor)
-    return armor and armor.ac or 0
-end
-
 Defense.new = function(entity, def)
     local equipment = entity:getComponent(Equipment)
     assert(equipment ~= nil, 'missing component: "Equipment"')
 
     -- set base armor class, used for NPCs
-    local base = getAC(entity)
+    local base = def['ac'] or 0
 
     local getArmorValue = function(self)
         local bonus = 0
 
         -- add AC for chest armor
         local chest = equipment:getItem('chest')
-        bonus = bonus + getAC(chest)
+        if chest ~= nil then
+            bonus = bonus + chest.ac
+        end
 
         -- add AC for offhand item, most likely a shield
         local offhand = equipment:getItem('offhand')
-        bonus = bonus + getAC(offhand)
+        if offhand ~= nil and offhand.type == 'armor' then
+            bonus = bonus + offhand.ac
+        end
 
         -- add dexterity bonus in case of player characters
         local stats = entity:getComponent(Stats)

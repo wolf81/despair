@@ -22,11 +22,13 @@ end
 local getInfo = function(entity)
     local info = {}
 
-    local armor = entity:getComponent(Armor)
-    if armor then addArmorInfo(info, armor) end
+    if entity.type == 'armor' then
+        addArmorInfo(info, entity)
+    end
 
-    local weapon = entity:getComponent(Weapon)
-    if weapon then addWeaponInfo(info, weapon) end
+    if entity.type == 'weapon' then
+        addWeaponInfo(info, entity)
+    end
 
     return info
 end

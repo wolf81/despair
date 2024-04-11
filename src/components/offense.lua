@@ -18,7 +18,7 @@ Offense.new = function(entity, def)
 
     local getAttackValue = function(self)
         local weapon = equipment:getItem('mainhand')
-        local base = weapon ~= nil and weapon.attack or 0
+        local base = weapon and weapon.attack or 0
         local bonus = 0
 
         -- add bonuses for player characters
@@ -58,7 +58,7 @@ Offense.new = function(entity, def)
 
         -- calculate weapon damage - critical hits always inflict maximum damage
         local weapon = equipment:getItem('mainhand')
-        if weapon ~= nil then 
+        if weapon then 
             if is_crit then
                 base = ndn.dice(weapon.damage).max()
             else
@@ -67,7 +67,7 @@ Offense.new = function(entity, def)
         end
 
         local stats = entity:getComponent(Stats)
-        if stats ~= nil then
+        if stats then
             local str_bonus = stats:getBonus('str')
             bonus = bonus + (weapon.kind == '2h' and str_bonus * 2 or str_bonus)
         end
