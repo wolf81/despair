@@ -36,6 +36,7 @@ Map                 = require 'src.world.map'
 -- hud
 ResourceBar         = require 'src.hud.resource_bar'
 PlayerInfo          = require 'src.hud.player_info'
+Actionbar           = require 'src.hud.actionbar'
 Portrait            = require 'src.hud.portrait'
 Minimap             = require 'src.hud.minimap'
 Overlay             = require 'src.hud.overlay'

@@ -18,20 +18,14 @@ Game.new = function()
     local dungeon = Dungeon(player)
     dungeon:enter()
 
-    local is_paused, show_inventory = false, false
-
-    local portrait = Portrait()
+    local portrait = Portrait(player)
+    local actionbar = Actionbar(player)
+    local actionbar_w, actionbar_h = actionbar:getSize()
 
     local overlay = Overlay()
 
     local update = function(self, dt) 
-        if (not is_paused) and (not show_inventory) then
-            dungeon:update(dt)
-        end
-
-        if show_inventory then
-            inventory:update(dt)
-        end
+        dungeon:update(dt)
 
         player_info:update(dt)
     end
@@ -45,6 +39,8 @@ Game.new = function()
         love.graphics.rectangle('fill', WINDOW_W - player_info_w, 0, player_info_w, WINDOW_H)
 
         player_info:draw(WINDOW_W - player_info_w, 0, player_info_w, WINDOW_H)
+
+        actionbar:draw((WINDOW_W - player_info_w - actionbar_w) / 2, WINDOW_H - actionbar_h)
 
         overlay:draw()
     end

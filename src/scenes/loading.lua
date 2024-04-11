@@ -120,6 +120,13 @@ local function registerPortraitsQuads()
     QuadCache:register(key, quads)
 end
 
+local function registerActionBarQuads()
+    local key = 'actionbar'
+    local image = TextureCache:get(key)
+    local quads = QuadGenerator.generate(image, 48, 48)
+    QuadCache:register(key, quads)
+end
+
 local function registerQuads()
     registerFxQuads()
     registerItemsQuads()
@@ -129,6 +136,7 @@ local function registerQuads()
     registerFxImpactQuads()
     registerInterfaceQuads()
     registerPortraitsQuads()
+    registerActionBarQuads()
     registerProjectilesQuads()
 end
 
