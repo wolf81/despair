@@ -36,4 +36,4 @@ Direction.fromHeading = function(x, y)
     else return Direction.NONE end
 end
 
-return Direction
+return TableHelper.readOnly(Direction)

@@ -5,7 +5,7 @@
 * feat: Implement food, food should increase energy
 * feat: Prevent stairs from being hidden under fog of war
 * feat: Generate monsters randomly just outside visible area of player
-* feat: Implement level saving and loading
+* feat: Implement level saving and loadingb
 * feat: Improve variety of textures in dungeon
 * feat: Implement magic missile spell
 * feat: Make generic bar view class that can be used for health, hunger, mana, ...
@@ -14,6 +14,8 @@
 * feat: Get experience for killing monsters and level up
 * feat: Backpack should be a fixed size array, so we can make a proper inventory UI
 * feat: Implement dual-wield attacks
+* feat: Implement sleep & health recovery over sleep, remove automatic health recovery
+* feat: Perhaps food should recover a small amount of health (?)
 
 ## BUGS 
 

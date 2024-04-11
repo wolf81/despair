@@ -56,6 +56,8 @@ M.create = function(id, coord)
     assert(def ~= nil, 'entity not registered \'' .. id .. '\'')
 
     local entity = Entity(def, coord or vector(0, 0)) 
+    -- provice every entity with an Info component, for displaying name and details in UI
+    entity:addComponent(Info(entity, def))
 
     if def.texture ~= nil then
         entity:addComponent(Visual(entity, def))
@@ -110,6 +112,8 @@ M.create = function(id, coord)
         entity:addComponent(Equippable(entity, def))
     elseif entity.type == 'weapon' then
         entity.z_index      = 5
+
+        -- TODO: remove, use properties inside Weapon component instead
         entity.kind         = def['kind']
         entity.attack       = def['attack']
         entity.damage       = def['damage']

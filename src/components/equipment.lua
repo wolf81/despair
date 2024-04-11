@@ -9,7 +9,7 @@ local mmax = math.max
 
 local Equipment = {}
 
-local SLOTS = { 
+local SLOTS = TableHelper.readOnly({ 
     ['mainhand']    = true, 
     ['offhand']     = true, 
     ['head']        = true,
@@ -21,7 +21,7 @@ local SLOTS = {
     ['neck']        = true, -- necklace
     ['ring1']       = true,
     ['ring2']       = true,
-}
+})
 
 Equipment.new = function(entity, def)
     local backpack = entity:getComponent(Backpack)
@@ -64,6 +64,9 @@ Equipment.new = function(entity, def)
 
             -- return all extra items to backpack
             for i = 2, #items do backpack:put(items[i]) end
+
+            -- TODO: if a light weapon was equipped, 
+            -- check if we can equip another light weapon?
 
             -- equipped successfully 
             return true
@@ -122,22 +125,31 @@ Equipment.new = function(entity, def)
                 equip.chest = item
                 return true
             elseif item.kind == 'shield' then
+                -- can't carry 2h weapon with shield, so unquip if needed
+                if equip.mainhand ~= nil and equip.mainhand.kind == '2h' then
+                    self:unequip('mainhand')
+                end
                 self:unequip('offhand')
                 equip.offhand = item
                 return true
             end
         elseif item.type == 'weapon' then
+            -- TODO: unequip natural weapon (if equipped)
+
             if item.kind == '2h' then
                 self:unequip('mainhand')
                 self:unequip('offhand')
                 equip.mainhand = item
                 return true
             elseif item.kind == 'light' then
+                -- can't carry 2h weapon with offhand weapon, so unquip if needed
+                if equip.mainhand ~= nil and equip.mainhand.kind == '2h' then
+                    self:unequip('mainhand')
+                end
+
                 if equip.mainhand ~= nil and equip.offhand == nil then
-                    print('eq offhand')
                     equip.offhand = item
                 else
-                    print('eq mainhand')
                     self:unequip('mainhand')
                     equip.mainhand = item                    
                 end
@@ -156,6 +168,8 @@ Equipment.new = function(entity, def)
                 equip.mainhand = item
                 return true
             end
+
+            -- TODO: if no mainhand weapon equipped, equip natural weapon
         elseif item.type == 'necklace' then
             self:unequip('neck')
             equip.neck = item

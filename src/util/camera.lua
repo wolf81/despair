@@ -7,7 +7,7 @@
 
 local HumpCamera = require 'lib.hump.camera'
 
-local mfloor = math.floor
+local mfloor, lrandom = math.floor, love.math.random
 
 local Camera = {}
 
@@ -38,8 +38,8 @@ Camera.new = function(x, y, scale)
 
         -- shake the camera for one second
         Timer.during(duration, function()
-            camera.x = x + love.math.random(-2, 2)
-            camera.y = y + love.math.random(-2, 2)
+            camera.x = x + lrandom(-2, 2)
+            camera.y = y + lrandom(-2, 2)
         end, function()
             camera.x = x
             camera.y = y

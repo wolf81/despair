@@ -1,6 +1,29 @@
+--[[
+--  Dungeon of Despair
+--
+--  Author: Wolfgang Schreurs
+--  info+despair@wolftrail.net
+--]]
+
 local mfloor = math.floor
 
 local Inventory = {}
+
+local TEXT_COLOR = { 0.0, 0.0, 0.0, 0.7 }
+
+local EQUIP_SLOT_INFO = TableHelper.readOnly({
+    [1]     = 'head',
+    [2]     = 'mainhand',
+    [3]     = 'neck',
+    [4]     = 'offhand',
+    [5]     = 'back',
+    [6]     = 'chest',
+    [7]     = 'hands',
+    [8]     = 'ring1',
+    [9]     = 'legs',
+    [10]    = 'ring2',
+    [11]    = 'feet',
+})
 
 local function generateSlots(equipment, equip_x, equip_y, backpack, backpack_x, backpack_y)
     local slots = {}
@@ -8,21 +31,6 @@ local function generateSlots(equipment, equip_x, equip_y, backpack, backpack_x, 
     local spacing, size = 2, 48
 
     -- generate slots for equipment
-
-    equip_slot_info = {
-        [1]     = 'head',
-        [2]     = 'mainhand',
-        [3]     = 'neck',
-        [4]     = 'offhand',
-        [5]     = 'back',
-        [6]     = 'chest',
-        [7]     = 'hands',
-        [8]     = 'ring1',
-        [9]     = 'legs',
-        [10]    = 'ring2',
-        [11]    = 'feet',
-    }
-
     for i = 1, 11 do
         local x = (i == 1 or i == 11) and 2 or (1 + (i + 1) % 3)
         local y = (i == 11) and 5 or (i > 1) and mfloor((1 + i) / 3 + 1) or 1
@@ -34,12 +42,11 @@ local function generateSlots(equipment, equip_x, equip_y, backpack, backpack_x, 
         table.insert(slots, { 
             x   = equip_x + x,
             y   = equip_y + y,
-            key = equip_slot_info[#slots + 1],
+            key = EQUIP_SLOT_INFO[#slots + 1],
         })
     end
 
     -- generate slots for backpack
-
     local _, max_size = backpack:size()
     for i = 1, max_size do
         -- convert index to pixel coords
@@ -79,13 +86,13 @@ local newBackground = function(width, height)
         love.graphics.draw(texture, x, y)
     end
 
-    return {
+    return TableHelper.readOnly({
         x = x,
         y = y,
         w = w,
         h = h,
         draw = draw,
-    }
+    })
 end
 
 local function getDamageText(damage_info)
@@ -94,10 +101,10 @@ local function getDamageText(damage_info)
     return min + damage_info.bonus .. '-' .. max + damage_info.bonus
 end
 
-local function drawCombatStats(offense, defense, x, y)
+local function drawCombatStats(offense, defense, x, y, w, h)
     local text_h = FONT:getHeight() + 8
 
-    local background = TextureGenerator.generatePaperTexture(230, 90)
+    local background = TextureGenerator.generatePaperTexture(w, h)
 
     local att_value = 'ATTACK BONUS: ' .. offense:getAttackValue()
     
@@ -106,13 +113,19 @@ local function drawCombatStats(offense, defense, x, y)
     local dmg_value = 'DAMAGE:       ' .. getDamageText(damage_info)
     local ac_value  = 'ARMOR CLASS:  ' .. defense:getArmorValue()
 
-    love.graphics.draw(background, x - 10, y - 10)
+    love.graphics.draw(background, x, y)
 
-    love.graphics.setColor(0.0, 0.0, 0.0, 0.7)
-    love.graphics.print('COMBAT STATS', x, y)
-    love.graphics.print(att_value, x, y + text_h)
-    love.graphics.print(dmg_value, x, y + text_h * 2)
-    love.graphics.print(ac_value, x, y + text_h * 3)
+    love.graphics.setColor(unpack(TEXT_COLOR))
+    love.graphics.print('COMBAT STATS', x + 10, y + 10)
+    love.graphics.print(att_value, x + 10, y + text_h + 10)
+    love.graphics.print(dmg_value, x + 10, y + text_h * 2 + 10)
+    love.graphics.print(ac_value, x + 10, y + text_h * 3 + 10)
+end
+
+local function drawItemInfo(x, y, w, h)
+    local background = TextureGenerator.generatePaperTexture(w, h)
+    love.graphics.draw(background, x, y)
+
 end
 
 -- TODO: need title bar and close button
@@ -134,9 +147,10 @@ Inventory.new = function(player)
     local equip_y, backpack_y = background.y + 16, background.y + 16
     local slots = generateSlots(
         equipment, equip_x, background.y + 20,
-        backpack, backpack_x, background.y + 20)
+        backpack, backpack_x, background.y + 20)    
 
-    local stats_y = background.y + background.h - 80
+    local stats_w, stats_h = mfloor(background.w / 2 - 20), 90
+    local stats_y = background.y + background.h - stats_h
 
     local hover_slot_info = nil
 
@@ -193,11 +207,36 @@ Inventory.new = function(player)
             end
         end
 
-        drawCombatStats(offense, defense, equip_x + 4, stats_y)
+        local mid_x = WINDOW_W / 2
+        local ox = mfloor((background.w / 2 - stats_w) / 3)
+        drawCombatStats(offense, defense, mid_x - stats_w - ox, stats_y, stats_w, stats_h)        
+        drawItemInfo(mid_x + ox, stats_y, stats_w, stats_h)
+
+        if not hover_slot_info then return end
+
+        love.graphics.setColor(unpack(TEXT_COLOR))
+
+        local item = nil
+        if hover_slot_info.idx > 11 then
+            item = backpack:peek(hover_slot_info.idx - 11)
+        else
+            item = equipment:getItem(hover_slot_info.slot.key)
+        end
+
+        if item then
+            local info = item:getComponent(Info)
+            love.graphics.print(info:getName(), mid_x + ox + 10, stats_y + 10)
+            local lines = lume.split(info:getDescription(), '\n')
+            for idx, line in ipairs(lines) do
+                love.graphics.print(string.upper(line), mid_x + ox + 10, stats_y + idx * 15 + 10)
+            end
+        end
     end
 
-    local keyPressed = function(self, key, scancode)
-        if key == 'i' then Gamestate.pop() end
+    local keyReleased = function(self, key, scancode)
+        if key == "escape" then
+            Gamestate.pop()
+        end
     end
 
     local mouseReleased = function(self, x, y, mouse_btn)
@@ -238,7 +277,7 @@ Inventory.new = function(player)
 
     return setmetatable({
         mousereleased   = mouseReleased,
-        keypressed      = keyPressed,
+        keyreleased     = keyReleased,
         update          = update,
         enter           = enter,
         leave           = leave,
