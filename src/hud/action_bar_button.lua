@@ -8,22 +8,22 @@
 local ActionBarButton = {}
 
 local ACTION_INFO = {
-    ['inventory']       = 2,
-    ['settings']        = 4,
-    ['attack']          = 6,
-    ['stealth']         = 7,
-    ['turn-undead']     = 8,
-    ['use-wand']        = 9,
-    ['push']            = 10,
-    ['shoot']           = 11,
-    ['use-potion']      = 14,
-    ['search']          = 15,
-    ['sleep']           = 16,
-    ['use-scroll']      = 17,
-    ['profile']         = 18,
-    ['steal']           = 19,
-    ['cast-spell']      = 20,
-    ['swap-weapon']     = 21, 
+    ['inventory']   = 2,
+    ['settings']    = 4,
+    ['attack']      = 6,
+    ['stealth']     = 7,
+    ['turn-undead'] = 8,
+    ['use-wand']    = 9,
+    ['push']        = 10,
+    ['shoot']       = 11,
+    ['use-potion']  = 14,
+    ['search']      = 15,
+    ['sleep']       = 16,
+    ['use-scroll']  = 17,
+    ['char-sheet']  = 18,
+    ['steal']       = 19,
+    ['cast-spell']  = 20,
+    ['swap-weapon'] = 21, 
 }
 
 ActionBarButton.new = function(arg)
@@ -42,6 +42,7 @@ ActionBarButton.new = function(arg)
 
     local arg_type = type(arg)
     if arg_type == 'string' then
+        assert(ACTION_INFO[arg] ~= nil, 'invalid action name: "' .. arg .. '"')
         quad_idx = ACTION_INFO[arg]
     elseif arg_type == 'number' then
         bar_w = arg

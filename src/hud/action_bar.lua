@@ -44,7 +44,7 @@ ActionBar.new = function(player)
     local sleep = ActionBarButton('sleep')
     table.insert(buttons, sleep)
 
-    local game_actions = { 'profile', 'inventory', 'settings' }
+    local game_actions = { 'char-sheet', 'inventory', 'settings' }
     for _, action in ipairs(game_actions) do
         local button = ActionBarButton(action)
         table.insert(buttons, button)

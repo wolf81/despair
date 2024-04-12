@@ -10,14 +10,20 @@ local mfloor, lrandom = math.floor, love.math.random
 local Game = {}
 
 local function showInventory(player)
-    print('show')
     if player:getComponent(Health):isAlive() then
         Gamestate.push(Inventory(player))
     end
 end
 
+local function showCharacterSheet(player)
+    if player:getComponent(Health):isAlive() then
+        Gamestate.push(CharSheet(player))
+    end
+end
+
 local function registerActions(player)
     local actions = {
+        ['char-sheet']  = function() showCharacterSheet(player) end,
         ['inventory']   = function() showInventory(player) end,
         ['sleep']       = function() print('try sleep player') end,
     }
@@ -98,6 +104,7 @@ Game.new = function()
         draw            = draw,
         leave           = leave,
         update          = update,
+        mousemoved      = mouseMoved,
         keyreleased     = keyReleased,
         showOverlay     = showOverlay,
         hideOverlay     = hideOverlay,
