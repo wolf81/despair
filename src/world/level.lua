@@ -82,7 +82,7 @@ Level.new = function(dungeon, level_idx)
     local scheduler = Scheduler()
 
     -- fog of war
-    local fog = Fog(15, 10)
+    local fog = Fog(16, 10)
 
     for _, monster in ipairs(newMonsters(map, { stair_up.coord, stair_dn.coord })) do
         table.insert(entities, monster)
@@ -132,7 +132,7 @@ Level.new = function(dungeon, level_idx)
 
         -- update fog of war
         fog:cover()
-        local radius = 7
+        local radius = 8
         shadowcaster:castLight(coord.x, coord.y, radius)
 
         local cartographer = entity:getComponent(Cartographer)

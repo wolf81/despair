@@ -125,7 +125,6 @@ end
 local function drawItemInfo(x, y, w, h)
     local background = TextureGenerator.generatePaperTexture(w, h)
     love.graphics.draw(background, x, y)
-
 end
 
 -- TODO: need title bar and close button

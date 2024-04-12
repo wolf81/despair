@@ -192,11 +192,6 @@ local function newPreloader()
     return preloader
 end
 
-local getMessage = function(preloader) 
-    local _, message = coroutine.resume(preloader)
-    return message or 'done'
-end
-
 Loading.new = function()
     local background = love.graphics.newImage('gfx/loading.png')
     local background_w, background_h = background:getDimensions()
@@ -222,7 +217,8 @@ Loading.new = function()
         local preloader_status = coroutine.status(preloader)
 
         if preloader_status == 'suspended' then
-            message = getMessage(preloader)
+            -- assign 2nd return value of the coroutine.resume call to message
+            message = select(2, coroutine.resume(preloader)) or ''
             message_x = mfloor((WINDOW_W - FONT:getWidth(message)) / 2)
         elseif preloader_status == 'dead' and time == 0 then
             Gamestate.switch(Game())

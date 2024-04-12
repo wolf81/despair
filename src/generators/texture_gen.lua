@@ -86,9 +86,9 @@ M.generatePanelTexture = function(w, h)
     local texture = TextureCache:get('uf_interface')
     local quads = QuadCache:get('uf_interface')
 
-    -- adjust width & height to be a power of 16, rounded down
-    w = mfloor(w / 16) * 16
-    h = mfloor(h / 16) * 16
+    -- adjust width & height to be a power of 8, rounded down
+    w = mfloor(w / 8) * 8
+    h = mfloor(h / 8) * 8
 
     local offset = 34 * 0 -- offset of 0, 1, 2 to change themes: gray, blue, brown
 
@@ -110,7 +110,7 @@ M.generatePanelTexture = function(w, h)
         end
 
         -- middle
-        for y = 16, h - 32, 16 do
+        for y = 16, h - 32, 8 do
             love.graphics.draw(texture, quads[326 + offset], 0, y)
             love.graphics.draw(texture, quads[331 + offset], w - 16, y)
         end

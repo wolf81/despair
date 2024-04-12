@@ -30,17 +30,12 @@ Game.new = function()
         player_info:update(dt)
     end
 
-    local player_info_w = INFO_PANEL_WIDTH
-
     local draw = function(self) 
-        dungeon:draw(0, 0, WINDOW_W - player_info_w, WINDOW_H) 
+        dungeon:draw(0, 0, WINDOW_W - INFO_PANEL_W, WINDOW_H - ACTION_BAR_H) 
 
-        love.graphics.setColor(0.1, 0.1, 0.1, 1.0)
-        love.graphics.rectangle('fill', WINDOW_W - player_info_w, 0, player_info_w, WINDOW_H)
+        player_info:draw(WINDOW_W - INFO_PANEL_W, 1, INFO_PANEL_W, WINDOW_H - ACTION_BAR_H)
 
-        player_info:draw(WINDOW_W - player_info_w, 0, player_info_w, WINDOW_H)
-
-        actionbar:draw((WINDOW_W - player_info_w - actionbar_w) / 2, WINDOW_H - actionbar_h)
+        actionbar:draw(0, WINDOW_H - ACTION_BAR_H - 1)
 
         overlay:draw()
     end

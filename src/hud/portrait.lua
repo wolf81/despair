@@ -26,7 +26,7 @@ Portrait.new = function(player)
 
     local canvas = love.graphics.newCanvas(quad_w, quad_h)
     canvas:renderTo(function() 
-        love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
+        love.graphics.setColor(1.0, 1.0, 1.0, 0.8)
         love.graphics.draw(texture, quads[6])
         love.graphics.draw(texture, quads[face_idx])
         love.graphics.draw(texture, quads[clothes_idx])
