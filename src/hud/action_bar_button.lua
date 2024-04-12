@@ -35,6 +35,7 @@ ActionBarButton.new = function(arg)
     local _, _, bar_w, bar_h = quads[1]:getViewport()
 
     local is_highlighted = false
+    local is_pressed = false
 
     local arg_type = type(arg)
     if arg_type == 'string' then
@@ -44,12 +45,19 @@ ActionBarButton.new = function(arg)
     else
         error('invalid argument type "' .. arg_type .. '", expected: "string" or "number"')
     end
-
+    
     local background = TextureGenerator.generatePanelTexture(bar_w, bar_h)
 
     local update = function(self, dt)
         local mx, my = love.mouse.getPosition()
+
         is_highlighted = (mx > bar_x) and (my > bar_y) and (mx < bar_x + bar_w) and (my < bar_y + bar_h)
+
+        if is_highlighted and is_pressed and (not love.mouse.isDown(1)) then
+            print('released', action)
+        end
+
+        is_pressed = is_highlighted and love.mouse.isDown(1)
     end
 
     local draw = function(self, x, y)

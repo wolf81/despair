@@ -9,6 +9,9 @@ local mfloor, lrandom = math.floor, love.math.random
 
 local Game = {}
 
+local function showInventory()
+end
+
 Game.new = function()
     -- love.math.setRandomSeed(1)
 
@@ -52,6 +55,10 @@ Game.new = function()
         end
     end
 
+    local leave = function(self, to)
+        Signal.remove(self)
+    end
+
     local showOverlay = function(self) overlay:fadeIn() end
 
     local hideOverlay = function(self) overlay:fadeOut() end
@@ -59,6 +66,7 @@ Game.new = function()
     return setmetatable({
         -- methods
         draw        = draw,
+        leave       = leave,
         update      = update,
         keyreleased = keyReleased,
         showOverlay = showOverlay,
