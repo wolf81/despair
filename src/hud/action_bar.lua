@@ -14,95 +14,65 @@ local CLASS_ACTIONS = {
     ['mage']    = { 'cast-spell', },
 }
 
-local newActionBar = function(arg)
-    assert(arg ~= nil, 'missing argument: "number" or "table"')
-
-    local arg_type = type(arg)
-    local buttons = {}
-    local w, h = 0, 0
-
-    if arg_type == 'table' then
-        actions = arg        
-        assert(#actions > 0, 'actions list must contain at least 1 element')
-
-        for _, action in ipairs(actions) do
-            table.insert(buttons, ActionBarButton(action))
-        end
-
-        local button_w, button_h = buttons[1]:getSize()
-        w, h = #buttons * button_w, button_h
-    elseif arg_type == 'number' then
-        table.insert(buttons, ActionBarButton(arg))
-
-        w, h = buttons[1]:getSize()
-    else
-        error('invalid type for "arg", expected: "table" or "number"')
-    end
-
-    update = function(dt)
-        for _, button in ipairs(buttons) do
-            button:update(dt)
-        end
-    end
-
-    draw = function(x, y)
-        local ox = 0
-        for _, button in ipairs(buttons) do
-            button:draw(x + ox, y)
-            ox = ox + button:getSize()
-        end
-    end
-
-    local getSize = function() return w, h end
-
-    return TableHelper.readOnly({
-        getSize = getSize,
-        update  = update,
-        draw    = draw,
-    })
-end
-
 ActionBar.new = function(player)
     local texture = TextureCache:get('actionbar')
     local quads = QuadCache:get('actionbar')
 
-    local actionbars = {}
+    local buttons = {}
 
     local generic_actions = { 'swap-weapon' }
-    table.insert(actionbars, newActionBar(generic_actions))
+    for _, action in ipairs(generic_actions) do
+        local button = ActionBarButton(action)
+        table.insert(buttons, button)
+    end
 
     local class_actions = CLASS_ACTIONS[player.class]
-    if #class_actions > 0 then
-        table.insert(actionbars, newActionBar(class_actions))
-        table.insert(actionbars, newActionBar(32))
+    for _, action in ipairs(class_actions) do
+        local button = ActionBarButton(action)
+        table.insert(buttons, button)
     end
+
+    local seperator = ActionBarButton(32)
+    table.insert(buttons, seperator)
 
     local use_actions = { 'use-potion', 'use-wand', 'use-scroll' }
-    table.insert(actionbars, newActionBar(use_actions))
-
-    local game_actions = { 'inventory', 'profile', 'sleep' }
-    table.insert(actionbars, newActionBar(game_actions))
-
-    local remaining_w = WINDOW_W
-    for _, actionbar in ipairs(actionbars) do
-        local actionbar_w, actionbar_h = actionbar.getSize()
-        remaining_w = remaining_w - actionbar_w
+    for _, action in ipairs(use_actions) do
+        local button = ActionBarButton(action)
+        table.insert(buttons, button)
     end
-    table.insert(actionbars, 2, newActionBar(remaining_w / 2))
-    table.insert(actionbars, #actionbars, newActionBar(remaining_w / 2))
+
+    local sleep = ActionBarButton('sleep')
+    table.insert(buttons, sleep)
+
+    local game_actions = { 'profile', 'inventory', 'settings' }
+    for _, action in ipairs(game_actions) do
+        local button = ActionBarButton(action)
+        table.insert(buttons, button)
+    end
+
+    local left_action_count = #generic_actions + #class_actions
+    local right_action_count = #use_actions + 1
+
+    local half_w = (WINDOW_W - INFO_PANEL_W) / 2
+
+    local left_spacing = half_w - left_action_count * 48 - seperator:getSize() / 2
+    local right_spacing = half_w - right_action_count * 48 - seperator:getSize() / 2
+
+    table.insert(buttons, #generic_actions + 1, ActionBarButton(left_spacing))
+    table.insert(buttons, #buttons - 3, ActionBarButton(right_spacing))
 
     local update = function(self, dt) 
-        for _, actionbar in ipairs(actionbars) do
-            actionbar.update(dt)
+        for _, button in ipairs(buttons) do
+            button:update(dt)
         end
     end
 
     local draw = function(self, x, y)
         local ox = 0
 
-        for idx, actionbar in ipairs(actionbars) do
-            actionbar.draw(x + ox, y)
-            ox = ox + actionbar.getSize()
+        for idx, button in ipairs(buttons) do
+            button:draw(x + ox, y)
+            ox = ox + button:getSize()
         end
     end
 

@@ -27,6 +27,8 @@ local ACTION_INFO = {
 }
 
 ActionBarButton.new = function(arg)
+    assert(arg ~= nil, 'missing argument: "string" or "number"')
+
     local texture = TextureCache:get('actionbar')
     local quads = QuadCache:get('actionbar')
     local quad_idx = 0
@@ -36,10 +38,11 @@ ActionBarButton.new = function(arg)
 
     local is_highlighted = false
     local is_pressed = false
+    local action = function() end
 
     local arg_type = type(arg)
     if arg_type == 'string' then
-        quad_idx = ACTION_INFO[arg]    
+        quad_idx = ACTION_INFO[arg]
     elseif arg_type == 'number' then
         bar_w = arg
     else
@@ -51,10 +54,12 @@ ActionBarButton.new = function(arg)
     local update = function(self, dt)
         local mx, my = love.mouse.getPosition()
 
+        if quad_idx == 0 then return end
+
         is_highlighted = (mx > bar_x) and (my > bar_y) and (mx < bar_x + bar_w) and (my < bar_y + bar_h)
 
         if is_highlighted and is_pressed and (not love.mouse.isDown(1)) then
-            print('released', action)
+            if arg_type == 'string' then Signal.emit(arg) end
         end
 
         is_pressed = is_highlighted and love.mouse.isDown(1)

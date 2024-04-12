@@ -9,7 +9,25 @@ local mfloor, lrandom = math.floor, love.math.random
 
 local Game = {}
 
-local function showInventory()
+local function showInventory(player)
+    print('show')
+    if player:getComponent(Health):isAlive() then
+        Gamestate.push(Inventory(player))
+    end
+end
+
+local function registerActions(player)
+    local actions = {
+        ['inventory']   = function() showInventory(player) end,
+        ['sleep']       = function() print('try sleep player') end,
+    }
+    local handles = {}    
+
+    for action, fn in pairs(actions) do
+        handles[action] = Signal.register(action, fn)
+    end
+
+    return handles
 end
 
 Game.new = function()
@@ -23,9 +41,10 @@ Game.new = function()
 
     local portrait = Portrait(player)
     local actionbar = ActionBar(player)
-    local actionbar_w, actionbar_h = actionbar:getSize()
 
     local overlay = Overlay()
+
+    local handles = registerActions(player)
 
     local update = function(self, dt) 
         dungeon:update(dt)
@@ -46,8 +65,8 @@ Game.new = function()
     end
 
     local keyReleased = function(self, key, scancode)        
-        if key == 'i' and player:getComponent(Health):isAlive() then
-            Gamestate.push(Inventory(player))
+        if key == 'i' then
+            self:showInventory()
         end
 
         if Gamestate.current() == self and key == "escape" then
@@ -55,22 +74,34 @@ Game.new = function()
         end
     end
 
-    local leave = function(self, to)
-        Signal.remove(self)
-    end
-
     local showOverlay = function(self) overlay:fadeIn() end
 
     local hideOverlay = function(self) overlay:fadeOut() end
 
+    local showInventory = function(self)
+        if not player:getComponent(Health):isAlive() then return end
+
+        Gamestate.push(Inventory(player))
+    end
+
+    local leave = function(self)
+        for action, handle in ipairs(handles) do
+            Signal.remove(action, handle)
+            handles[action] = nil
+        end
+
+        handles = {}
+    end
+
     return setmetatable({
         -- methods
-        draw        = draw,
-        leave       = leave,
-        update      = update,
-        keyreleased = keyReleased,
-        showOverlay = showOverlay,
-        hideOverlay = hideOverlay,
+        draw            = draw,
+        leave           = leave,
+        update          = update,
+        keyreleased     = keyReleased,
+        showOverlay     = showOverlay,
+        hideOverlay     = hideOverlay,
+        showInventory   = showInventory,
     }, Game)
 end
 
