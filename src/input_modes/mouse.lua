@@ -79,6 +79,26 @@ Mouse.new = function(entity)
         -- if next coord is not blocked, can move in direction
         if not level:isBlocked(next_coord) then
             return Move(level, entity, next_coord)            
+        elseif Direction.isOrdinal(direction) then
+            -- if cannot move in ordinal direction, try move in related directions,
+            -- e.g. if cannot move NW, try move N or W instead
+            local dirs = {}
+            if direction == Direction.NW then
+                dirs = { Direction.N, Direction.W }
+            elseif direction == Direction.NE then
+                dirs = { Direction.N, Direction.E }
+            elseif direction == Direction.SW then
+                dirs = { Direction.S, Direction.W }
+            elseif direction == Direction.SE then
+                dirs = { Direction.S, Direction.E }
+            end
+
+            for _, dir in ipairs(dirs) do
+                local next_coord = entity.coord + dir
+                if not level:isBlocked(next_coord) then
+                    return Move(level, entity, next_coord)
+                end
+            end
         end
 
         -- direction was blocked - if blocked by enemy entity perform a melee attack
