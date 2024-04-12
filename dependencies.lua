@@ -34,9 +34,10 @@ Level               = require 'src.world.level'
 Map                 = require 'src.world.map'
 
 -- hud
+ActionBarButton     = require 'src.hud.action_bar_button'
 ResourceBar         = require 'src.hud.resource_bar'
 PlayerInfo          = require 'src.hud.player_info'
-Actionbar           = require 'src.hud.actionbar'
+ActionBar           = require 'src.hud.action_bar'
 Portrait            = require 'src.hud.portrait'
 Minimap             = require 'src.hud.minimap'
 Overlay             = require 'src.hud.overlay'

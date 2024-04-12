@@ -19,7 +19,7 @@ Game.new = function()
     dungeon:enter()
 
     local portrait = Portrait(player)
-    local actionbar = Actionbar(player)
+    local actionbar = ActionBar(player)
     local actionbar_w, actionbar_h = actionbar:getSize()
 
     local overlay = Overlay()
