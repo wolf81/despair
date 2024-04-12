@@ -268,6 +268,9 @@ Inventory.new = function(player)
             equipment:unequip(hover_slot_info.slot.key)
         end
 
+        -- update game to show current health and energy after eating food, drinking potion, ...
+        game:update(0)
+
         -- if player died after using a harmful item, hide inventory
         if not player:getComponent(Health):isAlive() then
             Gamestate.pop()
