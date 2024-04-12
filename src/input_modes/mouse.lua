@@ -38,10 +38,23 @@ local isWeaponKindEquipped = function(entity, ...)
 end
 
 Mouse.new = function(entity)
+    local x, y = 0, 0
+
+    local update = function(self, dt, level)
+        local mx, my = love.mouse.getPosition()        
+
+        -- ensure mouse if visible if mouse moved
+        if x ~= mx and y ~= my then love.mouse.setVisible(true) end
+
+        x, y = mx, my
+    end
+
     local getAction = function(self, level, ap)
         if not love.mouse.isDown(1) then return end
 
-        local mouse_coord = Pointer.getCoord()
+        local mouse_coord = level:getCoord(x, y)
+
+        if not mouse_coord then return end
 
         -- skip turn if player clicked on himself
         if mouse_coord == entity.coord then return Idle(level, entity) end
@@ -80,7 +93,8 @@ Mouse.new = function(entity)
 
     return setmetatable({
         -- methods
-        getAction = getAction,
+        getAction   = getAction,
+        update      = update,
     }, Mouse)
 end
 

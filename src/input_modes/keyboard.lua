@@ -10,6 +10,10 @@ local Keyboard = {}
 Keyboard.new = function(entity)
     local was_pressed = {}
 
+    local update = function(self, dt, level)
+        -- body
+    end
+
     local getAction = function(self, level, ap)
         for key in pairs(was_pressed) do
             if not love.keyboard.isDown(key) then
@@ -67,7 +71,8 @@ Keyboard.new = function(entity)
 
     return setmetatable({
         -- methods
-        getAction = getAction,
+        getAction   = getAction,
+        update      = update,
     }, Keyboard)
 end
 

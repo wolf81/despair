@@ -10,11 +10,15 @@ io.stdout:setvbuf('no')
 require 'dependencies'
 require 'constants'
 
+local function trySetCursor()
+    if not love.mouse.isCursorSupported() then return end
+
+    local cursor = love.mouse.newCursor('gfx/pointer.png', 6, 6)
+    love.mouse.setCursor(cursor)
+end
+
 function love.load(args)
     love.window.setTitle('Dungeon of Despair')
-
-    -- init graphics for pointer device
-    Pointer.init()
 
     success = love.window.setMode(WINDOW_W * SCALE, WINDOW_H * SCALE, {
         highdpi = false,
@@ -33,6 +37,8 @@ function love.load(args)
     end
 
     love.graphics.scale(SCALE)
+
+    trySetCursor()
 
     Gamestate.registerEvents()
     Gamestate.switch(Loading())

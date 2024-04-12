@@ -22,7 +22,11 @@ Control.new = function(entity, def, ...)
     local ap = 0
 
     -- update implementation is empty, but required for any component
-    local update = function(self, dt, level) end
+    local update = function(self, dt, level) 
+        for _, input_mode in ipairs(input_modes) do
+            input_mode:update(dt, level)
+        end
+    end
 
     -- get current action - will try to generate a new action if current action is finished
     local getAction = function(self, level)

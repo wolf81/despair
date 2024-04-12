@@ -47,6 +47,10 @@ end
 Cpu.new = function(entity)
     local is_chasing_player = false
 
+    local update = function(self, dt, level)
+        -- body
+    end
+
     local getAction = function(self, level, ap)
         local player = level:getPlayer()
 
@@ -103,7 +107,8 @@ Cpu.new = function(entity)
 
     return setmetatable({
         -- methods
-        getAction = getAction,
+        getAction   = getAction,
+        update      = update,
     }, Cpu)
 end
 
