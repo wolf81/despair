@@ -27,6 +27,8 @@ Game.new = function()
     local update = function(self, dt) 
         dungeon:update(dt)
 
+        actionbar:update(dt)
+
         player_info:update(dt)
     end
 
