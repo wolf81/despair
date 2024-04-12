@@ -52,6 +52,7 @@ Game.new = function()
 
     local showOverlay = function(self) overlay:fadeIn() end
 
+    local hideOverlay = function(self) overlay:fadeOut() end
 
     return setmetatable({
         -- methods
