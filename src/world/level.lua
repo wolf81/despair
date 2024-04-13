@@ -20,7 +20,7 @@ local function newMonsters(map, blocked_coords)
         'purple_jelly', 'blk_widow_mat', 'spectator', 'observer'
     }
 
-    while #monsters < 10 do
+    while #monsters < 0 do
         local x = lrandom(map.width)
         local y = lrandom(map.height)
 

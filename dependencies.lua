@@ -49,6 +49,7 @@ Direction           = require 'src.util.direction'
 Animation           = require 'src.util.animation'
 Scheduler           = require 'src.util.scheduler'
 Camera              = require 'src.util.camera'
+Chart               = require 'src.util.chart'
 Turn                = require 'src.util.turn'
 Fog                 = require 'src.util.fog'
 
