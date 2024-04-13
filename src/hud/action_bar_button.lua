@@ -69,6 +69,7 @@ ActionBarButton.new = function(arg)
     local draw = function(self, x, y)
         bar_x, bar_y = x, y
 
+        love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
         love.graphics.draw(background, bar_x, bar_y)
 
         if quad_idx > 0 then

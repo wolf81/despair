@@ -9,54 +9,6 @@ local mmin, mmax = math.min, math.max
 
 local Cartographer = {}
 
---[[
-local RENDER_SCALE = 2.0
-
-local function newChart(size, level_idx)
-    local chart = {
-        level_idx = level_idx,
-    }
-
-    for y = 1, size do
-        chart[y] = {}
-        for x = 1, size do
-            chart[y][x] = math.huge
-        end
-    end
-
-    return chart
-end
-
-local function generateChartImage(chart, level_idx)
-    local image_size = MAP_SIZE * RENDER_SCALE
-
-    local canvas = love.graphics.newCanvas(image_size, image_size)
-    canvas:renderTo(function() 
-        for y = 1, MAP_SIZE do
-            for x = 1, MAP_SIZE do
-                local value = chart[y][x] 
-
-                if value == math.huge or value == 1 then goto continue end
-
-                if value == 0 then
-                    love.graphics.setColor(1.0, 1.0, 1.0, 0.3)
-                else
-                    love.graphics.setColor(0.0, 0.0, 0.0, 0.9)
-                end
-
-                local ox = x * RENDER_SCALE
-                local oy = y * RENDER_SCALE
-                love.graphics.rectangle('fill', ox, oy, RENDER_SCALE, RENDER_SCALE)
-
-                ::continue::
-            end
-        end
-    end)
-
-    return love.graphics.newImage(canvas:newImageData())
-end
---]]
-
 Cartographer.new = function(entity, def)
     local stats = entity:getComponent(Stats)
     local skills = entity:getComponent(Skills)
