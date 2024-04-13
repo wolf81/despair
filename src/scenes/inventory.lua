@@ -247,6 +247,10 @@ Inventory.new = function(player)
             local item_idx = hover_slot_info.idx - 11
 
             local item = backpack:peek(item_idx)
+
+            -- ignore empty slots
+            if not item then return end
+
             local usable = item:getComponent(Usable)
             local equippable = item:getComponent(Equippable)
 

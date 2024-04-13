@@ -15,4 +15,8 @@ M.padLeft = function(str, len, char)
     return str .. string.rep(char or ' ', len - #str)
 end
 
+M.capitalize = function(str)
+    return str:gsub("^%l", string.upper)
+end
+
 return M
