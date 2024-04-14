@@ -10,9 +10,6 @@ local mfloor = math.floor
 local PlayerInfo = {}
 
 PlayerInfo.new = function(player)
-    local portrait = Portrait(player)
-    local portrait_w, portrait_h = portrait:getSize() 
-
     local health_bar = ResourceBar(player, 'health')
     local energy_bar = ResourceBar(player, 'energy')
 
@@ -33,20 +30,19 @@ PlayerInfo.new = function(player)
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
 
         love.graphics.draw(background, WINDOW_W - INFO_PANEL_W, 1)
-        portrait:draw(x + 20, 20)
 
-        local bar_x = x + 21 + mfloor(portrait_w) + 10
+        local bar_x = x + 15
         local bar_y = 20
         love.graphics.print("HEALTH", bar_x, bar_y)
         health_bar:draw(bar_x, bar_y + 10)
-        love.graphics.print("HUNGER", bar_x, bar_y + 30)
-        energy_bar:draw(bar_x, bar_y + 40)
+        love.graphics.print("HUNGER", bar_x + 60, bar_y)
+        energy_bar:draw(bar_x + 60, bar_y + 10)
 
         local chart = cartographer:getChart()
         local chart_w, _ = chart:getSize()
         local chart_x = mfloor((w - chart_w) / 2)
 
-        chart:draw(x + chart_x, 90)
+        chart:draw(x + chart_x, 50)
     end
 
     local getSize = function()
