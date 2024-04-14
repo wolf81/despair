@@ -5,7 +5,7 @@
 --  info+despair@wolftrail.net
 --]]
 
-local mmin, mmax = math.min, math.max
+local mmin, mmax, mfloor = math.min, math.max, math.floor
 
 local Cartographer = {}
 
@@ -33,7 +33,8 @@ Cartographer.new = function(entity, def)
         local mind = stats:getBonus('mind')
         local know = skills:getValue('know')
 
-        local range = mmax((mind + know - 4), 0)
+        -- TODO: scale range better - MIND should have height weight than KNOWLEDGE
+        local range = mmin(mmax(mind + know - 1, 0), 6)
         local needs_update = false
 
         local x1, x2 = mmax(coord.x - range, 1), mmin(coord.x + range, MAP_SIZE)
