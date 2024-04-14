@@ -68,9 +68,9 @@ ActionBar.new = function(player)
     local draw = function(self, x, y)
         local ox = 0
 
-        for _, button in ipairs(buttons) do
+        for idx, button in ipairs(buttons) do
             button_w, button_h = button:getSize()
-            button:draw(x + ox, y + ACTION_BAR_H - button_h)
+            button:draw(x + ox + (idx == (left_action_count + 3) and 2 or 0), y + ACTION_BAR_H - button_h)
             ox = ox + button_w
         end
     end
