@@ -4,6 +4,7 @@ FlexSpace.new = function(width, height)
     assert(width ~= nil, 'missing argument: "width"')
     assert(height ~= nil, 'missing argument: "height"')
     local background = TextureGenerator.generatePanelTexture(width, height)
+    width, height = background:getDimensions()
 
     local update = function(self, dt)
         -- body

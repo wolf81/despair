@@ -32,8 +32,9 @@ ActionBar.new = function(player)
         table.insert(buttons, button)
     end
 
-    local seperator = FlexSpace(32, ACTION_BAR_H)
-    table.insert(buttons, seperator)
+    local portrait = Portrait(player)
+    local profile_btn = ImageButton(portrait:getImage(), 'char-sheet')
+    table.insert(buttons, profile_btn)
 
     local use_actions = { 'use-potion', 'use-wand', 'use-scroll' }
     for _, action in ipairs(use_actions) do
@@ -41,25 +42,22 @@ ActionBar.new = function(player)
         table.insert(buttons, button)
     end
 
-    local sleep = ActionBarButton('sleep')
-    table.insert(buttons, sleep)
-
-    local game_actions = { 'char-sheet', 'inventory', 'settings' }
+    local game_actions = { 'sleep', 'inventory', 'settings' }
     for _, action in ipairs(game_actions) do
         local button = ActionBarButton(action)
         table.insert(buttons, button)
     end
 
     local left_action_count = #generic_actions + #class_actions
-    local right_action_count = #use_actions + 1
+    local right_action_count = #use_actions
 
     local half_w = (WINDOW_W - INFO_PANEL_W) / 2
 
-    local left_spacing = half_w - left_action_count * 48 - seperator:getSize() / 2
-    local right_spacing = half_w - right_action_count * 48 - seperator:getSize() / 2
+    local left_spacing = half_w - left_action_count * 48 - portrait:getSize() / 2
+    local right_spacing = half_w - right_action_count * 48 - portrait:getSize() / 2
 
     table.insert(buttons, #generic_actions + 1, FlexSpace(left_spacing, ACTION_BAR_H))
-    table.insert(buttons, #buttons - 3, FlexSpace(right_spacing, ACTION_BAR_H))
+    table.insert(buttons, #buttons - 2, FlexSpace(right_spacing, ACTION_BAR_H))
 
     local update = function(self, dt) 
         for _, button in ipairs(buttons) do
@@ -70,9 +68,10 @@ ActionBar.new = function(player)
     local draw = function(self, x, y)
         local ox = 0
 
-        for idx, button in ipairs(buttons) do
-            button:draw(x + ox, y)
-            ox = ox + button:getSize()
+        for _, button in ipairs(buttons) do
+            button_w, button_h = button:getSize()
+            button:draw(x + ox, y + ACTION_BAR_H - button_h)
+            ox = ox + button_w
         end
     end
 

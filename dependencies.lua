@@ -37,6 +37,7 @@ Map                 = require 'src.world.map'
 -- hud
 ActionBarButton     = require 'src.hud.action_bar_button'
 ResourceBar         = require 'src.hud.resource_bar'
+ImageButton         = require 'src.hud.image_button'
 PlayerInfo          = require 'src.hud.player_info'
 FlexSpace           = require 'src.hud.flex_space'
 ActionBar           = require 'src.hud.action_bar'

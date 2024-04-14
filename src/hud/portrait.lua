@@ -78,14 +78,15 @@ Portrait.new = function(player)
         love.graphics.draw(image, x, y)
     end
 
-    local getSize = function(self)
-        return quad_w, quad_h
-    end
+    local getImage = function(self) return image end
+
+    local getSize = function(self) return quad_w, quad_h end
 
     return setmetatable({
         -- methods
-        draw    = draw,
-        getSize = getSize,
+        draw        = draw,
+        getSize     = getSize,
+        getImage    = getImage,
     }, Portrait)
 end
 
