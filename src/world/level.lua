@@ -219,25 +219,31 @@ Level.new = function(dungeon, level_idx)
             Timer.after(0.3, function() self:removeEntity(effect) end)        
         end
 
-        if status.damage == 0 then
-            print(entity.name .. ' missed attack on ' .. target.name)
-        else
-            local visual = target:getComponent(Visual)
-            visual:colorize(0.3)
-            if status.is_crit then
-                print(entity.name .. ' critically hit ' .. target.name .. ' for ' .. status.damage .. ' hitpoints')
+        local is_hit, is_crit = false, false
+
+        for _, attack in ipairs(status.attacks) do
+            is_hit = is_hit or attack.is_hit
+            is_crit = is_crit or attack.is_crit
+
+            if attack.damage == 0 then
+                print(entity.name .. ' missed attack on ' .. target.name)
             else
-                print(entity.name .. ' hit ' .. target.name .. ' for ' .. status.damage .. ' hitpoints')
+                if attack.is_crit then
+                    print(entity.name .. ' critically hit ' .. target.name .. ' for ' .. attack.damage .. ' hitpoints')
+                else
+                    print(entity.name .. ' hit ' .. target.name .. ' for ' .. attack.damage .. ' hitpoints')
+                end
             end
+
+            local total = attack.roll + attack.attack
+            print(total .. ' (' .. attack.roll .. ' + ' .. attack.attack .. ') vs ' .. status.ac)
         end
 
-        local total = status.roll + status.attack
-        print(total .. ' (' .. status.roll .. ' + ' .. status.attack .. ') vs ' .. status.ac)
+        -- visualize hit on target by drawing with a tint color
+        if is_hit then target:getComponent(Visual):colorize(0.3) end
 
         -- show camera shake effect if player performs a critical hit
-        if status.is_crit and entity == self:getPlayer() then
-            camera:shake(0.2)
-        end
+        if is_crit and entity == self:getPlayer() then camera:shake(0.2) end
     end
 
     local onEnergy = function(self, entity, message)

@@ -159,6 +159,11 @@ Equipment.new = function(entity, def)
                 equip.mainhand = item                    
                 return true
             elseif item.kind == 'ranged_1h' then
+                -- don't allow sling to be equipped with offhand weapon, but shield is fine
+                if equip.offhand ~= nil and equip.offhand.type == 'weapon' then
+                    self:unequip('offhand')
+                end
+
                 self:unequip('mainhand')
                 equip.mainhand = item
                 return true

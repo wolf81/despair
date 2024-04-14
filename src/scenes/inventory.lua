@@ -95,10 +95,19 @@ local newBackground = function(width, height)
     })
 end
 
-local function getDamageText(damage_info)
-    local dice = ndn.dice(damage_info.weapon)
-    local min, max = dice:range()
-    return min + damage_info.bonus .. '-' .. max + damage_info.bonus
+local function getWeapons(equipment)
+    local weapons = {}
+
+    local eq_mainhand = equipment:getItem('mainhand')
+    if eq_mainhand ~= nil and eq_mainhand.type == 'weapon' then
+        table.insert(weapons, eq_mainhand)
+    end
+    local eq_offhand = equipment:getItem('offhand')
+    if eq_offhand ~= nil and eq_offhand.type == 'weapon' then
+        table.insert(weapons, eq_offhand)
+    end
+
+    return weapons
 end
 
 local function drawCombatStats(equipment, offense, defense, x, y, w, h)
@@ -106,26 +115,25 @@ local function drawCombatStats(equipment, offense, defense, x, y, w, h)
 
     local background = TextureGenerator.generatePaperTexture(w, h)
 
-    local eq_mainhand, eq_offhand = equipment:getItem('mainhand'), equipment:getItem('offhand')
-    local weapons = {}
-    if eq_mainhand ~= nil and eq_mainhand.type == 'weapon' then
-        table.insert(weapons, eq_mainhand)
-    end
-    if eq_offhand ~= nil and eq_offhand.type == 'weapon' then
-        table.insert(weapons, eq_offhand)
-    end
+    local weapons = getWeapons(equipment)    
+    local is_dual_wielding = #weapons == 2
 
     local att_value = 'ATTACK BONUS: '
+    local dmg_value = 'DAMAGE:       '
+
     for idx, weapon in ipairs(weapons) do
-        att_value = att_value .. offense:getAttackValue(weapon)
+        local dmg_min, dmg_max = ndn.dice(weapon.damage):range()
+        local bonus = offense:getDamageBonus(weapon)
+
+        att_value = att_value .. offense:getAttackValue(weapon, is_dual_wielding)
+        dmg_value = dmg_value .. (dmg_min + bonus) .. '-' .. (dmg_max + bonus)
+
         if idx < #weapons then
             att_value = att_value .. '/' 
+            dmg_value = dmg_value .. '/'
         end
     end
     
-    local _, damage_info = offense:getDamageValue()
-
-    local dmg_value = 'DAMAGE:       ' .. getDamageText(damage_info)
     local ac_value  = 'ARMOR CLASS:  ' .. defense:getArmorValue()
 
     love.graphics.draw(background, x, y)
