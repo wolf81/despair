@@ -104,13 +104,13 @@ M.generatePanelTexture = function(w, h)
         love.graphics.draw(texture, quads[333 + offset], w - 16, h - 16)
 
         -- top & bottom rows
-        for x = 16, w - 16, 8 do
+        for x = 16, w - 24, 8 do
             love.graphics.draw(texture, quads[325 + offset], x, 0)
             love.graphics.draw(texture, quads[330 + offset], x, h - 16)
         end
 
         -- middle
-        for y = 16, h - 16, 8 do
+        for y = 16, h - 24, 8 do
             love.graphics.draw(texture, quads[326 + offset], 0, y)
             love.graphics.draw(texture, quads[331 + offset], w - 16, y)
         end
