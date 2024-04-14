@@ -32,7 +32,7 @@ ActionBar.new = function(player)
         table.insert(buttons, button)
     end
 
-    local seperator = ActionBarButton(32)
+    local seperator = FlexSpace(32, ACTION_BAR_H)
     table.insert(buttons, seperator)
 
     local use_actions = { 'use-potion', 'use-wand', 'use-scroll' }

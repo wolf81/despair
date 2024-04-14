@@ -26,29 +26,17 @@ local ACTION_INFO = {
     ['swap-weapon'] = 21, 
 }
 
-ActionBarButton.new = function(arg)
-    assert(arg ~= nil, 'missing argument: "string" or "number"')
+ActionBarButton.new = function(action)
+    assert(arg ~= nil, 'missing argument: "action"')
 
     local texture = TextureCache:get('actionbar')
     local quads = QuadCache:get('actionbar')
-    local quad_idx = 0
+    local quad_idx = ACTION_INFO[action]
 
     local bar_x, bar_y = 0, 0
     local _, _, bar_w, bar_h = quads[1]:getViewport()
-
-    local is_highlighted = false
-    local is_pressed = false
-    local action = function() end
-
-    local arg_type = type(arg)
-    if arg_type == 'string' then
-        assert(ACTION_INFO[arg] ~= nil, 'invalid action name: "' .. arg .. '"')
-        quad_idx = ACTION_INFO[arg]
-    elseif arg_type == 'number' then
-        bar_w = arg
-    else
-        error('invalid argument type "' .. arg_type .. '", expected: "string" or "number"')
-    end
+    
+    local is_highlighted, is_pressed = false, false
     
     local background = TextureGenerator.generatePanelTexture(bar_w, bar_h)
 
@@ -60,7 +48,7 @@ ActionBarButton.new = function(arg)
         is_highlighted = (mx > bar_x) and (my > bar_y) and (mx < bar_x + bar_w) and (my < bar_y + bar_h)
 
         if is_highlighted and is_pressed and (not love.mouse.isDown(1)) then
-            if arg_type == 'string' then Signal.emit(arg) end
+            Signal.emit(action)
         end
 
         is_pressed = is_highlighted and love.mouse.isDown(1)
@@ -72,14 +60,12 @@ ActionBarButton.new = function(arg)
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
         love.graphics.draw(background, bar_x, bar_y)
 
-        if quad_idx > 0 then
-            if is_highlighted then
-                love.graphics.setColor(0.4, 0.9, 0.8, 1.0)
-            end
-
-            love.graphics.draw(texture, quads[quad_idx], x, y)
-            love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
+        if is_highlighted then
+            love.graphics.setColor(0.4, 0.9, 0.8, 1.0)
         end
+
+        love.graphics.draw(texture, quads[quad_idx], x, y)
+        love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
     end
 
     local getSize = function(self) return bar_w, bar_h end

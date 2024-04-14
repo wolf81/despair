@@ -1,7 +1,9 @@
 local FlexSpace = {}
 
-FlexSpace.new = function(w, h)
-    local background = TextureGenerator.generatePanelTexture(w, h)
+FlexSpace.new = function(width, height)
+    assert(width ~= nil, 'missing argument: "width"')
+    assert(height ~= nil, 'missing argument: "height"')
+    local background = TextureGenerator.generatePanelTexture(width, height)
 
     local update = function(self, dt)
         -- body
@@ -12,7 +14,7 @@ FlexSpace.new = function(w, h)
         love.graphics.draw(background, x, y)
     end 
 
-    local getSize = function(self) return w, h end
+    local getSize = function(self) return width, height end
 
     return setmetatable({
         getSize = getSize,
