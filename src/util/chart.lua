@@ -54,7 +54,7 @@ end
 Chart.new = function(level_idx, map_size)
     local chart_image, needs_update = nil, true
 
-    local background = TextureGenerator.generatePaperTexture(120, 120)
+    local background = TextureGenerator.generateParchmentTexture(120, 120)
     local w, h = background:getDimensions()
 
     local chart = newChart(map_size)

@@ -113,7 +113,7 @@ end
 local function drawCombatStats(equipment, offense, defense, x, y, w, h)
     local text_h = FONT:getHeight() + 8
 
-    local background = TextureGenerator.generatePaperTexture(w, h)
+    local background = TextureGenerator.generateParchmentTexture(w, h)
 
     local weapons = getWeapons(equipment)    
     local is_dual_wielding = #weapons == 2
@@ -146,7 +146,7 @@ local function drawCombatStats(equipment, offense, defense, x, y, w, h)
 end
 
 local function drawItemInfo(x, y, w, h)
-    local background = TextureGenerator.generatePaperTexture(w, h)
+    local background = TextureGenerator.generateParchmentTexture(w, h)
     love.graphics.draw(background, x, y)
 end
 

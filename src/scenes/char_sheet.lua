@@ -14,7 +14,7 @@ local function getStatLine(stats, stat)
 end
 
 CharSheet.new = function(player)
-    local background = TextureGenerator.generatePaperTexture(220, 310)
+    local background = TextureGenerator.generateParchmentTexture(220, 310)
     local background_w, background_h = background:getDimensions()
 
     local game = nil

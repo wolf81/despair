@@ -9,7 +9,7 @@ local mfloor = math.floor
 
 local M = {}
 
-M.generatePaperTexture = function(width, height)
+M.generateParchmentTexture = function(width, height)
     assert(w ~= nil, 'missing argument: "width')
 
     height = height or width
