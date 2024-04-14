@@ -52,19 +52,13 @@ Cartographer.new = function(entity, def)
         chart:update()
     end
 
-    local getChartImage = function(self, color) return chart:getImage() end
-
-    local getLevelIndex = function(self) return chart:getLevelIndex() end
-
-    local getSize = function(self) return chart:getSize() end
+    local getChart = function(self) return chart end
 
     return setmetatable({
         -- methods
-        setLevel        = setLevel,
-        updateChart     = updateChart,
-        getChartImage   = getChartImage,
-        getLevelIndex   = getLevelIndex,
-        getSize         = getSize,
+        setLevel    = setLevel,
+        getChart    = getChart,
+        updateChart = updateChart,
     }, Cartographer)
 end
 

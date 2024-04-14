@@ -7,6 +7,8 @@
 
 local Chart = {}
 
+local mfloor = math.floor
+
 local RENDER_SCALE = 2.0
 
 local function generateChartImage(chart, level_idx)
@@ -49,10 +51,13 @@ local function newChart(size)
     return chart
 end
 
-Chart.new = function(level_idx, size)
+Chart.new = function(level_idx, map_size)
     local chart_image, needs_update = nil, true
 
-    local chart = newChart(size)
+    local background = TextureGenerator.generatePaperTexture(120, 120)
+    local w, h = background:getDimensions()
+
+    local chart = newChart(map_size)
 
     local getImage = function(self) return chart_image end
 
@@ -65,7 +70,22 @@ Chart.new = function(level_idx, size)
 
     local getLevelIndex = function(self) return level_idx end
 
-    local getSize = function(self) return MAP_SIZE * RENDER_SCALE, MAP_SIZE * RENDER_SCALE end
+    local getSize = function(self) return w, h end
+
+    local draw = function(self, x, y)
+        love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
+        love.graphics.draw(background, x, y)
+        love.graphics.setColor(0.0, 0.0, 0.0, 0.7)
+
+        local title = "LEVEL " .. level_idx
+        local title_x = mfloor((w - FONT:getWidth(title)) / 2)
+        love.graphics.print(title, x + title_x, y + 10)
+
+        local chart_w, chart_h = chart_image:getDimensions()
+        local chart_x = mfloor((w - chart_w) / 2)
+
+        love.graphics.draw(chart_image, x + chart_x, y + 20)
+    end
 
     local update = function(self)
         if needs_update then
@@ -80,6 +100,7 @@ Chart.new = function(level_idx, size)
         mapCoord        = mapCoord,
         getSize         = getSize,
         update          = update,
+        draw            = draw,
     }, Chart)
 end
 

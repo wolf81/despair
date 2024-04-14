@@ -40,7 +40,6 @@ ResourceBar         = require 'src.hud.resource_bar'
 PlayerInfo          = require 'src.hud.player_info'
 ActionBar           = require 'src.hud.action_bar'
 Portrait            = require 'src.hud.portrait'
-Minimap             = require 'src.hud.minimap'
 Overlay             = require 'src.hud.overlay'
 
 -- util
