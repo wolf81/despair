@@ -4,7 +4,7 @@ return {
 	name = 'Kendrick',
 	class = 'fighter',
 	race = 'dwarf',
-	level = 4,
+	level = 1,
 	sight = 60,
 	speed = 25,
 	str = 16,
