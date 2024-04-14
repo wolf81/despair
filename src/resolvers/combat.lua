@@ -23,11 +23,11 @@ M.resolve = function(entity, target)
     local roll = ndn.dice('1d20').roll()
     local is_crit = roll == 20 -- critical hit, dealing maximum damage
     local is_miss = roll == 1 -- critical miss
-    
-    local attack = offense:getAttackValue()
+
+    local attack = offense:getAttackValue(eq_mainhand)
     if is_dual_wielding then 
         attack = attack - 2 
-    and
+    end
 
     local ac = defense:getArmorValue()
     local is_hit = (is_crit == true)

@@ -16,8 +16,8 @@ Offense.new = function(entity, def)
     -- TODO: it should not be possible to have no weapon equipped, mainly important for players, 
     -- maybe humanoids - to use fist weapons if other weapons are unequipped
 
-    local getAttackValue = function(self)
-        local weapon = equipment:getItem('mainhand')
+    local getAttackValue = function(self, weapon)
+        assert(weapon ~= nil, 'missing argument: "weapon"')
         local base = weapon and weapon.attack or 0
         local bonus = 0
 

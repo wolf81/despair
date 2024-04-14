@@ -101,12 +101,27 @@ local function getDamageText(damage_info)
     return min + damage_info.bonus .. '-' .. max + damage_info.bonus
 end
 
-local function drawCombatStats(offense, defense, x, y, w, h)
+local function drawCombatStats(equipment, offense, defense, x, y, w, h)
     local text_h = FONT:getHeight() + 8
 
     local background = TextureGenerator.generatePaperTexture(w, h)
 
-    local att_value = 'ATTACK BONUS: ' .. offense:getAttackValue()
+    local eq_mainhand, eq_offhand = equipment:getItem('mainhand'), equipment:getItem('offhand')
+    local weapons = {}
+    if eq_mainhand ~= nil and eq_mainhand.type == 'weapon' then
+        table.insert(weapons, eq_mainhand)
+    end
+    if eq_offhand ~= nil and eq_offhand.type == 'weapon' then
+        table.insert(weapons, eq_offhand)
+    end
+
+    local att_value = 'ATTACK BONUS: '
+    for idx, weapon in ipairs(weapons) do
+        att_value = att_value .. offense:getAttackValue(weapon)
+        if idx < #weapons then
+            att_value = att_value .. '/' 
+        end
+    end
     
     local _, damage_info = offense:getDamageValue()
 
@@ -208,7 +223,7 @@ Inventory.new = function(player)
 
         local mid_x = WINDOW_W / 2
         local ox = mfloor((background.w / 2 - stats_w) / 3)
-        drawCombatStats(offense, defense, mid_x - stats_w - ox, stats_y, stats_w, stats_h)        
+        drawCombatStats(equipment, offense, defense, mid_x - stats_w - ox, stats_y, stats_w, stats_h)        
         drawItemInfo(mid_x + ox, stats_y, stats_w, stats_h)
 
         if not hover_slot_info then return end
