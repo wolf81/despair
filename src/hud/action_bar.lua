@@ -58,8 +58,8 @@ ActionBar.new = function(player)
     local left_spacing = half_w - left_action_count * 48 - seperator:getSize() / 2
     local right_spacing = half_w - right_action_count * 48 - seperator:getSize() / 2
 
-    table.insert(buttons, #generic_actions + 1, ActionBarButton(left_spacing))
-    table.insert(buttons, #buttons - 3, ActionBarButton(right_spacing))
+    table.insert(buttons, #generic_actions + 1, FlexSpace(left_spacing, ACTION_BAR_H))
+    table.insert(buttons, #buttons - 3, FlexSpace(right_spacing, ACTION_BAR_H))
 
     local update = function(self, dt) 
         for _, button in ipairs(buttons) do
