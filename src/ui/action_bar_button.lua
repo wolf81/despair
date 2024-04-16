@@ -78,7 +78,6 @@ ActionBarButton.new = function(action)
 
     local setFrame = function(self, x, y, w, h)
         frame = { x, y, w, h, }
-        print('setFrame', x, y, w, h)
         
         if w > 0 and h > 0 then
             background = TextureGenerator.generatePanelTexture(w, h)
