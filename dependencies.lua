@@ -10,7 +10,7 @@ local Cache = require 'src.util.cache'
 -- libraries
 bresenham           = require 'lib.bresenham.bresenham'
 Gamestate           = require 'lib.hump.gamestate'
-composer            = require 'lib.composer'
+tidy                = require 'lib.composer' -- TODO: rename composer to tidy
 Signal              = require 'lib.hump.signal'
 vector              = require 'lib.hump.vector'
 Timer               = require 'lib.hump.timer'

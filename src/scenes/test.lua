@@ -1,27 +1,24 @@
-local Border, VStack, HStack, Elem = composer.Border, composer.VStack, composer.HStack, composer.Elem
-local Stretch, MinSize, Margin = composer.Stretch, composer.MinSize, composer.Margin
-
 local Test = {}
 
 local makeButton = function(action)
-    return Elem(ActionBarButton(action), MinSize(48), Stretch(0))
+    return tidy.Elem(ActionBarButton(action), tidy.MinSize(48), tidy.Stretch(0))
 end
 
 local makeFlex = function()
-    return Elem(FlexSpace(), Stretch(1))
+    return tidy.Elem(FlexSpace(), tidy.Stretch(1))
 end
 
 local makeView = function(color)
-    return Elem(View(color),Stretch(1))
+    return tidy.Elem(View(color), tidy.Stretch(1))
 end
 
 -- TODO: add utility function to get each child element from a layout, border, vstack,
 
 Test.new = function()
     -- configure layout
-    local layout = VStack({
+    local layout = tidy.VStack({
         makeView({ 1.0, 0.0, 1.0, 1.0}),
-        HStack(Stretch(1, 0), MinSize(0, 48), {
+        tidy.HStack(tidy.Stretch(1, 0), tidy.MinSize(0, 48), {
             makeFlex(),
             makeButton('inventory'),
             makeButton('cast-spell'),
