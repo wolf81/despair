@@ -11,6 +11,8 @@ View.new = function(color)
     local setFrame = function(self, x, y, w, h)
         frame = { x,y, w, h }
     end
+
+    local update = function(self, dt) end
     
     return setmetatable({
         setFrame = setFrame,
