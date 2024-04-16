@@ -33,21 +33,20 @@ ActionBarButton.new = function(action)
     local quads = QuadCache:get('actionbar')
     local quad_idx = ACTION_INFO[action]
 
-    local bar_x, bar_y = 0, 0
-    local _, _, bar_w, bar_h = quads[1]:getViewport()
-
     local frame = { 0, 0, 0, 0, }
     
     local is_highlighted, is_pressed = false, false
     
-    local background = TextureGenerator.generatePanelTexture(bar_w, bar_h)
+    local background = nil
 
     local update = function(self, dt)
         local mx, my = love.mouse.getPosition()
 
+        local x, y, w, h = unpack(frame)
+
         if quad_idx == 0 then return end
 
-        is_highlighted = (mx > bar_x) and (my > bar_y) and (mx < bar_x + bar_w) and (my < bar_y + bar_h)
+        is_highlighted = (mx > x) and (my > y) and (mx < x + w) and (my < y + h)
 
         if is_highlighted and is_pressed and (not love.mouse.isDown(1)) then
             Signal.emit(action)
@@ -56,9 +55,10 @@ ActionBarButton.new = function(action)
         is_pressed = is_highlighted and love.mouse.isDown(1)
     end
 
-    local draw = function(self, x, y)
-        x, y = unpack(frame)
-        -- bar_x, bar_y = x, y
+    local draw = function(self)
+        if not background then return end
+
+        local x, y = unpack(frame)
 
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
         love.graphics.draw(background, x, y)
@@ -71,10 +71,15 @@ ActionBarButton.new = function(action)
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
     end
 
-    local getSize = function(self) return bar_w, bar_h end
+    local getSize = function(self) return frame[3], frame[4] end
 
     local setFrame = function(self, x, y, w, h)
         frame = { x, y, w, h, }
+        print('setFrame', x, y, w, h)
+        
+        if w > 0 and h > 0 then
+            background = TextureGenerator.generatePanelTexture(w, h)
+        end
     end
     
     return setmetatable({

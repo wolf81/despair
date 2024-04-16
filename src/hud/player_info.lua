@@ -17,19 +17,26 @@ PlayerInfo.new = function(player)
 
     local cartographer = player:getComponent(Cartographer)
 
-    local background = TextureGenerator.generatePanelTexture(INFO_PANEL_W, WINDOW_H - ACTION_BAR_H)
+    local background = nil
+
+    local frame = { 0, 0, 0, 0 }
 
     local update = function(self, dt)
         health_bar:update(dt)
         energy_bar:update(dt)
     end
 
-    local draw = function(self, x, y, w, h)
+    local draw = function(self)
+        -- TODO: add dummy background
+        if not background then return end
+
         love.graphics.setFont(FONT)
+
+        local x, y, w, h = unpack(frame)
 
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
 
-        love.graphics.draw(background, WINDOW_W - INFO_PANEL_W, 1)
+        love.graphics.draw(background, x, y)
 
         local bar_x = x + 15
         local bar_y = 20
@@ -45,12 +52,17 @@ PlayerInfo.new = function(player)
         chart:draw(x + chart_x, 50)
     end
 
-    local getSize = function()
-        return INFO_PANEL_W, WINDOW_H - ACTION_BAR_H
+    local setFrame = function(self, x, y, w, h)
+        frame = { x, y, w, h }
+
+        if w > 0 and h > 0 then
+            background = TextureGenerator.generatePanelTexture(w, h)
+        end
     end
 
     return setmetatable({
         -- methods
+        setFrame = setFrame,
         update  = update,
         draw    = draw,
     }, PlayerInfo)

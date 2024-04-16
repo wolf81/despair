@@ -46,7 +46,6 @@ ResourceBar         = require 'src.hud.resource_bar'
 ImageButton         = require 'src.hud.image_button'
 PlayerInfo          = require 'src.hud.player_info'
 FlexSpace           = require 'src.hud.flex_space'
-ActionBar           = require 'src.hud.action_bar'
 Portrait            = require 'src.hud.portrait'
 Overlay             = require 'src.hud.overlay'
 
@@ -59,6 +58,7 @@ Camera              = require 'src.util.camera'
 Chart               = require 'src.util.chart'
 Turn                = require 'src.util.turn'
 Fog                 = require 'src.util.fog'
+UI                  = require 'src.util.ui'
 
 -- dijkstra
 DijkstraMap         = require 'src.dijkstra.dijkstra'

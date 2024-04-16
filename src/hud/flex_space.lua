@@ -27,7 +27,7 @@ FlexSpace.new = function()
         end
     end
 
-    local getSize = function(self) return width, height end
+    local getSize = function(self) return frame[3], frame[4] end
 
     return setmetatable({
         setFrame = setFrame,

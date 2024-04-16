@@ -3,8 +3,7 @@ local ImageButton = {}
 ImageButton.new = function(image, action)
     assert(image ~= nil, 'missing argument: "image"')
 
-    local btn_w, btn_h = image:getDimensions()
-    local btn_x, btn_y = 0, 0
+    local frame = { 0, 0, 0, 0 }
 
     local is_highlighted, is_pressed = false, false
 
@@ -13,7 +12,9 @@ ImageButton.new = function(image, action)
 
         if quad_idx == 0 then return end
 
-        is_highlighted = (mx > btn_x) and (my > btn_y) and (mx < btn_x + btn_w) and (my < btn_y + btn_h)
+        local x, y, w, h = unpack(frame)
+
+        is_highlighted = (mx > x) and (my > y) and (mx < x + w) and (my < y + h)
 
         if is_highlighted and is_pressed and (not love.mouse.isDown(1)) then
             if action then
@@ -22,11 +23,10 @@ ImageButton.new = function(image, action)
         end
 
         is_pressed = is_highlighted and love.mouse.isDown(1)
-
     end
 
-    local draw = function(self, x, y)
-        btn_x, btn_y = x, y
+    local draw = function(self)
+        local x, y, w, h = unpack(frame)
 
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
 
@@ -34,13 +34,20 @@ ImageButton.new = function(image, action)
             love.graphics.setColor(0.4, 0.9, 0.8, 1.0)
         end
 
-        love.graphics.draw(image, btn_x, btn_y)
+        local image_w, image_h = image:getDimensions()
+
+        love.graphics.draw(image, x - 1, y - 1)
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
     end
 
-    local getSize = function(self) return btn_w, btn_h end
+    local getSize = function(self) return frame[3], frame[4] end
+
+    local setFrame = function(self, x, y, w, h)
+        frame = { x, y, w, h }
+    end
     
     return setmetatable({
+        setFrame = setFrame,
         getSize = getSize,
         update  = update,
         draw    = draw,

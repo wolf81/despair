@@ -19,7 +19,7 @@ WINDOW_W            = 800
 WINDOW_H            = 450
 
 INFO_PANEL_W        = 48 * 3
-ACTION_BAR_H        = 48
+ACTION_BAR_H        = 50
 
 CLASSES = TableHelper.readOnly({
     ['fighter']     = true,

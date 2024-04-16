@@ -9,6 +9,13 @@ local mfloor, lrandom = math.floor, love.math.random
 
 local Game = {}
 
+local CLASS_ACTIONS = {
+    ['fighter'] = {  },
+    ['cleric']  = { 'turn-undead', 'cast-spell', },
+    ['rogue']   = { 'stealth', 'search',  },
+    ['mage']    = { 'cast-spell', },
+}
+
 local function showInventory(player)
     if player:getComponent(Health):isAlive() then
         Gamestate.push(Inventory(player))
@@ -36,6 +43,28 @@ local function registerActions(player)
     return handles
 end
 
+local function getLeftActionButtons(player)
+    local buttons = {}
+
+    table.insert(buttons, UI.makeButton('swap-weapon'))
+
+    for _, action in ipairs(CLASS_ACTIONS[player.class]) do
+        table.insert(buttons, UI.makeButton(action))
+    end
+
+    return buttons
+end
+
+local function getRightActionButtons()
+    local buttons = {}
+
+    for _, action in ipairs({ 'use-potion', 'use-wand', 'use-scroll' }) do
+        table.insert(buttons, UI.makeButton(action))
+    end
+
+    return buttons
+end
+
 Game.new = function()
     -- love.math.setRandomSeed(1)
 
@@ -46,26 +75,49 @@ Game.new = function()
     dungeon:enter()
 
     local portrait = Portrait(player)
-    local actionbar = ActionBar(player)
 
     local overlay = Overlay()
 
     local handles = registerActions(player)
 
+    local HALF_W = (WINDOW_W - INFO_PANEL_W - 50) / 2
+    
+    -- configure layout
+    local layout = tidy.HStack({
+        tidy.VStack(tidy.Stretch(1), {
+            UI.makeView(dungeon, tidy.Stretch(1)),
+            tidy.HStack({
+                tidy.HStack(getLeftActionButtons(player), tidy.Stretch(0)),
+                UI.makeFlex(),
+                UI.makeButton('char-sheet', portrait:getImage()),
+                UI.makeFlex(),
+                tidy.HStack(getRightActionButtons(), tidy.Stretch(0)),
+            }),
+        }),
+        tidy.VStack({
+            UI.makeView(player_info, tidy.MinSize(INFO_PANEL_W, WINDOW_H - 50), tidy.Stretch(1, 0)),
+            tidy.HStack({
+                UI.makeButton('sleep'),
+                UI.makeButton('inventory'),
+                UI.makeButton('settings'),
+            })
+        })
+    })
+    layout:setFrame(0, 0, WINDOW_W, WINDOW_H)
+    for e in layout:eachElement() do
+        e.widget:setFrame(e.rect:unpack())
+    end
+
     local update = function(self, dt) 
-        dungeon:update(dt)
-
-        actionbar:update(dt)
-
-        player_info:update(dt)
+        for e in layout:eachElement() do
+            e.widget:update(dt)
+        end
     end
 
     local draw = function(self) 
-        dungeon:draw(0, 0, WINDOW_W - INFO_PANEL_W, WINDOW_H - ACTION_BAR_H) 
-
-        player_info:draw(WINDOW_W - INFO_PANEL_W, 1, INFO_PANEL_W, WINDOW_H - ACTION_BAR_H)
-
-        actionbar:draw(0, WINDOW_H - ACTION_BAR_H - 1)
+        for e in layout:eachElement() do
+            e.widget:draw()
+        end
 
         overlay:draw()
     end
