@@ -36,13 +36,13 @@ Level               = require 'src.world.level'
 Map                 = require 'src.world.map'
 
 -- hud
-ActionBarButton     = require 'src.hud.action_bar_button'
-ResourceBar         = require 'src.hud.resource_bar'
-ImageButton         = require 'src.hud.image_button'
-PlayerInfo          = require 'src.hud.player_info'
-FlexSpace           = require 'src.hud.flex_space'
-Portrait            = require 'src.hud.portrait'
-Overlay             = require 'src.hud.overlay'
+ActionBarButton     = require 'src.ui.action_bar_button'
+ResourceBar         = require 'src.ui.resource_bar'
+ImageButton         = require 'src.ui.image_button'
+PlayerInfo          = require 'src.ui.player_info'
+FlexSpace           = require 'src.ui.flex_space'
+Portrait            = require 'src.ui.portrait'
+Overlay             = require 'src.ui.overlay'
 
 -- util
 Shadowcaster        = require 'src.util.shadowcaster'

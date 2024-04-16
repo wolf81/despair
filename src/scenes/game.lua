@@ -52,11 +52,15 @@ local function getLeftActionButtons(player)
         table.insert(buttons, UI.makeButton(action))
     end
 
+    table.insert(buttons, UI.makeFlex())
+
     return buttons
 end
 
 local function getRightActionButtons()
     local buttons = {}
+
+    table.insert(buttons, UI.makeFlex())
 
     for _, action in ipairs({ 'use-potion', 'use-wand', 'use-scroll' }) do
         table.insert(buttons, UI.makeButton(action))
@@ -87,15 +91,13 @@ Game.new = function()
         tidy.VStack(tidy.Stretch(1), {
             UI.makeView(dungeon, tidy.Stretch(1)),
             tidy.HStack({
-                tidy.HStack(getLeftActionButtons(player), tidy.Stretch(0)),
-                UI.makeFlex(),
+                tidy.HStack(getLeftActionButtons(player), tidy.MinSize(HALF_W, 0)),
                 UI.makeButton('char-sheet', portrait:getImage()),
-                UI.makeFlex(),
-                tidy.HStack(getRightActionButtons(), tidy.Stretch(0)),
+                tidy.HStack(getRightActionButtons(), tidy.MinSize(HALF_W, 0)),
             }),
         }),
         tidy.VStack({
-            UI.makeView(player_info, tidy.MinSize(INFO_PANEL_W, WINDOW_H - 50), tidy.Stretch(1, 0)),
+            UI.makeView(player_info, tidy.MinSize(INFO_PANEL_W, WINDOW_H - 50)),
             tidy.HStack({
                 UI.makeButton('sleep'),
                 UI.makeButton('inventory'),
