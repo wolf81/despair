@@ -41,6 +41,7 @@ function love.load(args)
     trySetCursor()
 
     Gamestate.registerEvents()
+
     Gamestate.switch(Loading())
 end
 

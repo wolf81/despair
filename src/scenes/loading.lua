@@ -221,7 +221,7 @@ Loading.new = function()
             message = select(2, coroutine.resume(preloader)) or ''
             message_x = mfloor((WINDOW_W - FONT:getWidth(message)) / 2)
         elseif preloader_status == 'dead' and time == 0 then
-            Gamestate.switch(Game())
+            Gamestate.switch(Test())
         end
     end
 

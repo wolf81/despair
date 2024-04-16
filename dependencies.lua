@@ -16,6 +16,21 @@ Timer               = require 'lib.hump.timer'
 lume                = require 'lib.lume.lume'
 ndn                 = require 'lib.ndn'
 
+-- composer
+-- TODO: clean-up library, then add to `libraries` list
+local layout        = require 'lib.composer.composer.layout'
+local attr          = require 'lib.composer.composer.attributes'
+VStack              = layout.VStack
+HStack              = layout.HStack
+Elem                = layout.Elem
+Border              = layout.Border
+Margin              = attr.Margin
+MinSize             = attr.MinSize
+Stretch             = attr.Stretch
+-- TODO: for testing composer, remove after composer is improved
+View = require 'src.hud.view'
+Test = require 'src.scenes.test'
+
 -- helpers
 ActionHelper        = require 'src.helpers.action_helper'
 StringHelper        = require 'src.helpers.string_helper'

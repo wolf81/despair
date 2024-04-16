@@ -35,6 +35,8 @@ ActionBarButton.new = function(action)
 
     local bar_x, bar_y = 0, 0
     local _, _, bar_w, bar_h = quads[1]:getViewport()
+
+    local frame = { 0, 0, 0, 0, }
     
     local is_highlighted, is_pressed = false, false
     
@@ -55,10 +57,11 @@ ActionBarButton.new = function(action)
     end
 
     local draw = function(self, x, y)
-        bar_x, bar_y = x, y
+        x, y = unpack(frame)
+        -- bar_x, bar_y = x, y
 
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
-        love.graphics.draw(background, bar_x, bar_y)
+        love.graphics.draw(background, x, y)
 
         if is_highlighted then
             love.graphics.setColor(0.4, 0.9, 0.8, 1.0)
@@ -69,9 +72,14 @@ ActionBarButton.new = function(action)
     end
 
     local getSize = function(self) return bar_w, bar_h end
+
+    local setFrame = function(self, x, y, w, h)
+        frame = { x, y, w, h, }
+    end
     
     return setmetatable({
         -- methods
+        setFrame = setFrame,
         getSize = getSize,
         update  = update,
         draw    = draw,    
