@@ -84,7 +84,9 @@ Game.new = function()
 
     local handles = registerActions(player)
 
-    local HALF_W = (WINDOW_W - INFO_PANEL_W - 50) / 2
+    local portrai_w = portrait:getSize()
+
+    local HALF_W = (WINDOW_W - INFO_PANEL_W - portrai_w) / 2
     
     -- configure layout
     local layout = tidy.HStack({

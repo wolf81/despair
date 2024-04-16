@@ -9,6 +9,7 @@ ImageButton.new = function(image, action)
 
     local update = function(self, dt)
         local mx, my = love.mouse.getPosition()
+        mx, my = mx / SCALE, my / SCALE
 
         if quad_idx == 0 then return end
 
