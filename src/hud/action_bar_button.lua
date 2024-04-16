@@ -42,6 +42,9 @@ ActionBarButton.new = function(action)
     local update = function(self, dt)
         local mx, my = love.mouse.getPosition()
 
+        mx = mx / SCALE
+        my = my / SCALE
+
         local x, y, w, h = unpack(frame)
 
         if quad_idx == 0 then return end

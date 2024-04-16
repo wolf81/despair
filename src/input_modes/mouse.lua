@@ -41,7 +41,9 @@ Mouse.new = function(entity)
     local x, y = 0, 0
 
     local update = function(self, dt, level)
-        local mx, my = love.mouse.getPosition()        
+        local mx, my = love.mouse.getPosition()
+
+        mx, my = mx / SCALE, my / SCALE
 
         -- ensure mouse if visible if mouse moved
         if x ~= mx and y ~= my then love.mouse.setVisible(true) end

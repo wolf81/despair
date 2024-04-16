@@ -36,21 +36,41 @@ function love.load(args)
         end
     end
 
-    love.graphics.scale(SCALE)
-
     trySetCursor()
 
-    Gamestate.registerEvents()
+    -- Gamestate.registerEvents()
 
     Gamestate.switch(Loading())
 end
 
+function love.keypressed(key, scancode, isrepeat)
+    Gamestate.keyPressed(key, scancode, isrepeat)
+end
+
+function love.keyreleased(key, scancode)
+    Gamestate.keyReleased(key, scancode)
+end
+
+function love.mousemoved(x, y, dx, dy, istouch)
+    Gamestate.mouseMoved(x, y, dx, dy, istouch)
+end
+
+function love.mousereleased(x, y, button, istouch, presses)
+    Gamestate.mouseReleased(x, y, button, istouch, presses)
+end
+
+function love.mousepressed(x, y, button, istouch, presses)
+    Gamestate.mousePressed(x, y, button, istouch, presses)
+end
+
 function love.update(dt)
     Timer.update(dt)
-    -- game:update(dt)
+    Gamestate.update(dt)
 end
 
 function love.draw()
-
-    -- game:draw()
+    love.graphics.push()
+    love.graphics.scale(SCALE)
+    Gamestate.draw()
+    love.graphics.pop()
 end

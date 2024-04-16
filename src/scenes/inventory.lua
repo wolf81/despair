@@ -179,6 +179,8 @@ Inventory.new = function(player)
     local update = function(self, dt)
         local mx, my = love.mouse.getPosition()
 
+        mx, my = mx / SCALE, my / SCALE
+
         hover_slot_info = nil
 
         for idx, slot in ipairs(slots) do
@@ -305,8 +307,8 @@ Inventory.new = function(player)
     end
 
     return setmetatable({
-        mousereleased   = mouseReleased,
-        keyreleased     = keyReleased,
+        mouseReleased   = mouseReleased,
+        keyReleased     = keyReleased,
         update          = update,
         enter           = enter,
         leave           = leave,
