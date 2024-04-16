@@ -3,16 +3,16 @@ local Stretch, MinSize, Margin = composer.Stretch, composer.MinSize, composer.Ma
 
 local Test = {}
 
-local makeButton = function(action, ...)
-    return Elem(ActionBarButton(action), ...)
+local makeButton = function(action)
+    return Elem(ActionBarButton(action), MinSize(48), Stretch(0))
 end
 
 local makeFlex = function()
     return Elem(FlexSpace(), Stretch(1))
 end
 
-local makeView = function(color, ...)
-    return Elem(View(color), ...)
+local makeView = function(color)
+    return Elem(View(color),Stretch(1))
 end
 
 -- TODO: add utility function to get each child element from a layout, border, vstack,
@@ -20,11 +20,11 @@ end
 Test.new = function()
     -- configure layout
     local layout = VStack({
-        makeView({ 1.0, 0.0, 1.0, 1.0}, Stretch(1)),
+        makeView({ 1.0, 0.0, 1.0, 1.0}),
         HStack(Stretch(1, 0), MinSize(0, 48), {
             makeFlex(),
-            makeButton('inventory', MinSize(48)),
-            makeButton('cast-spell', MinSize(48)),
+            makeButton('inventory'),
+            makeButton('cast-spell'),
             makeFlex(),
         })
     })

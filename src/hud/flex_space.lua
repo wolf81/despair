@@ -13,8 +13,9 @@ FlexSpace.new = function()
     local draw = function(self)
         if not background then return end
 
-        local x, y = unpack(frame)
+        local x, y, w, h = unpack(frame)
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
+        love.graphics.rectangle('fill', x, y, w, h)
         love.graphics.draw(background, x, y)
     end 
 
