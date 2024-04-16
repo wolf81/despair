@@ -82,7 +82,7 @@ CharSheet.new = function(player)
 
     return setmetatable({
         -- methods
-        keyreleased = keyReleased,
+        keyReleased = keyReleased,
         update      = update,
         enter       = enter,
         leave       = leave,
