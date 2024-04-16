@@ -52,7 +52,7 @@ local function getLeftActionButtons(player)
         table.insert(buttons, UI.makeButton(action))
     end
 
-    table.insert(buttons, UI.makeFlex())
+    table.insert(buttons, UI.makeFlexPanel())
 
     return buttons
 end
@@ -60,7 +60,7 @@ end
 local function getRightActionButtons()
     local buttons = {}
 
-    table.insert(buttons, UI.makeFlex())
+    table.insert(buttons, UI.makeFlexPanel())
 
     for _, action in ipairs({ 'use-potion', 'use-wand', 'use-scroll' }) do
         table.insert(buttons, UI.makeButton(action))
@@ -84,9 +84,9 @@ Game.new = function()
 
     local handles = registerActions(player)
 
-    local portrai_w = portrait:getSize()
+    local portrait_w = portrait:getSize()
 
-    local HALF_W = (WINDOW_W - INFO_PANEL_W - portrai_w) / 2
+    local HALF_W = mfloor((WINDOW_W - INFO_PANEL_W - portrait_w) / 2)
     
     -- configure layout
     local layout = tidy.HStack({

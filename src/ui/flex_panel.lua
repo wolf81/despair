@@ -5,9 +5,9 @@
 --  info+despair@wolftrail.net
 --]]
 
-local FlexSpace = {}
+local FlexPanel = {}
 
-FlexSpace.new = function()
+FlexPanel.new = function()
     local frame = { 0, 0, 0, 0 }
 
     -- TODO: use dummy texture
@@ -41,9 +41,9 @@ FlexSpace.new = function()
         getSize = getSize,
         update  = update,
         draw    = draw,
-    }, FlexSpace)
+    }, FlexPanel)
 end
 
-return setmetatable(FlexSpace, {
-    __call = function(_, ...) return FlexSpace.new(...) end,
+return setmetatable(FlexPanel, {
+    __call = function(_, ...) return FlexPanel.new(...) end,
 })

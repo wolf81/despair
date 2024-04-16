@@ -15,8 +15,8 @@ M.makeButton = function(action, image)
     end
 end
 
-M.makeFlex = function()
-    return tidy.Elem(FlexSpace(), tidy.MinSize(0, 48), tidy.Stretch(1, 0))
+M.makeFlexPanel = function()
+    return tidy.Elem(FlexPanel(), tidy.MinSize(0, 48), tidy.Stretch(1, 0))
 end
 
 M.makeView = function(view, ...)

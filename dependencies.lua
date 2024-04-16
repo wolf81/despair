@@ -40,7 +40,7 @@ ActionBarButton     = require 'src.ui.action_bar_button'
 ResourceBar         = require 'src.ui.resource_bar'
 ImageButton         = require 'src.ui.image_button'
 PlayerInfo          = require 'src.ui.player_info'
-FlexSpace           = require 'src.ui.flex_space'
+FlexPanel           = require 'src.ui.flex_panel'
 Portrait            = require 'src.ui.portrait'
 Overlay             = require 'src.ui.overlay'
 
