@@ -4,8 +4,7 @@ local Stretch, MinSize, Margin = composer.Stretch, composer.MinSize, composer.Ma
 local Test = {}
 
 local makeButton = function(action, ...)
-    local widget = ActionBarButton(action)
-    return Elem(widget, ...)
+    return Elem(ActionBarButton(action), ...)
 end
 
 local makeFlex = function()
@@ -13,8 +12,7 @@ local makeFlex = function()
 end
 
 local makeView = function(color, ...)
-    local widget = View(color)
-    return Elem(widget, ...)
+    return Elem(View(color), ...)
 end
 
 -- TODO: add utility function to get each child element from a layout, border, vstack,
