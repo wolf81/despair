@@ -17,11 +17,6 @@ Timer               = require 'lib.hump.timer'
 lume                = require 'lib.lume.lume'
 ndn                 = require 'lib.ndn'
 
-
--- TODO: for testing composer, remove after composer is improved
-View = require 'src.hud.view'
-Test = require 'src.scenes.test'
-
 -- helpers
 ActionHelper        = require 'src.helpers.action_helper'
 StringHelper        = require 'src.helpers.string_helper'
