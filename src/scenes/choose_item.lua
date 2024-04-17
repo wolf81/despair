@@ -81,7 +81,7 @@ ChooseItem.new = function(player, items, button)
 
     local mouseReleased = function(self, mx, my, button, istouch, presses)
         local x, y, w, h = unpack(frame)
-        if (mx < x) or (mx > x + w) and (my < y) or (my > y + h) then
+        if (mx < x) or (mx > x + w) or (my < y) or (my > y + h) then
             Gamestate.pop()
         end
     end

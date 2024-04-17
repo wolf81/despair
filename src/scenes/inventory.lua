@@ -86,12 +86,17 @@ local newBackground = function(width, height)
         love.graphics.draw(texture, x, y)
     end
 
+    local getFrame = function() 
+        return { x, y, w, h }
+    end
+
     return TableHelper.readOnly({
         x = x,
         y = y,
         w = w,
         h = h,
         draw = draw,
+        getFrame = getFrame,
     })
 end
 
@@ -163,6 +168,8 @@ Inventory.new = function(player)
     -- the background & item containers
     local background = newBackground(500, 380)
     local container = TextureGenerator.generateContainerTexture()
+
+    local frame = background.getFrame()
 
     -- equipment & backpack slots
     local equip_x, backpack_x = background.x + 16, background.x + 180
@@ -263,7 +270,12 @@ Inventory.new = function(player)
         end
     end
 
-    local mouseReleased = function(self, x, y, mouse_btn)
+    local mouseReleased = function(self, mx, my, mouse_btn)
+        local x, y, w, h = unpack(frame)
+        if (mx < x) or (mx > x + w) or (my < y) or (my > y + h) then
+            return Gamestate.pop()
+        end
+
         if not (hover_slot_info and mouse_btn == 2) then return end
 
         if hover_slot_info.idx > 11 then

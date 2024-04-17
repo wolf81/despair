@@ -13,15 +13,23 @@ local function getStatLine(stats, stat)
     return value .. ' (' .. (bonus < 0 and ('-' .. bonus) or ('+' .. bonus)) .. ')'
 end
 
+local function getFrame(background)
+    local w, h = background:getDimensions()
+    local x = (WINDOW_W - w) / 2
+    local y = (WINDOW_H - h) / 2
+    return { x, y, w, h }
+end
+
 CharSheet.new = function(player)
     local background = TextureGenerator.generateParchmentTexture(220, 310)
-    local background_w, background_h = background:getDimensions()
-
-    local game = nil
 
     local exp_level = player:getComponent(ExpLevel)
     local skills = player:getComponent(Skills)
     local stats = player:getComponent(Stats)
+
+    local frame = getFrame(background)
+
+    local game = nil
 
     local update = function(self, dt) 
         -- body
@@ -30,8 +38,7 @@ CharSheet.new = function(player)
     local draw = function(self)
         game:draw()
 
-        local x = (WINDOW_W - background_w) / 2
-        local y = (WINDOW_H - background_h) / 2
+        local x, y = unpack(frame)
 
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
         love.graphics.draw(background, x, y)
@@ -80,13 +87,21 @@ CharSheet.new = function(player)
         end
     end
 
+    local mouseReleased = function(self, mx, my, button, istouch, presses)
+        local x, y, w, h = unpack(frame)
+        if (mx < x) or (mx > x + w) or (my < y) or (my > y + h) then
+            Gamestate.pop()
+        end
+    end
+
     return setmetatable({
         -- methods
-        keyReleased = keyReleased,
-        update      = update,
-        enter       = enter,
-        leave       = leave,
-        draw        = draw,
+        mouseReleased   = mouseReleased,
+        keyReleased     = keyReleased,
+        update          = update,
+        enter           = enter,
+        leave           = leave,
+        draw            = draw,
     }, CharSheet)
 end
 
