@@ -47,7 +47,7 @@ local function generateSlots(equipment, equip_x, equip_y, backpack, backpack_x, 
     end
 
     -- generate slots for backpack
-    local _, max_size = backpack:size()
+    local _, max_size = backpack:getSize()
     for i = 1, max_size do
         -- convert index to pixel coords
         local y = mfloor((i - 1) / 6) * (size + spacing)

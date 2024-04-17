@@ -19,12 +19,16 @@ local CLASS_ACTIONS = {
 local function showInventory(player)
     if player:getComponent(Health):isAlive() then
         Gamestate.push(Inventory(player))
+        -- prevent an isssue in which a single black frame is shown by immediately calling update
+        Gamestate.update(0)
     end
 end
 
 local function showCharacterSheet(player)
     if player:getComponent(Health):isAlive() then
         Gamestate.push(CharSheet(player))
+        -- prevent an isssue in which a single black frame is shown by immediately calling update
+        Gamestate.update(0)
     end
 end
 
@@ -184,6 +188,8 @@ Game.new = function()
         if not player:getComponent(Health):isAlive() then return end
 
         Gamestate.push(Inventory(player))
+        -- prevent an isssue in which a single black frame is shown by immediately calling update
+        Gamestate.update(0)
     end
 
     local showWands = function(self)
@@ -196,6 +202,8 @@ Game.new = function()
 
         if player:getComponent(Health):isAlive() then
             Gamestate.push(ChooseItem(player, wands, button))
+            -- prevent an isssue in which a single black frame is shown by immediately calling update
+            Gamestate.update(0)
         end
     end
 

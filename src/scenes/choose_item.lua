@@ -35,13 +35,20 @@ ChooseItem.new = function(player, items, button)
     local update = function(self, dt)
         -- body
     end
+
+    local keyReleased = function(self, key, scancode)
+        if key == "escape" then
+            Gamestate.pop()
+        end
+    end
     
     return setmetatable({
         -- methods
-        draw    = draw,
-        enter   = enter,
-        leave   = leave,
-        update  = update,
+        draw        = draw,
+        enter       = enter,
+        leave       = leave,
+        update      = update,
+        keyReleased = keyReleased,
     }, ChooseItem)
 end
 
