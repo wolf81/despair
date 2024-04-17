@@ -96,6 +96,7 @@ Game.new = function()
 
     local overlay = Overlay()
 
+    -- handles for observer pattern with Signal, added on enter, removed on leave
     local handles = {}
 
     local portrait_w = portrait:getSize()
@@ -159,8 +160,6 @@ Game.new = function()
     local hideOverlay = function(self) overlay:fadeOut() end
 
     local showInventory = function(self)
-        -- TODO: disable 'inventory' button if player died
-
         Gamestate.push(Inventory(player))
         -- prevent an isssue in which a single black frame is shown by immediately calling update
         Gamestate.update(0)
@@ -168,8 +167,6 @@ Game.new = function()
 
     local showItems = function(items, action)
         if #items == 0 then return print('empty item list') end
-
-        -- TODO: disable 'use' buttons if player died
 
         local button = getActionBarButton(layout, action)
         Gamestate.push(ChooseItem(player, items, button))
@@ -199,12 +196,40 @@ Game.new = function()
         end
     end
 
-    local onInventoryChanged = function()
-        
+    local onInventoryChanged = function(player)
+        local wand_count = 0
+        local tome_count = 0
+        local potion_count = 0
+
+        for idx = 1, backpack:getSize() do
+            local item = backpack:peek(idx)
+            if item.type == 'wand' then
+                wand_count = wand_count + 1
+            elseif item.type == 'tome' then
+                tome_count = tome_count + 1
+            elseif item.type == 'scroll' then
+                scroll_count = scroll_count + 1
+            end
+        end
+
+        for element in layout:eachElement() do
+            if getmetatable(element.widget) == ActionBarButton then
+                local button = element.widget
+                local action = button:getAction()
+
+                if action == 'use-wand' then
+                    button:setEnabled(wand_count > 0)
+                elseif action == 'use-scroll' then
+                    button:setEnabled(tome_count > 0)
+                elseif action == 'use-potion' then
+                    button:setEnabled(potion_count > 0)
+                end
+            end
+        end        
     end
 
     local enter = function(self, from)
-        handles = {
+        handlers = {
             ['char-sheet']  = function() showCharacterSheet(player) end,
             ['inventory']   = function() showInventory(player) end,
             ['sleep']       = function() print('try sleep player') end,
@@ -212,16 +237,15 @@ Game.new = function()
             ['use-scroll']  = function() showItems(getItems(player, 'tome'), 'use-scroll') end,
             ['use-potion']  = function() showItems(getItems(player, 'potion'), 'use-potion') end,
             ['destroy']     = function(...) onDestroy(...) end,
-            ['put']         = function(...) onInventoryChanged(...) end,
-            ['take']        = function(...) onInventoryChanged(...) end,
+            ['take']        = function() onInventoryChanged(player) end,
+            ['put']         = function() onInventoryChanged(player) end,
         }
-        for key, handler in pairs(handles) do
-            Signal.register(key, handler)
+        for action, handler in pairs(handlers) do
+            handles[action] = Signal.register(action, handler)
         end
     end
 
     local leave = function(self, to)
-        print('leave', to)
         for action, handle in ipairs(handles) do
             Signal.remove(action, handle)
             handles[action] = nil
@@ -229,6 +253,8 @@ Game.new = function()
 
         handles = {}
     end
+
+    onInventoryChanged(nil)
 
     return setmetatable({
         -- methods

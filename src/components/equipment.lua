@@ -142,8 +142,11 @@ Equipment.new = function(entity, def)
                 equip.mainhand = item
                 return true
             elseif item.kind == 'light' then
-                -- can't carry 2h weapon with offhand weapon, so unquip if needed
-                if equip.mainhand ~= nil and equip.mainhand.kind == '2h' then
+                -- can't carry 2h weapon or ranged weapon with offhand weapon, so unquip if needed
+                if equip.mainhand ~= nil and (
+                    equip.mainhand.kind == '2h' or 
+                    equip.mainhand.kind == 'ranged_1h' or 
+                    equip.mainhand.kind == 'ranged_2h') then
                     self:unequip('mainhand')
                 end
 

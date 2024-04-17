@@ -18,9 +18,9 @@ function Backpack.new(entity, def)
 
         if #items >= MAX_BACKPACK_SIZE then return false end
 
-        Signal.emit('put', item)
-
         table.insert(items, item)
+
+        Signal.emit('put', item)
 
         return true
     end
@@ -36,9 +36,11 @@ function Backpack.new(entity, def)
 
             for idx, item in ipairs(items) do
                 if arg(item) then
+                    _ = table.remove(items, idx)
+
                     Signal.emit('take', item)
                     
-                    table.insert(removed, table.remove(items, idx))
+                    table.insert(removed, item)
                 end
             end
 
@@ -47,9 +49,11 @@ function Backpack.new(entity, def)
             assert(arg > 0 and arg <= MAX_BACKPACK_SIZE, 
                 'index ' .. arg .. ' out of bounds, should be between 1 and ' .. MAX_BACKPACK_SIZE)
 
+            local item = table.remove(items, arg)
+
             Signal.emit('take', item)
 
-            return table.remove(items, arg)
+            return item
         end
 
         error('invalid argument type "' .. arg_type .. '"')
