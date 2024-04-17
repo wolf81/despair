@@ -26,6 +26,7 @@ CharSheet.new = function(player)
     local exp_level = player:getComponent(ExpLevel)
     local skills = player:getComponent(Skills)
     local stats = player:getComponent(Stats)
+    local health = player:getComponent(Health)
 
     local frame = getFrame(background)
 
@@ -45,8 +46,11 @@ CharSheet.new = function(player)
 
         love.graphics.setColor(0.0, 0.0, 0.0, 0.7)
 
+        local name = player.name:upper()
+        if not health:isAlive() then name = name .. ' (deceased)' end
+
         local lines = { 
-            player.name:upper(),
+            name,
             StringHelper.capitalize(player.class) .. ' level ' .. exp_level:getValue(),
             '',
             'STATS',
