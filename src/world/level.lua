@@ -41,6 +41,17 @@ local function newMonsters(map, blocked_coords)
     return monsters
 end
 
+local function onDropItem(self, entity)
+    if entity.coord == self.entry_coord or entity.coord == self.exit_coord then
+        print('it\'s not possible to drop items on stairs')
+        return
+    end
+    
+    local backpack = entity:getComponent(Backpack)
+    local size = backpack:getSize()
+    if size > 0 then backpack:dropItem(size, self) end
+end
+
 local function initSystems(entities)
     local visual_system, control_system = System(Visual), System(Control)
     local health_system, health_bar_system = System(Health), System(HealthBar)
@@ -192,8 +203,7 @@ Level.new = function(dungeon, level_idx)
     local onDestroy = function(self, entity, duration)
         print(entity.name .. ' is destroyed')
 
-        local visual = entity:getComponent(Visual)
-        visual:fadeOut(duration)
+        entity:getComponent(Visual):fadeOut(duration)
 
         Timer.after(duration, function() 
             entity.remove = true
@@ -368,25 +378,26 @@ Level.new = function(dungeon, level_idx)
         return (player_idx > 0) and entities[player_idx] or nil
     end
 
-    local handlers = {}
+    local handles = {}
 
     local enter = function(self, player)
         self:addEntity(player)
 
         self:setBlocked(player.coord, true)
 
-        handlers = {
-            ['put']     = function(...) onPut(self, ...)     end,
-            ['move']    = function(...) onMove(self, ...)    end,
-            ['idle']    = function(...) onIdle(self, ...)    end,
-            ['attack']  = function(...) onAttack(self, ...)  end,
-            ['destroy'] = function(...) onDestroy(self, ...) end,
-            ['energy']  = function(...) onEnergy(self, ...)  end,
-            ['turn']    = function(...) onTurn(self, ...)    end,
+        local handlers = {
+            ['put']         = function(...) onPut(self, ...)     end,
+            ['move']        = function(...) onMove(self, ...)    end,
+            ['idle']        = function(...) onIdle(self, ...)    end,
+            ['attack']      = function(...) onAttack(self, ...)  end,
+            ['destroy']     = function(...) onDestroy(self, ...) end,
+            ['energy']      = function(...) onEnergy(self, ...)  end,
+            ['turn']        = function(...) onTurn(self, ...)    end,
+            ['drop-item']   = function(...) onDropItem(self, ...) end
         }
 
-        for key, handler in pairs(handlers) do
-            Signal.register(key, handler)
+        for action, handler in pairs(handlers) do
+            handles[action] = Signal.register(action, handler)
         end
 
         local cartographer = player:getComponent(Cartographer)
@@ -402,8 +413,8 @@ Level.new = function(dungeon, level_idx)
     local exit = function(self, player)        
         self:removeEntity(player)
 
-        for key, handler in pairs(handlers) do
-            Signal.remove(key, handler)
+        for action, handle in pairs(handles) do
+            Signal.remove(action, handle)
         end
     end
 

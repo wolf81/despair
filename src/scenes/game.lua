@@ -229,7 +229,7 @@ Game.new = function()
     end
 
     local enter = function(self, from)
-        handlers = {
+        local handlers = {
             ['char-sheet']  = function() showCharacterSheet(player) end,
             ['inventory']   = function() showInventory(player) end,
             ['sleep']       = function() print('try sleep player') end,
