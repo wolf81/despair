@@ -178,15 +178,17 @@ Game.new = function()
     end
 
     local function onDestroy(entity, duration)
+        if entity.type ~= 'pc' then return end
+        
         -- ensure player can use mouse to interact with UI after death
-        if entity.type == 'pc' then love.mouse.setVisible(true) end
+        love.mouse.setVisible(true) 
 
         -- on player death, disable most actions
         local enabled_actions = {
             ['profile'] = true,
             ['settings'] = true,
         }
-        
+
         for element in layout:eachElement() do
             if getmetatable(element.widget) == ActionBarButton then
                 local button = element.widget
