@@ -11,7 +11,7 @@ local Game = {}
 
 local CLASS_ACTIONS = {
     ['fighter'] = {  },
-    ['cleric']  = { 'turn-undead', 'cast-spell', },
+    ['cleric']  = { 'cast-spell', 'turn-undead', },
     ['rogue']   = { 'stealth', 'search',  },
     ['mage']    = { 'cast-spell', },
 }
