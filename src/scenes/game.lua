@@ -224,14 +224,12 @@ Game.new = function()
         handles = {}
     end
 
-    local exit = function(self)
-    end
-
     return setmetatable({
         -- methods
         draw            = draw,
         leave           = leave,
         enter           = enter,
+        leave           = leave,
         update          = update,
         mouseMoved      = mouseMoved,
         keyReleased     = keyReleased,
