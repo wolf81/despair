@@ -28,13 +28,21 @@ local function showCharacterSheet(player)
     end
 end
 
-local function registerActions(player)
+local function showSelectWandMenu(player)
+    -- 1. find all wands in player backpack
+    -- 2. select wand button
+    -- 3. show all wands in menu
+    -- (menu might be disabled if no wands found?) 
+end
+
+local function registerActions(player, game)
     local actions = {
         ['char-sheet']  = function() showCharacterSheet(player) end,
         ['inventory']   = function() showInventory(player) end,
         ['sleep']       = function() print('try sleep player') end,
+        ['use-wand']    = function() game:showWands() end,
     }
-    local handles = {}    
+    local handles = {}
 
     for action, fn in pairs(actions) do
         handles[action] = Signal.register(action, fn)
@@ -82,12 +90,12 @@ Game.new = function()
 
     local overlay = Overlay()
 
-    local handles = registerActions(player)
+    local handles = {}
 
     local portrait_w = portrait:getSize()
 
     local HALF_W = mfloor((WINDOW_W - INFO_PANEL_W - portrait_w) / 2)
-    
+
     -- configure layout
     local layout = tidy.HStack({
         tidy.VStack(tidy.Stretch(1), {
@@ -146,7 +154,21 @@ Game.new = function()
         Gamestate.push(Inventory(player))
     end
 
-    local leave = function(self)
+    local showWands = function(self)
+        for e in layout:eachElement() do
+            if getmetatable(e.widget) == ActionBarButton then
+                if e.widget:getAction() == 'use-wand' then
+                    e.widget:setSelected(true)
+                end
+            end 
+        end
+    end
+
+    local enter = function(self, from)
+        handles = registerActions(player, self)
+    end
+
+    local leave = function(self, to)
         for action, handle in ipairs(handles) do
             Signal.remove(action, handle)
             handles[action] = nil
@@ -158,8 +180,10 @@ Game.new = function()
     return setmetatable({
         -- methods
         draw            = draw,
+        enter           = enter,
         leave           = leave,
         update          = update,
+        showWands       = showWands,
         mouseMoved      = mouseMoved,
         keyReleased     = keyReleased,
         showOverlay     = showOverlay,

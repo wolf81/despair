@@ -27,6 +27,10 @@ local useFood = function(self, target)
     return true, 0
 end
 
+local useWand = function(self, target)
+
+end
+
 Usable.new = function(entity, def)
     -- the generic use function does nothing, just returning
     -- success: false, remaining charges: 1
