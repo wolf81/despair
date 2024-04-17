@@ -199,6 +199,10 @@ Game.new = function()
         end
     end
 
+    local onInventoryChanged = function()
+        
+    end
+
     local enter = function(self, from)
         handles = {
             ['char-sheet']  = function() showCharacterSheet(player) end,
@@ -208,6 +212,8 @@ Game.new = function()
             ['use-scroll']  = function() showItems(getItems(player, 'tome'), 'use-scroll') end,
             ['use-potion']  = function() showItems(getItems(player, 'potion'), 'use-potion') end,
             ['destroy']     = function(...) onDestroy(...) end,
+            ['put']         = function(...) onInventoryChanged(...) end,
+            ['take']        = function(...) onInventoryChanged(...) end,
         }
         for key, handler in pairs(handles) do
             Signal.register(key, handler)

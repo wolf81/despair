@@ -36,6 +36,8 @@ function Backpack.new(entity, def)
 
             for idx, item in ipairs(items) do
                 if arg(item) then
+                    Signal.emit('take', item)
+                    
                     table.insert(removed, table.remove(items, idx))
                 end
             end
@@ -44,6 +46,8 @@ function Backpack.new(entity, def)
         elseif arg_type == 'number' then
             assert(arg > 0 and arg <= MAX_BACKPACK_SIZE, 
                 'index ' .. arg .. ' out of bounds, should be between 1 and ' .. MAX_BACKPACK_SIZE)
+
+            Signal.emit('take', item)
 
             return table.remove(items, arg)
         end
@@ -57,15 +61,11 @@ function Backpack.new(entity, def)
 
     local isFull = function(self) return #items == MAX_BACKPACK_SIZE end
 
-    local takeLast = function(self)
-        if #items > 0 then
-            return table.remove(items, #items)
-        end
-    end
+    local dropItem = function(self, idx, level)
+        assert(idx > 0 and idx <= #items, 
+            'index ' .. idx .. ' out of bounds, should be between 1 and ' .. #items)
 
-    local dropItem = function(self, item, level)
-        if not item then return end
-
+        local item = self:take(idx)
         item.coord = entity.coord:clone()
         level:addEntity(item)
     end
@@ -92,7 +92,6 @@ function Backpack.new(entity, def)
         take        = take,
         isFull      = isFull,
         getSize     = getSize,
-        takeLast    = takeLast,
         dropItem    = dropItem,
         equipAll    = equipAll,
     }, Backpack)
