@@ -10,6 +10,4 @@
 [submodule "lib/bresenham"]
 	path = lib/bresenham
 	url = https://github.com/wolf81/bresenham.lua.git
-[submodule "lib/composer"]
-	path = lib/composer
-	url = https://github.com/wolf81/composer.git
+
