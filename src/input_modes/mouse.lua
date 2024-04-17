@@ -38,10 +38,25 @@ local isWeaponKindEquipped = function(entity, ...)
 end
 
 Mouse.new = function(entity)
+    local x, y = 0, 0
+
+    local update = function(self, dt, level)
+        local mx, my = love.mouse.getPosition()
+
+        mx, my = mx / SCALE, my / SCALE
+
+        -- ensure mouse if visible if mouse moved
+        if x ~= mx and y ~= my then love.mouse.setVisible(true) end
+
+        x, y = mx, my
+    end
+
     local getAction = function(self, level, ap)
         if not love.mouse.isDown(1) then return end
 
-        local mouse_coord = Pointer.getCoord()
+        local mouse_coord = level:getCoord(x, y)
+
+        if not mouse_coord then return end
 
         -- skip turn if player clicked on himself
         if mouse_coord == entity.coord then return Idle(level, entity) end
@@ -66,6 +81,26 @@ Mouse.new = function(entity)
         -- if next coord is not blocked, can move in direction
         if not level:isBlocked(next_coord) then
             return Move(level, entity, next_coord)            
+        elseif Direction.isOrdinal(direction) then
+            -- if cannot move in ordinal direction, try move in related directions,
+            -- e.g. if cannot move NW, try move N or W instead
+            local dirs = {}
+            if direction == Direction.NW then
+                dirs = { Direction.N, Direction.W }
+            elseif direction == Direction.NE then
+                dirs = { Direction.N, Direction.E }
+            elseif direction == Direction.SW then
+                dirs = { Direction.S, Direction.W }
+            elseif direction == Direction.SE then
+                dirs = { Direction.S, Direction.E }
+            end
+
+            for _, dir in ipairs(dirs) do
+                local next_coord = entity.coord + dir
+                if not level:isBlocked(next_coord) then
+                    return Move(level, entity, next_coord)
+                end
+            end
         end
 
         -- direction was blocked - if blocked by enemy entity perform a melee attack
@@ -80,7 +115,8 @@ Mouse.new = function(entity)
 
     return setmetatable({
         -- methods
-        getAction = getAction,
+        getAction   = getAction,
+        update      = update,
     }, Mouse)
 end
 

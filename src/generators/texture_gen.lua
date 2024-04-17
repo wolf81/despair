@@ -9,7 +9,7 @@ local mfloor = math.floor
 
 local M = {}
 
-M.generatePaperTexture = function(width, height)
+M.generateParchmentTexture = function(width, height)
     assert(w ~= nil, 'missing argument: "width')
 
     height = height or width
@@ -86,9 +86,9 @@ M.generatePanelTexture = function(w, h)
     local texture = TextureCache:get('uf_interface')
     local quads = QuadCache:get('uf_interface')
 
-    -- adjust width & height to be a power of 16, rounded down
-    w = mfloor(w / 16) * 16
-    h = mfloor(h / 16) * 16
+    -- adjust width & height to be a power of 8, rounded down
+    -- w = mfloor(w / 8) * 8
+    -- h = mfloor(h / 8) * 8
 
     local offset = 34 * 0 -- offset of 0, 1, 2 to change themes: gray, blue, brown
 
@@ -104,13 +104,13 @@ M.generatePanelTexture = function(w, h)
         love.graphics.draw(texture, quads[333 + offset], w - 16, h - 16)
 
         -- top & bottom rows
-        for x = 16, w - 32, 8 do
+        for x = 16, w - 24, 8 do
             love.graphics.draw(texture, quads[325 + offset], x, 0)
             love.graphics.draw(texture, quads[330 + offset], x, h - 16)
         end
 
         -- middle
-        for y = 16, h - 32, 16 do
+        for y = 16, h - 24, 8 do
             love.graphics.draw(texture, quads[326 + offset], 0, y)
             love.graphics.draw(texture, quads[331 + offset], w - 16, y)
         end

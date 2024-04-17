@@ -82,7 +82,7 @@ Level.new = function(dungeon, level_idx)
     local scheduler = Scheduler()
 
     -- fog of war
-    local fog = Fog(15, 10)
+    local fog = Fog(16, 10)
 
     for _, monster in ipairs(newMonsters(map, { stair_up.coord, stair_dn.coord })) do
         table.insert(entities, monster)
@@ -132,7 +132,7 @@ Level.new = function(dungeon, level_idx)
 
         -- update fog of war
         fog:cover()
-        local radius = 7
+        local radius = 8
         shadowcaster:castLight(coord.x, coord.y, radius)
 
         local cartographer = entity:getComponent(Cartographer)
@@ -219,25 +219,31 @@ Level.new = function(dungeon, level_idx)
             Timer.after(0.3, function() self:removeEntity(effect) end)        
         end
 
-        if status.damage == 0 then
-            print(entity.name .. ' missed attack on ' .. target.name)
-        else
-            local visual = target:getComponent(Visual)
-            visual:colorize(0.3)
-            if status.is_crit then
-                print(entity.name .. ' critically hit ' .. target.name .. ' for ' .. status.damage .. ' hitpoints')
+        local is_hit, is_crit = false, false
+
+        for _, attack in ipairs(status.attacks) do
+            is_hit = is_hit or attack.is_hit
+            is_crit = is_crit or attack.is_crit
+
+            if attack.damage == 0 then
+                print(entity.name .. ' missed attack on ' .. target.name)
             else
-                print(entity.name .. ' hit ' .. target.name .. ' for ' .. status.damage .. ' hitpoints')
+                if attack.is_crit then
+                    print(entity.name .. ' critically hit ' .. target.name .. ' for ' .. attack.damage .. ' hitpoints')
+                else
+                    print(entity.name .. ' hit ' .. target.name .. ' for ' .. attack.damage .. ' hitpoints')
+                end
             end
+
+            local total = attack.roll + attack.attack
+            print(total .. ' (' .. attack.roll .. ' + ' .. attack.attack .. ') vs ' .. status.ac)
         end
 
-        local total = status.roll + status.attack
-        print(total .. ' (' .. status.roll .. ' + ' .. status.attack .. ') vs ' .. status.ac)
+        -- visualize hit on target by drawing with a tint color
+        if is_hit then target:getComponent(Visual):colorize(0.3) end
 
         -- show camera shake effect if player performs a critical hit
-        if status.is_crit and entity == self:getPlayer() then
-            camera:shake(0.2)
-        end
+        if is_crit and entity == self:getPlayer() then camera:shake(0.2) end
     end
 
     local onEnergy = function(self, entity, message)
@@ -307,8 +313,6 @@ Level.new = function(dungeon, level_idx)
         for _, system in ipairs(systems) do
             system:update(dt, self)
         end
-
-        Pointer.update(camera, self)
 
         scheduler:update(dt, self)
     end
@@ -405,6 +409,18 @@ Level.new = function(dungeon, level_idx)
 
     local getSize = function(self) return map_w, map_h end
 
+    local getCoord = function(self, x, y) 
+        if x < 0 or y < 0 or x > WINDOW_W - INFO_PANEL_W or y > WINDOW_H - ACTION_BAR_H then 
+            return nil
+        end
+
+        x, y = camera:worldCoords(x, y)
+        x = mfloor((x + INFO_PANEL_W / 2) / TILE_SIZE)
+        y = mfloor((y + ACTION_BAR_H / 2) / TILE_SIZE)
+
+        return vector(x, y)
+    end
+
     local getPlayerDistance = function(self, coord)
         return player_dist_map:getDistance(coord.x, coord.y)
     end
@@ -414,19 +430,20 @@ Level.new = function(dungeon, level_idx)
         entry_coord         = stair_up.coord,
         exit_coord          = stair_dn.coord,
         -- methods
-        update              = update,
         draw                = draw,
-        isBlocked           = isBlocked,
-        setBlocked          = setBlocked,
-        inLineOfSight       = inLineOfSight,
-        isVisible           = isVisible,
-        enter               = enter,
         exit                = exit,
+        enter               = enter,
+        update              = update,
         getSize             = getSize,
-        addEntity           = addEntity,
+        getCoord            = getCoord,
+        isVisible           = isVisible,
+        isBlocked           = isBlocked,
         getPlayer           = getPlayer,
+        addEntity           = addEntity,
+        setBlocked          = setBlocked,
         getEntities         = getEntities,
         removeEntity        = removeEntity,
+        inLineOfSight       = inLineOfSight,
         getPlayerDistance   = getPlayerDistance,
     }, Level)
 end

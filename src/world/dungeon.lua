@@ -60,7 +60,7 @@ local function generateLootTable()
     end
 
     for _, id in ipairs(EntityFactory.getIds('food')) do
-        loot_table[id] = 10
+        loot_table[id] = 14
     end
 
     return loot_table    
@@ -113,11 +113,13 @@ Dungeon.new = function(player)
     local levels, level_idx = {}, 0
     local alpha = 1.0
 
+    local frame = { 0, 0, 0, 0 }
+
     local update = function(self, dt) levels[level_idx]:update(dt) end
 
-    local draw = function(self, x, y, w, h)
+    local draw = function(self)
         love.graphics.setColor(1.0, 1.0, 1.0, self.alpha) 
-        levels[level_idx]:draw(x, y, w, h) 
+        levels[level_idx]:draw(unpack(frame)) 
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0) 
     end
 
@@ -179,6 +181,10 @@ Dungeon.new = function(player)
         end)
     end
 
+    local setFrame = function(self, x, y, w, h)
+        frame = { x, y, w, h }
+    end
+
     return setmetatable({
         -- properties
         alpha       = alpha,
@@ -188,6 +194,7 @@ Dungeon.new = function(player)
         draw        = draw,
         nextLevel   = nextLevel,
         prevLevel   = prevLevel,
+        setFrame    = setFrame,
     }, Dungeon)
 end
 

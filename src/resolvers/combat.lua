@@ -13,32 +13,57 @@ M.resolve = function(entity, target)
     local offense = entity:getComponent(Offense)
     local equipment = entity:getComponent(Equipment)
 
-    local roll = ndn.dice('1d20').roll()
-    local is_crit = roll == 20 -- critical hit, dealing maximum damage
-    local is_miss = roll == 1 -- critical miss
-    local attack = offense:getAttackValue()
+    local eq_mainhand = equipment:getItem('mainhand')
+    local eq_offhand = equipment:getItem('offhand')
+
+    local weapons = {}
+    if eq_mainhand ~= nil and eq_mainhand.type == 'weapon' then
+        table.insert(weapons, eq_mainhand)
+    end
+
+    if eq_offhand ~= nil and eq_offhand.type == 'weapon' then
+        table.insert(weapons, eq_offhand)
+    end
+
+    local is_dual_wielding = #weapons == 2
     local ac = defense:getArmorValue()
-    local is_hit = (is_crit == true)
-    if not (is_miss and is_crit) then
-        is_hit = (roll + attack) > ac
-    end
-    local damage = is_hit and offense:getDamageValue(is_crit) or 0
 
-    if is_hit then
-        health:harm(damage)
-    end
-
-    local eq_weapon = equipment:getItem('mainhand')
-   
-    return {
-        ac      = ac,
-        roll    = roll,
-        attack  = attack,
-        damage  = damage,
-        is_hit  = is_hit,
-        is_crit = is_crit,
-        proj_id = eq_weapon.projectile,
+    local combat_info = {
+        ac = ac,
+        attacks = {},
+        proj_id = eq_mainhand.projectile,        
     }
+
+    for _, weapon in ipairs(weapons) do
+        local roll = ndn.dice('1d20').roll()
+        local is_crit = roll == 20 -- critical hit, dealing maximum damage
+        local is_hit = false
+
+        local attack = offense:getAttackValue(weapon, is_dual_wielding)
+        local damage = 0
+
+        if roll > 1 then -- a roll of 1 is a critical miss
+            is_hit = is_crit or (roll + attack) > ac
+        end
+
+        if is_hit then
+            damage = offense:getDamageValue(weapon, is_crit)
+            health:harm(damage)
+        end
+
+        table.insert(combat_info.attacks, {
+            roll    = roll,
+            is_hit  = is_hit,
+            is_crit = is_crit,
+            attack  = attack,
+            damage  = damage,
+        })
+
+        -- no more attacks possible after target has died
+        if not health:isAlive() then break end
+    end
+
+    return combat_info
 end
 
 return M

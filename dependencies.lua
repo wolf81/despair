@@ -10,6 +10,7 @@ local Cache = require 'src.util.cache'
 -- libraries
 bresenham           = require 'lib.bresenham.bresenham'
 Gamestate           = require 'lib.hump.gamestate'
+tidy                = require 'lib.composer' -- TODO: rename composer to tidy
 Signal              = require 'lib.hump.signal'
 vector              = require 'lib.hump.vector'
 Timer               = require 'lib.hump.timer'
@@ -24,6 +25,8 @@ TableHelper         = require 'src.helpers.table_helper'
 PathHelper          = require 'src.helpers.path_helper'
 
 -- scenes
+ChooseItem          = require 'src.scenes.choose_item'
+CharSheet           = require 'src.scenes.char_sheet'
 Inventory           = require 'src.scenes.inventory'
 Loading             = require 'src.scenes.loading'
 Game                = require 'src.scenes.game'
@@ -33,22 +36,25 @@ Dungeon             = require 'src.world.dungeon'
 Level               = require 'src.world.level'
 Map                 = require 'src.world.map'
 
--- hud
-ResourceBar         = require 'src.hud.resource_bar'
-PlayerInfo          = require 'src.hud.player_info'
-Portrait            = require 'src.hud.portrait'
-Minimap             = require 'src.hud.minimap'
-Overlay             = require 'src.hud.overlay'
+-- ui
+ActionBarButton     = require 'src.ui.action_bar_button'
+ResourceBar         = require 'src.ui.resource_bar'
+ImageButton         = require 'src.ui.image_button'
+PlayerInfo          = require 'src.ui.player_info'
+FlexPanel           = require 'src.ui.flex_panel'
+Portrait            = require 'src.ui.portrait'
+Overlay             = require 'src.ui.overlay'
 
 -- util
 Shadowcaster        = require 'src.util.shadowcaster'
 Direction           = require 'src.util.direction'
 Animation           = require 'src.util.animation'
 Scheduler           = require 'src.util.scheduler'
-Pointer             = require 'src.util.pointer'
 Camera              = require 'src.util.camera'
+Chart               = require 'src.util.chart'
 Turn                = require 'src.util.turn'
 Fog                 = require 'src.util.fog'
+UI                  = require 'src.util.ui'
 
 -- dijkstra
 DijkstraMap         = require 'src.dijkstra.dijkstra'

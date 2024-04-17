@@ -9,6 +9,10 @@ local Keyboard = {}
 
 Keyboard.new = function(entity)
     local was_pressed = {}
+    
+    local update = function(self, dt, level)
+        -- body
+    end
 
     local getAction = function(self, level, ap)
         for key in pairs(was_pressed) do
@@ -16,7 +20,9 @@ Keyboard.new = function(entity)
                 if key == 'b' then
                     local backpack = entity:getComponent(Backpack)
                     backpack:dropItem(backpack:takeLast(), level)
-                end
+                elseif key == '9' then
+                    Signal.emit('use-wand')
+                end                
             end
         end
 
@@ -41,6 +47,8 @@ Keyboard.new = function(entity)
             direction = Direction.SE
         elseif love.keyboard.isDown('b') then
             was_pressed['b'] = true
+        elseif love.keyboard.isDown('9') then
+            was_pressed['9'] = true
         end
 
         if direction == Direction.NONE then return nil end
@@ -67,7 +75,8 @@ Keyboard.new = function(entity)
 
     return setmetatable({
         -- methods
-        getAction = getAction,
+        getAction   = getAction,
+        update      = update,
     }, Keyboard)
 end
 

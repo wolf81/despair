@@ -47,7 +47,7 @@ local function generateSlots(equipment, equip_x, equip_y, backpack, backpack_x, 
     end
 
     -- generate slots for backpack
-    local _, max_size = backpack:size()
+    local _, max_size = backpack:getSize()
     for i = 1, max_size do
         -- convert index to pixel coords
         local y = mfloor((i - 1) / 6) * (size + spacing)
@@ -86,31 +86,59 @@ local newBackground = function(width, height)
         love.graphics.draw(texture, x, y)
     end
 
+    local getFrame = function() 
+        return { x, y, w, h }
+    end
+
     return TableHelper.readOnly({
         x = x,
         y = y,
         w = w,
         h = h,
         draw = draw,
+        getFrame = getFrame,
     })
 end
 
-local function getDamageText(damage_info)
-    local dice = ndn.dice(damage_info.weapon)
-    local min, max = dice:range()
-    return min + damage_info.bonus .. '-' .. max + damage_info.bonus
+local function getWeapons(equipment)
+    local weapons = {}
+
+    local eq_mainhand = equipment:getItem('mainhand')
+    if eq_mainhand ~= nil and eq_mainhand.type == 'weapon' then
+        table.insert(weapons, eq_mainhand)
+    end
+    local eq_offhand = equipment:getItem('offhand')
+    if eq_offhand ~= nil and eq_offhand.type == 'weapon' then
+        table.insert(weapons, eq_offhand)
+    end
+
+    return weapons
 end
 
-local function drawCombatStats(offense, defense, x, y, w, h)
+local function drawCombatStats(equipment, offense, defense, x, y, w, h)
     local text_h = FONT:getHeight() + 8
 
-    local background = TextureGenerator.generatePaperTexture(w, h)
+    local background = TextureGenerator.generateParchmentTexture(w, h)
 
-    local att_value = 'ATTACK BONUS: ' .. offense:getAttackValue()
+    local weapons = getWeapons(equipment)    
+    local is_dual_wielding = #weapons == 2
+
+    local att_value = 'ATTACK BONUS: '
+    local dmg_value = 'DAMAGE:       '
+
+    for idx, weapon in ipairs(weapons) do
+        local dmg_min, dmg_max = ndn.dice(weapon.damage):range()
+        local bonus = offense:getDamageBonus(weapon)
+
+        att_value = att_value .. offense:getAttackValue(weapon, is_dual_wielding)
+        dmg_value = dmg_value .. (dmg_min + bonus) .. '-' .. (dmg_max + bonus)
+
+        if idx < #weapons then
+            att_value = att_value .. '/' 
+            dmg_value = dmg_value .. '/'
+        end
+    end
     
-    local _, damage_info = offense:getDamageValue()
-
-    local dmg_value = 'DAMAGE:       ' .. getDamageText(damage_info)
     local ac_value  = 'ARMOR CLASS:  ' .. defense:getArmorValue()
 
     love.graphics.draw(background, x, y)
@@ -123,9 +151,8 @@ local function drawCombatStats(offense, defense, x, y, w, h)
 end
 
 local function drawItemInfo(x, y, w, h)
-    local background = TextureGenerator.generatePaperTexture(w, h)
+    local background = TextureGenerator.generateParchmentTexture(w, h)
     love.graphics.draw(background, x, y)
-
 end
 
 -- TODO: need title bar and close button
@@ -142,6 +169,8 @@ Inventory.new = function(player)
     local background = newBackground(500, 380)
     local container = TextureGenerator.generateContainerTexture()
 
+    local frame = background.getFrame()
+
     -- equipment & backpack slots
     local equip_x, backpack_x = background.x + 16, background.x + 180
     local equip_y, backpack_y = background.y + 16, background.y + 16
@@ -156,6 +185,8 @@ Inventory.new = function(player)
 
     local update = function(self, dt)
         local mx, my = love.mouse.getPosition()
+
+        mx, my = mx / SCALE, my / SCALE
 
         hover_slot_info = nil
 
@@ -209,7 +240,7 @@ Inventory.new = function(player)
 
         local mid_x = WINDOW_W / 2
         local ox = mfloor((background.w / 2 - stats_w) / 3)
-        drawCombatStats(offense, defense, mid_x - stats_w - ox, stats_y, stats_w, stats_h)        
+        drawCombatStats(equipment, offense, defense, mid_x - stats_w - ox, stats_y, stats_w, stats_h)        
         drawItemInfo(mid_x + ox, stats_y, stats_w, stats_h)
 
         if not hover_slot_info then return end
@@ -239,7 +270,12 @@ Inventory.new = function(player)
         end
     end
 
-    local mouseReleased = function(self, x, y, mouse_btn)
+    local mouseReleased = function(self, mx, my, mouse_btn)
+        local x, y, w, h = unpack(frame)
+        if (mx < x) or (mx > x + w) or (my < y) or (my > y + h) then
+            return Gamestate.pop()
+        end
+
         if not (hover_slot_info and mouse_btn == 2) then return end
 
         if hover_slot_info.idx > 11 then
@@ -248,6 +284,10 @@ Inventory.new = function(player)
             local item_idx = hover_slot_info.idx - 11
 
             local item = backpack:peek(item_idx)
+
+            -- ignore empty slots
+            if not item then return end
+
             local usable = item:getComponent(Usable)
             local equippable = item:getComponent(Equippable)
 
@@ -269,6 +309,9 @@ Inventory.new = function(player)
             equipment:unequip(hover_slot_info.slot.key)
         end
 
+        -- update game to show current health and energy after eating food, drinking potion, ...
+        game:update(0)
+
         -- if player died after using a harmful item, hide inventory
         if not player:getComponent(Health):isAlive() then
             Gamestate.pop()
@@ -276,8 +319,8 @@ Inventory.new = function(player)
     end
 
     return setmetatable({
-        mousereleased   = mouseReleased,
-        keyreleased     = keyReleased,
+        mouseReleased   = mouseReleased,
+        keyReleased     = keyReleased,
         update          = update,
         enter           = enter,
         leave           = leave,
