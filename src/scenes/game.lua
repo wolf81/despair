@@ -20,11 +20,14 @@ local function getItems(player, type)
     local backpack = player:getComponent(Backpack)
 
     local items = {}
+    local item_info = {}
 
     for idx = 1, backpack:getSize() do
         local item = backpack:peek(idx)
-        if item.type == type then
+        -- only show unique item types, to prevent showing 2 wands of frost, 3 tomes of identify, ...
+        if item.type == type and not item_info[item.id] then
             table.insert(items, item)
+            item_info[item.id] = item
         end
     end
 
