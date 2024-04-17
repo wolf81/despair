@@ -198,7 +198,6 @@ Game.new = function()
         if #wands == 0 then return print('no wands in backpack') end
 
         local button = getActionBarButton(layout, 'use-wand')
-        print('btn', button)
 
         if player:getComponent(Health):isAlive() then
             Gamestate.push(ChooseItem(player, wands, button))

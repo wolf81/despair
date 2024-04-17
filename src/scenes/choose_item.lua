@@ -11,27 +11,34 @@ local function getImage(texture, quad)
     return canvas
 end
 
+local function getImageButton(item)
+    local def = EntityFactory.getDefinition(item.id)
+    local texture = TextureCache:get(def.texture)
+    local quads = QuadCache:get(def.texture)
+    local quad_idx = def.anim[1]
+    local image = getImage(texture, quads[quad_idx])
+    return ImageButton(image, item.gid)
+end
+
+local function getFrame(anchor_x, anchor_y, item_count)
+    local w, h = TILE_SIZE * item_count, TILE_SIZE
+    local x = anchor_x - w / 2 + (w / item_count / 2) 
+    local y = anchor_y - h - 1
+    return { x, y, w, h }
+end
+
 ChooseItem.new = function(player, items, button)
     local game = nil
 
     local btn_x, btn_y = button:getFrame()
-
+    local frame = getFrame(btn_x, btn_y, #items)
     local item_background = TextureGenerator.generatePanelTexture(TILE_SIZE, TILE_SIZE)
-    local w, h = TILE_SIZE * #items, TILE_SIZE
-    local x = btn_x - w / 2 + (w / #items / 2) 
-    local y = btn_y - h - 1
 
     local buttons = {}
-
     for idx, item in ipairs(items) do
-        local def = EntityFactory.getDefinition(item.id)
-        local texture = TextureCache:get(def.texture)
-        local quads = QuadCache:get(def.texture)
-        local frame = def.anim[1]
-        local image = getImage(texture, quads[frame])
-        local button = ImageButton(image, item.gid)
+        local button = getImageButton(item)
         local ox = (idx - 1) * TILE_SIZE
-        button:setFrame(x + ox, y, TILE_SIZE, TILE_SIZE)
+        button:setFrame(frame[1] + ox, frame[2], TILE_SIZE, TILE_SIZE)
         table.insert(buttons, button)
     end
 
@@ -72,8 +79,11 @@ ChooseItem.new = function(player, items, button)
         end
     end
 
-    local mouseReleased = function(self, x, y, button, istouch, presses)
-        Gamestate.pop()
+    local mouseReleased = function(self, mx, my, button, istouch, presses)
+        local x, y, w, h = unpack(frame)
+        if (mx < x) or (mx > x + w) and (my < y) or (my > y + h) then
+            Gamestate.pop()
+        end
     end
     
     return setmetatable({
