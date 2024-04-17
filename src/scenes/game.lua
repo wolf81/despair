@@ -144,12 +144,6 @@ Game.new = function()
         overlay:draw()
     end
 
-    local onDestroy = function(self, entity, duration)
-        print('DESTROYED', self, entity, duration)
-        -- ensure player can use mouse to interact with UI after death
-        if entity.type == 'pc' then love.mouse.setVisible(true) end
-    end
-
     local keyReleased = function(self, key, scancode)        
         if key == 'i' then
             self:showInventory()
@@ -183,8 +177,27 @@ Game.new = function()
         Gamestate.update(0)
     end
 
+    local function onDestroy(entity, duration)
+        -- ensure player can use mouse to interact with UI after death
+        if entity.type == 'pc' then love.mouse.setVisible(true) end
+
+        -- on player death, disable most actions
+        local enabled_actions = {
+            ['profile'] = true,
+            ['settings'] = true,
+        }
+        
+        for element in layout:eachElement() do
+            if getmetatable(element.widget) == ActionBarButton then
+                local button = element.widget
+                if not enabled_actions[button:getAction()] then
+                    button:setEnabled(false)
+                end
+            end
+        end
+    end
+
     local enter = function(self, from)
-        print('enter', from)
         handles = {
             ['char-sheet']  = function() showCharacterSheet(player) end,
             ['inventory']   = function() showInventory(player) end,
@@ -192,7 +205,7 @@ Game.new = function()
             ['use-wand']    = function() showItems(getItems(player, 'wand'), 'use-wand') end,
             ['use-scroll']  = function() showItems(getItems(player, 'tome'), 'use-scroll') end,
             ['use-potion']  = function() showItems(getItems(player, 'potion'), 'use-potion') end,
-            ['destroy']     = function(...) print('DESTROY'); onDestroy(self, ...) end,
+            ['destroy']     = function(...) onDestroy(...) end,
         }
         for key, handler in pairs(handles) do
             Signal.register(key, handler)
