@@ -77,11 +77,39 @@ local function getRightActionButtons()
     return buttons
 end
 
+local function getWands(backpack)
+    local wands = {}
+
+    for idx = 1, backpack:getSize() do
+        local item = backpack:peek(idx)
+        print(idx, item.type)
+        if item.type == 'wand' then
+            table.insert(wands, item)
+        end
+    end
+
+    return wands
+end
+
+local function getActionBarButton(layout, action)
+    for e in layout:eachElement() do
+        if getmetatable(e.widget) == ActionBarButton then
+            if e.widget:getAction() == action then
+                return e.widget
+            end
+        end
+    end
+
+    return nil
+end
+
 Game.new = function()
     -- love.math.setRandomSeed(1)
 
     local player = EntityFactory.create('pc' .. lrandom(1, 4))
     local player_info = PlayerInfo(player)
+
+    local backpack = player:getComponent(Backpack)
 
     local dungeon = Dungeon(player)
     dungeon:enter()
@@ -159,19 +187,15 @@ Game.new = function()
     end
 
     local showWands = function(self)
-        for e in layout:eachElement() do
-            if getmetatable(e.widget) == ActionBarButton then
-                if e.widget:getAction() == 'use-wand' then
-                    e.widget:setSelected(item_bar == nil)
-                    local items = { 'item1', 'item2', 'item3' }
-                    item_bar = ItemBar(items)
-                    local bar_w, bar_h = item_bar:getSize()
-                    local x, y, w, h = e.rect:unpack()
-                    local bar_x = x - bar_w / 2 + (bar_w / #items / 2) 
-                    local bar_y = y - bar_h - 1
-                    item_bar:setFrame(bar_x, bar_y, bar_w, bar_h)
-                end
-            end 
+        local wands = getWands(backpack)
+
+        if #wands == 0 then return print('no wands in backpack') end
+
+        local button = getActionBarButton(layout, 'use-wand')
+        print('btn', button)
+
+        if player:getComponent(Health):isAlive() then
+            Gamestate.push(ChooseItem(player, wands, button))
         end
     end
 

@@ -88,6 +88,8 @@ ActionBarButton.new = function(action)
         end
     end
 
+    local getFrame = function(self) return unpack(frame) end
+
     local setSelected = function(self, flag) is_selected = (flag == true) end
 
     local isSelected = function(self) return is_selected end
@@ -114,6 +116,7 @@ ActionBarButton.new = function(action)
         isEnabled   = isEnabled,
         getAction   = getAction,
         setFrame    = setFrame,
+        getFrame    = getFrame,
         update      = update,
         draw        = draw,    
     }, ActionBarButton)

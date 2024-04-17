@@ -25,6 +25,7 @@ TableHelper         = require 'src.helpers.table_helper'
 PathHelper          = require 'src.helpers.path_helper'
 
 -- scenes
+ChooseItem          = require 'src.scenes.choose_item'
 CharSheet           = require 'src.scenes.char_sheet'
 Inventory           = require 'src.scenes.inventory'
 Loading             = require 'src.scenes.loading'

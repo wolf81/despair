@@ -53,7 +53,7 @@ function Backpack.new(entity, def)
 
     local peek = function(self, idx) return items[idx] end
 
-    local size = function(self) return #items, MAX_BACKPACK_SIZE end
+    local getSize = function(self) return #items, MAX_BACKPACK_SIZE end
 
     local isFull = function(self) return #items == MAX_BACKPACK_SIZE end
 
@@ -90,8 +90,8 @@ function Backpack.new(entity, def)
         put         = put,
         peek        = peek,
         take        = take,
-        size        = size,
         isFull      = isFull,
+        getSize     = getSize,
         takeLast    = takeLast,
         dropItem    = dropItem,
         equipAll    = equipAll,

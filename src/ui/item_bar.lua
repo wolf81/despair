@@ -6,7 +6,7 @@ ItemBar.new = function(items)
     local item_background = TextureGenerator.generateContainerTexture()
     local image_w, image_h = item_background:getDimensions()
 
-    local background = TextureGenerator.generatePanelTexture(image_w * #items, image_h)
+    local background = TextureGenerator.generatePanelTexture(image_w * #items + 6, image_h + 6)
 
     local update = function(self, dt)
         -- body
@@ -16,11 +16,19 @@ ItemBar.new = function(items)
         local x, y = unpack(frame)
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
 
-        love.graphics.draw(background, x, y)
+        love.graphics.draw(background, x - 3, y - 3)
 
         local ox = 0
         for _, item in ipairs(items) do
             love.graphics.draw(item_background, x + ox, y)
+
+            local def = EntityFactory.getDefinition(item.id)
+            local texture = TextureCache:get(def.texture)
+            local quads = QuadCache:get(def.texture)
+            local frame = def.anim[1]
+
+            love.graphics.draw(texture, quads[frame], x + ox, y)
+
             ox = ox + image_w
         end
     end
