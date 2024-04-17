@@ -94,6 +94,8 @@ Game.new = function()
 
     local portrait_w = portrait:getSize()
 
+    local item_bar = nil
+
     local HALF_W = mfloor((WINDOW_W - INFO_PANEL_W - portrait_w) / 2)
 
     -- configure layout
@@ -131,6 +133,8 @@ Game.new = function()
             e.widget:draw()
         end
 
+        if item_bar then item_bar:draw() end
+
         overlay:draw()
     end
 
@@ -158,7 +162,14 @@ Game.new = function()
         for e in layout:eachElement() do
             if getmetatable(e.widget) == ActionBarButton then
                 if e.widget:getAction() == 'use-wand' then
-                    e.widget:setSelected(true)
+                    e.widget:setSelected(item_bar == nil)
+                    local items = { 'item1', 'item2', 'item3' }
+                    item_bar = ItemBar(items)
+                    local bar_w, bar_h = item_bar:getSize()
+                    local x, y, w, h = e.rect:unpack()
+                    local bar_x = x - bar_w / 2 + (bar_w / #items / 2) 
+                    local bar_y = y - bar_h - 1
+                    item_bar:setFrame(bar_x, bar_y, bar_w, bar_h)
                 end
             end 
         end

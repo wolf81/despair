@@ -35,13 +35,14 @@ Dungeon             = require 'src.world.dungeon'
 Level               = require 'src.world.level'
 Map                 = require 'src.world.map'
 
--- hud
+-- ui
 ActionBarButton     = require 'src.ui.action_bar_button'
 ResourceBar         = require 'src.ui.resource_bar'
 ImageButton         = require 'src.ui.image_button'
 PlayerInfo          = require 'src.ui.player_info'
 FlexPanel           = require 'src.ui.flex_panel'
 Portrait            = require 'src.ui.portrait'
+ItemBar             = require 'src.ui.item_bar'
 Overlay             = require 'src.ui.overlay'
 
 -- util
