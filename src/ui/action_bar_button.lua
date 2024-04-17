@@ -7,6 +7,8 @@
 
 local ActionBarButton = {}
 
+local DISABLED_ALPHA = 0.7
+
 local ACTION_INFO = {
     ['inventory']   = 2,
     ['settings']    = 4,
@@ -69,7 +71,7 @@ ActionBarButton.new = function(action)
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
         love.graphics.rectangle('fill', x + 1, y + 1, w - 2, h - 2)
 
-        love.graphics.setColor(1.0, 1.0, 1.0, (is_enabled and 1.0 or 0.5))
+        love.graphics.setColor(1.0, 1.0, 1.0, (is_enabled and 1.0 or DISABLED_ALPHA))
         love.graphics.draw(background, x, y)
 
         if is_highlighted or is_selected then
