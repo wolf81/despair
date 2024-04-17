@@ -32,44 +32,15 @@ local function getItems(player, type)
 end
 
 local function showInventory(player)
-    if player:getComponent(Health):isAlive() then
-        Gamestate.push(Inventory(player))
-        -- prevent an isssue in which a single black frame is shown by immediately calling update
-        Gamestate.update(0)
-    end
+    Gamestate.push(Inventory(player))
+    -- prevent an isssue in which a single black frame is shown by immediately calling update
+    Gamestate.update(0)
 end
 
 local function showCharacterSheet(player)
-    if player:getComponent(Health):isAlive() then
-        Gamestate.push(CharSheet(player))
-        -- prevent an isssue in which a single black frame is shown by immediately calling update
-        Gamestate.update(0)
-    end
-end
-
-local function showSelectWandMenu(player)
-    -- 1. find all wands in player backpack
-    -- 2. select wand button
-    -- 3. show all wands in menu
-    -- (menu might be disabled if no wands found?) 
-end
-
-local function registerActions(player, game)
-    local actions = {
-        ['char-sheet']  = function() showCharacterSheet(player) end,
-        ['inventory']   = function() showInventory(player) end,
-        ['sleep']       = function() print('try sleep player') end,
-        ['use-wand']    = function() game:showItems(getItems(player, 'wand'), 'use-wand') end,
-        ['use-scroll']  = function() game:showItems(getItems(player, 'tome'), 'use-scroll') end,
-        ['use-potion']  = function() game:showItems(getItems(player, 'potion'), 'use-potion') end,
-    }
-    local handles = {}
-
-    for action, fn in pairs(actions) do
-        handles[action] = Signal.register(action, fn)
-    end
-
-    return handles
+    Gamestate.push(CharSheet(player))
+    -- prevent an isssue in which a single black frame is shown by immediately calling update
+    Gamestate.update(0)
 end
 
 local function getLeftActionButtons(player)
@@ -173,6 +144,12 @@ Game.new = function()
         overlay:draw()
     end
 
+    local onDestroy = function(self, entity, duration)
+        print('DESTROYED', self, entity, duration)
+        -- ensure player can use mouse to interact with UI after death
+        if entity.type == 'pc' then love.mouse.setVisible(true) end
+    end
+
     local keyReleased = function(self, key, scancode)        
         if key == 'i' then
             self:showInventory()
@@ -188,29 +165,42 @@ Game.new = function()
     local hideOverlay = function(self) overlay:fadeOut() end
 
     local showInventory = function(self)
-        if not player:getComponent(Health):isAlive() then return end
+        -- TODO: disable 'inventory' button if player died
 
         Gamestate.push(Inventory(player))
         -- prevent an isssue in which a single black frame is shown by immediately calling update
         Gamestate.update(0)
     end
 
-    local showItems = function(self, items, action)
+    local showItems = function(items, action)
         if #items == 0 then return print('empty item list') end
 
-        if player:getComponent(Health):isAlive() then
-            local button = getActionBarButton(layout, action)
-            Gamestate.push(ChooseItem(player, items, button))
-            -- prevent an isssue in which a single black frame is shown by immediately calling update
-            Gamestate.update(0)
-        end
+        -- TODO: disable 'use' buttons if player died
+
+        local button = getActionBarButton(layout, action)
+        Gamestate.push(ChooseItem(player, items, button))
+        -- prevent an isssue in which a single black frame is shown by immediately calling update
+        Gamestate.update(0)
     end
 
     local enter = function(self, from)
-        handles = registerActions(player, self)
+        print('enter', from)
+        handles = {
+            ['char-sheet']  = function() showCharacterSheet(player) end,
+            ['inventory']   = function() showInventory(player) end,
+            ['sleep']       = function() print('try sleep player') end,
+            ['use-wand']    = function() showItems(getItems(player, 'wand'), 'use-wand') end,
+            ['use-scroll']  = function() showItems(getItems(player, 'tome'), 'use-scroll') end,
+            ['use-potion']  = function() showItems(getItems(player, 'potion'), 'use-potion') end,
+            ['destroy']     = function(...) print('DESTROY'); onDestroy(self, ...) end,
+        }
+        for key, handler in pairs(handles) do
+            Signal.register(key, handler)
+        end
     end
 
     local leave = function(self, to)
+        print('leave', to)
         for action, handle in ipairs(handles) do
             Signal.remove(action, handle)
             handles[action] = nil
@@ -219,13 +209,15 @@ Game.new = function()
         handles = {}
     end
 
+    local exit = function(self)
+    end
+
     return setmetatable({
         -- methods
         draw            = draw,
-        enter           = enter,
         leave           = leave,
+        enter           = enter,
         update          = update,
-        showItems       = showItems,
         mouseMoved      = mouseMoved,
         keyReleased     = keyReleased,
         showOverlay     = showOverlay,
