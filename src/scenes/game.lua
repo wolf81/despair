@@ -25,6 +25,7 @@ local function getItems(player, type)
     for idx = 1, backpack:getSize() do
         local item = backpack:peek(idx)
         -- only show unique item types, to prevent showing 2 wands of frost, 3 tomes of identify, ...
+        -- TODO: maybe show item count in button (?)
         if item.type == type and not item_info[item.id] then
             table.insert(items, item)
             item_info[item.id] = item
