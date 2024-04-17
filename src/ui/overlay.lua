@@ -38,11 +38,11 @@ Overlay.new = function()
 
     return setmetatable({
         -- properties
-        alpha       = 0.0,
+        alpha   = 0.0,
         -- methods
-        draw        = draw,
-        fadeIn      = fadeIn,
-        fadeOut     = fadeOut,
+        draw    = draw,
+        fadeIn  = fadeIn,
+        fadeOut = fadeOut,
     }, Overlay)
 end
 

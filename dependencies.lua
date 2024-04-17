@@ -43,7 +43,6 @@ ImageButton         = require 'src.ui.image_button'
 PlayerInfo          = require 'src.ui.player_info'
 FlexPanel           = require 'src.ui.flex_panel'
 Portrait            = require 'src.ui.portrait'
-ItemBar             = require 'src.ui.item_bar'
 Overlay             = require 'src.ui.overlay'
 
 -- util

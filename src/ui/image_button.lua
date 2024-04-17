@@ -53,12 +53,15 @@ ImageButton.new = function(image, action)
     local setFrame = function(self, x, y, w, h)
         frame = { x, y, w, h }
     end
+
+    local getFrame = function(self) return unpack(frame) end
     
     return setmetatable({
-        setFrame = setFrame,
-        getSize = getSize,
-        update  = update,
-        draw    = draw,
+        getFrame    = getFrame,
+        setFrame    = setFrame,
+        getSize     = getSize,
+        update      = update,
+        draw        = draw,
     }, ImageButton)
 end
 
