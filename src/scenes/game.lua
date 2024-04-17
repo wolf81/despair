@@ -16,6 +16,21 @@ local CLASS_ACTIONS = {
     ['mage']    = { 'cast-spell', },
 }
 
+local function getItems(player, type)
+    local backpack = player:getComponent(Backpack)
+
+    local items = {}
+
+    for idx = 1, backpack:getSize() do
+        local item = backpack:peek(idx)
+        if item.type == type then
+            table.insert(items, item)
+        end
+    end
+
+    return items
+end
+
 local function showInventory(player)
     if player:getComponent(Health):isAlive() then
         Gamestate.push(Inventory(player))
@@ -44,7 +59,9 @@ local function registerActions(player, game)
         ['char-sheet']  = function() showCharacterSheet(player) end,
         ['inventory']   = function() showInventory(player) end,
         ['sleep']       = function() print('try sleep player') end,
-        ['use-wand']    = function() game:showWands() end,
+        ['use-wand']    = function() game:showItems(getItems(player, 'wand'), 'use-wand') end,
+        ['use-scroll']  = function() game:showItems(getItems(player, 'tome'), 'use-scroll') end,
+        ['use-potion']  = function() game:showItems(getItems(player, 'potion'), 'use-potion') end,
     }
     local handles = {}
 
@@ -79,20 +96,6 @@ local function getRightActionButtons()
     end
 
     return buttons
-end
-
-local function getWands(backpack)
-    local wands = {}
-
-    for idx = 1, backpack:getSize() do
-        local item = backpack:peek(idx)
-        print(idx, item.type)
-        if item.type == 'wand' then
-            table.insert(wands, item)
-        end
-    end
-
-    return wands
 end
 
 local function getActionBarButton(layout, action)
@@ -192,15 +195,12 @@ Game.new = function()
         Gamestate.update(0)
     end
 
-    local showWands = function(self)
-        local wands = getWands(backpack)
-
-        if #wands == 0 then return print('no wands in backpack') end
-
-        local button = getActionBarButton(layout, 'use-wand')
+    local showItems = function(self, items, action)
+        if #items == 0 then return print('empty item list') end
 
         if player:getComponent(Health):isAlive() then
-            Gamestate.push(ChooseItem(player, wands, button))
+            local button = getActionBarButton(layout, action)
+            Gamestate.push(ChooseItem(player, items, button))
             -- prevent an isssue in which a single black frame is shown by immediately calling update
             Gamestate.update(0)
         end
@@ -225,7 +225,7 @@ Game.new = function()
         enter           = enter,
         leave           = leave,
         update          = update,
-        showWands       = showWands,
+        showItems       = showItems,
         mouseMoved      = mouseMoved,
         keyReleased     = keyReleased,
         showOverlay     = showOverlay,
