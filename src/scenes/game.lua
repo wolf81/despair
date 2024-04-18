@@ -262,7 +262,8 @@ Game.new = function()
 
         -- enable / disable all buttons
         for element in layout:eachElement() do
-            if getmetatable(element.widget) == ActionButton then
+            local widget_type = getmetatable(element.widget)
+            if widget_type == ActionButton or widget_type == ImageButton then
                 element.widget:setEnabled(enabled)
             end
         end

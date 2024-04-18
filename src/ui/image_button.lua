@@ -14,9 +14,11 @@ ImageButton.new = function(image, action, ...)
 
     local args = {...}
 
-    local is_highlighted, is_pressed = false, false
+    local is_highlighted, is_pressed, is_enabled = false, false, true
 
     local update = function(self, dt)
+        if not is_enabled then return end
+
         if quad_idx == 0 then return end
 
         local mx, my = love.mouse.getPosition()
@@ -41,7 +43,7 @@ ImageButton.new = function(image, action, ...)
     local draw = function(self)
         local x, y, w, h = frame:unpack()
 
-        love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
+        love.graphics.setColor(1.0, 1.0, 1.0, is_enabled and 1.0 or 0.8)
 
         if is_highlighted then
             love.graphics.setColor(0.4, 0.9, 0.8, 1.0)
@@ -58,8 +60,11 @@ ImageButton.new = function(image, action, ...)
     local setFrame = function(self, x, y, w, h) frame = Rect(x, y, w, h) end
 
     local getFrame = function(self) return frame:unpack() end
+
+    local setEnabled = function(self, flag) is_enabled = (flag == true) end
     
     return setmetatable({
+        setEnabled  = setEnabled,
         getFrame    = getFrame,
         setFrame    = setFrame,
         getSize     = getSize,

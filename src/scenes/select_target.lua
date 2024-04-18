@@ -14,7 +14,7 @@ SelectTarget.new = function(entity)
 
     local game, ability = nil, nil
 
-    local coord = vector(0, 0)
+    local coord = vector(-1, -1)
 
     local update = function(self, dt)
         game:update(dt)
@@ -23,11 +23,13 @@ SelectTarget.new = function(entity)
     local draw = function(self)
         game:draw()
 
+        -- crop drawing outside of visible frame, to prevent drawing over action bar & side panel
         love.graphics.setScissor(frame:unpack())
 
         love.graphics.setColor(1.0, 0.0, 1.0, 0.8)
         love.graphics.rectangle('line', coord.x * TILE_SIZE - 32, coord.y * TILE_SIZE + 32, TILE_SIZE, TILE_SIZE)
 
+        -- reset crop area
         love.graphics.setScissor()
     end
 
@@ -45,12 +47,15 @@ SelectTarget.new = function(entity)
     end
 
     local mouseReleased = function(self, mx, my, button, istouch, presses)
+        if button == 2 then Gamestate.pop() end
         -- print('mouseReleased', mx, my, button)
     end
 
     -- ability can be a class ability, item (wand), spell ...
     local enter = function(self, from, ability)
         assert(getmetatable(from) == Game, 'invalid argument for "from", expected: "Game"')
+
+        print('ab', ability.name)
 
         game, ability = from, ability
 
