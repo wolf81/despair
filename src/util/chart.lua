@@ -55,11 +55,10 @@ Chart.new = function(level_idx, map_size)
     local chart_image, needs_update = nil, true
 
     local background = TextureGenerator.generateParchmentTexture(120, 120)
-    local w, h = background:getDimensions()
 
     local chart = newChart(map_size)
 
-    local getImage = function(self) return chart_image end
+    local frame = Rect(0)
 
     local mapCoord = function(self, x, y, tile) 
         if chart[y][x] ~= tile then
@@ -70,9 +69,9 @@ Chart.new = function(level_idx, map_size)
 
     local getLevelIndex = function(self) return level_idx end
 
-    local getSize = function(self) return w, h end
+    local draw = function(self)
+        local x, y, w, h = frame:unpack()
 
-    local draw = function(self, x, y)
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
         love.graphics.draw(background, x, y)
         love.graphics.setColor(0.0, 0.0, 0.0, 0.7)
@@ -94,10 +93,17 @@ Chart.new = function(level_idx, map_size)
         end
     end
 
+    local setFrame = function(self, x, y, w, h) frame = Rect(x, y, w, h) end
+
+    local getSize = function(self) return background:getDimensions() end
+
+    local getImage = function(self) return chart_image end
+
     return setmetatable({
         getLevelIndex   = getLevelIndex,
         getImage        = getImage,
         mapCoord        = mapCoord,
+        setFrame        = setFrame,
         getSize         = getSize,
         update          = update,
         draw            = draw,

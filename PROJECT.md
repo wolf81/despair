@@ -62,7 +62,7 @@ MyClass.new = function(...)
     
     -- public interface
     return setmetatable({
-        public_prop     = public_prop,              
+        public_prop     = public_prop,
         publicMethod    = publicMethod,             
     }, MyClass)
 end
@@ -72,6 +72,10 @@ return setmetatable(MyClass, {
     __call = function(_, ...) return MyClass.new(...) end, 
 })
 ```
+
+I do try to avoid exposing public properties as much as possible, as I suspect this could result in unexpected behavior. 
+
+Calling methods will always result in a clear error of a method does not exist, but properties can be assigned to freely, without an error being raised if the property does not exist. Hence it is safer to modify internal state of an object by calling methods.
 
 ## ECS
 

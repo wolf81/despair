@@ -55,6 +55,9 @@ Cartographer.new = function(entity, def)
 
     local getChart = function(self) return chart end
 
+    -- set intial level
+    setLevel(nil, 1)
+
     return setmetatable({
         -- methods
         setLevel    = setLevel,

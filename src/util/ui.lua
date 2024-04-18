@@ -23,4 +23,23 @@ M.makeView = function(view, ...)
     return tidy.Elem(view, ...)
 end
 
+M.makeLabel = function(text, color)
+    local label = Label(text, color or { 1.0, 1.0, 1.0, 1.0 })
+    local w, h = label:getSize()
+    print(w, h)
+    return tidy.Elem(label, tidy.MinSize(w, h), tidy.Stretch(1, 0))
+end
+
+M.makeResourceBar = function(entity, type)
+    local resource_bar = ResourceBar(entity, type)
+    local w, h = resource_bar:getSize()
+    return tidy.Elem(resource_bar, tidy.MinSize(w, h), tidy.Stretch(1, 0))
+end
+
+M.makeChart = function(cartographer)
+    local chart = cartographer:getChart()
+    local w, h = chart:getSize()
+    return tidy.Elem(chart, tidy.MinSize(w, h), tidy.Stretch(1, 0))
+end
+
 return M

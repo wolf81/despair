@@ -35,25 +35,19 @@ ActionBarButton.new = function(action)
     local quads = QuadCache:get('actionbar')
     local quad_idx = ACTION_INFO[action]
 
-    local frame = { 0, 0, 0, 0 }
+    local frame = Rect(0)
     
     local is_enabled, is_selected, is_highlighted, is_pressed = true, false, false, false
     
     local background = nil
 
     local update = function(self, dt)
-        local mx, my = love.mouse.getPosition()
-
-        mx = mx / SCALE
-        my = my / SCALE
-
-        local x, y, w, h = unpack(frame)
-
         if quad_idx == 0 then return end
 
         if not is_enabled then return end
 
-        is_highlighted = is_selected or ((mx > x) and (my > y) and (mx < x + w) and (my < y + h))
+        local mx, my = love.mouse.getPosition()
+        is_highlighted = is_selected or frame:contains(mx / SCALE, my / SCALE)
 
         if is_highlighted and is_pressed and (not love.mouse.isDown(1)) then
             Signal.emit(action)
@@ -65,7 +59,7 @@ ActionBarButton.new = function(action)
     local draw = function(self)
         if not background then return end
 
-        local x, y, w, h = unpack(frame)
+        local x, y, w, h = frame:unpack()
 
         -- add white background behind texture for showing disabled state
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
@@ -83,14 +77,14 @@ ActionBarButton.new = function(action)
     end
 
     local setFrame = function(self, x, y, w, h)
-        frame = { x, y, w, h, }
+        frame = Rect(x, y, w, h)
         
         if w > 0 and h > 0 then
             background = TextureGenerator.generatePanelTexture(w, h)
         end
     end
 
-    local getFrame = function(self) return unpack(frame) end
+    local getFrame = function(self) return frame:unpack() end
 
     local setSelected = function(self, flag) is_selected = (flag == true) end
 
