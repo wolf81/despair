@@ -12,6 +12,8 @@ ImageButton.new = function(image, action, ...)
 
     local frame = Rect(0)
 
+    local args = {...}
+
     local is_highlighted, is_pressed = false, false
 
     local update = function(self, dt)
@@ -22,7 +24,7 @@ ImageButton.new = function(image, action, ...)
 
         if is_highlighted and is_pressed and (not love.mouse.isDown(1)) then
             if action then
-                Signal.emit(action, ...)
+                Signal.emit(action, unpack(args))
             end
         end
 

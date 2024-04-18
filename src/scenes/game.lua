@@ -234,15 +234,15 @@ Game.new = function()
 
     local enter = function(self, from)
         local handlers = {
-            ['char-sheet']  = function() showCharacterSheet(player) end,
-            ['inventory']   = function() showInventory(player) end,
             ['sleep']       = function() print('try sleep player') end,
+            ['inventory']   = function() showInventory(player) end,
+            ['char-sheet']  = function() showCharacterSheet(player) end,
+            ['take']        = function() onInventoryChanged(player) end,
+            ['put']         = function() onInventoryChanged(player) end,
             ['use-wand']    = function() showItems(getItems(player, 'wand'), 'use-wand') end,
             ['use-scroll']  = function() showItems(getItems(player, 'tome'), 'use-scroll') end,
             ['use-potion']  = function() showItems(getItems(player, 'potion'), 'use-potion') end,
             ['destroy']     = function(...) onDestroy(...) end,
-            ['take']        = function() onInventoryChanged(player) end,
-            ['put']         = function() onInventoryChanged(player) end,
         }
         for action, handler in pairs(handlers) do
             handles[action] = Signal.register(action, handler)
