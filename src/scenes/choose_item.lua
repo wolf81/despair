@@ -31,7 +31,7 @@ local function getFrame(anchor_x, anchor_y, item_count)
     local w, h = TILE_SIZE * item_count, TILE_SIZE
     local x = anchor_x - w / 2 + (w / item_count / 2) 
     local y = anchor_y - h - 1
-    return { x, y, w, h }
+    return Rect(x, y, w, h)
 end
 
 ChooseItem.new = function(player, items, button)
@@ -43,9 +43,9 @@ ChooseItem.new = function(player, items, button)
 
     local buttons = {}
     for idx, item in ipairs(items) do
+        local x, y = frame:unpack()
         local button = getImageButton(item)
-        local ox = (idx - 1) * TILE_SIZE
-        button:setFrame(frame[1] + ox, frame[2], TILE_SIZE, TILE_SIZE)
+        button:setFrame(x + (idx - 1) * TILE_SIZE, y, TILE_SIZE, TILE_SIZE)
         table.insert(buttons, button)
     end
 
@@ -63,8 +63,6 @@ ChooseItem.new = function(player, items, button)
 
     local draw = function(self)
         game:draw()
-
-        love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
 
         for _, button in ipairs(buttons) do
             local btn_x, btn_y = button:getFrame()
@@ -87,8 +85,7 @@ ChooseItem.new = function(player, items, button)
     end
 
     local mouseReleased = function(self, mx, my, button, istouch, presses)
-        local x, y, w, h = unpack(frame)
-        if (mx < x) or (mx > x + w) or (my < y) or (my > y + h) then
+        if not frame:contains(mx, my) then
             Gamestate.pop()
         end
     end

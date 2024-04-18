@@ -111,17 +111,17 @@ Game.new = function()
 
     -- configure layout
     local layout = tidy.HStack({
-        tidy.VStack(tidy.Stretch(1), {
+        tidy.VStack({
             UI.makeView(dungeon, tidy.Stretch(1)),
-            tidy.HStack({
+            tidy.HStack(tidy.MinSize(0, ACTION_BAR_H), {
                 tidy.HStack(getLeftActionButtons(player), tidy.MinSize(HALF_W, 0)),
                 UI.makeButton('char-sheet', portrait:getImage()),
                 tidy.HStack(getRightActionButtons(), tidy.MinSize(HALF_W, 0)),
             }),
         }),
         tidy.VStack({
-            UI.makeView(status_panel, tidy.MinSize(STATUS_PANEL_W, WINDOW_H - 50)),
-            tidy.HStack({
+            UI.makeView(status_panel, tidy.MinSize(STATUS_PANEL_W, 0), tidy.Stretch(0, 1)),
+            tidy.HStack(tidy.MinSize(0, ACTION_BAR_H), {
                 UI.makeButton('sleep'),
                 UI.makeButton('inventory'),
                 UI.makeButton('settings'),
