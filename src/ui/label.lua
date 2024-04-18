@@ -8,8 +8,10 @@ Label.new = function(text, color)
     local update = function(self, dt) end
 
     local draw = function(self)
-        local x, y, w, h = frame:unpack()
+        love.graphics.setFont(FONT)
         love.graphics.setColor(unpack(color))
+
+        local x, y, w, h = frame:unpack()
         love.graphics.print(text, x, y)
     end
 
