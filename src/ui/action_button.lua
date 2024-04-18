@@ -5,7 +5,7 @@
 --  info+despair@wolftrail.net
 --]]
 
-local ActionBarButton = {}
+local ActionButton = {}
 
 local DISABLED_ALPHA = 0.7
 
@@ -28,7 +28,7 @@ local ACTION_INFO = {
     ['swap-weapon'] = 21, 
 }
 
-ActionBarButton.new = function(action)
+ActionButton.new = function(action)
     assert(arg ~= nil, 'missing argument: "action"')
 
     local texture = TextureCache:get('actionbar')
@@ -115,9 +115,9 @@ ActionBarButton.new = function(action)
         getFrame    = getFrame,
         update      = update,
         draw        = draw,    
-    }, ActionBarButton)
+    }, ActionButton)
 end
 
-return setmetatable(ActionBarButton, {
-    __call = function(_, ...) return ActionBarButton.new(...) end,
+return setmetatable(ActionButton, {
+    __call = function(_, ...) return ActionButton.new(...) end,
 })

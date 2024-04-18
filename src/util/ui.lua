@@ -9,7 +9,7 @@ local M = {}
 
 M.makeButton = function(action, image)
     if not image then
-        return tidy.Elem(ActionBarButton(action), tidy.MinSize(48), tidy.Stretch(0))
+        return tidy.Elem(ActionButton(action), tidy.MinSize(48), tidy.Stretch(0))
     else
         return tidy.Elem(ImageButton(image, action), tidy.MinSize(50), tidy.Stretch(0))
     end

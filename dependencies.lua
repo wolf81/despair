@@ -10,11 +10,11 @@ local Cache = require 'src.util.cache'
 -- libraries
 bresenham           = require 'lib.bresenham.bresenham'
 Gamestate           = require 'lib.hump.gamestate'
-tidy                = require 'lib.composer' -- TODO: rename composer to tidy
 Signal              = require 'lib.hump.signal'
 vector              = require 'lib.hump.vector'
 Timer               = require 'lib.hump.timer'
 lume                = require 'lib.lume.lume'
+tidy                = require 'lib.composer' -- TODO: rename composer to tidy
 ndn                 = require 'lib.ndn'
 
 -- helpers
@@ -37,7 +37,7 @@ Level               = require 'src.world.level'
 Map                 = require 'src.world.map'
 
 -- ui
-ActionBarButton     = require 'src.ui.action_bar_button'
+ActionButton        = require 'src.ui.action_button'
 ResourceBar         = require 'src.ui.resource_bar'
 ImageButton         = require 'src.ui.image_button'
 StatusPanel         = require 'src.ui.status_panel'

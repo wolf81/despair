@@ -73,9 +73,9 @@ local function getRightActionButtons()
     return buttons
 end
 
-local function getActionBarButton(layout, action)
+local function getActionButton(layout, action)
     for e in layout:eachElement() do
-        if getmetatable(e.widget) == ActionBarButton then
+        if getmetatable(e.widget) == ActionButton then
             if e.widget:getAction() == action then
                 return e.widget
             end
@@ -171,7 +171,7 @@ Game.new = function()
     local showItems = function(items, action)
         if #items == 0 then return print('empty item list') end
 
-        local button = getActionBarButton(layout, action)
+        local button = getActionButton(layout, action)
         Gamestate.push(ChooseItem(player, items, button))
         -- prevent an issue in which a single black frame is shown by immediately calling update
         Gamestate.update(0)
@@ -190,7 +190,7 @@ Game.new = function()
         }
 
         for element in layout:eachElement() do
-            if getmetatable(element.widget) == ActionBarButton then
+            if getmetatable(element.widget) == ActionButton then
                 local button = element.widget
                 if not enabled_actions[button:getAction()] then
                     button:setEnabled(false)
@@ -210,13 +210,13 @@ Game.new = function()
                 wand_count = wand_count + 1
             elseif item.type == 'tome' then
                 tome_count = tome_count + 1
-            elseif item.type == 'scroll' then
-                scroll_count = scroll_count + 1
+            elseif item.type == 'potion' then
+                potion_count = potion_count + 1
             end
         end
 
         for element in layout:eachElement() do
-            if getmetatable(element.widget) == ActionBarButton then
+            if getmetatable(element.widget) == ActionButton then
                 local button = element.widget
                 local action = button:getAction()
 
