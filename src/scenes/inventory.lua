@@ -86,9 +86,7 @@ local newBackground = function(width, height)
         love.graphics.draw(texture, x, y)
     end
 
-    local getFrame = function() 
-        return { x, y, w, h }
-    end
+    local getFrame = function() return Rect(x, y, w, h) end
 
     return TableHelper.readOnly({
         x = x,
@@ -191,7 +189,8 @@ Inventory.new = function(player)
         hover_slot_info = nil
 
         for idx, slot in ipairs(slots) do
-            local x1, x2, y1, y2 = slot.x, slot.x + 48, slot.y, slot.y + 48
+            -- TODO: slots should use frames (Rect) to simpify calculations
+            local x1, x2, y1, y2 = slot.x, slot.x + TILE_SIZE, slot.y, slot.y + TILE_SIZE
             if mx > x1 and mx < x2 and my > y1 and my < y2 then
                 hover_slot_info = {
                     idx = idx,
@@ -271,10 +270,7 @@ Inventory.new = function(player)
     end
 
     local mouseReleased = function(self, mx, my, mouse_btn)
-        local x, y, w, h = unpack(frame)
-        if (mx < x) or (mx > x + w) or (my < y) or (my > y + h) then
-            return Gamestate.pop()
-        end
+        if not frame:contains(mx, my) then return Gamestate.pop() end
 
         if not (hover_slot_info and mouse_btn == 2) then return end
 

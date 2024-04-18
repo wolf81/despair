@@ -17,7 +17,7 @@ local function getFrame(background)
     local w, h = background:getDimensions()
     local x = (WINDOW_W - w) / 2
     local y = (WINDOW_H - h) / 2
-    return { x, y, w, h }
+    return Rect(x, y, w, h)
 end
 
 CharSheet.new = function(player)
@@ -39,7 +39,7 @@ CharSheet.new = function(player)
     local draw = function(self)
         game:draw()
 
-        local x, y = unpack(frame)
+        local x, y = frame:unpack()
 
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
         love.graphics.draw(background, x, y)
@@ -92,8 +92,7 @@ CharSheet.new = function(player)
     end
 
     local mouseReleased = function(self, mx, my, button, istouch, presses)
-        local x, y, w, h = unpack(frame)
-        if (mx < x) or (mx > x + w) or (my < y) or (my > y + h) then
+        if not frame:contains(mx, my) then
             Gamestate.pop()
         end
     end
