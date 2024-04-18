@@ -89,7 +89,7 @@ Game.new = function()
     -- love.math.setRandomSeed(1)
 
     local player = EntityFactory.create('pc' .. lrandom(1, 4))
-    local player_info = PlayerInfo(player)
+    local status_panel = StatusPanel(player)
 
     local backpack = player:getComponent(Backpack)
 
@@ -107,7 +107,7 @@ Game.new = function()
 
     local item_bar = nil
 
-    local HALF_W = mfloor((WINDOW_W - INFO_PANEL_W - portrait_w) / 2)
+    local HALF_W = mfloor((WINDOW_W - STATUS_PANEL_W - portrait_w) / 2)
 
     -- configure layout
     local layout = tidy.HStack({
@@ -120,7 +120,7 @@ Game.new = function()
             }),
         }),
         tidy.VStack({
-            UI.makeView(player_info, tidy.MinSize(INFO_PANEL_W, WINDOW_H - 50)),
+            UI.makeView(status_panel, tidy.MinSize(STATUS_PANEL_W, WINDOW_H - 50)),
             tidy.HStack({
                 UI.makeButton('sleep'),
                 UI.makeButton('inventory'),

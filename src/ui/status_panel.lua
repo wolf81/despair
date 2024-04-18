@@ -7,9 +7,9 @@
 
 local mfloor = math.floor
 
-local PlayerInfo = {}
+local StatusPanel = {}
 
-PlayerInfo.new = function(player)
+StatusPanel.new = function(player)
     -- local health_bar = ResourceBar(player, 'health')
     -- local energy_bar = ResourceBar(player, 'energy')
 
@@ -58,28 +58,6 @@ PlayerInfo.new = function(player)
         for e in layout:eachElement() do
             e.widget:draw()
         end
-
-
-        -- love.graphics.setFont(FONT)
-
-        -- local x, y, w, h = frame:unpack()
-
-        -- love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
-
-        -- love.graphics.draw(background, x, y)
-
-        -- local bar_x = x + 15
-        -- local bar_y = 20
-        -- love.graphics.print("HEALTH", bar_x, bar_y)
-        -- health_bar:draw(bar_x, bar_y + 10)
-        -- love.graphics.print("HUNGER", bar_x + 60, bar_y)
-        -- energy_bar:draw(bar_x + 60, bar_y + 10)
-
-        -- local chart = cartographer:getChart()
-        -- local chart_w, _ = chart:getSize()
-        -- local chart_x = mfloor((w - chart_w) / 2)
-
-        -- chart:draw(x + chart_x, 50)
     end
 
     local setFrame = function(self, x, y, w, h)
@@ -100,9 +78,9 @@ PlayerInfo.new = function(player)
         setFrame    = setFrame,
         update      = update,
         draw        = draw,
-    }, PlayerInfo)
+    }, StatusPanel)
 end
 
-return setmetatable(PlayerInfo, {
-    __call = function(_, ...) return PlayerInfo.new(...) end,
+return setmetatable(StatusPanel, {
+    __call = function(_, ...) return StatusPanel.new(...) end,
 })

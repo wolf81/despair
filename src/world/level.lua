@@ -421,12 +421,12 @@ Level.new = function(dungeon, level_idx)
     local getSize = function(self) return map_w, map_h end
 
     local getCoord = function(self, x, y) 
-        if x < 0 or y < 0 or x > WINDOW_W - INFO_PANEL_W or y > WINDOW_H - ACTION_BAR_H then 
+        if x < 0 or y < 0 or x > WINDOW_W - STATUS_PANEL_W or y > WINDOW_H - ACTION_BAR_H then 
             return nil
         end
 
         x, y = camera:worldCoords(x, y)
-        x = mfloor((x + INFO_PANEL_W / 2) / TILE_SIZE)
+        x = mfloor((x + STATUS_PANEL_W / 2) / TILE_SIZE)
         y = mfloor((y + ACTION_BAR_H / 2) / TILE_SIZE)
 
         return vector(x, y)
