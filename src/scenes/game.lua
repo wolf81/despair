@@ -37,13 +37,13 @@ end
 
 local function showInventory(player)
     Gamestate.push(Inventory(player))
-    -- prevent an isssue in which a single black frame is shown by immediately calling update
+    -- prevent an issue in which a single black frame is shown by immediately calling update
     Gamestate.update(0)
 end
 
 local function showCharacterSheet(player)
     Gamestate.push(CharSheet(player))
-    -- prevent an isssue in which a single black frame is shown by immediately calling update
+    -- prevent an issue in which a single black frame is shown by immediately calling update
     Gamestate.update(0)
 end
 
@@ -165,7 +165,7 @@ Game.new = function()
 
     local showInventory = function(self)
         Gamestate.push(Inventory(player))
-        -- prevent an isssue in which a single black frame is shown by immediately calling update
+        -- prevent an issue in which a single black frame is shown by immediately calling update
         Gamestate.update(0)
     end
 
@@ -174,7 +174,7 @@ Game.new = function()
 
         local button = getActionBarButton(layout, action)
         Gamestate.push(ChooseItem(player, items, button))
-        -- prevent an isssue in which a single black frame is shown by immediately calling update
+        -- prevent an issue in which a single black frame is shown by immediately calling update
         Gamestate.update(0)
     end
 

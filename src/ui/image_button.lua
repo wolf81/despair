@@ -7,7 +7,7 @@
 
 local ImageButton = {}
 
-ImageButton.new = function(image, action)
+ImageButton.new = function(image, action, ...)
     assert(image ~= nil, 'missing argument: "image"')
 
     local frame = Rect(0)
@@ -22,7 +22,7 @@ ImageButton.new = function(image, action)
 
         if is_highlighted and is_pressed and (not love.mouse.isDown(1)) then
             if action then
-                Signal.emit(action)
+                Signal.emit(action, ...)
             end
         end
 

@@ -24,7 +24,7 @@ local function getImageButton(item)
     local quads = QuadCache:get(def.texture)
     local quad_idx = def.anim[1]
     local image = getImage(texture, quads[quad_idx])
-    return ImageButton(image, item.gid)
+    return ImageButton(image, 'select-target', item)
 end
 
 local function getFrame(anchor_x, anchor_y, item_count)
