@@ -42,4 +42,8 @@ M.makeChart = function(cartographer)
     return tidy.Elem(chart, tidy.MinSize(w, h), tidy.Stretch(1, 0))
 end
 
+M.makeFlexSpace = function()
+    return tidy.Elem(FlexSpace(), tidy.Stretch(1))
+end
+
 return M

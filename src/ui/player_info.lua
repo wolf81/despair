@@ -21,15 +21,19 @@ PlayerInfo.new = function(player)
 
     local layout = tidy.Border(tidy.Margin(14), {
         tidy.VStack(tidy.Spacing(10), {
-            tidy.HStack({
+            tidy.HStack(tidy.Spacing(6), {
                 UI.makeLabel('HEALTH'),
                 UI.makeLabel('HUNGER'),
-            }), -- TODO: why isn't size properly calculated for this stack?
-            tidy.HStack({
+            }),
+            tidy.HStack(tidy.Spacing(6), {
                 UI.makeResourceBar(player, 'health'),
                 UI.makeResourceBar(player, 'energy'),
             }),
-            UI.makeChart(cartographer),
+            tidy.HStack({
+                UI.makeFlexSpace(),
+                UI.makeChart(cartographer),
+                UI.makeFlexSpace(),                
+            }),
         }),
     })
 
