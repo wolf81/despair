@@ -28,8 +28,10 @@ local ACTION_INFO = {
     ['swap-weapon'] = 21, 
 }
 
-ActionButton.new = function(action)
+ActionButton.new = function(action, ...)
     assert(arg ~= nil, 'missing argument: "action"')
+
+    local args = {...}
 
     local texture = TextureCache:get('actionbar')
     local quads = QuadCache:get('actionbar')
@@ -50,7 +52,8 @@ ActionButton.new = function(action)
         is_highlighted = is_selected or frame:contains(mx / SCALE, my / SCALE)
 
         if is_highlighted and is_pressed and (not love.mouse.isDown(1)) then
-            Signal.emit(action)
+            -- TODO: support actions that are functions, in line with ImageButton
+            Signal.emit(action, unpack(args))
         end
 
         is_pressed = is_highlighted and love.mouse.isDown(1)

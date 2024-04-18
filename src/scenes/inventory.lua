@@ -204,6 +204,8 @@ Inventory.new = function(player)
     local game = nil
 
     local enter = function(self, from)
+        assert(getmetatable(from) == Game, 'invalid argument for "from", expected: "Game"')
+        
         game = from
         game:showOverlay()
 

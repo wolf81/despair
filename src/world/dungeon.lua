@@ -185,16 +185,21 @@ Dungeon.new = function(player)
         frame = { x, y, w, h }
     end
 
+    local getCameraCoords = function(self, coord)
+        return levels[level_idx]:getCameraCoords(coord)
+    end
+
     return setmetatable({
         -- properties
-        alpha       = alpha,
+        alpha           = alpha,
         -- methods
-        enter       = enter,
-        update      = update,
-        draw        = draw,
-        nextLevel   = nextLevel,
-        prevLevel   = prevLevel,
-        setFrame    = setFrame,
+        draw            = draw,
+        enter           = enter,
+        update          = update,
+        setFrame        = setFrame,
+        nextLevel       = nextLevel,
+        prevLevel       = prevLevel,
+        getCameraCoords = getCameraCoords,
     }, Dungeon)
 end
 

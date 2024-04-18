@@ -47,16 +47,17 @@ Camera.new = function(x, y, scale)
         end)        
     end
 
-    local worldCoords = function(self, ...)
-        return camera:worldCoords(...)
-    end
+    local getWorldCoords = function(self, ...) return camera:worldCoords(...) end
+
+    local getCameraCoords = function(self, ...) return camera:cameraCoords(...) end
 
     return setmetatable({
         -- methods
-        move        = move,
-        shake       = shake,
-        draw        = draw,
-        worldCoords = worldCoords,
+        move            = move,
+        shake           = shake,
+        draw            = draw,
+        getWorldCoords  = getWorldCoords,
+        getCameraCoords = getCameraCoords,
     }, Camera)
 end
 

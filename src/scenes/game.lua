@@ -257,20 +257,34 @@ Game.new = function()
         handles = {}
     end
 
+    local setActionsEnabled = function(self, flag)
+        local enabled = flag == true
+
+        -- enable / disable all buttons
+        for element in layout:eachElement() do
+            if getmetatable(element.widget) == ActionButton then
+                element.widget:setEnabled(enabled)
+            end
+        end
+
+        -- update use buttons for inventory state
+        if enabled then onInventoryChanged(self) end
+    end
+
     onInventoryChanged(nil)
 
     return setmetatable({
         -- methods
-        draw            = draw,
-        leave           = leave,
-        enter           = enter,
-        leave           = leave,
-        update          = update,
-        mouseMoved      = mouseMoved,
-        keyReleased     = keyReleased,
-        showOverlay     = showOverlay,
-        hideOverlay     = hideOverlay,
-        showInventory   = showInventory,
+        draw                = draw,
+        leave               = leave,
+        enter               = enter,
+        leave               = leave,
+        update              = update,
+        keyReleased         = keyReleased,
+        showOverlay         = showOverlay,
+        hideOverlay         = hideOverlay,
+        showInventory       = showInventory,
+        setActionsEnabled   = setActionsEnabled,
     }, Game)
 end
 

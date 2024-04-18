@@ -24,7 +24,14 @@ ImageButton.new = function(image, action, ...)
 
         if is_highlighted and is_pressed and (not love.mouse.isDown(1)) then
             if action then
-                Signal.emit(action, unpack(args))
+                local action_type = type(action)
+                if action_type == 'string' then
+                    Signal.emit(action, unpack(args))
+                elseif action_type == 'function' then
+                    action(unpack(args))
+                else
+                    error('invalid argument for "action", expected: "string" or "function"')
+                end
             end
         end
 

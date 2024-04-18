@@ -7,6 +7,9 @@
 
 local M = {}
 
+-- generate a quad sheet for debugging purposes
+-- the quad sheet will be stored in the LOVE directory
+-- quads will show their quad index if large enough
 M.generate = function()
     for key, image in TextureCache:each() do
         local w, h = image:getDimensions()

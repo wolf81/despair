@@ -335,7 +335,7 @@ Level.new = function(dungeon, level_idx)
                 entity:draw()
             end
 
-            local ox, oy = camera:worldCoords(0, 0)
+            local ox, oy = camera:getWorldCoords(0, 0)
             fog:draw(ox, oy)
         end, x, y, w, h)
     end
@@ -425,7 +425,7 @@ Level.new = function(dungeon, level_idx)
             return nil
         end
 
-        x, y = camera:worldCoords(x, y)
+        x, y = camera:getWorldCoords(x, y)
         x = mfloor((x + STATUS_PANEL_W / 2) / TILE_SIZE)
         y = mfloor((y + ACTION_BAR_H / 2) / TILE_SIZE)
 
@@ -434,6 +434,10 @@ Level.new = function(dungeon, level_idx)
 
     local getPlayerDistance = function(self, coord)
         return player_dist_map:getDistance(coord.x, coord.y)
+    end
+
+    local getCameraCoords = function(self, coord)
+        return camera:getCameraCoords(coord.x, coord.y)
     end
     
     return setmetatable({
@@ -455,6 +459,7 @@ Level.new = function(dungeon, level_idx)
         getEntities         = getEntities,
         removeEntity        = removeEntity,
         inLineOfSight       = inLineOfSight,
+        getCameraCoords     = getCameraCoords,
         getPlayerDistance   = getPlayerDistance,
     }, Level)
 end
