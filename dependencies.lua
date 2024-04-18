@@ -43,7 +43,6 @@ ImageButton         = require 'src.ui.image_button'
 StatusPanel         = require 'src.ui.status_panel'
 FlexPanel           = require 'src.ui.flex_panel'
 FlexSpace           = require 'src.ui.flex_space'
-Portrait            = require 'src.ui.portrait'
 Overlay             = require 'src.ui.overlay'
 Label               = require 'src.ui.label'
 
@@ -109,6 +108,7 @@ QuadCache           = Cache()
 -- generators
 FontSheetGenerator  = require 'src.generators.font_sheet_gen'
 QuadSheetGenerator  = require 'src.generators.quad_sheet_gen'
+PortraitGenerator   = require 'src.generators.portrait_gen'
 TextureGenerator    = require 'src.generators.texture_gen'
 QuadGenerator       = require 'src.generators.quad_gen'
 MazeGenerator       = require 'src.generators.maze_gen'

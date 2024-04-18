@@ -7,7 +7,7 @@
 
 local lrandom = love.math.random
 
-local Portrait = {}
+local M = {}
 
 local FACE_INDICES = { 47, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 65, 65, }
 
@@ -30,7 +30,7 @@ local ACCESSORY_INDICES = { 8, 9, 10, 11, 12, 13, 19, 20, 21, 22, 23, 24, 25, 26
 
 local BEARD_INDICES = { 76, 77, 78, 79, 80, 87, 88, 89, 90, 105, 106, 107, 108, 109, 110 }
 
-Portrait.new = function(player)
+M.generate = function(player)
     local key = 'uf_portraits'
     local texture = TextureCache:get(key)
     local quads = QuadCache:get(key)
@@ -72,24 +72,7 @@ Portrait.new = function(player)
         love.graphics.draw(texture, quads[7])
     end)
 
-    local image = love.graphics.newImage(canvas:newImageData())
-
-    local draw = function(self, x, y)
-        love.graphics.draw(image, x, y)
-    end
-
-    local getImage = function(self) return image end
-
-    local getSize = function(self) return quad_w, quad_h end
-
-    return setmetatable({
-        -- methods
-        draw        = draw,
-        getSize     = getSize,
-        getImage    = getImage,
-    }, Portrait)
+    return love.graphics.newImage(canvas:newImageData())
 end
 
-return setmetatable(Portrait, {
-    __call = function(_, ...) return Portrait.new(...) end,
-})
+return M

@@ -96,16 +96,15 @@ Game.new = function()
     local dungeon = Dungeon(player)
     dungeon:enter()
 
-    local portrait = Portrait(player)
-
     local overlay = Overlay()
 
     -- handles for observer pattern with Signal, added on enter, removed on leave
     local handles = {}
 
-    local portrait_w = portrait:getSize()
-
     local item_bar = nil
+
+    local portrait = PortraitGenerator.generate(player)
+    local portrait_w = portrait:getDimensions()
 
     local HALF_W = mfloor((WINDOW_W - STATUS_PANEL_W - portrait_w) / 2)
 
@@ -115,7 +114,7 @@ Game.new = function()
             UI.makeView(dungeon, tidy.Stretch(1)),
             tidy.HStack(tidy.MinSize(0, ACTION_BAR_H), {
                 tidy.HStack(getLeftActionButtons(player), tidy.MinSize(HALF_W, 0)),
-                UI.makeButton('char-sheet', portrait:getImage()),
+                UI.makeButton('char-sheet', portrait),
                 tidy.HStack(getRightActionButtons(), tidy.MinSize(HALF_W, 0)),
             }),
         }),
