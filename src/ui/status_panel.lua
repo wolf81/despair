@@ -10,38 +10,39 @@ local mfloor = math.floor
 local StatusPanel = {}
 
 StatusPanel.new = function(player)
-    -- local health_bar = ResourceBar(player, 'health')
-    -- local energy_bar = ResourceBar(player, 'energy')
-
-    -- local bar_w, bar_h = health_bar:getSize()
-
     local cartographer = player:getComponent(Cartographer)
 
     local frame = Rect(0)
 
-    local layout = tidy.Border(tidy.Margin(14), {
-        tidy.VStack(tidy.Spacing(10), {
-            tidy.HStack(tidy.Spacing(6), {
-                UI.makeLabel('HEALTH'),
-                UI.makeLabel('HUNGER'),
-            }),
-            tidy.HStack(tidy.Spacing(6), {
-                UI.makeResourceBar(player, 'health'),
-                UI.makeResourceBar(player, 'energy'),
-            }),
-            tidy.HStack({
-                UI.makeFlexSpace(),
-                UI.makeChart(cartographer),
-                UI.makeFlexSpace(),                
-            }),
-        }),
+    local layout = tidy.Border(tidy.Margin(0, 20), {
+        tidy.HStack({
+            UI.makeFlexSpace(),
+            tidy.VStack({
+                tidy.HStack({
+                    UI.makeLabel('HEALTH'),
+                    UI.makeFlexSpace(), 
+                    UI.makeLabel('HUNGER'),
+                }),
+                UI.makeFixedSpace(0, 10),
+                tidy.HStack({
+                    UI.makeResourceBar(player, 'health'),
+                    UI.makeFlexSpace(),
+                    UI.makeResourceBar(player, 'energy'),
+                }),
+                UI.makeFixedSpace(0, 10),
+                tidy.HStack({
+                    UI.makeFlexSpace(),
+                    UI.makeChart(cartographer),
+                    UI.makeFlexSpace(),                
+                }),
+            }),            
+            UI.makeFlexSpace(),            
+        })
     })
 
     local background = nil
 
     local update = function(self, dt)
-        -- health_bar:update(dt)
-        -- energy_bar:update(dt)
         for e in layout:eachElement() do
             e.widget:update(dt)
         end        

@@ -26,7 +26,6 @@ end
 M.makeLabel = function(text, color)
     local label = Label(text, color or { 1.0, 1.0, 1.0, 1.0 })
     local w, h = label:getSize()
-    print(w, h)
     return tidy.Elem(label, tidy.MinSize(w, h), tidy.Stretch(1, 0))
 end
 
@@ -44,6 +43,12 @@ end
 
 M.makeFlexSpace = function()
     return tidy.Elem(FlexSpace(), tidy.Stretch(1))
+end
+
+M.makeFixedSpace = function(w, h)
+    local stretch_x = (w == 0) and 1 or 0
+    local stretch_y = (h == 0) and 1 or 0
+    return tidy.Elem(FlexSpace(), tidy.MinSize(w, h), tidy.Stretch(stretch_x, stretch_y))
 end
 
 return M
