@@ -50,7 +50,7 @@ local useWand = function(self, target, level)
 end
 
 Usable.new = function(entity, def)
-    local amount = (entity.type == 'wand') and lrandom(1, 4) or 1 
+    local amount = 1
 
     -- the generic use function does nothing, just returning
     -- success: false
@@ -62,8 +62,10 @@ Usable.new = function(entity, def)
         use = useFood
     elseif entity.type == 'wand' then
         use = useWand
+        amount = lrandom(1, 4)
     elseif entity.type == 'tome' then
         use = useTome
+        amount = lrandom(1, 4)
     end
 
     -- local getEffect = function(self)
