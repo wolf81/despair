@@ -9,25 +9,32 @@ local mfloor = math.floor
 
 local SelectTarget = {}
 
+local function getLevelCoord(x, y, level)
+    x, y = level:toWorldPos(x + TILE_SIZE, y)
+    return vector(mfloor(x / TILE_SIZE + 0.5), mfloor(y / TILE_SIZE + 0.5))
+end
+
 SelectTarget.new = function(entity)
     local frame = Rect(0)
 
     local game, ability = nil, nil
+
+    -- offsets used for drawing the target indicator
     local ox, oy = 0, 0
 
+    -- coord used for target indicator, only drawn if not nil
     local coord = nil
 
     local update = function(self, dt)
         game:update(dt)
 
+        -- calculate level coord for mouse position
         local mx, my = love.mouse.getPosition()
-        local pos = vector(mx, my)
-
         local level = game:getDungeon():getLevel()
-        local pos_x, pos_y = level:toWorldPos(mx + TILE_SIZE, my)
-        local level_x, level_y = mfloor(pos_x / TILE_SIZE + 0.5), mfloor(pos_y / TILE_SIZE + 0.5)
+        local level_coord = getLevelCoord(mx, my, level) 
 
-        if level:isVisible(vector(level_x, level_y)) then
+        if level:isVisible(level_coord) then
+            -- calculate camera coord for mouse position
             coord = vector(mfloor((mx - ox) / TILE_SIZE), mfloor((my - oy) / TILE_SIZE))
         else
             coord = nil
