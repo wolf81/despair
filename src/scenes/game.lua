@@ -154,7 +154,7 @@ Game.new = function()
             self:showInventory()
         end
 
-        if Gamestate.current() == self and key == "escape" then
+        if Gamestate.current() == self and key == 'escape' then
             love.event.quit()
         end
     end

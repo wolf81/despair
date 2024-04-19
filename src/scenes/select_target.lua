@@ -86,7 +86,7 @@ SelectTarget.new = function(entity)
     end
 
     local keyReleased = function(self, key, scancode)        
-        if Gamestate.current() == self and key == "escape" then
+        if Gamestate.current() == self and key == 'escape' then
             Gamestate.pop()
         end
     end

@@ -90,7 +90,7 @@ ChooseItem.new = function(player, items, button)
     end
 
     local keyReleased = function(self, key, scancode)
-        if key == "escape" then
+        if Gamestate.current() == self and key == 'escape' then
             Gamestate.pop()
         end
     end

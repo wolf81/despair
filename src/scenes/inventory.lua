@@ -266,7 +266,7 @@ Inventory.new = function(player)
     end
 
     local keyReleased = function(self, key, scancode)
-        if key == "escape" then
+        if Gamestate.current() == self and key == 'escape' then
             Gamestate.pop()
         end
     end
