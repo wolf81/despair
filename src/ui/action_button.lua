@@ -26,6 +26,7 @@ local ACTION_INFO = {
     ['steal']       = 19,
     ['cast-spell']  = 20,
     ['swap-weapon'] = 21, 
+    ['use-food']    = 22,
 }
 
 ActionButton.new = function(action, ...)

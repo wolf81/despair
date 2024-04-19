@@ -72,7 +72,7 @@ local function getRightActionButtons()
 
     table.insert(buttons, UI.makeFlexPanel())
 
-    for _, action in ipairs({ 'use-potion', 'use-wand', 'use-scroll' }) do
+    for _, action in ipairs({ 'use-food', 'use-potion', 'use-wand', 'use-scroll' }) do
         table.insert(buttons, UI.makeButton(action))
     end
 
@@ -203,18 +203,21 @@ Game.new = function()
     end
 
     local onInventoryChanged = function(player)
+        local food_count = 0
         local wand_count = 0
         local tome_count = 0
         local potion_count = 0
 
         for idx = 1, backpack:getSize() do
-            local item = backpack:peek(idx)
-            if item.type == 'wand' then
+            local item = backpack:peek(idx)            
+            if item.type == 'potion' then
+                potion_count = potion_count + 1
+            elseif item.type == 'wand' then
                 wand_count = wand_count + 1
             elseif item.type == 'tome' then
-                tome_count = tome_count + 1
-            elseif item.type == 'potion' then
-                potion_count = potion_count + 1
+                tome_count = tome_count + 1                
+            elseif item.type == 'food' then
+                food_count = food_count + 1
             end
         end
 
@@ -229,6 +232,8 @@ Game.new = function()
                     button:setEnabled(tome_count > 0)
                 elseif action == 'use-potion' then
                     button:setEnabled(potion_count > 0)
+                elseif action == 'use-food' then
+                    button:setEnabled(food_count > 0)
                 end
             end
         end        
@@ -241,6 +246,7 @@ Game.new = function()
             ['char-sheet']  = function() showCharacterSheet(player) end,
             ['take']        = function() onInventoryChanged(player) end,
             ['put']         = function() onInventoryChanged(player) end,
+            ['use-food']    = function() showItems(getItems(player, 'food'), 'use-food') end,
             ['use-wand']    = function() showItems(getItems(player, 'wand'), 'use-wand') end,
             ['use-scroll']  = function() showItems(getItems(player, 'tome'), 'use-scroll') end,
             ['use-potion']  = function() showItems(getItems(player, 'potion'), 'use-potion') end,

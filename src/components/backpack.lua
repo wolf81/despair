@@ -89,6 +89,15 @@ function Backpack.new(entity, def)
         put(nil, EntityFactory.create(id))
     end
 
+    -- perhaps cleaner to register this on entity?
+    Signal.register('expend', function(gid) 
+        for idx, item in ipairs(items) do
+            if item.gid == gid then
+                take(nil, idx)
+            end
+        end
+    end)
+
     return setmetatable({
         -- methods
         put         = put,

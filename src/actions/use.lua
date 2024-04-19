@@ -7,8 +7,14 @@
 
 local Use = {}
 
-Use.new = function(level, entity, ability, target)
+Use.new = function(level, entity, item, target)
     local did_execute, is_finished = false, false
+
+    -- target self if target entity is not defined
+    target = target or entity
+
+    local usable = item:getComponent(Usable)
+    usable:expend()
 
     --[[
     -- TODO: should add a 'use' action to player (same for food, potions, etc...)
@@ -21,10 +27,12 @@ Use.new = function(level, entity, ability, target)
 
         did_execute = true
 
+        usable:use(target, level)
+
         -- use wand on enemy
         -- use potion on Kendrick
         -- use tome on ..?
-        Signal.emit('use', entity, ability, target)
+        Signal.emit('use', entity, item, target)
 
         Timer.after(duration, function()
             is_finished = true

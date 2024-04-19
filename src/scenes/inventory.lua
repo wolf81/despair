@@ -286,15 +286,9 @@ Inventory.new = function(player)
             -- ignore empty slots
             if not item then return end
 
-            local usable = item:getComponent(Usable)
-            local equippable = item:getComponent(Equippable)
-
-            if usable then 
-                local success, remaining = usable:use(player)
-                if remaining == 0 then
-                    backpack:take(item_idx)
-                end 
-            elseif equippable then
+            -- equip item if possible
+            local equippable = item:getComponent(Equippable)        
+            if equippable then
                 if equippable:equip(player) then
                     backpack:take(item_idx)
                 end

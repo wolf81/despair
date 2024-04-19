@@ -53,7 +53,17 @@ ChooseItem.new = function(player, items, button)
     local buttons = {}
     for idx, item in ipairs(items) do
         local x, y = frame:unpack()
-        local button = getImageButton(item, function() showSelectTarget(item, player) end)
+        local button = getImageButton(item, function()
+            if item.type == 'wand' then
+                showSelectTarget(item, player) 
+            else
+                local level = game:getDungeon():getLevel()
+                local use = Use(level, player, item)
+                player:getComponent(Control):setAction(use)
+
+                Gamestate.pop()
+            end
+        end)
         button:setFrame(x + (idx - 1) * TILE_SIZE, y, TILE_SIZE, TILE_SIZE)
         table.insert(buttons, button)
     end

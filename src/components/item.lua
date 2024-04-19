@@ -8,7 +8,8 @@
 local Item = {}
 
 Item.new = function(entity, def)
-    return setmetatable({}, Item)
+    return setmetatable({
+    }, Item)
 end
 
 return setmetatable(Item, {
