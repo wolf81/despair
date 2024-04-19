@@ -96,6 +96,7 @@ Game.new = function()
     local dungeon = Dungeon(player)
     dungeon:enter()
 
+    -- a semi-transparent overlay, used when showing char-sheet, inventory on top ...
     local overlay = Overlay()
 
     -- handles for observer pattern with Signal, added on enter, removed on leave
@@ -272,6 +273,9 @@ Game.new = function()
         if enabled then onInventoryChanged(self) end
     end
 
+    local getDungeon = function(self) return dungeon end
+
+    -- set initial state for "use" buttons, e.g. enable wand button if we have at least 1 wand
     onInventoryChanged(nil)
 
     return setmetatable({
@@ -281,6 +285,7 @@ Game.new = function()
         enter               = enter,
         leave               = leave,
         update              = update,
+        getDungeon          = getDungeon,
         keyReleased         = keyReleased,
         showOverlay         = showOverlay,
         hideOverlay         = hideOverlay,

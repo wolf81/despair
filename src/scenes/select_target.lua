@@ -15,14 +15,32 @@ SelectTarget.new = function(entity)
     local game, ability = nil, nil
     local ox, oy = 0, 0
 
-    local coord = vector(-1, -1)
+    local coord = nil
 
     local update = function(self, dt)
         game:update(dt)
+
+        local mx, my = love.mouse.getPosition()
+        local pos = vector(mx, my)
+
+        local level = game:getDungeon():getLevel()
+        local pos_x, pos_y = level:toWorldPos(mx + TILE_SIZE, my)
+        local level_x, level_y = mfloor(pos_x / TILE_SIZE + 0.5), mfloor(pos_y / TILE_SIZE + 0.5)
+        local level_coord = vector(level_x, level_y)
+
+        if level:inLineOfSight(entity.coord, level_coord) then
+            -- TODO: also check if coord is covered by fog of war? 
+            -- FIXME: maybe fog of war calculation is wrong; it doesn't always match line of sight
+            coord = vector(mfloor((mx - ox) / TILE_SIZE), mfloor((my - oy) / TILE_SIZE))
+        else
+            coord = nil
+        end
     end
 
     local draw = function(self)
         game:draw()
+
+        if not coord then return end
 
         -- crop drawing outside of visible frame, to prevent drawing over action bar & side panel
         love.graphics.setScissor(frame:unpack())
@@ -34,20 +52,11 @@ SelectTarget.new = function(entity)
         love.graphics.setScissor()
     end
 
-    local setTargetable = function(self, x, y, range)
-        x1, x2 = x - range, x + range
-        y1, y2 = y - range, y + range
-    end
-
     local setFrame = function(self, x, y, w, h)
         frame = Rect(x, y, w, h)
 
         ox = -w % TILE_SIZE - TILE_SIZE
         oy = -h % TILE_SIZE
-    end
-
-    local mouseMoved = function(self, mx, my)
-        coord = vector(mfloor((mx + TILE_SIZE / 2) / TILE_SIZE), mfloor((my - TILE_SIZE / 2 - 8) / TILE_SIZE))
     end
 
     local mouseReleased = function(self, mx, my, button, istouch, presses)
@@ -81,7 +90,6 @@ SelectTarget.new = function(entity)
     return setmetatable({
         mouseReleased   = mouseReleased,
         keyReleased     = keyReleased,
-        mouseMoved      = mouseMoved,
         setFrame        = setFrame,
         update          = update,
         enter           = enter,

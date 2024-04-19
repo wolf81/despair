@@ -436,8 +436,8 @@ Level.new = function(dungeon, level_idx)
         return player_dist_map:getDistance(coord.x, coord.y)
     end
 
-    local getCameraCoords = function(self, coord)
-        return camera:getCameraCoords(coord.x, coord.y)
+    local toWorldPos = function(self, camera_x, camera_y)
+        return camera:getWorldCoords(camera_x, camera_y)
     end
     
     return setmetatable({
@@ -455,11 +455,11 @@ Level.new = function(dungeon, level_idx)
         isBlocked           = isBlocked,
         getPlayer           = getPlayer,
         addEntity           = addEntity,
+        toWorldPos          = toWorldPos,
         setBlocked          = setBlocked,
         getEntities         = getEntities,
         removeEntity        = removeEntity,
         inLineOfSight       = inLineOfSight,
-        getCameraCoords     = getCameraCoords,
         getPlayerDistance   = getPlayerDistance,
     }, Level)
 end
