@@ -184,7 +184,7 @@ Inventory.new = function(player)
     local update = function(self, dt)
         local mx, my = love.mouse.getPosition()
 
-        mx, my = mx / SCALE, my / SCALE
+        mx, my = mx / UI_SCALE, my / UI_SCALE
 
         hover_slot_info = nil
 

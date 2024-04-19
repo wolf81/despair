@@ -20,7 +20,7 @@ end
 function love.load(args)
     love.window.setTitle('Dungeon of Despair')
 
-    success = love.window.setMode(WINDOW_W * SCALE, WINDOW_H * SCALE, {
+    success = love.window.setMode(WINDOW_W * UI_SCALE, WINDOW_H * UI_SCALE, {
         highdpi = false,
     })
 
@@ -70,7 +70,7 @@ end
 
 function love.draw()
     love.graphics.push()
-    love.graphics.scale(SCALE)
+    love.graphics.scale(UI_SCALE)
     Gamestate.draw()
     love.graphics.pop()
 end
