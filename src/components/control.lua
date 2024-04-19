@@ -63,11 +63,18 @@ Control.new = function(entity, def, ...)
     -- get current action points
     local getAP = function(self) return ap end
 
+    local setAction = function(self, action_)
+        assert(action == nil, 'action already defined')
+
+        action = action_
+    end
+
     return setmetatable({             
         -- methods
-        update      = update,
         setEnabled  = setEnabled,
+        setAction   = setAction,
         getAction   = getAction,
+        update      = update,
         addAP       = addAP,
         getAP       = getAP,
     }, Control)

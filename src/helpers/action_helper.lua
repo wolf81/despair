@@ -41,4 +41,6 @@ M.getDestroyCost = function(entity) return mmax(entity:getComponent(Control):get
 
 M.getIdleCost = function(entity) return BASE_ACTION_COST end
 
+M.getUseCost = function(entity) return BASE_ACTION_COST end
+
 return M

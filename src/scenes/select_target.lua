@@ -66,9 +66,8 @@ SelectTarget.new = function(entity)
 
         local usable = ability:getComponent(Usable)
         if usable then
-            -- TODO: should add a 'use' action to player (same for food, potions, etc...)
-            -- the 'use' action should be activated next turn
-            usable:use(target_coord, level)
+            local use = Use(level, entity, ability, target_coord)
+            entity:getComponent(Control):setAction(use)
         end
     end
 

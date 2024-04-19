@@ -67,6 +67,7 @@ Destroy             = require 'src.actions.destroy'
 Attack              = require 'src.actions.attack'
 Move                = require 'src.actions.move'
 Idle                = require 'src.actions.idle'
+Use                 = require 'src.actions.use'
 
 -- input modes
 Keyboard            = require 'src.input_modes.keyboard'

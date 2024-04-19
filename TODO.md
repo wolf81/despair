@@ -2,20 +2,20 @@
 
 # FEATURES
 
-* feat: Implement food, food should increase energy
 * feat: Prevent stairs from being hidden under fog of war
 * feat: Generate monsters randomly just outside visible area of player
-* feat: Implement level saving and loadingb
+* feat: Implement level saving and loading
 * feat: Improve variety of textures in dungeon
 * feat: Implement magic missile spell
 * feat: Make generic bar view class that can be used for health, hunger, mana, ...
 * feat: For systems, add a draw method and optional sort method, to use for rendering & allow removal of draw method in Entity class
 * feat: HealthBar system should not be drawn from Visual system after making above change
 * feat: Get experience for killing monsters and level up
-* feat: Backpack should be a fixed size array, so we can make a proper inventory UI
 * feat: Implement dual-wield attacks
 * feat: Implement sleep & health recovery over sleep, remove automatic health recovery
 * feat: Perhaps food should recover a small amount of health (?)
+* feat: consuming a potion should assign a "use" action to player
+* feat: consuming food should assign a "use" action to player
 
 ## BUGS 
 
@@ -29,6 +29,8 @@
 
 # DONE
 
+* feat: Implement food, food should increase energy
+* feat: Backpack should be a fixed size array, so we can make a proper inventory UI
 * feat: Add entrance & exit stairs
 * feat: If player performs an action, turn is advanced for all entities
 * feat: Allow player to proceed to next level by moving on exit stairs

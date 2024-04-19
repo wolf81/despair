@@ -420,6 +420,7 @@ Level.new = function(dungeon, level_idx)
 
     local getSize = function(self) return map_w, map_h end
 
+    -- get the level coord for a position, e.g. mouse position
     local getCoord = function(self, x, y) 
         if x < 0 or y < 0 or x > WINDOW_W - STATUS_PANEL_W or y > WINDOW_H - ACTION_BAR_H then 
             return nil
