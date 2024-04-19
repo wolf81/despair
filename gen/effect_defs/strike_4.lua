@@ -3,4 +3,5 @@ return {
 	type = 'effect',
 	texture = 'uf_fx_impact',
 	anim = { 10, 11, 12 },
+	flags = { '' },
 }

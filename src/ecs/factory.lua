@@ -10,6 +10,19 @@ local M = {}
 local definitions = {}
 local type_info = {}
 
+local function parseFlags(flags)
+    local val = 0
+
+    for idx, flag in ipairs(flags) do
+        print('[!] FLAG', idx, flag)
+        if flag == 'PR' then
+            val = bit.bor(val, 0x1)
+        end
+    end
+
+    return val
+end
+
 M.register = function(dir_path, fn)
     fn = fn or function() end
     
@@ -139,10 +152,12 @@ M.create = function(id, coord)
     elseif entity.type == 'tome' then
         entity.z_index = 5
 
+        entity:addComponent(Usable(entity, def))
         entity:addComponent(Item(entity, def))
     elseif entity.type == 'wand' then
         entity.z_index = 5
 
+        entity:addComponent(Usable(entity, def))
         entity:addComponent(Item(entity, def))
     elseif entity.type == 'food' then
         entity.z_index = 5
@@ -151,6 +166,7 @@ M.create = function(id, coord)
         entity:addComponent(Item(entity, def))        
     elseif entity.type == 'effect' then
         entity.z_index = 20
+        entity.flags = parseFlags(def['flags']) 
     end
 
     return entity

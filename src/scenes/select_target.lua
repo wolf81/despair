@@ -9,11 +9,6 @@ local mfloor = math.floor
 
 local SelectTarget = {}
 
-local function getLevelCoord(x, y, level)
-    x, y = level:toWorldPos(x + TILE_SIZE, y)
-    return vector(mfloor(x / TILE_SIZE + 0.5), mfloor(y / TILE_SIZE + 0.5))
-end
-
 SelectTarget.new = function(entity)
     local frame = Rect(0)
 
@@ -31,7 +26,7 @@ SelectTarget.new = function(entity)
         -- calculate level coord for mouse position
         local mx, my = love.mouse.getPosition()
         local level = game:getDungeon():getLevel()
-        local level_coord = getLevelCoord(mx, my, level) 
+        local level_coord = level:getCoord(mx, my) 
 
         if level:isVisible(level_coord) then
             -- calculate camera coord for mouse position
@@ -65,14 +60,23 @@ SelectTarget.new = function(entity)
 
     local mouseReleased = function(self, mx, my, button, istouch, presses)
         if button == 2 then Gamestate.pop() end
-        -- print('mouseReleased', mx, my, button)
+
+        local level = game:getDungeon():getLevel()
+        local target_coord = level:getCoord(mx, my)
+
+        local usable = ability:getComponent(Usable)
+        if usable then
+            -- TODO: should add a 'use' action to player (same for food, potions, etc...)
+            -- the 'use' action should be activated next turn
+            usable:use(target_coord, level)
+        end
     end
 
     -- ability can be a class ability, item (wand), spell ...
-    local enter = function(self, from, ability)
+    local enter = function(self, from, ability_)
         assert(getmetatable(from) == Game, 'invalid argument for "from", expected: "Game"')
 
-        game, ability = from, ability
+        game, ability = from, ability_
 
         entity:getComponent(Control):setEnabled(false)
         game:setActionsEnabled(false)
