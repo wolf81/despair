@@ -69,6 +69,8 @@ SelectTarget.new = function(entity)
             local use = Use(level, entity, ability, target_coord)
             entity:getComponent(Control):setAction(use)
         end
+
+        Gamestate.pop()        
     end
 
     -- ability can be a class ability, item (wand), spell ...

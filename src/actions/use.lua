@@ -29,6 +29,8 @@ Use.new = function(level, entity, ability, target)
         Timer.after(duration, function()
             is_finished = true
 
+            print('[!] USE ACTION DONE')
+
             if fn then fn() end            
         end)
     end
