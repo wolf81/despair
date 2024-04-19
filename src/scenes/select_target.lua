@@ -26,11 +26,8 @@ SelectTarget.new = function(entity)
         local level = game:getDungeon():getLevel()
         local pos_x, pos_y = level:toWorldPos(mx + TILE_SIZE, my)
         local level_x, level_y = mfloor(pos_x / TILE_SIZE + 0.5), mfloor(pos_y / TILE_SIZE + 0.5)
-        local level_coord = vector(level_x, level_y)
 
-        if level:inLineOfSight(entity.coord, level_coord) then
-            -- TODO: also check if coord is covered by fog of war? 
-            -- FIXME: maybe fog of war calculation is wrong; it doesn't always match line of sight
+        if level:isVisible(vector(level_x, level_y)) then
             coord = vector(mfloor((mx - ox) / TILE_SIZE), mfloor((my - oy) / TILE_SIZE))
         else
             coord = nil
