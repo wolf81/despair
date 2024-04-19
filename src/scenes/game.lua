@@ -16,6 +16,12 @@ local CLASS_ACTIONS = {
     ['mage']    = { 'cast-spell', },
 }
 
+-- actions allowed after player died
+local DEATH_ACTIONS = {
+    ['settings']    = true,
+    ['char-sheet']  = true,
+}
+
 local function getItems(player, type)
     local backpack = player:getComponent(Backpack)
 
@@ -184,16 +190,12 @@ Game.new = function()
         -- ensure player can use mouse to interact with UI after death
         love.mouse.setVisible(true) 
 
-        -- on player death, disable most actions
-        local enabled_actions = {
-            ['profile'] = true,
-            ['settings'] = true,
-        }
-
+        -- on player death, disable most actions, as it doesn't make sense if player can use 
+        -- scrolls, wands, cast spells or enter stealth mode
         for element in layout:eachElement() do
             if getmetatable(element.widget) == ActionButton then
                 local button = element.widget
-                if not enabled_actions[button:getAction()] then
+                if not DEATH_ACTIONS[button:getAction()] then
                     button:setEnabled(false)
                 end
             end
