@@ -13,6 +13,7 @@ SelectTarget.new = function(entity)
     local frame = Rect(0)
 
     local game, ability = nil, nil
+    local ox, oy = 0, 0
 
     local coord = vector(-1, -1)
 
@@ -27,7 +28,7 @@ SelectTarget.new = function(entity)
         love.graphics.setScissor(frame:unpack())
 
         love.graphics.setColor(1.0, 0.0, 1.0, 0.8)
-        love.graphics.rectangle('line', coord.x * TILE_SIZE - 32, coord.y * TILE_SIZE + 32, TILE_SIZE, TILE_SIZE)
+        love.graphics.rectangle('line', coord.x * TILE_SIZE + ox, coord.y * TILE_SIZE + oy, TILE_SIZE, TILE_SIZE)
 
         -- reset crop area
         love.graphics.setScissor()
@@ -40,6 +41,9 @@ SelectTarget.new = function(entity)
 
     local setFrame = function(self, x, y, w, h)
         frame = Rect(x, y, w, h)
+
+        ox = -w % TILE_SIZE - TILE_SIZE
+        oy = -h % TILE_SIZE
     end
 
     local mouseMoved = function(self, mx, my)
@@ -55,8 +59,6 @@ SelectTarget.new = function(entity)
     local enter = function(self, from, ability)
         assert(getmetatable(from) == Game, 'invalid argument for "from", expected: "Game"')
 
-        print('ab', ability.name)
-
         game, ability = from, ability
 
         entity:getComponent(Control):setEnabled(false)
@@ -64,8 +66,6 @@ SelectTarget.new = function(entity)
     end
 
     local leave = function(self, to)
-        print('leave', from)
-
         entity:getComponent(Control):setEnabled(true)
         game:setActionsEnabled(true)
 
