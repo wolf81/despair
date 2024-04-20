@@ -7,26 +7,33 @@
 
 local ImageButton = {}
 
-ImageButton.new = function(image, action)
+ImageButton.new = function(image, action, ...)
     assert(image ~= nil, 'missing argument: "image"')
 
-    local frame = { 0, 0, 0, 0 }
+    local frame = Rect(0)
 
-    local is_highlighted, is_pressed = false, false
+    local args = {...}
+
+    local is_highlighted, is_pressed, is_enabled = false, false, true
 
     local update = function(self, dt)
-        local mx, my = love.mouse.getPosition()
-        mx, my = mx / SCALE, my / SCALE
+        if not is_enabled then return end
 
         if quad_idx == 0 then return end
 
-        local x, y, w, h = unpack(frame)
-
-        is_highlighted = (mx > x) and (my > y) and (mx < x + w) and (my < y + h)
+        local mx, my = love.mouse.getPosition()
+        is_highlighted = frame:contains(mx / UI_SCALE, my / UI_SCALE)
 
         if is_highlighted and is_pressed and (not love.mouse.isDown(1)) then
             if action then
-                Signal.emit(action)
+                local action_type = type(action)
+                if action_type == 'string' then
+                    Signal.emit(action, unpack(args))
+                elseif action_type == 'function' then
+                    action(unpack(args))
+                else
+                    error('invalid argument for "action", expected: "string" or "function"')
+                end
             end
         end
 
@@ -34,9 +41,9 @@ ImageButton.new = function(image, action)
     end
 
     local draw = function(self)
-        local x, y, w, h = unpack(frame)
+        local x, y, w, h = frame:unpack()
 
-        love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
+        love.graphics.setColor(1.0, 1.0, 1.0, is_enabled and 1.0 or 0.8)
 
         if is_highlighted then
             love.graphics.setColor(0.4, 0.9, 0.8, 1.0)
@@ -48,15 +55,16 @@ ImageButton.new = function(image, action)
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
     end
 
-    local getSize = function(self) return frame[3], frame[4] end
+    local getSize = function(self) return frame:getSize() end
 
-    local setFrame = function(self, x, y, w, h)
-        frame = { x, y, w, h }
-    end
+    local setFrame = function(self, x, y, w, h) frame = Rect(x, y, w, h) end
 
-    local getFrame = function(self) return unpack(frame) end
+    local getFrame = function(self) return frame:unpack() end
+
+    local setEnabled = function(self, flag) is_enabled = (flag == true) end
     
     return setmetatable({
+        setEnabled  = setEnabled,
         getFrame    = getFrame,
         setFrame    = setFrame,
         getSize     = getSize,

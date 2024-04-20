@@ -1,3 +1,10 @@
+--[[
+--  Dungeon of Despair
+--
+--  Author: Wolfgang Schreurs
+--  info+despair@wolftrail.net
+--]]
+
 local ChooseItem = {}
 
 local function getImage(texture, quad)
@@ -11,20 +18,28 @@ local function getImage(texture, quad)
     return canvas
 end
 
-local function getImageButton(item)
+local function getImageButton(item, fn)
     local def = EntityFactory.getDefinition(item.id)
     local texture = TextureCache:get(def.texture)
     local quads = QuadCache:get(def.texture)
     local quad_idx = def.anim[1]
     local image = getImage(texture, quads[quad_idx])
-    return ImageButton(image, item.gid)
+    return ImageButton(image, fn)
 end
 
 local function getFrame(anchor_x, anchor_y, item_count)
     local w, h = TILE_SIZE * item_count, TILE_SIZE
     local x = anchor_x - w / 2 + (w / item_count / 2) 
     local y = anchor_y - h - 1
-    return { x, y, w, h }
+    return Rect(x, y, w, h)
+end
+
+local function showSelectTarget(item, player)
+    Gamestate.pop()
+
+    local select_target = SelectTarget(player)
+    select_target:setFrame(0, 0, WINDOW_W - STATUS_PANEL_W, WINDOW_H - ACTION_BAR_H)
+    Gamestate.push(select_target, item)
 end
 
 ChooseItem.new = function(player, items, button)
@@ -36,13 +51,26 @@ ChooseItem.new = function(player, items, button)
 
     local buttons = {}
     for idx, item in ipairs(items) do
-        local button = getImageButton(item)
-        local ox = (idx - 1) * TILE_SIZE
-        button:setFrame(frame[1] + ox, frame[2], TILE_SIZE, TILE_SIZE)
+        local x, y = frame:unpack()
+        local button = getImageButton(item, function()
+            local usable = item:getComponent(Usable)
+            if usable and usable:requiresTarget() then
+                showSelectTarget(item, player) 
+            else
+                local level = game:getDungeon():getLevel()
+                local use = Use(level, player, item)
+                player:getComponent(Control):setAction(use)
+
+                Gamestate.pop()
+            end
+        end)
+        button:setFrame(x + (idx - 1) * TILE_SIZE, y, TILE_SIZE, TILE_SIZE)
         table.insert(buttons, button)
     end
 
     local enter = function(self, from)
+        assert(getmetatable(from) == Game, 'invalid argument for "from", expected: "Game"')
+
         game = from
 
         button:setSelected(true)
@@ -56,8 +84,6 @@ ChooseItem.new = function(player, items, button)
 
     local draw = function(self)
         game:draw()
-
-        love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
 
         for _, button in ipairs(buttons) do
             local btn_x, btn_y = button:getFrame()
@@ -74,14 +100,13 @@ ChooseItem.new = function(player, items, button)
     end
 
     local keyReleased = function(self, key, scancode)
-        if key == "escape" then
+        if Gamestate.current() == self and key == 'escape' then
             Gamestate.pop()
         end
     end
 
     local mouseReleased = function(self, mx, my, button, istouch, presses)
-        local x, y, w, h = unpack(frame)
-        if (mx < x) or (mx > x + w) or (my < y) or (my > y + h) then
+        if Gamestate.current() == self and not frame:contains(mx, my) then
             Gamestate.pop()
         end
     end

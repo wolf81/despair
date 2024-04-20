@@ -16,61 +16,34 @@ local CLASS_ACTIONS = {
     ['mage']    = { 'cast-spell', },
 }
 
+-- actions allowed after player died
+local DEATH_ACTIONS = {
+    ['settings']    = true,
+    ['char-sheet']  = true,
+}
+
 local function getItems(player, type)
     local backpack = player:getComponent(Backpack)
 
     local items = {}
+    local item_info = {}
 
     for idx = 1, backpack:getSize() do
         local item = backpack:peek(idx)
-        if item.type == type then
+        -- only show unique item types, to prevent showing 2 wands of frost, 3 tomes of identify, ...
+        -- TODO: maybe show item count in button (?)
+        if item.type == type and not item_info[item.id] then
             table.insert(items, item)
+            item_info[item.id] = item
         end
     end
 
     return items
 end
 
-local function showInventory(player)
-    if player:getComponent(Health):isAlive() then
-        Gamestate.push(Inventory(player))
-        -- prevent an isssue in which a single black frame is shown by immediately calling update
-        Gamestate.update(0)
-    end
-end
+local function showInventory(player) Gamestate.push(Inventory(player)) end
 
-local function showCharacterSheet(player)
-    if player:getComponent(Health):isAlive() then
-        Gamestate.push(CharSheet(player))
-        -- prevent an isssue in which a single black frame is shown by immediately calling update
-        Gamestate.update(0)
-    end
-end
-
-local function showSelectWandMenu(player)
-    -- 1. find all wands in player backpack
-    -- 2. select wand button
-    -- 3. show all wands in menu
-    -- (menu might be disabled if no wands found?) 
-end
-
-local function registerActions(player, game)
-    local actions = {
-        ['char-sheet']  = function() showCharacterSheet(player) end,
-        ['inventory']   = function() showInventory(player) end,
-        ['sleep']       = function() print('try sleep player') end,
-        ['use-wand']    = function() game:showItems(getItems(player, 'wand'), 'use-wand') end,
-        ['use-scroll']  = function() game:showItems(getItems(player, 'tome'), 'use-scroll') end,
-        ['use-potion']  = function() game:showItems(getItems(player, 'potion'), 'use-potion') end,
-    }
-    local handles = {}
-
-    for action, fn in pairs(actions) do
-        handles[action] = Signal.register(action, fn)
-    end
-
-    return handles
-end
+local function showCharacterSheet(player) Gamestate.push(CharSheet(player)) end
 
 local function getLeftActionButtons(player)
     local buttons = {}
@@ -91,16 +64,16 @@ local function getRightActionButtons()
 
     table.insert(buttons, UI.makeFlexPanel())
 
-    for _, action in ipairs({ 'use-potion', 'use-wand', 'use-scroll' }) do
+    for _, action in ipairs({ 'use-food', 'use-potion', 'use-wand', 'use-scroll' }) do
         table.insert(buttons, UI.makeButton(action))
     end
 
     return buttons
 end
 
-local function getActionBarButton(layout, action)
+local function getActionButton(layout, action)
     for e in layout:eachElement() do
-        if getmetatable(e.widget) == ActionBarButton then
+        if getmetatable(e.widget) == ActionButton then
             if e.widget:getAction() == action then
                 return e.widget
             end
@@ -114,38 +87,39 @@ Game.new = function()
     -- love.math.setRandomSeed(1)
 
     local player = EntityFactory.create('pc' .. lrandom(1, 4))
-    local player_info = PlayerInfo(player)
+    local status_panel = StatusPanel(player)
 
     local backpack = player:getComponent(Backpack)
 
     local dungeon = Dungeon(player)
     dungeon:enter()
 
-    local portrait = Portrait(player)
-
+    -- a semi-transparent overlay, used when showing char-sheet, inventory on top ...
     local overlay = Overlay()
 
+    -- handles for observer pattern with Signal, added on enter, removed on leave
     local handles = {}
-
-    local portrait_w = portrait:getSize()
 
     local item_bar = nil
 
-    local HALF_W = mfloor((WINDOW_W - INFO_PANEL_W - portrait_w) / 2)
+    local portrait = PortraitGenerator.generate(player)
+    local portrait_w = portrait:getDimensions()
+
+    local HALF_W = mfloor((WINDOW_W - STATUS_PANEL_W - portrait_w) / 2)
 
     -- configure layout
     local layout = tidy.HStack({
-        tidy.VStack(tidy.Stretch(1), {
+        tidy.VStack({
             UI.makeView(dungeon, tidy.Stretch(1)),
-            tidy.HStack({
+            tidy.HStack(tidy.MinSize(0, ACTION_BAR_H), {
                 tidy.HStack(getLeftActionButtons(player), tidy.MinSize(HALF_W, 0)),
-                UI.makeButton('char-sheet', portrait:getImage()),
+                UI.makeButton('char-sheet', portrait),
                 tidy.HStack(getRightActionButtons(), tidy.MinSize(HALF_W, 0)),
             }),
         }),
         tidy.VStack({
-            UI.makeView(player_info, tidy.MinSize(INFO_PANEL_W, WINDOW_H - 50)),
-            tidy.HStack({
+            UI.makeView(status_panel, tidy.MinSize(STATUS_PANEL_W, 0), tidy.Stretch(0, 1)),
+            tidy.HStack(tidy.MinSize(0, ACTION_BAR_H), {
                 UI.makeButton('sleep'),
                 UI.makeButton('inventory'),
                 UI.makeButton('settings'),
@@ -174,11 +148,9 @@ Game.new = function()
     end
 
     local keyReleased = function(self, key, scancode)        
-        if key == 'i' then
-            self:showInventory()
-        end
+        if key == 'i' then showInventory(player) end
 
-        if Gamestate.current() == self and key == "escape" then
+        if Gamestate.current() == self and key == 'escape' then
             love.event.quit()
         end
     end
@@ -187,27 +159,84 @@ Game.new = function()
 
     local hideOverlay = function(self) overlay:fadeOut() end
 
-    local showInventory = function(self)
-        if not player:getComponent(Health):isAlive() then return end
-
-        Gamestate.push(Inventory(player))
-        -- prevent an isssue in which a single black frame is shown by immediately calling update
-        Gamestate.update(0)
-    end
-
-    local showItems = function(self, items, action)
+    local showItems = function(items, action)
         if #items == 0 then return print('empty item list') end
 
-        if player:getComponent(Health):isAlive() then
-            local button = getActionBarButton(layout, action)
-            Gamestate.push(ChooseItem(player, items, button))
-            -- prevent an isssue in which a single black frame is shown by immediately calling update
-            Gamestate.update(0)
+        local button = getActionButton(layout, action)
+        Gamestate.push(ChooseItem(player, items, button))
+    end
+
+    local function onDestroy(entity, duration)
+        if entity.type ~= 'pc' then return end
+        
+        -- ensure player can use mouse to interact with UI after death
+        love.mouse.setVisible(true) 
+
+        -- on player death, disable most actions, as it doesn't make sense if player can use 
+        -- scrolls, wands, cast spells or enter stealth mode
+        for element in layout:eachElement() do
+            if getmetatable(element.widget) == ActionButton then
+                local button = element.widget
+                if not DEATH_ACTIONS[button:getAction()] then
+                    button:setEnabled(false)
+                end
+            end
         end
     end
 
+    local onInventoryChanged = function(player)
+        local food_count = 0
+        local wand_count = 0
+        local tome_count = 0
+        local potion_count = 0
+
+        for idx = 1, backpack:getSize() do
+            local item = backpack:peek(idx)            
+            if item.type == 'potion' then
+                potion_count = potion_count + 1
+            elseif item.type == 'wand' then
+                wand_count = wand_count + 1
+            elseif item.type == 'tome' then
+                tome_count = tome_count + 1                
+            elseif item.type == 'food' then
+                food_count = food_count + 1
+            end
+        end
+
+        for element in layout:eachElement() do
+            if getmetatable(element.widget) == ActionButton then
+                local button = element.widget
+                local action = button:getAction()
+
+                if action == 'use-wand' then
+                    button:setEnabled(wand_count > 0)
+                elseif action == 'use-scroll' then
+                    button:setEnabled(tome_count > 0)
+                elseif action == 'use-potion' then
+                    button:setEnabled(potion_count > 0)
+                elseif action == 'use-food' then
+                    button:setEnabled(food_count > 0)
+                end
+            end
+        end        
+    end
+
     local enter = function(self, from)
-        handles = registerActions(player, self)
+        local handlers = {
+            ['sleep']       = function() print('try sleep player') end,
+            ['inventory']   = function() showInventory(player) end,
+            ['char-sheet']  = function() showCharacterSheet(player) end,
+            ['take']        = function() onInventoryChanged(player) end,
+            ['put']         = function() onInventoryChanged(player) end,
+            ['use-food']    = function() showItems(getItems(player, 'food'), 'use-food') end,
+            ['use-wand']    = function() showItems(getItems(player, 'wand'), 'use-wand') end,
+            ['use-scroll']  = function() showItems(getItems(player, 'tome'), 'use-scroll') end,
+            ['use-potion']  = function() showItems(getItems(player, 'potion'), 'use-potion') end,
+            ['destroy']     = function(...) onDestroy(...) end,
+        }
+        for action, handler in pairs(handlers) do
+            handles[action] = Signal.register(action, handler)
+        end
     end
 
     local leave = function(self, to)
@@ -219,18 +248,43 @@ Game.new = function()
         handles = {}
     end
 
+    local setActionsEnabled = function(self, flag)
+        local enabled = flag == true
+
+        -- enable / disable all buttons
+        for element in layout:eachElement() do
+            local widget_type = getmetatable(element.widget)
+            if widget_type == ActionButton or widget_type == ImageButton then
+                element.widget:setEnabled(enabled)
+            end
+        end
+
+        -- update use buttons for inventory state
+        if enabled then onInventoryChanged(self) end
+    end
+
+    local getDungeon = function(self) return dungeon end
+
+    local mouseReleased = function(self, mx, my, button, istouch, presses)
+        love.mouse.setVisible(true) 
+    end
+
+    -- set initial state for "use" buttons, e.g. enable wand button if we have at least 1 wand
+    onInventoryChanged(nil)
+
     return setmetatable({
         -- methods
-        draw            = draw,
-        enter           = enter,
-        leave           = leave,
-        update          = update,
-        showItems       = showItems,
-        mouseMoved      = mouseMoved,
-        keyReleased     = keyReleased,
-        showOverlay     = showOverlay,
-        hideOverlay     = hideOverlay,
-        showInventory   = showInventory,
+        draw                = draw,
+        leave               = leave,
+        enter               = enter,
+        leave               = leave,
+        update              = update,
+        getDungeon          = getDungeon,
+        keyReleased         = keyReleased,
+        showOverlay         = showOverlay,
+        hideOverlay         = hideOverlay,
+        mouseReleased       = mouseReleased,
+        setActionsEnabled   = setActionsEnabled,
     }, Game)
 end
 

@@ -41,6 +41,17 @@ local function newMonsters(map, blocked_coords)
     return monsters
 end
 
+local function onDropItem(self, entity)
+    if entity.coord == self.entry_coord or entity.coord == self.exit_coord then
+        print('it\'s not possible to drop items on stairs')
+        return
+    end
+    
+    local backpack = entity:getComponent(Backpack)
+    local size = backpack:getSize()
+    if size > 0 then backpack:dropItem(size, self) end
+end
+
 local function initSystems(entities)
     local visual_system, control_system = System(Visual), System(Control)
     local health_system, health_bar_system = System(Health), System(HealthBar)
@@ -191,34 +202,9 @@ Level.new = function(dungeon, level_idx)
 
     local onDestroy = function(self, entity, duration)
         print(entity.name .. ' is destroyed')
-
-        local visual = entity:getComponent(Visual)
-        visual:fadeOut(duration)
-
-        Timer.after(duration, function() 
-            entity.remove = true
-        end)
     end
 
     local onAttack = function(self, entity, target, status, duration)
-        if status.proj_id ~= nil and status.proj_id ~= '' then
-            local coord1 = vector(entity.coord.x + 0.5, entity.coord.y + 0.5)
-            local coord2 = vector(target.coord.x + 0.5, target.coord.y + 0.5)
-            local projectile = EntityFactory.create(status.proj_id, coord1)            
-            self:addEntity(projectile)
-            local visual = projectile:getComponent(Visual)
-            local rot = matan2(coord2.x - coord1.x, coord1.y - coord2.y) - math.pi / 2
-            visual:setRotation(rot)
-
-            Timer.tween(duration, projectile, { coord = coord2 }, 'linear', function()
-                self:removeEntity(projectile)
-            end)
-        else
-            local effect = EntityFactory.create('strike_1', target.coord:clone())
-            self:addEntity(effect)
-            Timer.after(0.3, function() self:removeEntity(effect) end)        
-        end
-
         local is_hit, is_crit = false, false
 
         for _, attack in ipairs(status.attacks) do
@@ -238,12 +224,6 @@ Level.new = function(dungeon, level_idx)
             local total = attack.roll + attack.attack
             print(total .. ' (' .. attack.roll .. ' + ' .. attack.attack .. ') vs ' .. status.ac)
         end
-
-        -- visualize hit on target by drawing with a tint color
-        if is_hit then target:getComponent(Visual):colorize(0.3) end
-
-        -- show camera shake effect if player performs a critical hit
-        if is_crit and entity == self:getPlayer() then camera:shake(0.2) end
     end
 
     local onEnergy = function(self, entity, message)
@@ -325,7 +305,7 @@ Level.new = function(dungeon, level_idx)
                 entity:draw()
             end
 
-            local ox, oy = camera:worldCoords(0, 0)
+            local ox, oy = camera:getWorldCoords(0, 0)
             fog:draw(ox, oy)
         end, x, y, w, h)
     end
@@ -368,25 +348,28 @@ Level.new = function(dungeon, level_idx)
         return (player_idx > 0) and entities[player_idx] or nil
     end
 
-    local handlers = {}
+    local shakeCamera = function(self, duration) camera:shake(duration) end
+
+    local handles = {}
 
     local enter = function(self, player)
         self:addEntity(player)
 
         self:setBlocked(player.coord, true)
 
-        handlers = {
-            ['put']     = function(...) onPut(self, ...)     end,
-            ['move']    = function(...) onMove(self, ...)    end,
-            ['idle']    = function(...) onIdle(self, ...)    end,
-            ['attack']  = function(...) onAttack(self, ...)  end,
-            ['destroy'] = function(...) onDestroy(self, ...) end,
-            ['energy']  = function(...) onEnergy(self, ...)  end,
-            ['turn']    = function(...) onTurn(self, ...)    end,
+        local handlers = {
+            ['put']         = function(...) onPut(self, ...)     end,
+            ['move']        = function(...) onMove(self, ...)    end,
+            ['idle']        = function(...) onIdle(self, ...)    end,
+            ['attack']      = function(...) onAttack(self, ...)  end,
+            ['destroy']     = function(...) onDestroy(self, ...) end,
+            ['energy']      = function(...) onEnergy(self, ...)  end,
+            ['turn']        = function(...) onTurn(self, ...)    end,
+            ['drop-item']   = function(...) onDropItem(self, ...) end
         }
 
-        for key, handler in pairs(handlers) do
-            Signal.register(key, handler)
+        for action, handler in pairs(handlers) do
+            handles[action] = Signal.register(action, handler)
         end
 
         local cartographer = player:getComponent(Cartographer)
@@ -402,20 +385,21 @@ Level.new = function(dungeon, level_idx)
     local exit = function(self, player)        
         self:removeEntity(player)
 
-        for key, handler in pairs(handlers) do
-            Signal.remove(key, handler)
+        for action, handle in pairs(handles) do
+            Signal.remove(action, handle)
         end
     end
 
     local getSize = function(self) return map_w, map_h end
 
+    -- get the level coord for a position, e.g. mouse position
     local getCoord = function(self, x, y) 
-        if x < 0 or y < 0 or x > WINDOW_W - INFO_PANEL_W or y > WINDOW_H - ACTION_BAR_H then 
+        if x < 0 or y < 0 or x > WINDOW_W - STATUS_PANEL_W or y > WINDOW_H - ACTION_BAR_H then 
             return nil
         end
 
-        x, y = camera:worldCoords(x, y)
-        x = mfloor((x + INFO_PANEL_W / 2) / TILE_SIZE)
+        x, y = camera:getWorldCoords(x, y)
+        x = mfloor((x + STATUS_PANEL_W / 2) / TILE_SIZE)
         y = mfloor((y + ACTION_BAR_H / 2) / TILE_SIZE)
 
         return vector(x, y)
@@ -423,6 +407,10 @@ Level.new = function(dungeon, level_idx)
 
     local getPlayerDistance = function(self, coord)
         return player_dist_map:getDistance(coord.x, coord.y)
+    end
+
+    local toWorldPos = function(self, camera_x, camera_y)
+        return camera:getWorldCoords(camera_x, camera_y)
     end
     
     return setmetatable({
@@ -440,7 +428,9 @@ Level.new = function(dungeon, level_idx)
         isBlocked           = isBlocked,
         getPlayer           = getPlayer,
         addEntity           = addEntity,
+        toWorldPos          = toWorldPos,
         setBlocked          = setBlocked,
+        shakeCamera         = shakeCamera,
         getEntities         = getEntities,
         removeEntity        = removeEntity,
         inLineOfSight       = inLineOfSight,

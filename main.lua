@@ -20,7 +20,7 @@ end
 function love.load(args)
     love.window.setTitle('Dungeon of Despair')
 
-    success = love.window.setMode(WINDOW_W * SCALE, WINDOW_H * SCALE, {
+    success = love.window.setMode(WINDOW_W * UI_SCALE, WINDOW_H * UI_SCALE, {
         highdpi = false,
     })
 
@@ -38,9 +38,21 @@ function love.load(args)
 
     trySetCursor()
 
-    -- Gamestate.registerEvents()
+    GamestateHelper.fixGamestatePushPop()
 
     Gamestate.switch(Loading())
+end
+
+function love.update(dt)
+    Timer.update(dt)
+    Gamestate.update(dt)
+end
+
+function love.draw()
+    love.graphics.push()
+    love.graphics.scale(UI_SCALE)
+    Gamestate.draw()
+    love.graphics.pop()
 end
 
 function love.keypressed(key, scancode, isrepeat)
@@ -61,16 +73,4 @@ end
 
 function love.mousepressed(x, y, button, istouch, presses)
     Gamestate.mousePressed(x, y, button, istouch, presses)
-end
-
-function love.update(dt)
-    Timer.update(dt)
-    Gamestate.update(dt)
-end
-
-function love.draw()
-    love.graphics.push()
-    love.graphics.scale(SCALE)
-    Gamestate.draw()
-    love.graphics.pop()
 end

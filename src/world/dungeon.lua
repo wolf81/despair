@@ -113,13 +113,13 @@ Dungeon.new = function(player)
     local levels, level_idx = {}, 0
     local alpha = 1.0
 
-    local frame = { 0, 0, 0, 0 }
+    local frame = Rect(0)
 
     local update = function(self, dt) levels[level_idx]:update(dt) end
 
     local draw = function(self)
         love.graphics.setColor(1.0, 1.0, 1.0, self.alpha) 
-        levels[level_idx]:draw(unpack(frame)) 
+        levels[level_idx]:draw(frame:unpack()) 
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0) 
     end
 
@@ -163,8 +163,7 @@ Dungeon.new = function(player)
             return
         end
 
-        local control = player:getComponent(Control)
-        control:setEnabled(false)
+        player:getComponent(Control):setEnabled(false)
 
         Timer.tween(0.5, self, { alpha = 0.0 }, 'linear', function()
             levels[level_idx]:exit(player)
@@ -176,25 +175,27 @@ Dungeon.new = function(player)
 
             Timer.tween(0.5, self, { alpha = 1.0 }, 'linear', function()
                 self.alpha = 1.0
-                control:setEnabled(true)
+
+                player:getComponent(Control):setEnabled(true)
             end)
         end)
     end
 
-    local setFrame = function(self, x, y, w, h)
-        frame = { x, y, w, h }
-    end
+    local setFrame = function(self, x, y, w, h) frame = Rect(x, y, w, h) end
+
+    local getLevel = function(self, idx) return levels[level_idx] end
 
     return setmetatable({
         -- properties
-        alpha       = alpha,
+        alpha           = alpha,
         -- methods
-        enter       = enter,
-        update      = update,
-        draw        = draw,
-        nextLevel   = nextLevel,
-        prevLevel   = prevLevel,
-        setFrame    = setFrame,
+        draw            = draw,
+        enter           = enter,
+        update          = update,
+        setFrame        = setFrame,
+        getLevel        = getLevel,
+        nextLevel       = nextLevel,
+        prevLevel       = prevLevel,
     }, Dungeon)
 end
 

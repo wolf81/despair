@@ -36,15 +36,14 @@ ResourceBar.new = function(entity, type)
     assert(type ~= nil, 'missing argument: "type"')
     assert(QUAD_INFO[type] ~= nil, 'invalid argument for "type", expected "health" or "energy"')
 
-    local textures = {}
-
+    local frame = Rect(0)
     local texture = TextureCache:get('uf_interface')
     local quads = QuadCache:get('uf_interface')
     local frames = QUAD_INFO[type]
     local empty_quad, filled_quad = quads[frames[1]], quads[frames[2]]
     local texture_idx = 0
-    local _, _, w, h = empty_quad:getViewport()
 
+    local textures = {}
     for i = 0, SEGMENT_COUNT do
         textures[i] = generateBarTexture(texture, empty_quad, filled_quad, i)
     end
@@ -58,17 +57,24 @@ ResourceBar.new = function(entity, type)
         texture_idx = mfloor(current / total * SEGMENT_COUNT)
     end
 
-    local draw = function(self, x, y) 
+    local draw = function(self) 
+        local x, y = frame:unpack()        
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
         love.graphics.draw(textures[texture_idx], x, y)
     end
 
-    local getSize = function() return w, h end
+    local setFrame = function(self, x, y, w, h) frame = Rect(x, y, w, h) end
+
+    local getSize = function(self) 
+        local _, _, w, h = empty_quad:getViewport()
+        return w, h 
+    end
 
     return setmetatable({
-        draw    = draw,
-        update  = update,
-        getSize = getSize,
+        draw        = draw,
+        update      = update,
+        getSize     = getSize,
+        setFrame    = setFrame,
     }, ResourceBar)
 end
 

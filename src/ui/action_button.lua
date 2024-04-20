@@ -5,7 +5,9 @@
 --  info+despair@wolftrail.net
 --]]
 
-local ActionBarButton = {}
+local ActionButton = {}
+
+local DISABLED_ALPHA = 0.7
 
 local ACTION_INFO = {
     ['inventory']   = 2,
@@ -24,37 +26,35 @@ local ACTION_INFO = {
     ['steal']       = 19,
     ['cast-spell']  = 20,
     ['swap-weapon'] = 21, 
+    ['use-food']    = 22,
 }
 
-ActionBarButton.new = function(action)
+ActionButton.new = function(action, ...)
     assert(arg ~= nil, 'missing argument: "action"')
+
+    local args = {...}
 
     local texture = TextureCache:get('actionbar')
     local quads = QuadCache:get('actionbar')
     local quad_idx = ACTION_INFO[action]
 
-    local frame = { 0, 0, 0, 0 }
+    local frame = Rect(0)
     
     local is_enabled, is_selected, is_highlighted, is_pressed = true, false, false, false
     
     local background = nil
 
     local update = function(self, dt)
-        local mx, my = love.mouse.getPosition()
-
-        mx = mx / SCALE
-        my = my / SCALE
-
-        local x, y, w, h = unpack(frame)
-
         if quad_idx == 0 then return end
 
         if not is_enabled then return end
 
-        is_highlighted = is_selected or ((mx > x) and (my > y) and (mx < x + w) and (my < y + h))
+        local mx, my = love.mouse.getPosition()
+        is_highlighted = is_selected or frame:contains(mx / UI_SCALE, my / UI_SCALE)
 
         if is_highlighted and is_pressed and (not love.mouse.isDown(1)) then
-            Signal.emit(action)
+            -- TODO: support actions that are functions, in line with ImageButton
+            Signal.emit(action, unpack(args))
         end
 
         is_pressed = is_highlighted and love.mouse.isDown(1)
@@ -63,13 +63,13 @@ ActionBarButton.new = function(action)
     local draw = function(self)
         if not background then return end
 
-        local x, y, w, h = unpack(frame)
+        local x, y, w, h = frame:unpack()
 
         -- add white background behind texture for showing disabled state
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
         love.graphics.rectangle('fill', x + 1, y + 1, w - 2, h - 2)
 
-        love.graphics.setColor(1.0, 1.0, 1.0, (is_enabled and 1.0 or 0.5))
+        love.graphics.setColor(1.0, 1.0, 1.0, (is_enabled and 1.0 or DISABLED_ALPHA))
         love.graphics.draw(background, x, y)
 
         if is_highlighted or is_selected then
@@ -81,14 +81,14 @@ ActionBarButton.new = function(action)
     end
 
     local setFrame = function(self, x, y, w, h)
-        frame = { x, y, w, h, }
+        frame = Rect(x, y, w, h)
         
         if w > 0 and h > 0 then
             background = TextureGenerator.generatePanelTexture(w, h)
         end
     end
 
-    local getFrame = function(self) return unpack(frame) end
+    local getFrame = function(self) return frame:unpack() end
 
     local setSelected = function(self, flag) is_selected = (flag == true) end
 
@@ -119,9 +119,9 @@ ActionBarButton.new = function(action)
         getFrame    = getFrame,
         update      = update,
         draw        = draw,    
-    }, ActionBarButton)
+    }, ActionButton)
 end
 
-return setmetatable(ActionBarButton, {
-    __call = function(_, ...) return ActionBarButton.new(...) end,
+return setmetatable(ActionButton, {
+    __call = function(_, ...) return ActionButton.new(...) end,
 })

@@ -58,7 +58,6 @@ local function newGrid(size, fn)
 end
 
 M.generate = function(map_size, corr_size)
-    -- scale = math.max(scale or 1, 1)
     corr_size = math.max(corr_size, 1)
 
     -- scale the grid by taking into account corridor wall tiles

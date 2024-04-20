@@ -18,9 +18,9 @@ function Backpack.new(entity, def)
 
         if #items >= MAX_BACKPACK_SIZE then return false end
 
-        Signal.emit('put', item)
-
         table.insert(items, item)
+
+        Signal.emit('put', item)
 
         return true
     end
@@ -36,7 +36,11 @@ function Backpack.new(entity, def)
 
             for idx, item in ipairs(items) do
                 if arg(item) then
-                    table.insert(removed, table.remove(items, idx))
+                    _ = table.remove(items, idx)
+
+                    Signal.emit('take', item)
+                    
+                    table.insert(removed, item)
                 end
             end
 
@@ -45,7 +49,11 @@ function Backpack.new(entity, def)
             assert(arg > 0 and arg <= MAX_BACKPACK_SIZE, 
                 'index ' .. arg .. ' out of bounds, should be between 1 and ' .. MAX_BACKPACK_SIZE)
 
-            return table.remove(items, arg)
+            local item = table.remove(items, arg)
+
+            Signal.emit('take', item)
+
+            return item
         end
 
         error('invalid argument type "' .. arg_type .. '"')
@@ -57,15 +65,11 @@ function Backpack.new(entity, def)
 
     local isFull = function(self) return #items == MAX_BACKPACK_SIZE end
 
-    local takeLast = function(self)
-        if #items > 0 then
-            return table.remove(items, #items)
-        end
-    end
+    local dropItem = function(self, idx, level)
+        assert(idx > 0 and idx <= #items, 
+            'index ' .. idx .. ' out of bounds, should be between 1 and ' .. #items)
 
-    local dropItem = function(self, item, level)
-        if not item then return end
-
+        local item = self:take(idx)
         item.coord = entity.coord:clone()
         level:addEntity(item)
     end
@@ -85,6 +89,15 @@ function Backpack.new(entity, def)
         put(nil, EntityFactory.create(id))
     end
 
+    -- perhaps cleaner to register this on entity?
+    Signal.register('expend', function(gid) 
+        for idx, item in ipairs(items) do
+            if item.gid == gid then
+                take(nil, idx)
+            end
+        end
+    end)
+
     return setmetatable({
         -- methods
         put         = put,
@@ -92,7 +105,6 @@ function Backpack.new(entity, def)
         take        = take,
         isFull      = isFull,
         getSize     = getSize,
-        takeLast    = takeLast,
         dropItem    = dropItem,
         equipAll    = equipAll,
     }, Backpack)

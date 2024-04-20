@@ -17,7 +17,7 @@ local function getFrame(background)
     local w, h = background:getDimensions()
     local x = (WINDOW_W - w) / 2
     local y = (WINDOW_H - h) / 2
-    return { x, y, w, h }
+    return Rect(x, y, w, h)
 end
 
 CharSheet.new = function(player)
@@ -26,6 +26,7 @@ CharSheet.new = function(player)
     local exp_level = player:getComponent(ExpLevel)
     local skills = player:getComponent(Skills)
     local stats = player:getComponent(Stats)
+    local health = player:getComponent(Health)
 
     local frame = getFrame(background)
 
@@ -38,15 +39,18 @@ CharSheet.new = function(player)
     local draw = function(self)
         game:draw()
 
-        local x, y = unpack(frame)
+        local x, y = frame:unpack()
 
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
         love.graphics.draw(background, x, y)
 
         love.graphics.setColor(0.0, 0.0, 0.0, 0.7)
 
+        local name = player.name:upper()
+        if not health:isAlive() then name = name .. ' (deceased)' end
+
         local lines = { 
-            player.name:upper(),
+            name,
             StringHelper.capitalize(player.class) .. ' level ' .. exp_level:getValue(),
             '',
             'STATS',
@@ -72,6 +76,8 @@ CharSheet.new = function(player)
     end
 
     local enter = function(self, from)
+        assert(getmetatable(from) == Game, 'invalid argument for "from", expected: "Game"')
+        
         game = from
         game:showOverlay()
     end
@@ -82,14 +88,13 @@ CharSheet.new = function(player)
     end
 
     local keyReleased = function(self, key, scancode)
-        if key == "escape" then
+        if Gamestate.current() == self and key == 'escape' then
             Gamestate.pop()
         end
     end
 
     local mouseReleased = function(self, mx, my, button, istouch, presses)
-        local x, y, w, h = unpack(frame)
-        if (mx < x) or (mx > x + w) or (my < y) or (my > y + h) then
+        if Gamestate.current() == self and not frame:contains(mx, my) then
             Gamestate.pop()
         end
     end

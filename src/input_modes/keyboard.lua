@@ -18,10 +18,9 @@ Keyboard.new = function(entity)
         for key in pairs(was_pressed) do
             if not love.keyboard.isDown(key) then
                 if key == 'b' then
-                    local backpack = entity:getComponent(Backpack)
-                    backpack:dropItem(backpack:takeLast(), level)
+                    Signal.emit('drop-item', entity)
                 elseif key == '9' then
-                    Signal.emit('use-wand')
+                    Signal.emit('use-wand', entity)
                 end                
             end
         end

@@ -9,41 +9,87 @@ local lrandom = love.math.random
 
 local Usable = {}
 
-local usePotion = function(self, target)
+local usePotion = function(self, target, level)
     if target == nil then return false end
 
     local health = target:getComponent(Health)
     health:heal(lrandom(2, 6))
 
-    return true, 0
+    return true
 end
 
-local useFood = function(self, target)
+local useFood = function(self, target, level)
     if target == nil then return false end
 
     local energy = target:getComponent(Energy)
     energy:eatFood(lrandom(2, 5))
 
-    return true, 0
+    return true
 end
 
-local useWand = function(self, target)
+local useTome = function(self, target, level)
+    print('use tome')
+    return false
+end
 
+local useWand = function(self, target, level)
+    local entities = level:getEntities(target, function(entity) 
+        -- TODO: some wands might target walls or maybe empty space
+        return entity.type == 'pc' or entity.type == 'npc'
+    end)
+
+    for _, entity in ipairs(entities) do
+        local health = entity:getComponent(Health)
+        local damage = ndn.dice('3d4').roll()
+        health:harm(damage)
+    end
+
+    return false
 end
 
 Usable.new = function(entity, def)
-    -- the generic use function does nothing, just returning
-    -- success: false, remaining charges: 1
-    local use = function(self, target) return false, 1 end
+    local amount = 1
+
+    -- the default use function is a noop, just returning success status: false
+    local use = function(self, target, level) return false end
     
-    if entity.type == 'food' then
-        use = useFood
-    elseif entity.type == 'potion' then
+    if entity.type == 'potion' then
         use = usePotion
+    elseif entity.type == 'food' then
+        use = useFood
+    elseif entity.type == 'wand' then
+        use = useWand
+        amount = lrandom(1, 4)
+    elseif entity.type == 'tome' then
+        use = useTome
+        amount = lrandom(1, 4)
     end
-    
+
+    local getEffect = function(self)
+        if not def.effect then return nil end
+        
+        return EntityFactory.create(def.effect)
+    end
+
+    local getAmount = function(self) return amount end
+
+    local expend = function(self) 
+        amount = math.max(amount - 1, 0)
+        
+        -- TODO: should automatically deplete on use, so we can remove getAmount()
+
+        -- TODO: should be deplete
+        if amount == 0 then Signal.emit('expend', entity.gid) end
+    end
+
+    local requiresTarget = function(self) return entity.type == 'wand' end
+
     return setmetatable({
-        use = use,
+        requiresTarget  = requiresTarget,
+        getAmount       = getAmount,
+        getEffect       = getEffect,
+        expend          = expend,
+        use             = use,
     }, Usable)
 end
 

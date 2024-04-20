@@ -17,8 +17,6 @@ Move.new = function(level, entity, ...)
 
     local coord = coords[#coords]
 
-    local ap = ActionHelper.getMoveCost(entity, unpack(coords))
-
     local execute = function(self, duration, fn)
         if did_execute then return end
 
@@ -33,7 +31,7 @@ Move.new = function(level, entity, ...)
         end)
     end
 
-    local getAP = function(self) return ap end
+    local getAP = function(self) return ActionHelper.getMoveCost(entity, unpack(coords)) end
 
     local isFinished = function(self) return is_finished end
 

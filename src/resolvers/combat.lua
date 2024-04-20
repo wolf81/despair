@@ -31,7 +31,6 @@ M.resolve = function(entity, target)
     local combat_info = {
         ac = ac,
         attacks = {},
-        proj_id = eq_mainhand.projectile,        
     }
 
     for _, weapon in ipairs(weapons) do

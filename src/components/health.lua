@@ -22,7 +22,7 @@ Health.new = function(entity, def)
     end
 
     if hd ~= nil then
-        total = ndn.dice(hd).average()
+        total = ndn.dice(hd).roll()
         current = total
     else
         total = stats:getValue('str') + 1

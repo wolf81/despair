@@ -139,10 +139,12 @@ M.create = function(id, coord)
     elseif entity.type == 'tome' then
         entity.z_index = 5
 
+        entity:addComponent(Usable(entity, def))
         entity:addComponent(Item(entity, def))
     elseif entity.type == 'wand' then
         entity.z_index = 5
 
+        entity:addComponent(Usable(entity, def))
         entity:addComponent(Item(entity, def))
     elseif entity.type == 'food' then
         entity.z_index = 5
@@ -151,6 +153,7 @@ M.create = function(id, coord)
         entity:addComponent(Item(entity, def))        
     elseif entity.type == 'effect' then
         entity.z_index = 20
+        entity.flags = FlagsHelper.parseFlags(def['flags']) 
     end
 
     return entity

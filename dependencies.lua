@@ -10,21 +10,25 @@ local Cache = require 'src.util.cache'
 -- libraries
 bresenham           = require 'lib.bresenham.bresenham'
 Gamestate           = require 'lib.hump.gamestate'
-tidy                = require 'lib.composer' -- TODO: rename composer to tidy
 Signal              = require 'lib.hump.signal'
 vector              = require 'lib.hump.vector'
 Timer               = require 'lib.hump.timer'
 lume                = require 'lib.lume.lume'
+tidy                = require 'lib.composer' -- TODO: rename composer to tidy
 ndn                 = require 'lib.ndn'
 
 -- helpers
+GamestateHelper     = require 'src.helpers.gamestate_helper'
+EffectHelper        = require 'src.helpers.effect_helper'
 ActionHelper        = require 'src.helpers.action_helper'
 StringHelper        = require 'src.helpers.string_helper'
 ColorHelper         = require 'src.helpers.color_helper'
 TableHelper         = require 'src.helpers.table_helper'
+FlagsHelper         = require 'src.helpers.flags_helper'
 PathHelper          = require 'src.helpers.path_helper'
 
 -- scenes
+SelectTarget        = require 'src.scenes.select_target'
 ChooseItem          = require 'src.scenes.choose_item'
 CharSheet           = require 'src.scenes.char_sheet'
 Inventory           = require 'src.scenes.inventory'
@@ -37,13 +41,14 @@ Level               = require 'src.world.level'
 Map                 = require 'src.world.map'
 
 -- ui
-ActionBarButton     = require 'src.ui.action_bar_button'
+ActionButton        = require 'src.ui.action_button'
 ResourceBar         = require 'src.ui.resource_bar'
 ImageButton         = require 'src.ui.image_button'
-PlayerInfo          = require 'src.ui.player_info'
+StatusPanel         = require 'src.ui.status_panel'
 FlexPanel           = require 'src.ui.flex_panel'
-Portrait            = require 'src.ui.portrait'
+FlexSpace           = require 'src.ui.flex_space'
 Overlay             = require 'src.ui.overlay'
+Label               = require 'src.ui.label'
 
 -- util
 Shadowcaster        = require 'src.util.shadowcaster'
@@ -51,7 +56,7 @@ Direction           = require 'src.util.direction'
 Animation           = require 'src.util.animation'
 Scheduler           = require 'src.util.scheduler'
 Camera              = require 'src.util.camera'
-Chart               = require 'src.util.chart'
+Rect                = require 'src.util.rect'
 Turn                = require 'src.util.turn'
 Fog                 = require 'src.util.fog'
 UI                  = require 'src.util.ui'
@@ -64,6 +69,7 @@ Destroy             = require 'src.actions.destroy'
 Attack              = require 'src.actions.attack'
 Move                = require 'src.actions.move'
 Idle                = require 'src.actions.idle'
+Use                 = require 'src.actions.use'
 
 -- input modes
 Keyboard            = require 'src.input_modes.keyboard'
@@ -106,6 +112,7 @@ QuadCache           = Cache()
 -- generators
 FontSheetGenerator  = require 'src.generators.font_sheet_gen'
 QuadSheetGenerator  = require 'src.generators.quad_sheet_gen'
+PortraitGenerator   = require 'src.generators.portrait_gen'
 TextureGenerator    = require 'src.generators.texture_gen'
 QuadGenerator       = require 'src.generators.quad_gen'
 MazeGenerator       = require 'src.generators.maze_gen'

@@ -7,6 +7,27 @@
 
 local Attack = {}
 
+local getMainhandWeaponEffect = function(entity)
+    local item = entity:getComponent(Equipment):getItem('mainhand')
+ 
+    if item then
+        return item:getComponent(Equippable):getEffect()
+    end
+
+    return nil
+end
+
+local function effectAsProjectile(effect, coord1, coord2)
+    coord1 = vector(coord1.x + 0.5, coord1.y + 0.5)
+    coord2 = vector(coord2.x + 0.5, coord2.y + 0.5)            
+
+    local dxy = coord1 - coord2
+    effect:getComponent(Visual):setRotation(math.atan2(dxy.x, -dxy.y) + math.pi / 2)
+    effect.coord = coord1
+
+    return coord2
+end
+
 Attack.new = function(level, entity, target)
     local did_execute, is_finished = false, false
 
@@ -18,6 +39,23 @@ Attack.new = function(level, entity, target)
         local status = CombatResolver.resolve(entity, target)
 
         Signal.emit('attack', entity, target, status, duration)
+
+        local effect = getMainhandWeaponEffect(entity)
+        if effect then
+            EffectHelper.showEffect(effect, level, duration, target.coord, entity.coord)
+        end
+
+        local is_hit, is_crit = false, false
+        for _, attack in ipairs(status.attacks) do
+            if attack.is_hit then is_hit = true end
+            if attack.is_crit then is_crit = true end
+        end
+
+        -- visualize hit on target by drawing with a tint color
+        if is_hit then target:getComponent(Visual):colorize(0.3) end
+
+        -- show camera shake effect if player performs a critical hit
+        if is_crit and entity == level:getPlayer() then level:shakeCamera(duration) end
 
         Timer.after(duration, function()
             is_finished = true

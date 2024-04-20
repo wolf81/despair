@@ -1,4 +1,0 @@
-ID$           |TYPE$      |NAME$         |TEXTURE$    |ANIM@ |
-
-arrow         |projectile |arrow         |projectiles |1     |
-magic_missile |projectile |magic missile |uf_fx       |11    |
