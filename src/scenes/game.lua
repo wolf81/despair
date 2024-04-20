@@ -41,17 +41,9 @@ local function getItems(player, type)
     return items
 end
 
-local function showInventory(player)
-    Gamestate.push(Inventory(player))
-    -- prevent an issue in which a single black frame is shown by immediately calling update
-    Gamestate.update(0)
-end
+local function showInventory(player) Gamestate.push(Inventory(player)) end
 
-local function showCharacterSheet(player)
-    Gamestate.push(CharSheet(player))
-    -- prevent an issue in which a single black frame is shown by immediately calling update
-    Gamestate.update(0)
-end
+local function showCharacterSheet(player) Gamestate.push(CharSheet(player)) end
 
 local function getLeftActionButtons(player)
     local buttons = {}
@@ -156,9 +148,7 @@ Game.new = function()
     end
 
     local keyReleased = function(self, key, scancode)        
-        if key == 'i' then
-            self:showInventory()
-        end
+        if key == 'i' then showInventory(player) end
 
         if Gamestate.current() == self and key == 'escape' then
             love.event.quit()
@@ -169,19 +159,11 @@ Game.new = function()
 
     local hideOverlay = function(self) overlay:fadeOut() end
 
-    local showInventory = function(self)
-        Gamestate.push(Inventory(player))
-        -- prevent an issue in which a single black frame is shown by immediately calling update
-        Gamestate.update(0)
-    end
-
     local showItems = function(items, action)
         if #items == 0 then return print('empty item list') end
 
         local button = getActionButton(layout, action)
         Gamestate.push(ChooseItem(player, items, button))
-        -- prevent an issue in which a single black frame is shown by immediately calling update
-        Gamestate.update(0)
     end
 
     local function onDestroy(entity, duration)
@@ -302,7 +284,6 @@ Game.new = function()
         showOverlay         = showOverlay,
         hideOverlay         = hideOverlay,
         mouseReleased       = mouseReleased,
-        showInventory       = showInventory,
         setActionsEnabled   = setActionsEnabled,
     }, Game)
 end

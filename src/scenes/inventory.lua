@@ -303,12 +303,6 @@ Inventory.new = function(player)
 
         -- update game to show current health and energy after eating food, drinking potion, ...
         game:update(0)
-
-        -- if player died after using a harmful item, hide inventory
-        if not player:getComponent(Health):isAlive() then
-            Gamestate.pop()
-            Gamestate.update(0)
-        end                
     end
 
     return setmetatable({

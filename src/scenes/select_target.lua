@@ -59,19 +59,18 @@ SelectTarget.new = function(entity)
     end
 
     local mouseReleased = function(self, mx, my, button, istouch, presses)
-        if button == 2 then Gamestate.pop() end
+        if button ~= 2 then
+            local level = game:getDungeon():getLevel()
+            local target_coord = level:getCoord(mx, my)
 
-        local level = game:getDungeon():getLevel()
-        local target_coord = level:getCoord(mx, my)
-
-        local usable = ability:getComponent(Usable)
-        if usable then
-            local use = Use(level, entity, ability, target_coord)
-            entity:getComponent(Control):setAction(use)
+            local usable = ability:getComponent(Usable)
+            if usable then
+                local use = Use(level, entity, ability, target_coord)
+                entity:getComponent(Control):setAction(use)
+            end
         end
 
-        Gamestate.pop()
-        Gamestate.update(0)
+        if Gamestate.current() == self then Gamestate.pop() end
     end
 
     -- ability can be a class ability, item (wand), spell ...
@@ -94,7 +93,6 @@ SelectTarget.new = function(entity)
     local keyReleased = function(self, key, scancode)        
         if Gamestate.current() == self and key == 'escape' then
             Gamestate.pop()
-            Gamestate.update(0)
         end
     end
 

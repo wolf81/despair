@@ -82,12 +82,15 @@ Usable.new = function(entity, def)
         -- TODO: should be deplete
         if amount == 0 then Signal.emit('expend', entity.gid) end
     end
-    
+
+    local requiresTarget = function(self) return entity.type == 'wand' end
+
     return setmetatable({
-        getAmount   = getAmount,
-        getEffect   = getEffect,
-        expend      = expend,
-        use         = use,
+        requiresTarget  = requiresTarget,
+        getAmount       = getAmount,
+        getEffect       = getEffect,
+        expend          = expend,
+        use             = use,
     }, Usable)
 end
 
