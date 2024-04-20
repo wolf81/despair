@@ -4,5 +4,5 @@ return {
 	name = 'wand',
 	texture = 'uf_items',
 	anim = { 365 },
-	effect = 'magic_missile',
+	effect = 'ef_magic_missile',
 }

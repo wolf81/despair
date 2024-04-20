@@ -22,6 +22,7 @@ ActionHelper        = require 'src.helpers.action_helper'
 StringHelper        = require 'src.helpers.string_helper'
 ColorHelper         = require 'src.helpers.color_helper'
 TableHelper         = require 'src.helpers.table_helper'
+FlagsHelper         = require 'src.helpers.flags_helper'
 PathHelper          = require 'src.helpers.path_helper'
 
 -- scenes

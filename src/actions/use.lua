@@ -34,10 +34,23 @@ Use.new = function(level, entity, item, target)
         -- use tome on ..?
         Signal.emit('use', entity, item, target)
 
+        local effect = usable:getEffect()
+        if effect ~= nil then
+            local is_proj = FlagsHelper.hasFlag(effect.flags, FLAGS.projectile)
+
+            if is_proj then
+                effect.coord = entity.coord:clone()
+                -- move projectile from start coord to end coord
+                level:addEntity(effect)
+
+                Timer.tween(duration, effect, { coord = target }, 'linear', function() 
+                    level:removeEntity(effect)
+                end)
+            end
+        end
+
         Timer.after(duration, function()
             is_finished = true
-
-            print('[!] USE ACTION DONE')
 
             if fn then fn() end            
         end)

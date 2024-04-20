@@ -68,23 +68,22 @@ Usable.new = function(entity, def)
         amount = lrandom(1, 4)
     end
 
-    -- local getEffect = function(self)
-    --     if not def.effect then return end
-        
-    --     return EntityFactory.create(def.effect)
-    -- end
+    local getEffect = function(self)
+        return EntityFactory.create(def.effect)
+    end
 
     local getAmount = function(self) return amount end
 
     local expend = function(self) 
         amount = math.max(amount - 1, 0)
         
+        -- TODO: should be deplete
         if amount == 0 then Signal.emit('expend', entity.gid) end
     end
     
     return setmetatable({
         getAmount   = getAmount,
-        -- getEffect   = getEffect,
+        getEffect   = getEffect,
         expend      = expend,
         use         = use,
     }, Usable)

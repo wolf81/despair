@@ -42,3 +42,7 @@ FONT = love.graphics.newImageFont('gfx/image_font.png',
     "1234567890!#$%&*()-+=[]:;\"'<" ..
     ">,.?/abcdefghijklmnopqrstuvwx" ..
     "yz ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
+FLAGS = {
+    ['projectile'] = 0x1,
+}
