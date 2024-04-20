@@ -1,9 +1,9 @@
-ID$           |TYPE$  |TEXTURE$     |ANIM@    |FLAGS@ |
+ID$              |TYPE$  |TEXTURE$     |ANIM@    |FLAGS@ |
 
-strike_1      |effect |uf_fx_impact |1,2,3    |       |
-strike_2      |effect |uf_fx_impact |4,5,6    |       |
-strike_3      |effect |uf_fx_impact |7,8,9    |       |
-strike_4      |effect |uf_fx_impact |10,11,12 |       |
-strike_5      |effect |uf_fx_impact |13,14,15 |       |
-strike_6      |effect |uf_fx_impact |16,17,18 |       |
-magic_missile |effect |uf_fx        |11       |PR     |
+strike_1         |effect |uf_fx_impact |1,2,3    |       |
+strike_2         |effect |uf_fx_impact |4,5,6    |       |
+strike_3         |effect |uf_fx_impact |7,8,9    |       |
+strike_4         |effect |uf_fx_impact |10,11,12 |       |
+strike_5         |effect |uf_fx_impact |13,14,15 |       |
+strike_6         |effect |uf_fx_impact |16,17,18 |       |
+ef_magic_missile |effect |uf_fx        |81       |PR     |

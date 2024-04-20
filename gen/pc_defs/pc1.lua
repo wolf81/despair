@@ -11,7 +11,7 @@ return {
 	dex = 13,
 	mind = 10,
 	flags = { 'DV' },
-	equip = { 'chain_mail', 'light_shield', 'longsword', 'food_1', 'food_1', 'wand_1', 'potion_1' },
+	equip = { 'chain_mail', 'light_shield', 'longsword', 'food_1', 'food_1' },
 	texture = 'uf_heroes',
 	anim = { 21, 22, 23, 24 },
 }

@@ -4,5 +4,4 @@ return {
 	texture = 'uf_fx_impact',
 	anim = { 16, 17, 18 },
 	flags = { '' },
- }
- 
+}

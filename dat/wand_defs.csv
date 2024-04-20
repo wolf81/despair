@@ -1,8 +1,8 @@
-ID$    |TYPE$ |NAME$ |TEXTURE$ |ANIM@ |EFFECT$       |
+ID$    |TYPE$ |NAME$ |TEXTURE$ |ANIM@ |EFFECT$          |
 
-wand_1 |wand  |wand  |uf_items |364   |magic_missile |
-wand_2 |wand  |wand  |uf_items |365   |magic_missile |
-wand_3 |wand  |wand  |uf_items |408   |magic_missile |
-wand_4 |wand  |wand  |uf_items |409   |magic_missile |
-wand_5 |wand  |wand  |uf_items |452   |magic_missile |
-wand_6 |wand  |wand  |uf_items |453   |magic_missile |
+wand_1 |wand  |wand  |uf_items |364   |ef_magic_missile |
+wand_2 |wand  |wand  |uf_items |365   |ef_magic_missile |
+wand_3 |wand  |wand  |uf_items |408   |ef_magic_missile |
+wand_4 |wand  |wand  |uf_items |409   |ef_magic_missile |
+wand_5 |wand  |wand  |uf_items |452   |ef_magic_missile |
+wand_6 |wand  |wand  |uf_items |453   |ef_magic_missile |
