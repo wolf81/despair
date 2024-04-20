@@ -33,8 +33,6 @@ local useTome = function(self, target, level)
 end
 
 local useWand = function(self, target, level)
-    print('use wand')
-
     local entities = level:getEntities(target, function(entity) 
         -- TODO: some wands might target walls or maybe empty space
         return entity.type == 'pc' or entity.type == 'npc'
@@ -52,8 +50,7 @@ end
 Usable.new = function(entity, def)
     local amount = 1
 
-    -- the generic use function does nothing, just returning
-    -- success: false
+    -- the default use function is a noop, just returning success status: false
     local use = function(self, target, level) return false end
     
     if entity.type == 'potion' then
@@ -79,6 +76,8 @@ Usable.new = function(entity, def)
     local expend = function(self) 
         amount = math.max(amount - 1, 0)
         
+        -- TODO: should automatically deplete on use, so we can remove getAmount()
+
         -- TODO: should be deplete
         if amount == 0 then Signal.emit('expend', entity.gid) end
     end

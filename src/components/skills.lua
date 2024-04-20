@@ -28,9 +28,7 @@ Skills.new = function(entity, def)
         know = level + (class == 'mage' and 3 or 0),
     }
 
-    local getValue = function(self, skill)
-        return skills[skill]
-    end
+    local getValue = function(self, skill) return skills[skill] end
 
     return setmetatable({
         -- methods

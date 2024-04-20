@@ -16,13 +16,9 @@ Stats.new = function(entity, def)
         mind = def['mind'],
     }
 
-    local getValue = function(self, stat)
-        return stats[stat]
-    end
+    local getValue = function(self, stat) return stats[stat] end
 
-    local getBonus = function(self, stat)
-        return mfloor((stats[stat] - 10) / 2)
-    end
+    local getBonus = function(self, stat) return mfloor((stats[stat] - 10) / 2) end
 
     return setmetatable({
         -- methods
