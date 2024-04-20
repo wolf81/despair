@@ -150,6 +150,10 @@ Equipment.new = function(entity, def)
                     self:unequip('mainhand')
                 end
 
+                if equip.offhand ~= nil and equip.offhand.kind == 'shield' then
+                    self:unequip('offhand')
+                end
+
                 if equip.mainhand ~= nil and equip.offhand == nil then
                     equip.offhand = item
                 else
