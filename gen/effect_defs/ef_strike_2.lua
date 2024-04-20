@@ -1,7 +1,7 @@
 return {
-	id = 'strike_5',
+	id = 'ef_strike_2',
 	type = 'effect',
 	texture = 'uf_fx_impact',
-	anim = { 13, 14, 15 },
+	anim = { 4, 5, 6 },
 	flags = { '' },
 }

@@ -20,8 +20,16 @@ Equippable.new = function(entity, def)
         return success
     end
 
+    local getEffect = function(self)
+        if not def.effect then return nil end
+        
+        return EntityFactory.create(def.effect)
+    end    
+
     return setmetatable({
-        equip = equip,
+        -- methods
+        getEffect   = getEffect,
+        equip       = equip,
     }, Equippable)
 end
 

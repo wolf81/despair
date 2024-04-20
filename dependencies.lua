@@ -19,6 +19,7 @@ ndn                 = require 'lib.ndn'
 
 -- helpers
 GamestateHelper     = require 'src.helpers.gamestate_helper'
+EffectHelper        = require 'src.helpers.effect_helper'
 ActionHelper        = require 'src.helpers.action_helper'
 StringHelper        = require 'src.helpers.string_helper'
 ColorHelper         = require 'src.helpers.color_helper'

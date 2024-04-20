@@ -41,15 +41,12 @@ Use.new = function(level, entity, item, target)
             local eff_w, eff_h = visual:getSize()
 
             if is_proj then
-                local start_coord = entity.coord:clone()
-                local end_coord = target:clone()
+                local start_coord = vector(entity.coord.x + 0.5, entity.coord.y + 0.5)
+                local end_coord = vector(target.x + 0.5, target.y + 0.5)
 
                 -- local angle = start_coord:angleTo(end_coord)
                 local dxy = start_coord - end_coord
-                local rot = math.atan2(dxy.x, -dxy.y) + math.pi / 2
-
-                local ox, oy = -TILE_SIZE / 2 + eff_w / 2, -TILE_SIZE / 2 + eff_h / 2
-                visual:setRotation(rot):setOffset(ox, oy)
+                visual:setRotation(math.atan2(dxy.x, -dxy.y) + math.pi / 2)
                 
                 effect.coord = start_coord
                 -- move projectile from start coord to end coord

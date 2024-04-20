@@ -19,8 +19,13 @@ Destroy.new = function(level, entity)
 
         Signal.emit('destroy', entity, duration)
 
+        entity:getComponent(Visual):fadeOut(duration)
+
         Timer.after(duration, function()
             is_finished = true
+
+            -- mark for removal from play
+            entity.remove = true
             
             if fn then fn() end
         end)

@@ -202,35 +202,9 @@ Level.new = function(dungeon, level_idx)
 
     local onDestroy = function(self, entity, duration)
         print(entity.name .. ' is destroyed')
-
-        entity:getComponent(Visual):fadeOut(duration)
-
-        Timer.after(duration, function() 
-            entity.remove = true
-        end)
     end
 
     local onAttack = function(self, entity, target, status, duration)
-        if status.proj_id ~= nil and status.proj_id ~= '' then
-            local coord1 = vector(entity.coord.x + 0.5, entity.coord.y + 0.5)
-            local coord2 = vector(target.coord.x + 0.5, target.coord.y + 0.5)
-            local projectile = EntityFactory.create(status.proj_id, coord1)            
-            self:addEntity(projectile)
-            local visual = projectile:getComponent(Visual)
-            local dxy = coord1 - coord2
-            local rot = matan2(dxy.x, -dxy.y) + math.pi / 2
-
-            visual:setRotation(rot)
-
-            Timer.tween(duration, projectile, { coord = coord2 }, 'linear', function()
-                self:removeEntity(projectile)
-            end)
-        else
-            local effect = EntityFactory.create('strike_1', target.coord:clone())
-            self:addEntity(effect)
-            Timer.after(0.3, function() self:removeEntity(effect) end)        
-        end
-
         local is_hit, is_crit = false, false
 
         for _, attack in ipairs(status.attacks) do
@@ -250,12 +224,6 @@ Level.new = function(dungeon, level_idx)
             local total = attack.roll + attack.attack
             print(total .. ' (' .. attack.roll .. ' + ' .. attack.attack .. ') vs ' .. status.ac)
         end
-
-        -- visualize hit on target by drawing with a tint color
-        if is_hit then target:getComponent(Visual):colorize(0.3) end
-
-        -- show camera shake effect if player performs a critical hit
-        if is_crit and entity == self:getPlayer() then camera:shake(0.2) end
     end
 
     local onEnergy = function(self, entity, message)
@@ -380,6 +348,8 @@ Level.new = function(dungeon, level_idx)
         return (player_idx > 0) and entities[player_idx] or nil
     end
 
+    local shakeCamera = function(self, duration) camera:shake(duration) end
+
     local handles = {}
 
     local enter = function(self, player)
@@ -460,6 +430,7 @@ Level.new = function(dungeon, level_idx)
         addEntity           = addEntity,
         toWorldPos          = toWorldPos,
         setBlocked          = setBlocked,
+        shakeCamera         = shakeCamera,
         getEntities         = getEntities,
         removeEntity        = removeEntity,
         inLineOfSight       = inLineOfSight,

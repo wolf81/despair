@@ -8,5 +8,5 @@ return {
 	attack = 0,
 	damage = '2d6',
 	special = { '' },
-	projectile = '',
+	effect = 'ef_strike_1',
 }
