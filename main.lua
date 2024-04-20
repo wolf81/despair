@@ -17,22 +17,6 @@ local function trySetCursor()
     love.mouse.setCursor(cursor)
 end
 
-local function fixGamestatePushPop() 
-    local gs_push = Gamestate.push
-    Gamestate.push = function(...)
-        gs_push(...)
-        -- prevent a single black frame from being shown, by immediately forcing an update
-        Gamestate.update(0)
-    end        
-
-    local gs_pop = Gamestate.pop
-    Gamestate.pop = function(...) 
-        gs_pop(...)
-        -- prevent a single black frame from being shown, by immediately forcing an update
-        Gamestate.update(0)
-    end
-end
-
 function love.load(args)
     love.window.setTitle('Dungeon of Despair')
 
@@ -54,11 +38,21 @@ function love.load(args)
 
     trySetCursor()
 
-    fixGamestatePushPop()
-
-    -- Gamestate.registerEvents()
+    GamestateHelper.fixGamestatePushPop()
 
     Gamestate.switch(Loading())
+end
+
+function love.update(dt)
+    Timer.update(dt)
+    Gamestate.update(dt)
+end
+
+function love.draw()
+    love.graphics.push()
+    love.graphics.scale(UI_SCALE)
+    Gamestate.draw()
+    love.graphics.pop()
 end
 
 function love.keypressed(key, scancode, isrepeat)
@@ -79,16 +73,4 @@ end
 
 function love.mousepressed(x, y, button, istouch, presses)
     Gamestate.mousePressed(x, y, button, istouch, presses)
-end
-
-function love.update(dt)
-    Timer.update(dt)
-    Gamestate.update(dt)
-end
-
-function love.draw()
-    love.graphics.push()
-    love.graphics.scale(UI_SCALE)
-    Gamestate.draw()
-    love.graphics.pop()
 end

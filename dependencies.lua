@@ -18,6 +18,7 @@ tidy                = require 'lib.composer' -- TODO: rename composer to tidy
 ndn                 = require 'lib.ndn'
 
 -- helpers
+GamestateHelper     = require 'src.helpers.gamestate_helper'
 ActionHelper        = require 'src.helpers.action_helper'
 StringHelper        = require 'src.helpers.string_helper'
 ColorHelper         = require 'src.helpers.color_helper'
