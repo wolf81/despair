@@ -79,7 +79,7 @@ Usable.new = function(entity, def)
         -- TODO: should automatically deplete on use, so we can remove getAmount()
 
         -- TODO: should be deplete
-        if amount == 0 then Signal.emit('expend', entity.gid) end
+        if amount == 0 then Signal.emit('depleted', entity.gid) end
     end
 
     local requiresTarget = function(self) return entity.type == 'wand' end

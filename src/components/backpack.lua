@@ -90,7 +90,7 @@ function Backpack.new(entity, def)
     end
 
     -- perhaps cleaner to register this on entity?
-    Signal.register('expend', function(gid) 
+    Signal.register('depleted', function(gid) 
         for idx, item in ipairs(items) do
             if item.gid == gid then
                 take(nil, idx)
