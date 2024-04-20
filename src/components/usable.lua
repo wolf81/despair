@@ -42,7 +42,7 @@ local useWand = function(self, target, level)
 
     for _, entity in ipairs(entities) do
         local health = entity:getComponent(Health)
-        local damage = ndn.dice('2d4').roll()
+        local damage = ndn.dice('3d4').roll()
         health:harm(damage)
     end
 
