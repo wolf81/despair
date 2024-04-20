@@ -71,13 +71,9 @@ Usable.new = function(entity, def)
         return EntityFactory.create(def.effect)
     end
 
-    local getAmount = function(self) return amount end
-
     local expend = function(self) 
         amount = math.max(amount - 1, 0)
         
-        -- TODO: should automatically deplete on use, so we can remove getAmount()
-
         -- TODO: should be deplete
         if amount == 0 then Signal.emit('depleted', entity.gid) end
     end
@@ -86,7 +82,6 @@ Usable.new = function(entity, def)
 
     return setmetatable({
         requiresTarget  = requiresTarget,
-        getAmount       = getAmount,
         getEffect       = getEffect,
         expend          = expend,
         use             = use,
