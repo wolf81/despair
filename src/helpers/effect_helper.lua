@@ -4,6 +4,8 @@ local HALF_PI = math.pi / 2
 
 local M = {}
 
+-- TODO: split in 2 methods: show effect & show projectile, will make it easier to use for usable 
+-- abilities & maybe spells.
 M.showEffect = function(effect, level, duration, target_coord, origin_coord)
     assert(effect ~= nil, 'missing argument: "effect"')
     assert(level ~= nil, 'missing argument: "level"')
