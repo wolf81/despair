@@ -90,12 +90,14 @@ CharSheet.new = function(player)
     local keyReleased = function(self, key, scancode)
         if Gamestate.current() == self and key == 'escape' then
             Gamestate.pop()
+            Gamestate.update(0)
         end
     end
 
     local mouseReleased = function(self, mx, my, button, istouch, presses)
         if not frame:contains(mx, my) then
             Gamestate.pop()
+            Gamestate.update(0)
         end
     end
 

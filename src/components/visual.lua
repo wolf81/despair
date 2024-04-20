@@ -22,13 +22,14 @@ Visual.new = function(entity, def, duration)
     local texture = TextureCache:get(def.texture)
     local quads = QuadCache:get(def.texture)
     local anim = Animation(frames, duration)
-    local rot, ox, oy = 0, 0, 0
+    local angle = 0
+    local ox, oy = 0, 0
+
+    local _, _, quad_w, quad_h = quads[1]:getViewport()
 
     local anim_handle = nil
 
-    update = function(self, dt, level) 
-        anim:update(dt)
-    end
+    update = function(self, dt, level) anim:update(dt) end
 
     draw = function(self)
         if shader_info.shader ~= nil then
@@ -40,7 +41,8 @@ Visual.new = function(entity, def, duration)
 
         love.graphics.setColor(1.0, 1.0, 1.0, self.alpha)
         local pos = entity.coord * TILE_SIZE
-        anim:draw(texture, quads, pos, rot, ox, oy)
+
+        anim:draw(texture, quads, pos, angle, ox, oy)
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
 
         love.graphics.setShader()
@@ -103,13 +105,14 @@ Visual.new = function(entity, def, duration)
         end)
     end
 
-    setRotation = function(self, angle)
-        rot, ox, oy = angle, 0, 0
+    setRotation = function(self, angle_)
+        angle = angle_
+        return self
+    end
 
-        if angle ~= 0 then 
-            local _, _, quad_w, quad_h = quads[1]:getViewport()
-            ox, oy = mfloor(quad_w / 2), mfloor(quad_h / 2)
-        end
+    setOffset = function(self, x, y)
+        ox, oy = x, y
+        return self
     end
 
     return setmetatable({
@@ -122,6 +125,7 @@ Visual.new = function(entity, def, duration)
         fadeOut     = fadeOut,
         colorize    = colorize,
         setShader   = setShader,
+        setOffset   = setOffset,
         setRotation = setRotation,
     }, Visual)
 end

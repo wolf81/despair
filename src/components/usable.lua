@@ -69,6 +69,8 @@ Usable.new = function(entity, def)
     end
 
     local getEffect = function(self)
+        if not def.effect then return nil end
+        
         return EntityFactory.create(def.effect)
     end
 

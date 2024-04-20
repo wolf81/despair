@@ -36,10 +36,12 @@ end
 
 local function showSelectTarget(item, player)
     Gamestate.pop()
+    Gamestate.update(0)
 
     local select_target = SelectTarget(player)
     select_target:setFrame(0, 0, WINDOW_W - STATUS_PANEL_W, WINDOW_H - ACTION_BAR_H)
     Gamestate.push(select_target, item)
+    -- prevent an issue in which a single black frame is shown by immediately calling update
     Gamestate.update(0)
 end
 
@@ -62,6 +64,7 @@ ChooseItem.new = function(player, items, button)
                 player:getComponent(Control):setAction(use)
 
                 Gamestate.pop()
+                Gamestate.update(0)
             end
         end)
         button:setFrame(x + (idx - 1) * TILE_SIZE, y, TILE_SIZE, TILE_SIZE)
@@ -102,12 +105,14 @@ ChooseItem.new = function(player, items, button)
     local keyReleased = function(self, key, scancode)
         if Gamestate.current() == self and key == 'escape' then
             Gamestate.pop()
+            Gamestate.update(0)
         end
     end
 
     local mouseReleased = function(self, mx, my, button, istouch, presses)
         if not frame:contains(mx, my) then
             Gamestate.pop()
+            Gamestate.update(0)
         end
     end
     

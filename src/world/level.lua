@@ -217,7 +217,9 @@ Level.new = function(dungeon, level_idx)
             local projectile = EntityFactory.create(status.proj_id, coord1)            
             self:addEntity(projectile)
             local visual = projectile:getComponent(Visual)
-            local rot = matan2(coord2.x - coord1.x, coord1.y - coord2.y) - math.pi / 2
+            local dxy = coord1 - coord2
+            local rot = matan2(dxy.x, -dxy.y) + math.pi / 2
+
             visual:setRotation(rot)
 
             Timer.tween(duration, projectile, { coord = coord2 }, 'linear', function()

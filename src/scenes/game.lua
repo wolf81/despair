@@ -283,6 +283,10 @@ Game.new = function()
 
     local getDungeon = function(self) return dungeon end
 
+    local mouseReleased = function(self, mx, my, button, istouch, presses)
+        love.mouse.setVisible(true) 
+    end
+
     -- set initial state for "use" buttons, e.g. enable wand button if we have at least 1 wand
     onInventoryChanged(nil)
 
@@ -297,6 +301,7 @@ Game.new = function()
         keyReleased         = keyReleased,
         showOverlay         = showOverlay,
         hideOverlay         = hideOverlay,
+        mouseReleased       = mouseReleased,
         showInventory       = showInventory,
         setActionsEnabled   = setActionsEnabled,
     }, Game)

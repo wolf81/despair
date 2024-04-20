@@ -28,7 +28,7 @@ SelectTarget.new = function(entity)
         local level = game:getDungeon():getLevel()
         local level_coord = level:getCoord(mx, my) 
 
-        if level:isVisible(level_coord) then
+        if level_coord and level:isVisible(level_coord) then
             -- calculate camera coord for mouse position
             coord = vector(mfloor((mx - ox) / TILE_SIZE), mfloor((my - oy) / TILE_SIZE))
         else
@@ -70,7 +70,8 @@ SelectTarget.new = function(entity)
             entity:getComponent(Control):setAction(use)
         end
 
-        Gamestate.pop()        
+        Gamestate.pop()
+        Gamestate.update(0)
     end
 
     -- ability can be a class ability, item (wand), spell ...
@@ -93,6 +94,7 @@ SelectTarget.new = function(entity)
     local keyReleased = function(self, key, scancode)        
         if Gamestate.current() == self and key == 'escape' then
             Gamestate.pop()
+            Gamestate.update(0)
         end
     end
 

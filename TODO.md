@@ -16,11 +16,14 @@
 * feat: Perhaps food should recover a small amount of health (?)
 * feat: consuming a potion should assign a "use" action to player
 * feat: consuming food should assign a "use" action to player
+* feat: override Gamestate.push() & Gamestate.pop() to always call Gamestate.update(0)
+* feat: setters in components should return self, so builder pattern can be used, see Visual setRotation, setOffset
 
 ## BUGS 
 
 * fix: sometimes monsters stay visible under fog of war
 * fix: rendering is buggy if 2 items with same z-index (e.g. tomes) are stacked on top of each other
+* fix: when using keyboard for movement and pressing action buttons, sometimes the mouse pointer disappears
 
 ## LIB
 
