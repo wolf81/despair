@@ -55,7 +55,7 @@ Control.new = function(entity, def, ...)
     end
 
     -- toggle enabled state - if disabled will not respond to input from CPU, keyboard, mouse, ...
-    local setEnabled = function(self, flag) is_enabled = (flag == true) end
+    local setEnabled = function(self, flag) print('set_enabled', flag);  is_enabled = (flag == true) end
 
     -- add action points
     local addAP = function(self, value) ap = ap + value end
@@ -63,11 +63,7 @@ Control.new = function(entity, def, ...)
     -- get current action points
     local getAP = function(self) return ap end
 
-    local setAction = function(self, action_)
-        assert(action == nil, 'action already defined')
-
-        action = action_
-    end
+    local setAction = function(self, action_) action = action_ end
 
     return setmetatable({             
         -- methods

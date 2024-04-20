@@ -115,6 +115,8 @@ Visual.new = function(entity, def, duration)
         return self
     end
 
+    getSize = function(self) return quad_w, quad_h end
+
     return setmetatable({
         -- properties
         alpha       = 1.0,
@@ -123,6 +125,7 @@ Visual.new = function(entity, def, duration)
         draw        = draw,
         fadeIn      = fadeIn,
         fadeOut     = fadeOut,
+        getSize     = getSize,
         colorize    = colorize,
         setShader   = setShader,
         setOffset   = setOffset,

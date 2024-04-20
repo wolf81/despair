@@ -1,7 +1,7 @@
 return {
-	id = 'ef_magic_missile',
+	id = 'ef_bolt_purple',
 	type = 'effect',
 	texture = 'uf_fx',
-	anim = { 81 },
+	anim = { 111 },
 	flags = { 'PR' },
 }
