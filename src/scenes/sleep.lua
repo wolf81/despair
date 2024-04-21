@@ -11,8 +11,8 @@ Sleep.new = function(player)
 
     local background = {
         texture = TextureGenerator.generateColorTexture(
-            WINDOW_W, 
-            WINDOW_H, 
+            WINDOW_W - STATUS_PANEL_W, 
+            WINDOW_H - ACTION_BAR_H, 
             { 0.0, 0.0, 0.0, 1.0 }),
         alpha = 0.0,
     }
