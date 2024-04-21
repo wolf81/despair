@@ -41,6 +41,8 @@ local function getItems(player, type)
     return items
 end
 
+local function sleepPlayer(player) Gamestate.push(Sleep(player)) end
+
 local function showInventory(player) Gamestate.push(Inventory(player)) end
 
 local function showCharacterSheet(player) Gamestate.push(CharSheet(player)) end
@@ -223,7 +225,7 @@ Game.new = function()
 
     local enter = function(self, from)
         local handlers = {
-            ['sleep']       = function() print('try sleep player') end,
+            ['sleep']       = function() sleepPlayer(player) end,
             ['inventory']   = function() showInventory(player) end,
             ['char-sheet']  = function() showCharacterSheet(player) end,
             ['take']        = function() onInventoryChanged(player) end,

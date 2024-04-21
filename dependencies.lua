@@ -33,6 +33,7 @@ ChooseItem          = require 'src.scenes.choose_item'
 CharSheet           = require 'src.scenes.char_sheet'
 Inventory           = require 'src.scenes.inventory'
 Loading             = require 'src.scenes.loading'
+Sleep               = require 'src.scenes.sleep'
 Game                = require 'src.scenes.game'
 
 -- world
