@@ -61,7 +61,7 @@ Health.new = function(entity, def)
     local time = 0
     local update = function(self, dt)
         time = time + dt
-        if time > 5.0 then
+        if time > 5.0 and self:isAlive() then
             time = time - 5.0
             self:heal(1)
         end
