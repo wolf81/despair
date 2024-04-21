@@ -127,8 +127,8 @@ M.generateColorTexture = function(w, h, color)
 
     h = h or w
 
-    -- if no color is defined, create a white color texture
-    color = color or { 1.0, 1.0, 1.0, 1.0 }
+    -- if no color is defined, create a black color texture
+    color = color or { 0.0, 0.0, 0.0, 1.0 }
 
     local canvas = love.graphics.newCanvas(w, h)
     canvas:renderTo(function() 
