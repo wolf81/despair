@@ -29,6 +29,7 @@ PathHelper          = require 'src.helpers.path_helper'
 
 -- scenes
 SelectTarget        = require 'src.scenes.select_target'
+ChangeLevel         = require 'src.scenes.change_level'
 ChooseItem          = require 'src.scenes.choose_item'
 CharSheet           = require 'src.scenes.char_sheet'
 Inventory           = require 'src.scenes.inventory'

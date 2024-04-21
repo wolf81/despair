@@ -3,6 +3,10 @@ local Sleep = {}
 local FADE_DURATION = 0.5
 
 Sleep.new = function(player)
+    -- recover health over time (turns)
+    local health = player:getComponent(Health)
+    assert(health ~= nil, 'missing component: "Health"')
+
     local game = nil
 
     local background = {
