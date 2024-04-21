@@ -228,6 +228,7 @@ Game.new = function()
             ['sleep']       = function() sleepPlayer(player) end,
             ['inventory']   = function() showInventory(player) end,
             ['char-sheet']  = function() showCharacterSheet(player) end,
+            ['change-level'] = function() changeLevel(level_idx, player)
             ['take']        = function() onInventoryChanged(player) end,
             ['put']         = function() onInventoryChanged(player) end,
             ['use-food']    = function() showItems(getItems(player, 'food'), 'use-food') end,

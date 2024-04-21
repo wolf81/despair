@@ -135,6 +135,9 @@ Dungeon.new = function(player)
             error('already at max level, should not have stairs down')
         end
 
+        Signal.emit('change-level', level_idx + 1, player)
+
+        --[[
         local control = player:getComponent(Control)
         control:setEnabled(false)
 
@@ -155,6 +158,7 @@ Dungeon.new = function(player)
                 control:setEnabled(true)
             end)
         end)
+        --]]
     end
 
     local prevLevel = function(self)
@@ -163,6 +167,9 @@ Dungeon.new = function(player)
             return
         end
 
+        Signal.emit('change-level', level_idx - 1, player)
+
+        --[[
         player:getComponent(Control):setEnabled(false)
 
         Timer.tween(0.5, self, { alpha = 0.0 }, 'linear', function()
@@ -179,11 +186,14 @@ Dungeon.new = function(player)
                 player:getComponent(Control):setEnabled(true)
             end)
         end)
+        --]]
     end
 
     local setFrame = function(self, x, y, w, h) frame = Rect(x, y, w, h) end
 
     local getLevel = function(self, idx) return levels[level_idx] end
+
+    local setLevel = function(self, idx)
 
     return setmetatable({
         -- properties
