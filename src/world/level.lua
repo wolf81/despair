@@ -42,7 +42,7 @@ local function newMonsters(map, blocked_coords)
 end
 
 local function onDropItem(self, entity)
-    if entity.coord == self.entry_coord or entity.coord == self.exit_coord then
+    if entity.coord == self.stair_up.coord or entity.coord == self.stair_dn.coord then
         print('it\'s not possible to drop items on stairs')
         return
     end
@@ -418,11 +418,12 @@ Level.new = function(dungeon, level_idx)
     local toWorldPos = function(self, camera_x, camera_y)
         return camera:getWorldCoords(camera_x, camera_y)
     end
+
+    local hasStairs = function(self, coord)
+        return coord == stair_up.coord or coord == stair_dn.coord
+    end
     
     return setmetatable({
-        -- properties
-        entry_coord         = stair_up.coord,
-        exit_coord          = stair_dn.coord,
         -- methods
         draw                = draw,
         exit                = exit,
@@ -430,6 +431,7 @@ Level.new = function(dungeon, level_idx)
         update              = update,
         getSize             = getSize,
         getCoord            = getCoord,
+        hasStairs           = hasStairs,
         isVisible           = isVisible,
         isBlocked           = isBlocked,
         getPlayer           = getPlayer,

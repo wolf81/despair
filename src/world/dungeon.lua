@@ -84,9 +84,7 @@ local function addLoot(level, level_idx, loot_table)
             local y = lrandom(1, level_h)
             local coord = vector(x, y)
 
-            if ((not level:isBlocked(coord)) 
-                and coord ~= level.entry_coord 
-                and control ~= level.exit_coord) then
+            if not level:isBlocked(coord) and not level:hasStairs(coord) then 
                 local item = EntityFactory.create(item_id, coord)
                 print('add ' .. item.name .. ' at coord ' .. tostring(coord))
                 level:addEntity(item)
@@ -126,7 +124,6 @@ Dungeon.new = function(player)
     local enter = function(self)
         level_idx = 1
         levels = { newLevel(self, level_idx, loot_table) }
-        player.coord = levels[level_idx].entry_coord:clone()
         levels[level_idx]:enter(player)
     end
 
