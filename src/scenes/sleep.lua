@@ -1,5 +1,7 @@
 local Sleep = {}
 
+local FADE_DURATION = 0.5
+
 Sleep.new = function(player)
     local game = nil
 
@@ -29,12 +31,12 @@ Sleep.new = function(player)
         game:setActionsEnabled(false)
 
         -- start 'enter sleep' animation
-        Timer.tween(1.0, background, { alpha = 1.0 }, 'linear', function() end)
-
-        Timer.after(1.0, function() 
-            -- start 'exit sleep' animation
-            Timer.tween(1.0, background, { alpha = 0.0 }, 'linear', function() 
-                Gamestate.pop()
+        Timer.tween(FADE_DURATION, background, { alpha = 1.0 }, 'linear', function() 
+            Timer.after(FADE_DURATION, function() 
+                -- start 'exit sleep' animation
+                Timer.tween(1.0, background, { alpha = 0.0 }, 'linear', function() 
+                    Gamestate.pop()
+                end)
             end)
         end)
     end
