@@ -12,18 +12,21 @@ local FADE_DURATION = 0.2
 Overlay.new = function()
     local handle = nil
 
-    local background = TextureGenerator.generateColorTexture(WINDOW_W, WINDOW_H, { 0.0, 0.0, 0.0, 0.5 })
+    local background = {
+        texture = TextureGenerator.generateColorTexture(WINDOW_W, WINDOW_H, { 0.0, 0.0, 0.0, 0.5 }),
+        alpha = 0.0,
+    }
 
     local draw = function(self)
-        love.graphics.setColor(0.0, 0.0, 0.0, self.alpha)
-        love.graphics.draw(background, 0, 0)
+        love.graphics.setColor(0.0, 0.0, 0.0, background.alpha)
+        love.graphics.draw(background.texture, 0, 0)
     end
 
     local fadeIn = function(self)
         if handle then Timer.cancel(handle) end
 
-        handle = Timer.tween(FADE_DURATION, self, { alpha = 1.0 }, 'linear', function()
-            self.alpha = 1.0
+        handle = Timer.tween(FADE_DURATION, background, { alpha = 1.0 }, 'linear', function()
+            background.alpha = 1.0
             handle = nil
         end)
     end
@@ -31,15 +34,13 @@ Overlay.new = function()
     local fadeOut = function(self)
         if handle then Timer.cancel(handle) end
 
-        handle = Timer.tween(FADE_DURATION, self, { alpha = 0.0 }, 'linear', function()
-            self.alpha = 0.0
+        handle = Timer.tween(FADE_DURATION, background, { alpha = 0.0 }, 'linear', function()
+            background.alpha = 0.0
             handle = nil
         end)
     end
 
     return setmetatable({
-        -- properties
-        alpha   = 0.0,
         -- methods
         draw    = draw,
         fadeIn  = fadeIn,

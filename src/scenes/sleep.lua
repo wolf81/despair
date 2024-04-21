@@ -3,10 +3,19 @@ local Sleep = {}
 Sleep.new = function(player)
     local game = nil
 
-    local alpha = 0.0
+    local background = {
+        texture = TextureGenerator.generateColorTexture(
+            WINDOW_W, 
+            WINDOW_H, 
+            { 0.0, 0.0, 0.0, 1.0 }),
+        alpha = 0.0,
+    }
 
     local draw = function(self)
         game:draw()
+
+        love.graphics.setColor(1.0, 1.0, 1.0, background.alpha)
+        love.graphics.draw(background.texture)
     end
 
     local update = function(self, dt)
@@ -17,7 +26,17 @@ Sleep.new = function(player)
         game = from
 
         player:getComponent(Control):setEnabled(false)
-        game:setActionsEnabled(false)        
+        game:setActionsEnabled(false)
+
+        -- start 'enter sleep' animation
+        Timer.tween(1.0, background, { alpha = 1.0 }, 'linear', function() end)
+
+        Timer.after(1.0, function() 
+            -- start 'exit sleep' animation
+            Timer.tween(1.0, background, { alpha = 0.0 }, 'linear', function() 
+                Gamestate.pop()
+            end)
+        end)
     end
 
     local leave = function(self, to)

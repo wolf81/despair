@@ -86,10 +86,6 @@ M.generatePanelTexture = function(w, h)
     local texture = TextureCache:get('uf_interface')
     local quads = QuadCache:get('uf_interface')
 
-    -- adjust width & height to be a power of 8, rounded down
-    -- w = mfloor(w / 8) * 8
-    -- h = mfloor(h / 8) * 8
-
     local offset = 34 * 0 -- offset of 0, 1, 2 to change themes: gray, blue, brown
 
     local color_info = ColorHelper.getColors(texture, quads[326 + offset], true)[1]
@@ -125,10 +121,11 @@ end
 M.generateColorTexture = function(w, h, color)
     assert(w ~= nil, 'missing argument: "w')
 
+    -- if no height is defined, make height equal to width
     h = h or w
 
-    -- if no color is defined, create a black color texture
-    color = color or { 0.0, 0.0, 0.0, 1.0 }
+    -- if no color is defined, generate a white color texture
+    color = color or { 1.0, 1.0, 1.0, 1.0 }
 
     local canvas = love.graphics.newCanvas(w, h)
     canvas:renderTo(function() 
