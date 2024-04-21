@@ -352,8 +352,14 @@ Level.new = function(dungeon, level_idx)
 
     local handles = {}
 
-    local enter = function(self, player)
+    local enter = function(self, player, direction)
         self:addEntity(player)
+
+        if direction == 'up' then
+            player.coord = stair_dn.coord:clone()        
+        else
+            player.coord = stair_up.coord:clone()        
+        end
 
         self:setBlocked(player.coord, true)
 

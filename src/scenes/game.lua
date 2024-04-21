@@ -41,6 +41,8 @@ local function getItems(player, type)
     return items
 end
 
+local function changeLevel(player, level_idx) Gamestate.push(ChangeLevel(player, level_idx)) end
+
 local function sleepPlayer(player) Gamestate.push(Sleep(player)) end
 
 local function showInventory(player) Gamestate.push(Inventory(player)) end
@@ -86,7 +88,7 @@ local function getActionButton(layout, action)
 end
 
 Game.new = function()
-    -- love.math.setRandomSeed(1)
+    love.math.setRandomSeed(5)
 
     local player = EntityFactory.create('pc' .. lrandom(1, 4))
     local status_panel = StatusPanel(player)
@@ -225,17 +227,17 @@ Game.new = function()
 
     local enter = function(self, from)
         local handlers = {
-            ['sleep']       = function() sleepPlayer(player) end,
-            ['inventory']   = function() showInventory(player) end,
-            ['char-sheet']  = function() showCharacterSheet(player) end,
-            ['change-level'] = function() changeLevel(level_idx, player)
-            ['take']        = function() onInventoryChanged(player) end,
-            ['put']         = function() onInventoryChanged(player) end,
-            ['use-food']    = function() showItems(getItems(player, 'food'), 'use-food') end,
-            ['use-wand']    = function() showItems(getItems(player, 'wand'), 'use-wand') end,
-            ['use-scroll']  = function() showItems(getItems(player, 'tome'), 'use-scroll') end,
-            ['use-potion']  = function() showItems(getItems(player, 'potion'), 'use-potion') end,
-            ['destroy']     = function(...) onDestroy(...) end,
+            ['sleep']           = function() sleepPlayer(player) end,
+            ['inventory']       = function() showInventory(player) end,
+            ['char-sheet']      = function() showCharacterSheet(player) end,
+            ['change-level']    = function(...) changeLevel(...) end,
+            ['take']            = function() onInventoryChanged(player) end,
+            ['put']             = function() onInventoryChanged(player) end,
+            ['use-food']        = function() showItems(getItems(player, 'food'), 'use-food') end,
+            ['use-wand']        = function() showItems(getItems(player, 'wand'), 'use-wand') end,
+            ['use-scroll']      = function() showItems(getItems(player, 'tome'), 'use-scroll') end,
+            ['use-potion']      = function() showItems(getItems(player, 'potion'), 'use-potion') end,
+            ['destroy']         = function(...) onDestroy(...) end,
         }
         for action, handler in pairs(handlers) do
             handles[action] = Signal.register(action, handler)
