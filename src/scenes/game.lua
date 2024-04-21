@@ -88,7 +88,7 @@ local function getActionButton(layout, action)
 end
 
 Game.new = function()
-    love.math.setRandomSeed(5)
+    -- love.math.setRandomSeed(5)
 
     local player = EntityFactory.create('pc' .. lrandom(1, 4))
     local status_panel = StatusPanel(player)

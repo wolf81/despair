@@ -69,6 +69,7 @@ DijkstraMap         = require 'src.dijkstra.dijkstra'
 -- actions
 Destroy             = require 'src.actions.destroy'
 Attack              = require 'src.actions.attack'
+Rest                = require 'src.actions.rest'
 Move                = require 'src.actions.move'
 Idle                = require 'src.actions.idle'
 Use                 = require 'src.actions.use'

@@ -34,6 +34,18 @@ Sleep.new = function(player)
         player:getComponent(Control):setEnabled(false)
         game:setActionsEnabled(false)
 
+        -- 8 hours needed to fully sleep
+        -- 30 AP == how many hours?
+        -- 1 turn == 6 seconds (30 AP?)
+        -- 1 move then, could be 5 AP?
+
+        -- 1 minute = 10 turns
+        -- 1 hour = 600 turns
+        -- 8 hours = 4800 turns
+
+        -- movement speed based on 1 round (10 turns)
+        -- so movement speed 30 means 6 tiles in 10 turns about 0.6
+
         -- start 'enter sleep' animation
         Timer.tween(FADE_DURATION, background, { alpha = 1.0 }, 'linear', function() 
             Timer.after(FADE_DURATION, function() 
