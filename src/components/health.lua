@@ -62,11 +62,12 @@ Health.new = function(entity, def)
     local update = function(self, dt) end
 
     return setmetatable({
-        update      = update,
-        getValue    = getValue,
-        isAlive     = isAlive,
+        -- methods
         harm        = harm,
         heal        = heal,
+        update      = update,
+        isAlive     = isAlive,
+        getValue    = getValue,
     }, Health)
 end
 

@@ -10,7 +10,7 @@ local Game = {}
 local CLASS_ACTIONS = {
     ['fighter'] = {  },
     ['cleric']  = { 'cast-spell', 'turn-undead', },
-    ['rogue']   = { 'stealth', 'search',  },
+    ['rogue']   = { 'stealth', 'search', },
     ['mage']    = { 'cast-spell', },
 }
 
@@ -39,9 +39,9 @@ local function getItems(player, type)
     return items
 end
 
-local function changeLevel(player, level_idx) Gamestate.push(ChangeLevel(player, level_idx)) end
+local function onChangeLevel(player, level_idx) Gamestate.push(ChangeLevel(player, level_idx)) end
 
-local function sleepPlayer(player, level) 
+local function onSleepPlayer(player, level) 
     if not level:getScheduler():inCombat() then
         Gamestate.push(Sleep(player)) 
     else
@@ -49,9 +49,9 @@ local function sleepPlayer(player, level)
     end
 end
 
-local function showInventory(player) Gamestate.push(Inventory(player)) end
+local function onShowInventory(player) Gamestate.push(Inventory(player)) end
 
-local function showCharacterSheet(player) Gamestate.push(CharSheet(player)) end
+local function onShowCharacterSheet(player) Gamestate.push(CharSheet(player)) end
 
 local function getLeftActionButtons(player)
     local buttons = {}
@@ -156,7 +156,7 @@ Game.new = function()
     end
 
     local keyReleased = function(self, key, scancode)        
-        if key == 'i' then showInventory(player) end
+        if key == 'i' then Signal.emit('inventory') end
 
         if Gamestate.current() == self and key == 'escape' then
             love.event.quit()
@@ -167,11 +167,10 @@ Game.new = function()
 
     local hideOverlay = function(self) overlay:fadeOut() end
 
-    local showItems = function(items, action)
+    local onShowItems = function(items, action)
         if #items == 0 then return print('empty item list') end
 
-        local button = getActionButton(layout, action)
-        Gamestate.push(ChooseItem(player, items, button))
+        Gamestate.push(ChooseItem(player, items, getActionButton(layout, action)))
     end
 
     local function onDestroy(entity, duration)
@@ -231,17 +230,17 @@ Game.new = function()
 
     local enter = function(self, from)
         local handlers = {
-            ['sleep']           = function() sleepPlayer(player, dungeon:getLevel()) end,
-            ['inventory']       = function() showInventory(player) end,
-            ['char-sheet']      = function() showCharacterSheet(player) end,
-            ['change-level']    = function(...) changeLevel(...) end,
+            ['sleep']           = function() onSleepPlayer(player, dungeon:getLevel()) end,
+            ['inventory']       = function() onShowInventory(player) end,
+            ['char-sheet']      = function() onShowCharacterSheet(player) end,
             ['take']            = function() onInventoryChanged(player) end,
             ['put']             = function() onInventoryChanged(player) end,
-            ['use-food']        = function() showItems(getItems(player, 'food'), 'use-food') end,
-            ['use-wand']        = function() showItems(getItems(player, 'wand'), 'use-wand') end,
-            ['use-scroll']      = function() showItems(getItems(player, 'tome'), 'use-scroll') end,
-            ['use-potion']      = function() showItems(getItems(player, 'potion'), 'use-potion') end,
+            ['use-food']        = function() onShowItems(getItems(player, 'food'), 'use-food') end,
+            ['use-wand']        = function() onShowItems(getItems(player, 'wand'), 'use-wand') end,
+            ['use-scroll']      = function() onShowItems(getItems(player, 'tome'), 'use-scroll') end,
+            ['use-potion']      = function() onShowItems(getItems(player, 'potion'), 'use-potion') end,
             ['destroy']         = function(...) onDestroy(...) end,
+            ['change-level']    = function(...) onChangeLevel(...) end,
         }
         for action, handler in pairs(handlers) do
             handles[action] = Signal.register(action, handler)

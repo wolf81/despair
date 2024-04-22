@@ -80,6 +80,7 @@ Info.new = function(entity, def)
     end
 
     return setmetatable({
+        -- methods
         getName         = getName,
         getDescription  = getDescription,
     }, Info)

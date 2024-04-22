@@ -52,8 +52,8 @@ Camera.new = function(x, y, scale)
     return setmetatable({
         -- methods
         move            = move,
-        shake           = shake,
         draw            = draw,
+        shake           = shake,
         getWorldCoords  = getWorldCoords,
         getCameraCoords = getCameraCoords,
     }, Camera)

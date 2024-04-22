@@ -62,12 +62,13 @@ ImageButton.new = function(image, action, ...)
     local setEnabled = function(self, flag) is_enabled = (flag == true) end
     
     return setmetatable({
-        setEnabled  = setEnabled,
+        -- methods
+        draw        = draw,
+        update      = update,
+        getSize     = getSize,
         getFrame    = getFrame,
         setFrame    = setFrame,
-        getSize     = getSize,
-        update      = update,
-        draw        = draw,
+        setEnabled  = setEnabled,
     }, ImageButton)
 end
 

@@ -26,8 +26,8 @@ Equippable.new = function(entity, def)
 
     return setmetatable({
         -- methods
-        getEffect   = getEffect,
         equip       = equip,
+        getEffect   = getEffect,
     }, Equippable)
 end
 

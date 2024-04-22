@@ -37,9 +37,9 @@ RACES = TableHelper.readOnly({
 })
 
 FONT = love.graphics.newImageFont('gfx/image_font.png', 
-    "1234567890!#$%&*()-+=[]:;\"'<" ..
-    ">,.?/abcdefghijklmnopqrstuvwx" ..
-    "yz ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+    '1234567890!#$%&*()-+=[]:;"\'<' ..
+    '>,.?/abcdefghijklmnopqrstuvwx' ..
+    'yz ABCDEFGHIJKLMNOPQRSTUVWXYZ')
 
 FLAGS = {
     -- effect flags

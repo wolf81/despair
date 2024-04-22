@@ -67,8 +67,8 @@ HealthBar.new = function(entity, def, alpha)
 
     return setmetatable({
         -- methods
-        update  = update,
         draw    = draw,
+        update  = update,
     }, HealthBar)
 end
 

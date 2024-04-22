@@ -304,12 +304,13 @@ Inventory.new = function(player)
     end
 
     return setmetatable({
-        mouseReleased   = mouseReleased,
-        keyReleased     = keyReleased,
-        update          = update,
+        -- methods
+        draw            = draw,
         enter           = enter,
         leave           = leave,
-        draw            = draw,
+        update          = update,
+        keyReleased     = keyReleased,
+        mouseReleased   = mouseReleased,
     }, Inventory)
 end
 

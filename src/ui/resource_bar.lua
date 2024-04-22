@@ -69,6 +69,7 @@ ResourceBar.new = function(entity, type)
     end
 
     return setmetatable({
+        -- methods
         draw        = draw,
         update      = update,
         getSize     = getSize,

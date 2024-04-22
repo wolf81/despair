@@ -85,11 +85,11 @@ Map.new = function(tiles)
 
     return setmetatable({
         -- methods
-        setBlocked  = setBlocked,
-        isBlocked   = isBlocked,
-        getSize     = getSize,
-        getTile     = getTile,
         draw        = draw,
+        getTile     = getTile,
+        getSize     = getSize,
+        isBlocked   = isBlocked,
+        setBlocked  = setBlocked,
     }, Map)
 end
 

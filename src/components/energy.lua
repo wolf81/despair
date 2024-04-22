@@ -41,8 +41,8 @@ Energy.new = function(entity, def)
 
     return setmetatable({
         -- methods
-        eatFood     = eatFood,
         expend      = expend,
+        eatFood     = eatFood,
         getValue    = getValue,
     }, Energy)
 end

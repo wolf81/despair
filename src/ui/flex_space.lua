@@ -16,11 +16,12 @@ FlexSpace.new = function()
 
     local getFrame = function(self) return frame:unpack() end
 
-    return setmetatable({ 
+    return setmetatable({
+        -- methods        
+        draw        = draw,
+        update      = update,
         getFrame    = getFrame,
         setFrame    = setFrame,   
-        update      = update,
-        draw        = draw,
     }, FlexSpace)
 end
 

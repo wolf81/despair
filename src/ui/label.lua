@@ -25,10 +25,11 @@ Label.new = function(text, color)
     local getSize = function(self) return FONT:getWidth(text), FONT:getHeight() end 
     
     return setmetatable({
-        setFrame = setFrame,
-        getSize = getSize,
-        update = update,
-        draw = draw,
+        -- methods
+        draw        = draw,
+        update      = update,
+        getSize     = getSize,
+        setFrame    = setFrame,
     }, Label)
 end
 

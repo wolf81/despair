@@ -22,10 +22,11 @@ Rect.new = function(x, y, w, h)
     local getSize = function(self) return w, h end
 
     return setmetatable({
-        getPosition = getPosition,
-        contains    = contains,
-        getSize     = getSize,
+        -- methods        
         unpack      = unpack,
+        getSize     = getSize,
+        contains    = contains,
+        getPosition = getPosition,
     }, Rect)
 end
 

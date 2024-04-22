@@ -95,8 +95,8 @@ Level.new = function(dungeon, level_idx)
         end
 
         -- about once every 15 turns, randomly spawn a monster if PC is not in combat 
-        if not scheduler:inCombat() and lrandom(1, 15) == 1 then
-            self:addEntity(EncounterGenerator.generate(self, coord, 9, 7))
+        if not scheduler:inCombat() and lrandom(1, 25) == 1 then
+            self:addEntity(EncounterGenerator.generate(self, coord, 10, 8))
         end
 
         -- update the player distance map, to help NPCs find player

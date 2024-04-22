@@ -27,9 +27,9 @@ System.new = function(T)
 
     return setmetatable({
         -- methods
+        update          = update,
         addComponent    = addComponent,
         removeComponent = removeComponent,
-        update          = update,
     }, System)
 end
 

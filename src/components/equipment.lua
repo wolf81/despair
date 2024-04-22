@@ -199,12 +199,12 @@ Equipment.new = function(entity, def)
 
     return setmetatable({
         -- methods
-        tryEquipRanged  = tryEquipRanged,
-        tryEquipMelee   = tryEquipMelee,
-        didEquip        = didEquip,
+        equip           = equip,
         unequip         = unequip,
         getItem         = getItem,
-        equip           = equip,
+        didEquip        = didEquip,
+        tryEquipMelee   = tryEquipMelee,
+        tryEquipRanged  = tryEquipRanged,
     }, Equipment)
 end
 

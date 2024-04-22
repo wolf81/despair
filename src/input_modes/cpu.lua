@@ -115,9 +115,9 @@ Cpu.new = function(entity)
 
     return setmetatable({
         -- methods
-        getAction   = getAction,
-        inCombat    = inCombat,
         update      = update,
+        inCombat    = inCombat,
+        getAction   = getAction,
     }, Cpu)
 end
 
