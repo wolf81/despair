@@ -76,6 +76,34 @@ Control.new = function(entity, def, ...)
     
         local current, total = entity:getComponent(Health):getValue()
         -- TODO: determine recovery rate, recover health every n turns
+        -- recovery rate is the modulus value to recover some health (e.g.: 1)
+
+        -- example 1:
+        --   lets say a player has 8 current health of 10 total, 2 missing
+        --   sleep duration should be normalized to e.g. 48 turns (SLEEP_DURATION)
+        --   so, recover health at turns 24 & 48
+        --   recovery turns: 48 / 2 = 24 (if sleep_turns % 24 == 0 then addHealth(1))
+        --     recovery {
+        --       rate  = 1,
+        --       turns = 24,
+        --     }
+        --
+        -- example 2:
+        --   player: 27 of 40 (13 missing)
+        --   recovery turns: 48 / 13 = 3.69 (approx. 4)
+        --     recovery {
+        --       rate  = 1,
+        --       turns = 4,
+        --     }
+        -- can we improve handling the rounding error (?)
+        -- 
+        -- example 3:
+        --   player: 5 of 8 (3 missing)
+        --   recovery turns: 48 / 3 = 16
+        --     recovery {
+        --       rate  = 1,
+        --       turns = 16,
+        --     }
     end
 
     local isSleeping = function(self, turns) return sleep_turns > 0 end
