@@ -12,9 +12,11 @@ local function newMonsters(map, blocked_coords)
 
     local types = EntityFactory.getIds('npc')
 
+    local map_w, map_h = map:getSize()
+
     while #monsters < 10 do
-        local x = lrandom(map.width)
-        local y = lrandom(map.height)
+        local x = lrandom(map_w)
+        local y = lrandom(map_h)
 
         if not map:isBlocked(x, y) then
             for _, blocked_coord in ipairs(blocked_coords) do
