@@ -1,3 +1,8 @@
+--  Dungeon of Despair
+--
+--  Author: Wolfgang Schreurs
+--  info+despair@wolftrail.net
+
 local ChangeLevel = {}
 
 local FADE_DURATION = 0.5
@@ -8,10 +13,11 @@ local function newBackgroundImage()
     local w = WINDOW_W - STATUS_PANEL_W
     local h = WINDOW_H - ACTION_BAR_H
 
-    local x1 = (w - 48) / 2
-    local x2 = x1 + 48
-    local y1 = (h - 48) / 2
-    local y2 = y1 + 48
+    -- reveal the tile area of PC
+    local x1 = (w - TILE_SIZE) / 2
+    local x2 = x1 + TILE_SIZE
+    local y1 = (h - TILE_SIZE) / 2
+    local y2 = y1 + TILE_SIZE
     
     canvas:renderTo(function()
         love.graphics.setColor(0.0, 0.0, 0.0, 1.0)

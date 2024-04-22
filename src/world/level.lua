@@ -10,13 +10,7 @@ local Level = {}
 local function newMonsters(map, blocked_coords)
     local monsters = {}
 
-    local types = { 
-        'bat', 'blk_widow', 'skeleton', 'skel_mage', 'skel_warr', 
-        'skel_arch', 'cobra', 'rat', 'green_ooze', 'red_drag',
-        'wraith', 'vampire', 'vampire_lord', 'lich', 'dire_cobra',
-        'dire_bat', 'blue_drag', 'orc_shaman', 'orc_warrior', 
-        'purple_jelly', 'blk_widow_mat', 'spectator', 'observer'
-    }
+    local types = EntityFactory.getIds('npc')
 
     while #monsters < 10 do
         local x = lrandom(map.width)

@@ -1,3 +1,8 @@
+--  Dungeon of Despair
+--
+--  Author: Wolfgang Schreurs
+--  info+despair@wolftrail.net
+
 local matan2 = math.atan2
 
 local HALF_PI = math.pi / 2
