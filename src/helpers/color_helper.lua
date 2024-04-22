@@ -3,7 +3,7 @@
 --
 --  Author: Wolfgang Schreurs
 --  info+despair@wolftrail.net
---]]
+]]
 
 local M = {}
 
