@@ -71,7 +71,12 @@ Control.new = function(entity, def, ...)
 
     local setAction = function(self, action_) action = action_ end
 
-    local sleep = function(self, turns) sleep_turns = turns end
+    local sleep = function(self, turns) 
+        sleep_turns = turns 
+    
+        local current, total = entity:getComponent(Health):getValue()
+        -- TODO: determine recovery rate, recover health every n turns
+    end
 
     local isSleeping = function(self, turns) return sleep_turns > 0 end
 
