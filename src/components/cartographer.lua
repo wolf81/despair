@@ -1,9 +1,7 @@
---[[
 --  Dungeon of Despair
 --
 --  Author: Wolfgang Schreurs
 --  info+despair@wolftrail.net
---]]
 
 local mmin, mmax, mfloor = math.min, math.max, math.floor
 
