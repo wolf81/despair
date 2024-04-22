@@ -30,6 +30,8 @@ Turn.new = function(entities, level)
     -- keep track if player performed an action
     local is_waiting_for_player = true
 
+    local turn_duration = TURN_DURATION
+
     local update = function(self)
         -- ensure a player is in play (not destroyed) and turn is not finished
         if (not player) or is_finished then return end
@@ -44,8 +46,13 @@ Turn.new = function(entities, level)
 
             local action = control:getAction(level)
             if action then
+                local is_sleeping = getmetatable(action) == Rest
+
+                -- while the player is sleeping, turns are instant
+                turn_duration = is_sleeping and 0 or TURN_DURATION
+
                 -- always immediately execute player action
-                action:execute(TURN_DURATION)
+                action:execute(turn_duration)
                 is_waiting_for_player = false
 
                 for _, entity in ipairs(entities) do
@@ -59,10 +66,10 @@ Turn.new = function(entities, level)
             for _, entity in ipairs(entities) do
                 local control = entity:getComponent(Control)
                 local action = control:getAction(level)
-                if action then action:execute(TURN_DURATION) end
+                if action then action:execute(turn_duration) end
             end
 
-            Timer.after(TURN_DURATION, function() is_finished = true end)
+            Timer.after(turn_duration, function() is_finished = true end)
         end
     end
 

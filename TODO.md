@@ -18,6 +18,7 @@
 * feat: consuming food should assign a "use" action to player
 * feat: override Gamestate.push() & Gamestate.pop() to always call Gamestate.update(0)
 * feat: setters in components should return self, so builder pattern can be used, see Visual setRotation, setOffset
+* feat: implement ChangeLevel scene, this scene could keep player visible while making area around player dark, to provide a smooth transition between levels
 
 ## BUGS 
 

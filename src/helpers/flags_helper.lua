@@ -1,3 +1,5 @@
+local bband, bbor = bit.band, bit.bor
+
 local M = {}
 
 M.parseFlags = function(flags)
@@ -5,7 +7,7 @@ M.parseFlags = function(flags)
 
     for idx, flag in pairs(flags) do
         if flag == 'PR' then
-            val = bit.bor(val, FLAGS.projectile)
+            val = bbor(val, FLAGS.projectile)
         end
     end
 
@@ -13,7 +15,7 @@ M.parseFlags = function(flags)
 end
 
 M.hasFlag = function(value, flag)
-    return bit.band(value, flag) == flag
+    return bband(value, flag) == flag
 end
 
 return M

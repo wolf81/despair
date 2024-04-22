@@ -36,35 +36,10 @@ Use.new = function(level, entity, item, target)
 
         local effect = usable:getEffect()
         if effect ~= nil then
-            local is_proj = FlagsHelper.hasFlag(effect.flags, FLAGS.projectile)
-            local visual = effect:getComponent(Visual)
-            local eff_w, eff_h = visual:getSize()
-
-            if is_proj then
-                local start_coord = vector(entity.coord.x + 0.5, entity.coord.y + 0.5)
-                local end_coord = vector(target.x + 0.5, target.y + 0.5)
-
-                -- local angle = start_coord:angleTo(end_coord)
-                local dxy = start_coord - end_coord
-                visual:setRotation(math.atan2(dxy.x, -dxy.y) + math.pi / 2)
-                
-                effect.coord = start_coord
-                -- move projectile from start coord to end coord
-                level:addEntity(effect)
-
-                Timer.tween(duration, effect, { coord = end_coord }, 'in-quad', function() 
-                    level:removeEntity(effect)
-                end)
+            if FlagsHelper.hasFlag(effect.flags, FLAGS.projectile) then
+                EffectHelper.showProjectile(effect, level, 0.5, entity.coord, target)
             else
-                local ox, oy = -TILE_SIZE / 2 + eff_w / 2, -TILE_SIZE / 2 + eff_h / 2
-                visual:setOffset(ox, oy)
-
-                effect.coord = target:clone()
-                -- move projectile from start coord to end coord
-                level:addEntity(effect)
-                Timer.after(0.5, function() 
-                    level:removeEntity(effect)
-                end)
+                EffectHelper.showEffect(effect, level, 0.5, target)
             end
         end
 

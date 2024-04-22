@@ -42,7 +42,7 @@ local function newMonsters(map, blocked_coords)
 end
 
 local function onDropItem(self, entity)
-    if entity.coord == self.entry_coord or entity.coord == self.exit_coord then
+    if entity.coord == self.stair_up.coord or entity.coord == self.stair_dn.coord then
         print('it\'s not possible to drop items on stairs')
         return
     end
@@ -80,7 +80,7 @@ Level.new = function(dungeon, level_idx)
     -- generate a Dijkstra map for monsters movement towards / away from player
     local player_dist_map = DijkstraMap(
         tiles,                                      -- 2D tile map
-        function(x, y) return tiles[y][x] ~= 0 end, -- check whether tile is blocked
+        function(x, y) return tiles[y][x] == 1 end, -- check whether tile is blocked
         true,                                       -- include diagonal movement
         ORDINAL_MOVE_FACTOR)                        -- cost of diagonal moves
 
@@ -294,7 +294,7 @@ Level.new = function(dungeon, level_idx)
             system:update(dt, self)
         end
 
-        scheduler:update(dt, self)
+        scheduler:update(self)
     end
 
     local draw = function(self, x, y, w, h)
@@ -352,8 +352,14 @@ Level.new = function(dungeon, level_idx)
 
     local handles = {}
 
-    local enter = function(self, player)
+    local enter = function(self, player, direction)
         self:addEntity(player)
+
+        if direction == 'up' then
+            player.coord = stair_dn.coord:clone()        
+        else
+            player.coord = stair_up.coord:clone()        
+        end
 
         self:setBlocked(player.coord, true)
 
@@ -409,14 +415,11 @@ Level.new = function(dungeon, level_idx)
         return player_dist_map:getDistance(coord.x, coord.y)
     end
 
-    local toWorldPos = function(self, camera_x, camera_y)
-        return camera:getWorldCoords(camera_x, camera_y)
+    local hasStairs = function(self, coord)
+        return coord == stair_up.coord or coord == stair_dn.coord
     end
     
     return setmetatable({
-        -- properties
-        entry_coord         = stair_up.coord,
-        exit_coord          = stair_dn.coord,
         -- methods
         draw                = draw,
         exit                = exit,
@@ -424,11 +427,11 @@ Level.new = function(dungeon, level_idx)
         update              = update,
         getSize             = getSize,
         getCoord            = getCoord,
+        hasStairs           = hasStairs,
         isVisible           = isVisible,
         isBlocked           = isBlocked,
         getPlayer           = getPlayer,
         addEntity           = addEntity,
-        toWorldPos          = toWorldPos,
         setBlocked          = setBlocked,
         shakeCamera         = shakeCamera,
         getEntities         = getEntities,

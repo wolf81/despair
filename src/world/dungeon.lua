@@ -84,9 +84,7 @@ local function addLoot(level, level_idx, loot_table)
             local y = lrandom(1, level_h)
             local coord = vector(x, y)
 
-            if ((not level:isBlocked(coord)) 
-                and coord ~= level.entry_coord 
-                and control ~= level.exit_coord) then
+            if not level:isBlocked(coord) and not level:hasStairs(coord) then 
                 local item = EntityFactory.create(item_id, coord)
                 print('add ' .. item.name .. ' at coord ' .. tostring(coord))
                 level:addEntity(item)
@@ -126,7 +124,6 @@ Dungeon.new = function(player)
     local enter = function(self)
         level_idx = 1
         levels = { newLevel(self, level_idx, loot_table) }
-        player.coord = levels[level_idx].entry_coord:clone()
         levels[level_idx]:enter(player)
     end
 
@@ -135,26 +132,7 @@ Dungeon.new = function(player)
             error('already at max level, should not have stairs down')
         end
 
-        local control = player:getComponent(Control)
-        control:setEnabled(false)
-
-        Timer.tween(0.5, self, { alpha = 0.0 }, 'linear', function()
-            levels[level_idx]:exit(player)
-            -- proceed to next level, generating a new level if needed
-            level_idx = level_idx + 1
-            if level_idx > #levels then
-                table.insert(levels, newLevel(self, level_idx, loot_table))
-            end
-
-            local level = levels[level_idx]
-            player.coord = level.entry_coord:clone()
-            level:enter(player)
-
-            Timer.tween(0.5, self, { alpha = 1.0 }, 'linear', function()
-                self.alpha = 1.0
-                control:setEnabled(true)
-            end)
-        end)
+        Signal.emit('change-level', player, level_idx + 1)
     end
 
     local prevLevel = function(self)
@@ -163,27 +141,24 @@ Dungeon.new = function(player)
             return
         end
 
-        player:getComponent(Control):setEnabled(false)
-
-        Timer.tween(0.5, self, { alpha = 0.0 }, 'linear', function()
-            levels[level_idx]:exit(player)
-            -- proceed to previous level
-            level_idx = level_idx - 1
-            local level = levels[level_idx]
-            player.coord = level.exit_coord:clone()
-            level:enter(player)
-
-            Timer.tween(0.5, self, { alpha = 1.0 }, 'linear', function()
-                self.alpha = 1.0
-
-                player:getComponent(Control):setEnabled(true)
-            end)
-        end)
+        Signal.emit('change-level', player, level_idx - 1)
     end
 
     local setFrame = function(self, x, y, w, h) frame = Rect(x, y, w, h) end
 
     local getLevel = function(self, idx) return levels[level_idx] end
+
+    local setLevel = function(self, level_idx_)
+        local direction = level_idx_ < level_idx and 'up' or 'down'
+
+        levels[level_idx]:exit(player)
+
+        level_idx = level_idx_        
+        if level_idx > #levels then
+            table.insert(levels, newLevel(self, level_idx, loot_table))
+        end
+        levels[level_idx]:enter(player, direction)
+    end
 
     return setmetatable({
         -- properties
@@ -194,6 +169,8 @@ Dungeon.new = function(player)
         update          = update,
         setFrame        = setFrame,
         getLevel        = getLevel,
+        setLevel        = setLevel,
+        -- TODO: call these methods from Level directly?
         nextLevel       = nextLevel,
         prevLevel       = prevLevel,
     }, Dungeon)

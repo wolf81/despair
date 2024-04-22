@@ -5,7 +5,11 @@
 --  info+despair@wolftrail.net
 --]]
 
+local mfloor = math.floor
+
 local Control = {}
+
+local SLEEP_TURNS = 48 -- represents 4.800 actual turns, but compressed by factor 100
 
 Control.new = function(entity, def, ...)
     local input_modes = {...}
@@ -13,6 +17,8 @@ Control.new = function(entity, def, ...)
 
     -- whether to respond to input from any of the input modes
     local is_enabled = true
+
+    local sleep_turns, recovery = 0, {}
 
     -- the current action to perform
     local action = nil
@@ -32,47 +38,86 @@ Control.new = function(entity, def, ...)
     local getAction = function(self, level)
         if not is_enabled then return false end
 
-        if action == nil or action:isFinished() then
+        if action == nil or action:isFinished() then            
             local health = entity:getComponent(Health)
             -- if a played has died, will always return Destroy, regardless of current AP
             if not health:isAlive() then
                 action = Destroy(level, entity)
                 ap = ap - action:getAP()                
             elseif ap > 0 then
-                -- find the first action from the input modes list
-                for _, input_mode in ipairs(input_modes) do
-                    action = input_mode:getAction(level, ap)                
-                    if action then 
-                        ap = ap - action:getAP()
-                        break 
+                if sleep_turns > 0 then
+                    action = Rest(level, entity)
+
+                    local gain = recovery[sleep_turns]
+                    print((SLEEP_TURNS - sleep_turns), 'gain', gain)
+                    if gain > 0 then health:heal(gain) end
+                    
+                    sleep_turns = sleep_turns - 1
+                else
+                    -- find the first action from the input modes list
+                    for _, input_mode in ipairs(input_modes) do
+                        action = input_mode:getAction(level, ap)                
+                        if action then 
+                            ap = ap - action:getAP()
+                            break 
+                        end
                     end
                 end
             end
-
         end
 
         return action
     end
 
     -- toggle enabled state - if disabled will not respond to input from CPU, keyboard, mouse, ...
-    local setEnabled = function(self, flag) print('set_enabled', flag);  is_enabled = (flag == true) end
+    local setEnabled = function(self, flag) is_enabled = (flag == true) end
 
     -- add action points
-    local addAP = function(self, value) ap = ap + value end
+    local addAP = function(self, ap_) ap = ap + ap_ end
 
     -- get current action points
     local getAP = function(self) return ap end
 
     local setAction = function(self, action_) action = action_ end
 
+    -- forces the related entity to return Rest actions for a certain amount of turns
+    -- sleep will be interrupted when an entity is harmed, e.g. by an attack
+    -- at the same time, sleeping will allow health recovery over time
+    local sleep = function(self, turns) 
+        sleep_turns = turns or SLEEP_TURNS
+    
+        local current, total = entity:getComponent(Health):getValue()
+        local missing = total - current
+        local rate = mfloor(sleep_turns / missing)
+
+        -- generate a health recovery table, that indicates, per turn, how much health is recovered
+        recovery = {}
+        for i = 1, sleep_turns do
+            local gain = 0
+
+            if i % rate == 0 then gain = gain + 1 end
+
+            table.insert(recovery, gain)
+        end
+    end
+
+    -- check whether the entity is sleeping
+    local isSleeping = function(self, turns) return sleep_turns > 0 end
+
+    -- interrupt sleep, if the entity is sleeping, otherwise nothing happens
+    local awake = function(self) sleep_turns = 0 end
+
     return setmetatable({             
         -- methods
+        isSleeping  = isSleeping,
         setEnabled  = setEnabled,
         setAction   = setAction,
         getAction   = getAction,
         update      = update,
         addAP       = addAP,
         getAP       = getAP,
+        sleep       = sleep,
+        awake       = awake,
     }, Control)
 end
 

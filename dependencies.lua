@@ -29,10 +29,12 @@ PathHelper          = require 'src.helpers.path_helper'
 
 -- scenes
 SelectTarget        = require 'src.scenes.select_target'
+ChangeLevel         = require 'src.scenes.change_level'
 ChooseItem          = require 'src.scenes.choose_item'
 CharSheet           = require 'src.scenes.char_sheet'
 Inventory           = require 'src.scenes.inventory'
 Loading             = require 'src.scenes.loading'
+Sleep               = require 'src.scenes.sleep'
 Game                = require 'src.scenes.game'
 
 -- world
@@ -67,6 +69,7 @@ DijkstraMap         = require 'src.dijkstra.dijkstra'
 -- actions
 Destroy             = require 'src.actions.destroy'
 Attack              = require 'src.actions.attack'
+Rest                = require 'src.actions.rest'
 Move                = require 'src.actions.move'
 Idle                = require 'src.actions.idle'
 Use                 = require 'src.actions.use'

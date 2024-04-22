@@ -42,7 +42,11 @@ Attack.new = function(level, entity, target)
 
         local effect = getMainhandWeaponEffect(entity)
         if effect then
-            EffectHelper.showEffect(effect, level, duration, target.coord, entity.coord)
+            if FlagsHelper.hasFlag(effect.flags, FLAGS.projectile) then
+                EffectHelper.showProjectile(effect, level, duration, entity.coord, target.coord)
+            else
+                EffectHelper.showEffect(effect, level, duration, target.coord)
+            end
         end
 
         local is_hit, is_crit = false, false
