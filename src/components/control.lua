@@ -14,6 +14,8 @@ Control.new = function(entity, def, ...)
     -- whether to respond to input from any of the input modes
     local is_enabled = true
 
+    local sleep_turns = 0
+
     -- the current action to perform
     local action = nil
 
@@ -32,23 +34,27 @@ Control.new = function(entity, def, ...)
     local getAction = function(self, level)
         if not is_enabled then return false end
 
-        if action == nil or action:isFinished() then
+        if action == nil or action:isFinished() then            
             local health = entity:getComponent(Health)
             -- if a played has died, will always return Destroy, regardless of current AP
             if not health:isAlive() then
                 action = Destroy(level, entity)
                 ap = ap - action:getAP()                
             elseif ap > 0 then
-                -- find the first action from the input modes list
-                for _, input_mode in ipairs(input_modes) do
-                    action = input_mode:getAction(level, ap)                
-                    if action then 
-                        ap = ap - action:getAP()
-                        break 
+                if sleep_turns > 0 then
+                    action = Rest(level, entity)
+                    sleep_turns = sleep_turns - 1
+                else
+                    -- find the first action from the input modes list
+                    for _, input_mode in ipairs(input_modes) do
+                        action = input_mode:getAction(level, ap)                
+                        if action then 
+                            ap = ap - action:getAP()
+                            break 
+                        end
                     end
                 end
             end
-
         end
 
         return action
@@ -65,14 +71,23 @@ Control.new = function(entity, def, ...)
 
     local setAction = function(self, action_) action = action_ end
 
+    local sleep = function(self, turns) sleep_turns = turns end
+
+    local isSleeping = function(self, turns) return sleep_turns > 0 end
+
+    local awake = function(self) sleep_turns = 0 end
+
     return setmetatable({             
         -- methods
+        isSleeping  = isSleeping,
         setEnabled  = setEnabled,
         setAction   = setAction,
         getAction   = getAction,
         update      = update,
         addAP       = addAP,
         getAP       = getAP,
+        sleep       = sleep,
+        awake       = awake,
     }, Control)
 end
 

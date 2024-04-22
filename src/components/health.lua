@@ -32,7 +32,10 @@ Health.new = function(entity, def)
     -- reduce health by amount of hitpoints
     -- returns current & total health
     local harm = function(self, hitpoints) 
-        current = mmax(current - hitpoints, 0) 
+        current = mmax(current - hitpoints, 0)
+
+        entity:getComponent(Control):awake()
+
         return current, total
     end
 

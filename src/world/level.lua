@@ -294,7 +294,7 @@ Level.new = function(dungeon, level_idx)
             system:update(dt, self)
         end
 
-        scheduler:update(dt, self)
+        scheduler:update(self)
     end
 
     local draw = function(self, x, y, w, h)

@@ -7,7 +7,7 @@ Sleep.new = function(player)
     local health = player:getComponent(Health)
     assert(health ~= nil, 'missing component: "Health"')
 
-    local game = nil
+    local game, did_enter_sleep, did_finish_sleep = nil, false, false
 
     local background = {
         texture = TextureGenerator.generateColorTexture(
@@ -26,12 +26,23 @@ Sleep.new = function(player)
 
     local update = function(self, dt)
         game:update(dt)
+
+        if did_finish_sleep or not did_enter_sleep then return end
+
+        if not player:getComponent(Control):isSleeping() then
+            did_finish_sleep = true
+            -- start 'exit sleep' animation
+            Timer.tween(FADE_DURATION, background, { alpha = 0.0 }, 'linear', function() 
+                Gamestate.pop()
+            end)
+        end
     end
 
     local enter = function(self, from)
         game = from
 
-        player:getComponent(Control):setEnabled(false)
+        local control = player:getComponent(Control)
+        control:setEnabled(false)
         game:setActionsEnabled(false)
 
         -- 8 hours needed to fully sleep
@@ -46,13 +57,16 @@ Sleep.new = function(player)
         -- movement speed based on 1 round (10 turns)
         -- so movement speed 30 means 6 tiles in 10 turns about 0.6
 
+        -- we need to compress turns, cause waiting 4800 turns is too long
+        -- maybe divide by 100, increase monster spawn chance by 100 (?)
+        local sleep_turns = 48
+
         -- start 'enter sleep' animation
         Timer.tween(FADE_DURATION, background, { alpha = 1.0 }, 'linear', function() 
             Timer.after(FADE_DURATION, function() 
-                -- start 'exit sleep' animation
-                Timer.tween(1.0, background, { alpha = 0.0 }, 'linear', function() 
-                    Gamestate.pop()
-                end)
+                control:sleep(sleep_turns)
+                control:setEnabled(true)
+                did_enter_sleep = true
             end)
         end)
     end
