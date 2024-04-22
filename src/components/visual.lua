@@ -23,6 +23,8 @@ Visual.new = function(entity, def, duration)
     local angle = 0
     local ox, oy = 0, 0
 
+    local fade = { alpha = 0.0 }
+
     local _, _, quad_w, quad_h = quads[1]:getViewport()
 
     local anim_handle = nil
@@ -37,7 +39,7 @@ Visual.new = function(entity, def, duration)
             end
         end
 
-        love.graphics.setColor(1.0, 1.0, 1.0, self.alpha)
+        love.graphics.setColor(1.0, 1.0, 1.0, fade.alpha)
         local pos = entity.coord * TILE_SIZE
 
         anim:draw(texture, quads, pos, angle, ox, oy)
@@ -46,7 +48,7 @@ Visual.new = function(entity, def, duration)
         love.graphics.setShader()
 
         local health_bar = entity:getComponent(HealthBar)
-        if health_bar then health_bar:draw(self.alpha) end
+        if health_bar then health_bar:draw(fade.alpha) end
     end
 
     colorize = function(self, duration)
@@ -84,21 +86,21 @@ Visual.new = function(entity, def, duration)
     end
 
     fadeOut = function(self, duration)
-        if self.alpha == 0.0 then return end
+        if fade.alpha == 0.0 then return end
 
         if anim_handle then Timer.cancel(anim_handle) end
 
-        anim_handle = Timer.tween(duration, self, { alpha = 0.0 }, 'linear', function()
+        anim_handle = Timer.tween(duration, fade, { alpha = 0.0 }, 'linear', function()
             anim_handle = nil 
         end)
     end
 
     fadeIn = function(self, duration)
-        if self.alpha == 1.0 then return end
+        if fade.alpha == 1.0 then return end
 
         if anim_handle then Timer.cancel(anim_handle) end
 
-        anim_handle = Timer.tween(duration, self, { alpha = 1.0 }, 'linear', function() 
+        anim_handle = Timer.tween(duration, fade, { alpha = 1.0 }, 'linear', function() 
             anim_handle = nil
         end)
     end
@@ -116,8 +118,6 @@ Visual.new = function(entity, def, duration)
     getSize = function(self) return quad_w, quad_h end
 
     return setmetatable({
-        -- properties
-        alpha       = 1.0,
         -- methods
         update      = update,
         draw        = draw,

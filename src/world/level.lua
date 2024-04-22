@@ -10,17 +10,13 @@ local Level = {}
 local function newMonsters(map, blocked_coords)
     local monsters = {}
 
-    local types = { 
-        'bat', 'blk_widow', 'skeleton', 'skel_mage', 'skel_warr', 
-        'skel_arch', 'cobra', 'rat', 'green_ooze', 'red_drag',
-        'wraith', 'vampire', 'vampire_lord', 'lich', 'dire_cobra',
-        'dire_bat', 'blue_drag', 'orc_shaman', 'orc_warrior', 
-        'purple_jelly', 'blk_widow_mat', 'spectator', 'observer'
-    }
+    local types = EntityFactory.getIds('npc')
+
+    local map_w, map_h = map:getSize()
 
     while #monsters < 10 do
-        local x = lrandom(map.width)
-        local y = lrandom(map.height)
+        local x = lrandom(map_w)
+        local y = lrandom(map_h)
 
         if not map:isBlocked(x, y) then
             for _, blocked_coord in ipairs(blocked_coords) do
@@ -40,7 +36,7 @@ local function newMonsters(map, blocked_coords)
 end
 
 local function onDropItem(self, entity)
-    if entity.coord == self.stair_up.coord or entity.coord == self.stair_dn.coord then
+    if self:hasStairs(entity.coord) then
         print('it\'s not possible to drop items on stairs')
         return
     end

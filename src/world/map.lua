@@ -40,8 +40,8 @@ Map.new = function(tiles)
 
         local texture = TextureCache:get('uf_terrain')
         local quads = QuadCache:get('uf_terrain')
-        for y = 1, self.height do
-            for x = 1, self.width do
+        for y = 1, height do
+            for x = 1, width do
                 local tile_id = tiles[y][x]
 
                 if tile_id == math.huge then goto continue end
@@ -84,9 +84,6 @@ Map.new = function(tiles)
     end
 
     return setmetatable({
-        -- properties
-        width       = width,
-        height      = height,
         -- methods
         setBlocked  = setBlocked,
         isBlocked   = isBlocked,

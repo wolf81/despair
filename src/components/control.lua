@@ -47,9 +47,11 @@ Control.new = function(entity, def, ...)
                     action = Rest(level, entity)
 
                     local gain = recovery[sleep_turns]
-                    print((SLEEP_TURNS - sleep_turns), 'gain', gain)
                     if gain > 0 then health:heal(gain) end
-                    
+
+                    -- sleeping expends a bit of energy every couple of turns
+                    if sleep_turns % 3 == 0 then entity:getComponent(Energy):expend(1) end                                    
+
                     sleep_turns = sleep_turns - 1
                 else
                     -- find the first action from the input modes list

@@ -28,11 +28,12 @@ Turn.new = function(entities, level)
     -- keep track if player performed an action
     local is_waiting_for_player = true
 
+    -- assume default turn duration, unless player is sleeping
     local turn_duration = TURN_DURATION
 
     local update = function(self)
         -- ensure a player is in play (not destroyed) and turn is not finished
-        if (not player) or is_finished then return end
+        if not player or is_finished then return end
 
         -- ensure the player always performs the first action
         if is_waiting_for_player then
@@ -44,15 +45,15 @@ Turn.new = function(entities, level)
 
             local action = control:getAction(level)
             if action then
+                -- when sleeping, turns are instant, since PC will not be seeing anything
                 local is_sleeping = getmetatable(action) == Rest
-
-                -- while the player is sleeping, turns are instant
                 turn_duration = is_sleeping and 0 or TURN_DURATION
 
                 -- always immediately execute player action
                 action:execute(turn_duration)
                 is_waiting_for_player = false
 
+                -- give all NPCs action points based on action points used by PC
                 for _, entity in ipairs(entities) do
                     entity:getComponent(Control):addAP(action:getAP())
                 end
