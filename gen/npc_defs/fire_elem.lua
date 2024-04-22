@@ -1,0 +1,15 @@
+return {
+	id = 'fire_elem',
+	type = 'npc',
+	name = 'fire elemental',
+	hd = '1d8',
+	ac = 12,
+	class = '',
+	flags = { '' },
+	speed = 30,
+	equip = { 'bite' },
+	texture = 'uf_heroes',
+	anim = { 449, 450, 451, 452 },
+	morale = 0,
+	special = { '' },
+}

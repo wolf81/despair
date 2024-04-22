@@ -38,7 +38,7 @@ blue_drag     |npc   |azure dragon          |1d12  |12  |       |       |30     
 green_drag    |npc   |emerald dragon        |1d12  |12  |       |       |30     |bite     |uf_heroes |357,358,359,360 |        |         |
 void_elem     |npc   |void elemental        |1d8   |12  |       |       |30     |bite     |uf_heroes |441,442,443,444 |        |         |
 water_elem    |npc   |water elemental       |1d8   |12  |       |       |30     |bite     |uf_heroes |445,446,447,448 |        |         |
-file_elem     |npc   |fire elemental        |1d8   |12  |       |       |30     |bite     |uf_heroes |449,450,451,452 |        |         |
+fire_elem     |npc   |fire elemental        |1d8   |12  |       |       |30     |bite     |uf_heroes |449,450,451,452 |        |         |
 air_elem      |npc   |air elemental         |1d8   |12  |       |       |30     |bite     |uf_heroes |453,454,455,456 |        |         |
 earth_elem    |npc   |earth elemental       |1d8   |12  |       |       |30     |bite     |uf_heroes |457,458,459,460 |        |         |
 green_ooze    |npc   |green ooze            |1d8   |12  |       |       |30     |bite     |uf_heroes |469,470,471,472 |        |         |
