@@ -13,6 +13,9 @@ Sleep.new = function(player)
     local health = player:getComponent(Health)
     assert(health ~= nil, 'missing component: "Health"')
 
+    local control = player:getComponent(Control)
+    assert(control ~= nil, 'missing component: "Control"')
+
     local game, did_enter_sleep, did_finish_sleep = nil, false, false
 
     local background = {
@@ -47,13 +50,8 @@ Sleep.new = function(player)
     local enter = function(self, from)
         game = from
 
-
-        local control = player:getComponent(Control)
         control:setEnabled(false)
         game:setActionsEnabled(false)
-
-        local sleep_turns = 48
-        control:sleep(sleep_turns)
 
         -- 8 hours needed to fully sleep
         -- 30 AP == how many hours?
@@ -69,6 +67,9 @@ Sleep.new = function(player)
 
         -- we need to compress turns, cause waiting 4800 turns is too long
         -- maybe divide by 100, increase monster spawn chance by 100 (?)
+        
+        local sleep_turns = 48
+        control:sleep(sleep_turns)
 
         local missing = getMissingHealth(player)        
 
@@ -80,7 +81,7 @@ Sleep.new = function(player)
     end
 
     local leave = function(self, to)
-        player:getComponent(Control):setEnabled(true)
+        control:setEnabled(true)
         game:setActionsEnabled(true)
 
         game = nil
