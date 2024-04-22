@@ -26,6 +26,7 @@ lich          |npc   |lich                  |1d8   |12  |       |       |30     
 observer      |npc   |observer              |1d8   |12  |       |       |30     |bite     |uf_heroes |273,274,275,276 |        |         |
 spectator     |npc   |spectator             |1d8   |12  |       |       |30     |bite     |uf_heroes |277,278,279,280 |        |         |
 dryad         |npc   |dryad                 |1d8   |12  |       |       |30     |bite     |uf_heroes |293,294,295,296 |        |         |
+sprite        |npc   |sprite                |1d8   |12  |       |       |30     |bite     |uf_heroes |297,298,299,300 |        |         |
 red_abishai   |npc   |red abishai           |1d8   |12  |       |       |30     |bite     |uf_heroes |301,302,303,304 |        |         |
 blue_abishai  |npc   |blue abishai          |1d8   |12  |       |       |30     |bite     |uf_heroes |305,306,307,308 |        |         |
 green_abishai |npc   |green abishai         |1d8   |12  |       |       |30     |bite     |uf_heroes |309,310,311,312 |        |         |
