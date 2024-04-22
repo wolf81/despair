@@ -70,16 +70,19 @@ Control.new = function(entity, def, ...)
     end
 
     -- toggle enabled state - if disabled will not respond to input from CPU, keyboard, mouse, ...
-    local setEnabled = function(self, flag) print('set_enabled', flag);  is_enabled = (flag == true) end
+    local setEnabled = function(self, flag) is_enabled = (flag == true) end
 
     -- add action points
-    local addAP = function(self, value) ap = ap + value end
+    local addAP = function(self, ap_) ap = ap + ap_ end
 
     -- get current action points
     local getAP = function(self) return ap end
 
     local setAction = function(self, action_) action = action_ end
 
+    -- forces the related entity to return Rest actions for a certain amount of turns
+    -- sleep will be interrupted when an entity is harmed, e.g. by an attack
+    -- at the same time, sleeping will allow health recovery over time
     local sleep = function(self, turns) 
         sleep_turns = turns or SLEEP_TURNS
     
@@ -98,8 +101,10 @@ Control.new = function(entity, def, ...)
         end
     end
 
+    -- check whether the entity is sleeping
     local isSleeping = function(self, turns) return sleep_turns > 0 end
 
+    -- interrupt sleep, if the entity is sleeping, otherwise nothing happens
     local awake = function(self) sleep_turns = 0 end
 
     return setmetatable({             
