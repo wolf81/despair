@@ -14,13 +14,22 @@ local DIRS = {
     Direction.W, Direction.SE,
 }
 
+local function isBlocked(level, coord)
+    if level:isBlocked(coord) or level:hasStairs(coord) then return true end
+
+    local entities = level:getEntities(coord)
+    for _, entity in ipairs(entities) do
+        if entity:getComponent(Control) then return true end
+    end
+
+    return false
+end
+
 local function getRandomDirection(level, coord)
     local dirs = lume.shuffle(DIRS)
 
     for _, dir in ipairs(dirs) do
-        local next_coord = coord + dir
-        local is_blocked = level:isBlocked(next_coord) or (#level:getEntities(next_coord) > 0) 
-        if not is_blocked then return dir end
+        if not isBlocked(level, coord + dir) then return dir end
     end
 
     return Direction.NONE
@@ -31,9 +40,8 @@ local function getDirectionToPlayer(level, coord)
 
     for _, next_dir in ipairs(DIRS) do
         local next_coord = coord + next_dir
-        local is_blocked = #level:getEntities(next_coord) > 0
         local next_dist = level:getPlayerDistance(next_coord)
-        if not is_blocked and next_dist < dist then
+        if not isBlocked(level, next_coord) and next_dist < dist then
             dist = next_dist
             dir = next_dir
         end
@@ -88,7 +96,7 @@ Cpu.new = function(entity)
 
             -- add next coord to path if not blocked, otherwise add current coord to path
             local next_coord = coord + direction
-            if not level:isBlocked(next_coord) and #level:getEntities(next_coord) == 0 then
+            if not isBlocked(level, next_coord) then
                 table.insert(path, next_coord)
                 ap = ap - ActionHelper.getMoveCost(entity, next_coord)
                 coord = next_coord

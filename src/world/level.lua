@@ -36,7 +36,7 @@ local function newMonsters(map, blocked_coords)
 end
 
 local function onDropItem(self, entity)
-    if entity.coord == self.stair_up.coord or entity.coord == self.stair_dn.coord then
+    if self:hasStairs(entity.coord) then
         print('it\'s not possible to drop items on stairs')
         return
     end
