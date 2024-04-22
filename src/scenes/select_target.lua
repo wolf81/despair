@@ -95,6 +95,7 @@ SelectTarget.new = function(entity)
     end
 
     return setmetatable({
+        -- methods
         mouseReleased   = mouseReleased,
         keyReleased     = keyReleased,
         setFrame        = setFrame,

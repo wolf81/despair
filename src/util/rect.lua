@@ -22,6 +22,7 @@ Rect.new = function(x, y, w, h)
     local getSize = function(self) return w, h end
 
     return setmetatable({
+        -- methods        
         getPosition = getPosition,
         contains    = contains,
         getSize     = getSize,

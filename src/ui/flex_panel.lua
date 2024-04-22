@@ -35,6 +35,7 @@ FlexPanel.new = function()
     local getSize = function(self) return frame:getSize() end
 
     return setmetatable({
+        -- methods
         setFrame = setFrame,
         getSize = getSize,
         update  = update,

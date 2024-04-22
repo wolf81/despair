@@ -243,6 +243,7 @@ Loading.new = function()
     end
 
     return setmetatable({
+        -- methods
         keyreleased = keyReleased,
         update      = update,
         enter       = enter,

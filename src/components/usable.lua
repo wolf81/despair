@@ -79,6 +79,7 @@ Usable.new = function(entity, def)
     local requiresTarget = function(self) return entity.type == 'wand' end
 
     return setmetatable({
+        -- methods
         requiresTarget  = requiresTarget,
         getEffect       = getEffect,
         expend          = expend,

@@ -16,7 +16,8 @@ FlexSpace.new = function()
 
     local getFrame = function(self) return frame:unpack() end
 
-    return setmetatable({ 
+    return setmetatable({
+        -- methods        
         getFrame    = getFrame,
         setFrame    = setFrame,   
         update      = update,

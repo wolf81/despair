@@ -304,6 +304,7 @@ Inventory.new = function(player)
     end
 
     return setmetatable({
+        -- methods
         mouseReleased   = mouseReleased,
         keyReleased     = keyReleased,
         update          = update,
