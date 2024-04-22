@@ -31,6 +31,7 @@ local function generateLootTable()
     end
 
     for _, id in ipairs(EntityFactory.getIds('weapon')) do
+        
         -- TODO: should have 'natural weapon' flag for items that should not be loot
         if id ~= 'bite' and id ~= 'unarmed' then
             loot_table[id] = 2
