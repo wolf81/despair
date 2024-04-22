@@ -70,9 +70,12 @@ Keyboard.new = function(entity)
         return Move(level, entity, next_coord)
     end
 
+    local inCombat = function(self) return false end
+
     return setmetatable({
         -- methods
         getAction   = getAction,
+        inCombat    = inCombat,
         update      = update,
     }, Keyboard)
 end

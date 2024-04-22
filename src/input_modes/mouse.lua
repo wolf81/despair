@@ -111,9 +111,12 @@ Mouse.new = function(entity)
         return nil
     end
 
+    local inCombat = function(self) return false end
+
     return setmetatable({
         -- methods
         getAction   = getAction,
+        inCombat    = inCombat,
         update      = update,
     }, Mouse)
 end

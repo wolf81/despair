@@ -31,6 +31,9 @@ Turn.new = function(entities, level)
     -- assume default turn duration, unless player is sleeping
     local turn_duration = TURN_DURATION
 
+    -- keep track if the entities are in combat in current turn
+    local in_combat = false
+
     local update = function(self)
         -- ensure a player is in play (not destroyed) and turn is not finished
         if not player or is_finished then return end
@@ -64,6 +67,8 @@ Turn.new = function(entities, level)
         if not is_waiting_for_player then
             for _, entity in ipairs(entities) do
                 local control = entity:getComponent(Control)
+                if control:inCombat() then in_combat = true end
+
                 local action = control:getAction(level)
                 if action then action:execute(turn_duration) end
             end
@@ -76,11 +81,14 @@ Turn.new = function(entities, level)
 
     local isFinished = function(self) return is_finished end
 
+    local inCombat = function(self) return in_combat end
+
     return setmetatable({
         -- methods
         update      = update,
-        isFinished  = isFinished,
         getIndex    = getIndex,
+        inCombat    = inCombat,
+        isFinished  = isFinished,
     }, Turn)
 end
 

@@ -41,7 +41,13 @@ end
 
 local function changeLevel(player, level_idx) Gamestate.push(ChangeLevel(player, level_idx)) end
 
-local function sleepPlayer(player) Gamestate.push(Sleep(player)) end
+local function sleepPlayer(player, level) 
+    if not level:getScheduler():inCombat() then
+        Gamestate.push(Sleep(player)) 
+    else
+        print('can\'t sleep while enemies are nearby')
+    end
+end
 
 local function showInventory(player) Gamestate.push(Inventory(player)) end
 
@@ -225,7 +231,7 @@ Game.new = function()
 
     local enter = function(self, from)
         local handlers = {
-            ['sleep']           = function() sleepPlayer(player) end,
+            ['sleep']           = function() sleepPlayer(player, dungeon:getLevel()) end,
             ['inventory']       = function() showInventory(player) end,
             ['char-sheet']      = function() showCharacterSheet(player) end,
             ['change-level']    = function(...) changeLevel(...) end,

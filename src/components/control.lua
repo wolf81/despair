@@ -104,6 +104,18 @@ Control.new = function(entity, def, ...)
     -- check whether the entity is sleeping
     local isSleeping = function(self, turns) return sleep_turns > 0 end
 
+    -- check whether the entity is engaged in combat, which for PC will never be true
+    -- for NPC it will be true if the NPC sees player and starts chasing player
+    local inCombat = function(self)
+        if entity:getComponent(Health):isAlive() then
+            for _, input_mode in ipairs(input_modes) do
+                if input_mode:inCombat() then return true end
+            end
+        end
+
+        return false
+    end
+
     -- interrupt sleep, if the entity is sleeping, otherwise nothing happens
     local awake = function(self) sleep_turns = 0 end
 
@@ -113,6 +125,7 @@ Control.new = function(entity, def, ...)
         setEnabled  = setEnabled,
         setAction   = setAction,
         getAction   = getAction,
+        inCombat    = inCombat,
         update      = update,
         addAP       = addAP,
         getAP       = getAP,

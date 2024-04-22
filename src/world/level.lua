@@ -412,6 +412,8 @@ Level.new = function(dungeon, level_idx)
     local hasStairs = function(self, coord)
         return coord == stair_up.coord or coord == stair_dn.coord
     end
+
+    local getScheduler = function(self) return scheduler end
     
     return setmetatable({
         -- methods
@@ -429,6 +431,7 @@ Level.new = function(dungeon, level_idx)
         setBlocked          = setBlocked,
         shakeCamera         = shakeCamera,
         getEntities         = getEntities,
+        getScheduler        = getScheduler,
         removeEntity        = removeEntity,
         inLineOfSight       = inLineOfSight,
         getPlayerDistance   = getPlayerDistance,
