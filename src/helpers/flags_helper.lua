@@ -1,3 +1,8 @@
+--  Dungeon of Despair
+--
+--  Author: Wolfgang Schreurs
+--  info+despair@wolftrail.net
+
 local bband, bbor = bit.band, bit.bor
 
 local M = {}

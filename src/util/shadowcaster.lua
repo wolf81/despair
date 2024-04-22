@@ -1,9 +1,7 @@
---[[
 --  Dungeon of Despair
 --
 --  Author: Wolfgang Schreurs
 --  info+despair@wolftrail.net
---]]
 
 --[[
     Adapted from: https://github.com/markandgo/Lua-FOV/blob/master/rsfov.lua

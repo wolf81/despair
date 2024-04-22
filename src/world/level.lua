@@ -1,9 +1,7 @@
---[[
 --  Dungeon of Despair
 --
 --  Author: Wolfgang Schreurs
 --  info+despair@wolftrail.net
---]]
 
 local mfloor, matan2, lrandom = math.floor, math.atan2, love.math.random
 

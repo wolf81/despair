@@ -1,3 +1,8 @@
+--  Dungeon of Despair
+--
+--  Author: Wolfgang Schreurs
+--  info+despair@wolftrail.net
+
 local Sleep = {}
 
 local FADE_DURATION = 0.5

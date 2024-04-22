@@ -1,9 +1,7 @@
---[[
 --  Dungeon of Despair
 --
 --  Author: Wolfgang Schreurs
 --  info+despair@wolftrail.net
---]]
 
 TILE_SIZE           = 48
 MAP_SIZE            = 40
