@@ -10,6 +10,8 @@ Scheduler.new = function()
     local turn = nil
     local entities, entity_idx = {}, 0
 
+    local in_combat = false
+
     local addEntity = function(self, entity)
         local control = entity:getComponent(control)
         if entity:getComponent(Control) then
@@ -29,7 +31,9 @@ Scheduler.new = function()
     local update = function(self, level)
         if #entities == 0 then return end
 
-        if (not turn) or turn:isFinished() then 
+        if not turn or turn:isFinished() then 
+            if turn then in_combat = turn:inCombat() end
+            
             turn = Turn(entities, level) 
             Signal.emit('turn', turn:getIndex())            
         end
@@ -39,9 +43,12 @@ Scheduler.new = function()
 
     local getTurnIndex = function(self) return turn_idx end
 
+    local inCombat = function(self) return in_combat end
+
     return setmetatable({
         -- methods
         update          = update,
+        inCombat        = inCombat,
         addEntity       = addEntity,
         removeEntity    = removeEntity,
         getTurnIndex    = getTurnIndex,

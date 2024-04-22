@@ -1,0 +1,15 @@
+return {
+	id = 'earth_elem',
+	type = 'npc',
+	name = 'earth elemental',
+	hd = '1d8',
+	ac = 12,
+	class = '',
+	flags = { '' },
+	speed = 30,
+	equip = { 'bite' },
+	texture = 'uf_heroes',
+	anim = { 457, 458, 459, 460 },
+	morale = 0,
+	special = { '' },
+}

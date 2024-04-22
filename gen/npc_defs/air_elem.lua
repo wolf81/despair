@@ -1,0 +1,15 @@
+return {
+	id = 'air_elem',
+	type = 'npc',
+	name = 'air elemental',
+	hd = '1d8',
+	ac = 12,
+	class = '',
+	flags = { '' },
+	speed = 30,
+	equip = { 'bite' },
+	texture = 'uf_heroes',
+	anim = { 453, 454, 455, 456 },
+	morale = 0,
+	special = { '' },
+}

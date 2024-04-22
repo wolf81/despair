@@ -11,6 +11,8 @@ M.resolve = function(entity, target)
     local offense = entity:getComponent(Offense)
     local equipment = entity:getComponent(Equipment)
 
+    local target_sleeping = target:getComponent(Control):isSleeping()
+
     local eq_mainhand = equipment:getItem('mainhand')
     local eq_offhand = equipment:getItem('offhand')
 
@@ -31,8 +33,12 @@ M.resolve = function(entity, target)
         attacks = {},
     }
 
+    -- TODO: perform multiple when AP becomes a multiple of 5, so:
+    -- AP 6+: 1 extra attack
+    -- AP 11+: 2 extra attacks
+    -- AP 15+: 3 extra attacks
     for _, weapon in ipairs(weapons) do
-        local roll = ndn.dice('1d20').roll()
+        local roll = target_sleeping and 20 or ndn.dice('1d20').roll()
         local is_crit = roll == 20 -- critical hit, dealing maximum damage
         local is_hit = false
 

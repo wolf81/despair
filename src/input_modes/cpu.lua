@@ -51,7 +51,7 @@ local function getDirectionToPlayer(level, coord)
 end
 
 Cpu.new = function(entity)
-    local is_chasing_player = false
+    local in_combat = false
 
     local update = function(self, dt, level)
         -- body
@@ -81,14 +81,14 @@ Cpu.new = function(entity)
             local distance = mfloor(coord:dist(player.coord))
 
             -- start chase player when player enters line of sight
-            if (not is_chasing_player) and distance < 10 then
-                is_chasing_player = level:inLineOfSight(coord, player.coord)
+            if not in_combat and distance < 10 then
+                in_combat = level:inLineOfSight(coord, player.coord)
             end
 
             local direction = Direction.NONE
 
             -- if not standing next to player, either move randomly or towards player if chasing
-            if distance > 1 and is_chasing_player then 
+            if distance > 1 and in_combat then 
                 direction = getDirectionToPlayer(level, coord) 
             else
                 direction = getRandomDirection(level, coord)
@@ -111,9 +111,12 @@ Cpu.new = function(entity)
         return nil
     end
 
+    local inCombat = function(self) return in_combat end
+
     return setmetatable({
         -- methods
         getAction   = getAction,
+        inCombat    = inCombat,
         update      = update,
     }, Cpu)
 end

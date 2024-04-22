@@ -1,0 +1,15 @@
+return {
+	id = 'water_elem',
+	type = 'npc',
+	name = 'water elemental',
+	hd = '1d8',
+	ac = 12,
+	class = '',
+	flags = { '' },
+	speed = 30,
+	equip = { 'bite' },
+	texture = 'uf_heroes',
+	anim = { 445, 446, 447, 448 },
+	morale = 0,
+	special = { '' },
+}

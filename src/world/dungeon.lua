@@ -31,10 +31,10 @@ local function generateLootTable()
     end
 
     for _, id in ipairs(EntityFactory.getIds('weapon')) do
-        -- TODO: should have 'natural weapon' flag for items that should not be loot
-        if id ~= 'bite' and id ~= 'unarmed' then
+        local weapon_flags = EntityFactory.getFlags(id)
+        if not FlagsHelper.hasFlag(weapon_flags, FLAGS.natural_weapon) then
             loot_table[id] = 2
-        end
+        end        
     end
 
     for _, id in ipairs(EntityFactory.getIds('ring')) do

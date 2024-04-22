@@ -1,6 +1,10 @@
 ID$           |TYPE$ |NAME$                 |HD$   |AC# |CLASS$ |FLAGS@ |SPEED# |EQUIP@   |TEXTURE$  |ANIM@           |MORALE# |SPECIAL@ |
 
-task_master   |npc   |taskmaster            |1d8   |12  |       |       |30     |bite     |uf_heroes |81,82,83,84     |        |         |
+blackguard    |npc   |blackguard            |1d8   |12  |       |       |30     |bite     |uf_heroes |65,66,67,68     |        |         |
+slaver        |npc   |slaver                |1d8   |12  |       |       |30     |bite     |uf_heroes |81,82,83,84     |        |         |
+slave_1       |npc   |slave                 |1d8   |12  |       |       |30     |bite     |uf_heroes |85,86,87,88     |        |         |
+slave_2       |npc   |slave                 |1d8   |12  |       |       |30     |bite     |uf_heroes |89,90,91,92     |        |         |
+slave_3       |npc   |slave                 |1d8   |12  |       |       |30     |bite     |uf_heroes |93,94,95,96     |        |         |
 skeleton      |npc   |skeleton              |1d12  |12  |       |       |30     |bite     |uf_heroes |121,122,123,124 |        |         |
 skel_warr     |npc   |skeleton warrior      |1d12  |12  |       |       |30     |bite     |uf_heroes |125,126,127,128 |        |         |
 skel_mage     |npc   |skeleton mage         |1d12  |12  |       |       |30     |bite     |uf_heroes |129,130,131,132 |        |         |
@@ -21,9 +25,22 @@ vampire_lord  |npc   |vampire lord          |1d8   |12  |       |       |30     
 lich          |npc   |lich                  |1d8   |12  |       |       |30     |bite     |uf_heroes |237,238,239,240 |        |         |
 observer      |npc   |observer              |1d8   |12  |       |       |30     |bite     |uf_heroes |273,274,275,276 |        |         |
 spectator     |npc   |spectator             |1d8   |12  |       |       |30     |bite     |uf_heroes |277,278,279,280 |        |         |
+dryad         |npc   |dryad                 |1d8   |12  |       |       |30     |bite     |uf_heroes |293,294,295,296 |        |         |
+sprite        |npc   |sprite                |1d8   |12  |       |       |30     |bite     |uf_heroes |297,298,299,300 |        |         |
+red_abishai   |npc   |red abishai           |1d8   |12  |       |       |30     |bite     |uf_heroes |301,302,303,304 |        |         |
+blue_abishai  |npc   |blue abishai          |1d8   |12  |       |       |30     |bite     |uf_heroes |305,306,307,308 |        |         |
+green_abishai |npc   |green abishai         |1d8   |12  |       |       |30     |bite     |uf_heroes |309,310,311,312 |        |         |
+deva          |npc   |deva                  |1d8   |12  |       |       |30     |bite     |uf_heroes |313,314,315,316 |        |         |
+fallen_deva   |npc   |fallen deva           |1d8   |12  |       |       |30     |bite     |uf_heroes |317,318,319,320 |        |         |
 black_drag    |npc   |black dragon          |1d12  |12  |       |       |30     |bite     |uf_heroes |345,346,347,348 |        |         |
 red_drag      |npc   |red dragon            |1d12  |12  |       |       |30     |bite     |uf_heroes |349,350,351,352 |        |         |
 blue_drag     |npc   |azure dragon          |1d12  |12  |       |       |30     |bite     |uf_heroes |353,354,355,356 |        |         |
 green_drag    |npc   |emerald dragon        |1d12  |12  |       |       |30     |bite     |uf_heroes |357,358,359,360 |        |         |
+void_elem     |npc   |void elemental        |1d8   |12  |       |       |30     |bite     |uf_heroes |441,442,443,444 |        |         |
+water_elem    |npc   |water elemental       |1d8   |12  |       |       |30     |bite     |uf_heroes |445,446,447,448 |        |         |
+fire_elem     |npc   |fire elemental        |1d8   |12  |       |       |30     |bite     |uf_heroes |449,450,451,452 |        |         |
+air_elem      |npc   |air elemental         |1d8   |12  |       |       |30     |bite     |uf_heroes |453,454,455,456 |        |         |
+earth_elem    |npc   |earth elemental       |1d8   |12  |       |       |30     |bite     |uf_heroes |457,458,459,460 |        |         |
 green_ooze    |npc   |green ooze            |1d8   |12  |       |       |30     |bite     |uf_heroes |469,470,471,472 |        |         |
 purple_jelly  |npc   |purple jelly          |1d8   |12  |       |       |30     |bite     |uf_heroes |473,474,475,476 |        |         |
+mimic         |npc   |mimic                 |1d8   |12  |       |       |30     |bite     |uf_heroes |509,510,511,512 |        |         |

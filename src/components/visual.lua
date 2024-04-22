@@ -23,7 +23,7 @@ Visual.new = function(entity, def, duration)
     local angle = 0
     local ox, oy = 0, 0
 
-    local fade = { alpha = 0.0 }
+    local fade = { alpha = 1.0 }
 
     local _, _, quad_w, quad_h = quads[1]:getViewport()
 

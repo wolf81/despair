@@ -1,7 +1,7 @@
 return {
-	id = 'task_master',
+	id = 'void_elem',
 	type = 'npc',
-	name = 'taskmaster',
+	name = 'void elemental',
 	hd = '1d8',
 	ac = 12,
 	class = '',
@@ -9,7 +9,7 @@ return {
 	speed = 30,
 	equip = { 'bite' },
 	texture = 'uf_heroes',
-	anim = { 81, 82, 83, 84 },
+	anim = { 441, 442, 443, 444 },
 	morale = 0,
 	special = { '' },
 }

@@ -11,20 +11,14 @@
 * feat: For systems, add a draw method and optional sort method, to use for rendering & allow removal of draw method in Entity class
 * feat: HealthBar system should not be drawn from Visual system after making above change
 * feat: Get experience for killing monsters and level up
-* feat: Implement dual-wield attacks
-* feat: Implement sleep & health recovery over sleep, remove automatic health recovery
-* feat: Perhaps food should recover a small amount of health (?)
-* feat: consuming a potion should assign a "use" action to player
-* feat: consuming food should assign a "use" action to player
-* feat: override Gamestate.push() & Gamestate.pop() to always call Gamestate.update(0)
 * feat: setters in components should return self, so builder pattern can be used, see Visual setRotation, setOffset
-* feat: implement ChangeLevel scene, this scene could keep player visible while making area around player dark, to provide a smooth transition between levels
 
 ## BUGS 
 
 * fix: sometimes monsters stay visible under fog of war
 * fix: rendering is buggy if 2 items with same z-index (e.g. tomes) are stacked on top of each other
 * fix: when using keyboard for movement and pressing action buttons, sometimes the mouse pointer disappears
+* fix: sometimes NPCs walk away, if NPCs are horizontally aligned with player and 1 empty tile in between, why?
 
 ## LIB
 
@@ -33,6 +27,12 @@
 
 # DONE
 
+* feat: Implement sleep & health recovery over sleep, remove automatic health recovery
+* feat: Implement dual-wield attacks
+* feat: consuming a potion should assign a "use" action to player
+* feat: consuming food should assign a "use" action to player
+* feat: override Gamestate.push() & Gamestate.pop() to always call Gamestate.update(0)
+* feat: implement ChangeLevel scene, this scene could keep player visible while making area around player dark, to provide a smooth transition between levels
 * feat: Implement food, food should increase energy
 * feat: Backpack should be a fixed size array, so we can make a proper inventory UI
 * feat: Add entrance & exit stairs

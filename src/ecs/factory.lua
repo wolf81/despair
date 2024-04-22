@@ -54,12 +54,11 @@ M.create = function(id, coord)
     assert(def ~= nil, 'entity not registered \'' .. id .. '\'')
 
     local entity = Entity(def, coord or vector(0, 0)) 
+    entity.flags = M.getFlags(id) 
     -- provice every entity with an Info component, for displaying name and details in UI
     entity:addComponent(Info(entity, def))
 
-    if def.texture ~= nil then
-        entity:addComponent(Visual(entity, def))
-    end  
+    if def.texture ~= nil then entity:addComponent(Visual(entity, def)) end  
 
     if entity.type == 'pc' then
         entity.z_index = 15
@@ -150,8 +149,7 @@ M.create = function(id, coord)
         entity:addComponent(Usable(entity, def))
         entity:addComponent(Item(entity, def))        
     elseif entity.type == 'effect' then
-        entity.z_index = 20
-        entity.flags = FlagsHelper.parseFlags(def['flags']) 
+        entity.z_index  = 20
     end
 
     return entity
@@ -163,6 +161,15 @@ end
 
 M.getDefinition = function(id)
     return definitions[id]
+end
+
+M.getFlags = function(id)
+    local flags = 0
+
+    local def = definitions[id]
+    if def ~= nil then return FlagsHelper.parseFlags(def['flags'] or {}) end
+
+    return 0
 end
 
 return M

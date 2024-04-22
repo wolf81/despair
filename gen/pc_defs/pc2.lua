@@ -11,7 +11,7 @@ return {
 	dex = 15,
 	mind = 12,
 	flags = { '' },
-	equip = { 'stud_leather', 'short_sword', 'short_sword', 'food_1', 'food_1', 'shortbow', 'wand_1', 'wand_2', 'wand_3' },
+	equip = { 'stud_leather', 'short_sword', 'short_sword', 'food_1', 'food_1' },
 	texture = 'uf_heroes',
 	anim = { 29, 30, 31, 32 },
 }
