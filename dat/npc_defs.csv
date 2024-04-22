@@ -42,3 +42,4 @@ air_elem      |npc   |air elemental         |1d8   |12  |       |       |30     
 earth_elem    |npc   |earth elemental       |1d8   |12  |       |       |30     |bite     |uf_heroes |457,458,459,460 |        |         |
 green_ooze    |npc   |green ooze            |1d8   |12  |       |       |30     |bite     |uf_heroes |469,470,471,472 |        |         |
 purple_jelly  |npc   |purple jelly          |1d8   |12  |       |       |30     |bite     |uf_heroes |473,474,475,476 |        |         |
+mimic         |npc   |mimic                 |1d8   |12  |       |       |30     |bite     |uf_heroes |509,510,511,512 |        |         |
