@@ -415,10 +415,6 @@ Level.new = function(dungeon, level_idx)
         return player_dist_map:getDistance(coord.x, coord.y)
     end
 
-    local toWorldPos = function(self, camera_x, camera_y)
-        return camera:getWorldCoords(camera_x, camera_y)
-    end
-
     local hasStairs = function(self, coord)
         return coord == stair_up.coord or coord == stair_dn.coord
     end
@@ -436,7 +432,6 @@ Level.new = function(dungeon, level_idx)
         isBlocked           = isBlocked,
         getPlayer           = getPlayer,
         addEntity           = addEntity,
-        toWorldPos          = toWorldPos,
         setBlocked          = setBlocked,
         shakeCamera         = shakeCamera,
         getEntities         = getEntities,

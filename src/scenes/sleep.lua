@@ -2,6 +2,12 @@ local Sleep = {}
 
 local FADE_DURATION = 0.5
 
+local function getMissingHealth(player)
+    local health = player:getComponent(Health)
+    local current, total = health:getValue()
+    return total - current
+end
+
 Sleep.new = function(player)
     -- recover health over time (turns)
     local health = player:getComponent(Health)
@@ -41,9 +47,13 @@ Sleep.new = function(player)
     local enter = function(self, from)
         game = from
 
+
         local control = player:getComponent(Control)
         control:setEnabled(false)
         game:setActionsEnabled(false)
+
+        local sleep_turns = 48
+        control:sleep(sleep_turns)
 
         -- 8 hours needed to fully sleep
         -- 30 AP == how many hours?
@@ -59,15 +69,13 @@ Sleep.new = function(player)
 
         -- we need to compress turns, cause waiting 4800 turns is too long
         -- maybe divide by 100, increase monster spawn chance by 100 (?)
-        local sleep_turns = 48
+
+        local missing = getMissingHealth(player)        
 
         -- start 'enter sleep' animation
-        Timer.tween(FADE_DURATION, background, { alpha = 1.0 }, 'linear', function() 
-            Timer.after(FADE_DURATION, function() 
-                control:sleep(sleep_turns)
-                control:setEnabled(true)
-                did_enter_sleep = true
-            end)
+        Timer.tween(FADE_DURATION, background, { alpha = 1.0 }, 'linear', function()
+            control:setEnabled(true)
+            did_enter_sleep = true
         end)
     end
 
