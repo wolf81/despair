@@ -107,16 +107,14 @@ Dungeon.new = function(player)
     local loot_table = generateLootTable()
 
     local levels, level_idx = {}, 0
-    local alpha = 1.0
 
     local frame = Rect(0)
 
     local update = function(self, dt) levels[level_idx]:update(dt) end
 
     local draw = function(self)
-        love.graphics.setColor(1.0, 1.0, 1.0, self.alpha) 
+        love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
         levels[level_idx]:draw(frame:unpack()) 
-        love.graphics.setColor(1.0, 1.0, 1.0, 1.0) 
     end
 
     local enter = function(self)
@@ -159,8 +157,6 @@ Dungeon.new = function(player)
     end
 
     return setmetatable({
-        -- properties
-        alpha           = alpha,
         -- methods
         draw            = draw,
         enter           = enter,
