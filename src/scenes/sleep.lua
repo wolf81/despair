@@ -58,8 +58,7 @@ Sleep.new = function(player)
         -- we need to compress turns, cause waiting 4800 turns is too long
         -- maybe divide by 100, increase monster spawn chance by 100 (?)
 
-        local sleep_turns = 48
-        control:sleep(sleep_turns)
+        control:sleep()
 
         -- start 'enter sleep' animation
         Timer.tween(FADE_DURATION, background, { alpha = 1.0 }, 'linear', function()
