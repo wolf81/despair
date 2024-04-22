@@ -7,34 +7,6 @@ local mfloor, matan2, lrandom = math.floor, math.atan2, love.math.random
 
 local Level = {}
 
-local function newMonsters(map, blocked_coords)
-    local monsters = {}
-
-    local types = EntityFactory.getIds('npc')
-
-    local map_w, map_h = map:getSize()
-
-    while #monsters < 10 do
-        local x = lrandom(map_w)
-        local y = lrandom(map_h)
-
-        if not map:isBlocked(x, y) then
-            for _, blocked_coord in ipairs(blocked_coords) do
-                local is_blocked = blocked_coord.x == x and blocked_coord.y == y
-                if is_blocked then goto continue end
-            end
-
-            local type = types[lrandom(#types)]
-            local monster = EntityFactory.create(type, vector(x, y))
-            table.insert(monsters, monster)
-
-            ::continue::
-        end        
-    end
-
-    return monsters
-end
-
 local function onDropItem(self, entity)
     if self:hasStairs(entity.coord) then
         print('it\'s not possible to drop items on stairs')
@@ -89,16 +61,6 @@ Level.new = function(dungeon, level_idx)
     -- fog of war
     local fog = Fog(16, 10)
 
-    for _, monster in ipairs(newMonsters(map, { stair_up.coord, stair_dn.coord })) do
-        table.insert(entities, monster)
-        map:setBlocked(monster.coord.x, monster.coord.y, true)
-
-        local visual = monster:getComponent(Visual)
-        visual.alpha = 0.0
-
-        scheduler:addEntity(monster)
-    end
-
     -- add camera
     local camera = Camera(0.0, 0.0, 1.0)
     local follow = true
@@ -130,6 +92,11 @@ Level.new = function(dungeon, level_idx)
             end
 
             return
+        end
+
+        -- about once every 15 turns, randomly spawn a monster if PC is not in combat 
+        if not scheduler:inCombat() and lrandom(1, 15) == 1 then
+            self:addEntity(EncounterGenerator.generate(self, coord, 9, 7))
         end
 
         -- update the player distance map, to help NPCs find player
@@ -414,6 +381,8 @@ Level.new = function(dungeon, level_idx)
     end
 
     local getScheduler = function(self) return scheduler end
+
+    local getIndex = function(self) return level_idx end
     
     return setmetatable({
         -- methods
@@ -422,6 +391,7 @@ Level.new = function(dungeon, level_idx)
         enter               = enter,
         update              = update,
         getSize             = getSize,
+        getIndex            = getIndex,
         getCoord            = getCoord,
         hasStairs           = hasStairs,
         isVisible           = isVisible,
