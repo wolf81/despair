@@ -81,7 +81,7 @@ Cpu.new = function(entity)
             local distance = mfloor(coord:dist(player.coord))
 
             -- start chase player when player enters line of sight
-            if (not is_chasing_player) and distance < 10 then
+            if not is_chasing_player and distance < 10 then
                 is_chasing_player = level:inLineOfSight(coord, player.coord)
             end
 

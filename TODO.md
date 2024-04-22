@@ -25,6 +25,7 @@
 * fix: sometimes monsters stay visible under fog of war
 * fix: rendering is buggy if 2 items with same z-index (e.g. tomes) are stacked on top of each other
 * fix: when using keyboard for movement and pressing action buttons, sometimes the mouse pointer disappears
+* fix: sometimes NPCs walk away, if NPCs are horizontally aligned with player and 1 empty tile in between, why?
 
 ## LIB
 
