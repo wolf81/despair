@@ -80,7 +80,7 @@ Level.new = function(dungeon, level_idx)
     -- generate a Dijkstra map for monsters movement towards / away from player
     local player_dist_map = DijkstraMap(
         tiles,                                      -- 2D tile map
-        function(x, y) return tiles[y][x] ~= 0 end, -- check whether tile is blocked
+        function(x, y) return tiles[y][x] == 1 end, -- check whether tile is blocked
         true,                                       -- include diagonal movement
         ORDINAL_MOVE_FACTOR)                        -- cost of diagonal moves
 
