@@ -31,8 +31,8 @@ Animation.new = function(frames, duration)
 
     return setmetatable({ 
         -- methods
-        update  = update,
         draw    = draw,
+        update  = update,
     }, Animation)
 end
 

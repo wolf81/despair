@@ -18,10 +18,10 @@ FlexSpace.new = function()
 
     return setmetatable({
         -- methods        
+        draw        = draw,
+        update      = update,
         getFrame    = getFrame,
         setFrame    = setFrame,   
-        update      = update,
-        draw        = draw,
     }, FlexSpace)
 end
 

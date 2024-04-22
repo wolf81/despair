@@ -28,9 +28,9 @@ Cache.new = function()
 
     return setmetatable({
         -- methods
-        register    = register,
         get         = get,
         each        = each,
+        register    = register,
     }, Cache)
 end
 

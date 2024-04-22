@@ -43,10 +43,10 @@ Entity.new = function(def, coord)
         z_index         = 1,                        -- z-index for rendering
         remove          = false,                    -- set to true to remove from play
         -- methods
-        getComponent    = getComponent,
-        removeComponent = removeComponent,
-        addComponent    = addComponent,
         draw            = draw,
+        getComponent    = getComponent,
+        addComponent    = addComponent,
+        removeComponent = removeComponent,
     }, Entity)
 end
 

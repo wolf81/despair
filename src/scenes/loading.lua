@@ -244,10 +244,10 @@ Loading.new = function()
 
     return setmetatable({
         -- methods
-        keyreleased = keyReleased,
-        update      = update,
-        enter       = enter,
         draw        = draw,
+        enter       = enter,
+        update      = update,
+        keyreleased = keyReleased,
     }, Loading)
 end
 

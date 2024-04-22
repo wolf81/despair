@@ -80,10 +80,10 @@ Usable.new = function(entity, def)
 
     return setmetatable({
         -- methods
-        requiresTarget  = requiresTarget,
-        getEffect       = getEffect,
-        expend          = expend,
         use             = use,
+        expend          = expend,
+        getEffect       = getEffect,
+        requiresTarget  = requiresTarget,
     }, Usable)
 end
 

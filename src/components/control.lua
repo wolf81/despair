@@ -121,16 +121,16 @@ Control.new = function(entity, def, ...)
 
     return setmetatable({             
         -- methods
-        isSleeping  = isSleeping,
-        setEnabled  = setEnabled,
-        setAction   = setAction,
-        getAction   = getAction,
-        inCombat    = inCombat,
-        update      = update,
+        awake       = awake,
         addAP       = addAP,
         getAP       = getAP,
         sleep       = sleep,
-        awake       = awake,
+        update      = update,
+        inCombat    = inCombat,
+        setAction   = setAction,
+        getAction   = getAction,
+        isSleeping  = isSleeping,
+        setEnabled  = setEnabled,
     }, Control)
 end
 

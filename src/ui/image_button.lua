@@ -63,12 +63,12 @@ ImageButton.new = function(image, action, ...)
     
     return setmetatable({
         -- methods
-        setEnabled  = setEnabled,
+        draw        = draw,
+        update      = update,
+        getSize     = getSize,
         getFrame    = getFrame,
         setFrame    = setFrame,
-        getSize     = getSize,
-        update      = update,
-        draw        = draw,
+        setEnabled  = setEnabled,
     }, ImageButton)
 end
 

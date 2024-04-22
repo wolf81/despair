@@ -36,10 +36,10 @@ FlexPanel.new = function()
 
     return setmetatable({
         -- methods
-        setFrame = setFrame,
-        getSize = getSize,
-        update  = update,
-        draw    = draw,
+        draw        = draw,
+        update      = update,
+        getSize     = getSize,
+        setFrame    = setFrame,
     }, FlexPanel)
 end
 

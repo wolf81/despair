@@ -26,10 +26,10 @@ Label.new = function(text, color)
     
     return setmetatable({
         -- methods
-        setFrame = setFrame,
-        getSize = getSize,
-        update = update,
-        draw = draw,
+        draw        = draw,
+        update      = update,
+        getSize     = getSize,
+        setFrame    = setFrame,
     }, Label)
 end
 

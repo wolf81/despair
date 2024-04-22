@@ -108,15 +108,15 @@ ActionButton.new = function(action, ...)
     
     return setmetatable({
         -- methods
-        setSelected = setSelected,
-        isSelected  = isSelected,
-        setEnabled  = setEnabled,
-        isEnabled   = isEnabled,
-        getAction   = getAction,
+        draw        = draw,
+        update      = update,
         setFrame    = setFrame,
         getFrame    = getFrame,
-        update      = update,
-        draw        = draw,    
+        isEnabled   = isEnabled,
+        getAction   = getAction,
+        isSelected  = isSelected,
+        setEnabled  = setEnabled,
+        setSelected = setSelected,
     }, ActionButton)
 end
 

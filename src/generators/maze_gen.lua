@@ -67,7 +67,6 @@ M.generate = function(map_size, corr_size)
     local grid = newGrid(grid_size)
     carvePassage(1, 1, grid)
 
-    --[[
     -- remove some dead-ends 
     for cy = 1, #grid do
         for cx = 1, #grid[cy] do
@@ -84,7 +83,6 @@ M.generate = function(map_size, corr_size)
             end
         end
     end
-    --]]
 
     -- keep track of empty coords, so we can add stairs later
     local coords = {}

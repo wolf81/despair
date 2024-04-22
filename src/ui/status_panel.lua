@@ -74,9 +74,9 @@ StatusPanel.new = function(player)
 
     return setmetatable({
         -- methods
-        setFrame    = setFrame,
-        update      = update,
         draw        = draw,
+        update      = update,
+        setFrame    = setFrame,
     }, StatusPanel)
 end
 

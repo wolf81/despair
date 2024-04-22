@@ -23,10 +23,10 @@ Rect.new = function(x, y, w, h)
 
     return setmetatable({
         -- methods        
-        getPosition = getPosition,
-        contains    = contains,
-        getSize     = getSize,
         unpack      = unpack,
+        getSize     = getSize,
+        contains    = contains,
+        getPosition = getPosition,
     }, Rect)
 end
 

@@ -63,11 +63,11 @@ Health.new = function(entity, def)
 
     return setmetatable({
         -- methods
-        update      = update,
-        getValue    = getValue,
-        isAlive     = isAlive,
         harm        = harm,
         heal        = heal,
+        update      = update,
+        isAlive     = isAlive,
+        getValue    = getValue,
     }, Health)
 end
 

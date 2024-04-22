@@ -119,8 +119,8 @@ Visual.new = function(entity, def, duration)
 
     return setmetatable({
         -- methods
-        update      = update,
         draw        = draw,
+        update      = update,
         fadeIn      = fadeIn,
         fadeOut     = fadeOut,
         getSize     = getSize,
