@@ -133,8 +133,9 @@ Dungeon.new = function(player)
 
     local prevLevel = function(self)
         if level_idx == 1 then
-            print('A magical force is preventing your exit. Maybe you need to find the Orb of Cerbos to escape?')
-            return
+            return Signal.emit(
+                'notify', 
+                'A magical force is preventing your exit. Maybe you need to find the Orb of Cerbos to escape?')
         end
 
         Signal.emit('change-level', player, level_idx - 1)

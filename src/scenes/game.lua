@@ -102,6 +102,8 @@ Game.new = function()
     local dungeon = Dungeon(player)
     dungeon:enter()
 
+    local notify_bar = NotifyBar()
+
     -- a semi-transparent overlay, used when showing char-sheet, inventory on top ...
     local overlay = Overlay()
 
@@ -143,6 +145,8 @@ Game.new = function()
         for e in layout:eachElement() do
             e.widget:update(dt)
         end
+
+        notify_bar:update(dt)
     end
 
     local draw = function(self) 
@@ -153,6 +157,8 @@ Game.new = function()
         if item_bar then item_bar:draw() end
 
         overlay:draw()
+
+        notify_bar:draw()
     end
 
     local keyReleased = function(self, key, scancode)        
@@ -228,6 +234,10 @@ Game.new = function()
         end        
     end
 
+    local onNotify = function(message, duration)        
+        notify_bar:show(message, duration)
+    end
+
     local enter = function(self, from)
         local handlers = {
             ['sleep']           = function() onSleepPlayer(player, dungeon:getLevel()) end,
@@ -241,6 +251,7 @@ Game.new = function()
             ['use-potion']      = function() onShowItems(getItems(player, 'potion'), 'use-potion') end,
             ['destroy']         = function(...) onDestroy(...) end,
             ['change-level']    = function(...) onChangeLevel(...) end,
+            ['notify']          = function(...) onNotify(...) end,
         }
         for action, handler in pairs(handlers) do
             handles[action] = Signal.register(action, handler)

@@ -203,7 +203,7 @@ Loading.new = function()
 
     local preloader = newPreloader()
 
-    local message, message_x = nil
+    local message, message_x = nil, 0
 
     local enter = function(self)
         coroutine.resume(preloader)
