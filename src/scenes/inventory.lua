@@ -140,10 +140,11 @@ local function drawCombatStats(equipment, offense, defense, x, y, w, h)
     love.graphics.draw(background, x, y)
 
     love.graphics.setColor(unpack(TEXT_COLOR))
-    love.graphics.print('COMBAT STATS', x + 10, y + 10)
-    love.graphics.print(att_value, x + 10, y + text_h + 10)
-    love.graphics.print(dmg_value, x + 10, y + text_h * 2 + 10)
-    love.graphics.print(ac_value, x + 10, y + text_h * 3 + 10)
+    love.graphics.print(
+        'COMBAT STATS\n' .. 
+        att_value .. '\n' .. 
+        dmg_value .. '\n' .. 
+        ac_value, x + 10, y + 10)
 end
 
 local function drawItemInfo(x, y, w, h)
@@ -255,11 +256,9 @@ Inventory.new = function(player)
 
         if item then
             local info = item:getComponent(Info)
-            love.graphics.print(info:getName(), mid_x + ox + 10, stats_y + 10)
-            local lines = lume.split(info:getDescription(), '\n')
-            for idx, line in ipairs(lines) do
-                love.graphics.print(string.upper(line), mid_x + ox + 10, stats_y + idx * 15 + 10)
-            end
+            love.graphics.print(
+                info:getName() .. '\n' .. 
+                info:getDescription(), mid_x + ox + 10, stats_y + 10)
         end
     end
 
