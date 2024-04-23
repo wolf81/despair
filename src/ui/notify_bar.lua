@@ -8,8 +8,7 @@ local mfloor, mceil, mmin, mmax = math.floor, math.ceil, math.min, math.max
 local NotifyBar = {}
 
 local FADE_DURATION = 0.2
-local PADDING       = 10
-local MARGIN        = 6
+local MARGIN        = 10
 
 local function shallowClone(tbl)
     local clone = {}
@@ -55,19 +54,20 @@ NotifyBar.new = function()
             return 
         end
 
-        -- TODO: simplify the code to only store outer rectangle
-        -- position text inside draw() function using the margin
+        -- calculate a rectangle, large enough to fit the text, including some margin
         local spacing = FONT:getHeight() - FONT:getLineHeight()
-        local max_w = (WINDOW_W - STATUS_PANEL_W) - PADDING * 2
+        local max_w = WINDOW_W - STATUS_PANEL_W - MARGIN * 2
+        local line_h = FONT:getHeight() * FONT:getLineHeight()
 
         local w = FONT:getWidth(message)
         local lines = mceil(w / max_w)
-        local h = FONT:getHeight() * lines + mmax((lines - 1), 0) * spacing
-        w = mmin(w, max_w)
-        local x = mfloor((max_w - w) / 2) + PADDING
-        local y = mfloor(WINDOW_H - ACTION_BAR_H - h) - MARGIN - PADDING
+        local is_half_line = w < (max_w / 2)
+        local h = lines * line_h + MARGIN * 2 - spacing
+        w = lines > 1 and max_w or mmin(w + MARGIN * 2, max_w)
+        local x = mfloor((max_w - w) / 2) + MARGIN
+        local y = mfloor(WINDOW_H - ACTION_BAR_H - h) - MARGIN
 
-        background = newBackground(w + MARGIN * 2, h + MARGIN * 2)
+        background = newBackground(w, h)
 
         table.insert(notifications, { 
             message     = message, 
@@ -96,10 +96,9 @@ NotifyBar.new = function()
         if not notification then return end
 
         local x, y, w, h = notification.frame:unpack()
-
         love.graphics.setColor(1.0, 1.0, 1.0, notification.alpha)
-        love.graphics.draw(background, x - MARGIN, y - MARGIN)
-        love.graphics.printf(notification.message, x, y, w, 'center')
+        love.graphics.draw(background, x, y)
+        love.graphics.printf(notification.message, x, y + MARGIN + 1, w, 'center')
     end
 
     return setmetatable({
