@@ -34,6 +34,8 @@ function love.load(args)
         end
     end
 
+    FONT:setLineHeight(2.0)
+
     trySetCursor()
 
     GamestateHelper.fixGamestatePushPop()
