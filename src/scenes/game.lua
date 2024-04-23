@@ -42,11 +42,11 @@ end
 local function onChangeLevel(player, level_idx) Gamestate.push(ChangeLevel(player, level_idx)) end
 
 local function onSleepPlayer(player, level) 
-    if not level:getScheduler():inCombat() then
-        Gamestate.push(Sleep(player)) 
-    else
-        Signal.emit('notify', 'Can\'t sleep while enemies are nearby')
+    if level:getScheduler():inCombat() then
+        return Signal.emit('notify', 'Can\'t sleep while enemies are nearby')
     end
+
+    Gamestate.push(Sleep(player)) 
 end
 
 local function onShowInventory(player) Gamestate.push(Inventory(player)) end
