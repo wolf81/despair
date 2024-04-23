@@ -45,7 +45,7 @@ local function onSleepPlayer(player, level)
     if not level:getScheduler():inCombat() then
         Gamestate.push(Sleep(player)) 
     else
-        print('can\'t sleep while enemies are nearby')
+        Signal.emit('notify', 'Can\'t sleep while enemies are nearby')
     end
 end
 
