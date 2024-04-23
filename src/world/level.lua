@@ -9,8 +9,7 @@ local Level = {}
 
 local function onDropItem(self, entity)
     if self:hasStairs(entity.coord) then
-        print('it\'s not possible to drop items on stairs')
-        return
+        return Signal.emit('notify', 'It\'s not possible to drop items on stairs')
     end
     
     local backpack = entity:getComponent(Backpack)
