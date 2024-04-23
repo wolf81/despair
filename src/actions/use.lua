@@ -14,12 +14,6 @@ Use.new = function(level, entity, item, target)
     local usable = item:getComponent(Usable)
     usable:expend()    
 
-    --[[
-    -- TODO: should add a 'use' action to player (same for food, potions, etc...)
-    -- the 'use' action should be activated next turn
-    usable:use(target_coord, level)
-    --]]
-
     local execute = function(self, duration, fn)
         if did_execute then return end
 
