@@ -39,7 +39,7 @@ Entity.new = function(def, coord)
         type            = def.type,                 -- type as defined in data file
         name            = def.name or 'unknown',
         flags           = 0,
-        coord           = coord,                    -- tile coord
+        coord           = coord:clone(),            -- tile coord
         remove          = false,                    -- set to true to remove from play
         z_index         = 1,                        -- z-index for rendering
         -- methods
