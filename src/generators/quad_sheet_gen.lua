@@ -12,8 +12,7 @@ M.generate = function()
     for key, image in TextureCache:each() do
         local w, h = image:getDimensions()
 
-        local font = love.graphics.newFont(10)
-        love.graphics.setFont(font)
+        love.graphics.setFont(love.graphics.newFont(10))
 
         local canvas = love.graphics.newCanvas(w, h)
         canvas:renderTo(function() 

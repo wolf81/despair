@@ -43,8 +43,8 @@ FONT = love.graphics.newImageFont('gfx/image_font.png',
 
 FLAGS = {
     -- effect flags
-    ['projectile'] = 0x1,
+    ['projectile']      = 0x1,
 
     -- weapon flags
-    ['natural_weapon'] = 0x1,
+    ['natural_weapon']  = 0x1, -- weapons like claws, tooth, tail, fists, ...
 }

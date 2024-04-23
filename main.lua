@@ -15,6 +15,11 @@ local function trySetCursor()
     love.mouse.setCursor(cursor)
 end
 
+local function configureFont()
+    FONT:setLineHeight(2.0)
+    love.graphics.setFont(FONT)
+end
+
 function love.load(args)
     love.window.setTitle('Dungeon of Despair')
 
@@ -34,7 +39,7 @@ function love.load(args)
         end
     end
 
-    FONT:setLineHeight(2.0)
+    configureFont()
 
     trySetCursor()
 
