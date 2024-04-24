@@ -17,12 +17,16 @@ bat           |npc   |bat                     |1d8    |12  |       |       |30  
 blk_widow_mat |npc   |black widow matriarch   |1d8+2  |12  |       |       |20     |bite     |uf_heroes |193,194,195,196 |        |         |
 blk_widow     |npc   |black widow             |1d8+2  |12  |       |       |20     |bite     |uf_heroes |197,198,199,200 |        |         |
 rat           |npc   |rat                     |1d8    |12  |       |       |30     |bite     |uf_heroes |201,202,203,204 |        |         |
-dire_cobra    |npc   |dire cobra              |1d8    |12  |       |       |30     |bite     |uf_heroes |217,218,219,220 |        |         |
-cobra         |npc   |cobra                   |1d8    |12  |       |       |30     |bite     |uf_heroes |221,222,223,224 |        |         |
+h_viper_snake |npc   |huge viper              |6d8+6  |15  |       |       |20     |bite     |uf_heroes |217,218,219,220 |        |         |
+l_viper_snake |npc   |large viper             |3d8    |15  |       |       |20     |bite     |uf_heroes |217,218,219,220 |        |         |
+viper_snake   |npc   |viper                   |2d8    |16  |       |       |20     |bite     |uf_heroes |221,222,223,224 |        |         |
+s_viper_snake |npc   |small viper             |1d8    |17  |       |       |20     |bite     |uf_heroes |221,222,223,224 |        |         |
 minotaur      |npc   |minotaur                |1d8    |12  |       |       |30     |bite     |uf_heroes |225,226,227,228 |        |         |
 vampire       |npc   |vampire                 |1d8    |12  |       |       |30     |bite     |uf_heroes |229,230,231,232 |        |         |
 vampire_lord  |npc   |vampire lord            |1d8    |12  |       |       |30     |bite     |uf_heroes |233,234,235,236 |        |         |
 lich          |npc   |lich                    |1d8    |12  |       |       |30     |bite     |uf_heroes |237,238,239,240 |        |         |
+wolf          |npc   |wolf                    |2d8+4  |14  |       |       |50     |bite     |uf_heroes |241,242,243,244 |        |         |
+blink_dog     |npc   |blink dog               |4d10   |16  |       |       |40     |bite     |uf_heroes |245,246,247,248 |        |         |
 observer      |npc   |observer                |1d8    |12  |       |       |30     |bite     |uf_heroes |273,274,275,276 |        |         |
 spectator     |npc   |spectator               |1d8    |12  |       |       |30     |bite     |uf_heroes |277,278,279,280 |        |         |
 dryad         |npc   |dryad                   |1d8    |12  |       |       |30     |bite     |uf_heroes |293,294,295,296 |        |         |
