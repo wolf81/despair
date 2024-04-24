@@ -9,47 +9,10 @@ local MINIMUM_LOAD_DURATION = 0.5
 
 local Loading = {}
 
-local function registerTerrainQuads()
-    local key = 'uf_terrain'
+local function registerQuadsByKey(key, size)
     local image = TextureCache:get(key)
-    local quads = QuadGenerator.generate(image, 48, 48)
-    QuadCache:register(key, quads)
-end
-
-local function registerItemsQuads()
-    local key = 'uf_items'
-    local image = TextureCache:get(key)
-    local quads = QuadGenerator.generate(image, 48, 48)
-    QuadCache:register(key, quads)
-end
-
-local function registerHeroesQuads()
-    print('REGISTER HERO QUADS')
-    local key = 'uf_heroes'
-    local image = TextureCache:get(key)
-    local quads = QuadGenerator.generate(image, 48, 48)
-    QuadCache:register(key, quads)
-end
-
-local function registerFxQuads()
-    local key = 'uf_fx'
-    local image = TextureCache:get(key)
-    local quads = QuadGenerator.generate(image, 24, 24)
-    QuadCache:register(key, quads)
-end
-
-local function registerFxImpactQuads()
-    local key = 'uf_fx_impact'
-    local image = TextureCache:get(key)
-    local quads = QuadGenerator.generate(image, 48, 48)
-    QuadCache:register(key, quads)
-end
-
-local function registerProjectilesQuads()
-    local key = 'projectiles'
-    local image = TextureCache:get(key)
-    local quads = QuadGenerator.generate(image, 24, 24)
-    QuadCache:register(key, quads)
+    local quads = QuadGenerator.generate(image, size, size)
+    QuadCache:register(key, quads)    
 end
 
 local function registerInterfaceQuads()
@@ -112,20 +75,6 @@ local function registerSkillsQuads()
     QuadCache:register(key, quads)
 end
 
-local function registerPortraitsQuads()
-    local key = 'uf_portraits'
-    local image = TextureCache:get(key)
-    local quads = QuadGenerator.generate(image, 50, 50)
-    QuadCache:register(key, quads)
-end
-
-local function registerActionBarQuads()
-    local key = 'actionbar'
-    local image = TextureCache:get(key)
-    local quads = QuadGenerator.generate(image, 48, 48)
-    QuadCache:register(key, quads)
-end
-
 local function loadLevels()
     local levels_dir = 'gen/levels'
     local dir_path = love.filesystem.getRealDirectory(levels_dir)
@@ -136,6 +85,7 @@ local function loadLevels()
         local getContents = assert(loadfile(filepath))
         table.insert(level_data, getContents())
     end
+
     -- sort by level index
     table.sort(level_data, function(a, b) return a.level < b.level end)
     assert(#level_data, DUNGEON_LEVELS, '"level_data" count does not match "DUNGEON_LEVELS"')
@@ -169,8 +119,6 @@ local function loadEntities()
 end
 
 local function loadGraphics()
-    -- generate textures & quads
-    -- cache generated textures & quads
     local gfx_dir = 'gfx'
     files = love.filesystem.getDirectoryItems(gfx_dir)
     for _, file in ipairs(files) do
@@ -187,15 +135,18 @@ local function loadGraphics()
 end
 
 local function registerQuads()
-    registerFxQuads()
-    registerItemsQuads()
-    registerHeroesQuads()
+    for _, key in ipairs({ 'uf_terrain', 'uf_heroes', 'uf_items', 'uf_fx_impact', 'actionbar' }) do
+        registerQuadsByKey(key, 48)
+    end
+
+    for _, key in ipairs({ 'uf_fx', 'projectiles' }) do
+        registerQuadsByKey(key, 24)
+    end
+
+    registerQuadsByKey('uf_portraits', 50)
+
     registerSkillsQuads()
-    registerTerrainQuads()
-    registerFxImpactQuads()
     registerInterfaceQuads()
-    registerPortraitsQuads()
-    registerActionBarQuads()
     registerProjectilesQuads()
 end
 
