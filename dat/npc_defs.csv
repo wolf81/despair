@@ -16,7 +16,8 @@ dire_bat      |npc   |dire bat                |1d8    |12  |       |       |30  
 bat           |npc   |bat                     |1d8    |12  |       |       |30     |bite     |uf_heroes |181,182,183,184 |        |         |
 blk_widow_mat |npc   |black widow matriarch   |1d8+2  |12  |       |       |20     |bite     |uf_heroes |193,194,195,196 |        |         |
 blk_widow     |npc   |black widow             |1d8+2  |12  |       |       |20     |bite     |uf_heroes |197,198,199,200 |        |         |
-rat           |npc   |rat                     |1d8    |12  |       |       |30     |bite     |uf_heroes |201,202,203,204 |        |         |
+rat           |npc   |rat                     |1d2    |14  |       |       |15     |bite     |uf_heroes |201,202,203,204 |        |         |
+dire_rat      |npc   |dire rat                |1d8+1  |15  |       |       |40     |bite     |uf_heroes |205,206,207,208 |        |         |
 h_viper_snake |npc   |huge viper              |6d8+6  |15  |       |       |20     |bite     |uf_heroes |217,218,219,220 |        |         |
 l_viper_snake |npc   |large viper             |3d8    |15  |       |       |20     |bite     |uf_heroes |217,218,219,220 |        |         |
 viper_snake   |npc   |viper                   |2d8    |16  |       |       |20     |bite     |uf_heroes |221,222,223,224 |        |         |

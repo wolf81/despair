@@ -147,7 +147,10 @@ local function newPreloader()
         local data_dir = 'gen'
         local dirs = love.filesystem.getDirectoryItems(data_dir)
         for _, dir in ipairs(dirs) do
-            EntityFactory.register(data_dir .. '/' .. dir)
+            -- by convention, all entity directory names end in 'defs' 
+            if dir:match('defs$') then
+                EntityFactory.register(data_dir .. '/' .. dir)
+            end
         end
             
         -- generate textures & quads
