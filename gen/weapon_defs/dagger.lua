@@ -8,5 +8,6 @@ return {
 	attack = 0,
 	damage = '1d4',
 	special = { '' },
+	flags = { '' },
 	effect = 'ef_strike_1',
 }
