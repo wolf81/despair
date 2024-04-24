@@ -36,7 +36,7 @@ black_drag    |npc   |black dragon            |1d12   |12  |       |       |30  
 red_drag      |npc   |red dragon              |1d12   |12  |       |       |30     |bite     |uf_heroes |349,350,351,352 |        |         |
 blue_drag     |npc   |azure dragon            |1d12   |12  |       |       |30     |bite     |uf_heroes |353,354,355,356 |        |         |
 green_drag    |npc   |emerald dragon          |1d12   |12  |       |       |30     |bite     |uf_heroes |357,358,359,360 |        |         |
-g_stag_beetle |npc   |giant stag beetle       |7d8+21 |19  |       |       |20     |bite     |uf_heroes |424,425,426,427 |        |         |
+g_stag_beetle |npc   |giant stag beetle       |7d8+21 |19  |       |       |20     |bite     |uf_heroes |417,418,419,420 |        |         |
 g_bomb_beetle |npc   |giant bombardier beetle |2d8+4  |16  |       |       |20     |bite     |uf_heroes |421,422,423,424 |        |         |
 giant_beetle  |npc   |giant beetle            |3d6+3  |15  |       |       |30     |bite     |uf_heroes |425,426,427,428 |        |         |
 fire_beetle   |npc   |fire beetle             |1d8    |13  |       |       |30     |bite     |uf_heroes |429,430,431,432 |        |         |
