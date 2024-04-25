@@ -95,9 +95,9 @@ local function addLoot(level, level_idx, loot_table)
     end
 end
 
-local function newLevel(dungeon, level_idx, loot_table)
-    local level = Level(dungeon, level_idx)
-    addLoot(level, level_idx, loot_table)
+local function newLevel(dungeon, level_info, loot_table)
+    local level = Level(dungeon, level_info)
+    addLoot(level, level_info.level, loot_table)
     return level
 end
 
@@ -119,12 +119,12 @@ Dungeon.new = function(level_info, player)
 
     local enter = function(self)
         level_idx = 1
-        levels = { newLevel(self, level_idx, loot_table) }
+        levels = { newLevel(self, level_info[level_idx], loot_table) }
         levels[level_idx]:enter(player)
     end
 
     local nextLevel = function(self)
-        if level_idx == DUNGEON_LEVELS then 
+        if level_idx == #level_info then 
             error('already at max level, should not have stairs down')
         end
 
@@ -152,8 +152,9 @@ Dungeon.new = function(level_info, player)
 
         level_idx = level_idx_        
         if level_idx > #levels then
-            table.insert(levels, newLevel(self, level_idx, loot_table))
+            table.insert(levels, newLevel(self, level_info[level_idx], loot_table))
         end
+
         levels[level_idx]:enter(player, direction)
     end
 

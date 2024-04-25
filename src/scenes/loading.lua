@@ -88,7 +88,6 @@ local function loadLevels()
 
     -- sort by level index
     table.sort(level_data, function(a, b) return a.level < b.level end)
-    assert(#level_data, DUNGEON_LEVELS, '"level_data" count does not match "DUNGEON_LEVELS"')
 
     return level_data
 end

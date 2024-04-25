@@ -31,12 +31,12 @@ local function initSystems(entities)
     return { visual_system, control_system, health_system, health_bar_system }
 end
 
-Level.new = function(dungeon, level_idx)
+Level.new = function(dungeon, level_info)
     assert(dungeon ~= nil, 'missing argument "dungeon"')
-    assert(level_idx ~= nil, 'missing argument "level_idx"')
+    assert(level_info ~= nil, 'missing argument "level_info"')
 
     -- generate a map
-    local tiles, stair_up, stair_dn = MazeGenerator.generate(MAP_SIZE, 9)
+    local tiles, stair_up, stair_dn = MazeGenerator.generate(MAP_SIZE, level_info.corr_size)
 
     local map = Map(tiles, function(id) return id ~= 0 end)
     local map_w, map_h = map:getSize()
@@ -54,6 +54,8 @@ Level.new = function(dungeon, level_idx)
     stair_dn = EntityFactory.create('dun_13', stair_dn)
 
     local entities = { stair_up, stair_dn }
+
+    local encounter_builder = EncounterBuilder(level_info, 10, 8)
 
     local scheduler = Scheduler()
 
@@ -93,9 +95,9 @@ Level.new = function(dungeon, level_idx)
             return
         end
 
-        -- about once every 15 turns, randomly spawn a monster if PC is not in combat 
+        -- every once in a while, spawn a NPC if PC is not in combat 
         if not scheduler:inCombat() and lrandom(1, 25) == 1 then
-            self:addEntity(EncounterGenerator.generate(self, coord, 10, 8))
+            encounter_builder:makeEncounter(self, coord)
         end
 
         -- update the player distance map, to help NPCs find player
@@ -339,7 +341,7 @@ Level.new = function(dungeon, level_idx)
         end
 
         local cartographer = player:getComponent(Cartographer)
-        cartographer:setLevel(level_idx, function(x, y) 
+        cartographer:setLevel(level_info.level, function(x, y) 
             return fog:isVisible(x, y)
         end)
         cartographer:updateChart(player.coord, map)
@@ -381,7 +383,7 @@ Level.new = function(dungeon, level_idx)
 
     local getScheduler = function(self) return scheduler end
 
-    local getIndex = function(self) return level_idx end
+    local getInfo = function(self) return level_info end
     
     return setmetatable({
         -- methods
@@ -390,7 +392,7 @@ Level.new = function(dungeon, level_idx)
         enter               = enter,
         update              = update,
         getSize             = getSize,
-        getIndex            = getIndex,
+        getInfo             = getInfo,
         getCoord            = getCoord,
         hasStairs           = hasStairs,
         isVisible           = isVisible,
