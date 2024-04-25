@@ -6,22 +6,28 @@
 local ExpLevel = {}
 
 ExpLevel.new = function(entity, def)
-    local value = def['level']
+    local level = def['level']
 
-    local advance = function(self)
-        value = value + 1
-        print('advanced to level: ' .. value)
-        return value
+    local exp = def['exp'] or 0
+
+    local incLevel = function(self)
+        level = level + 1
+        print('advanced to level: ' .. level)
+        return level
     end
 
-    local getValue = function(self)
-        return value
-    end
+    local addExp = function(self, exp_) exp = exp + exp_ end
+
+    local getExp = function(self) return exp end
+
+    local getLevel = function(self) return level end
 
     return setmetatable({
-        --methods
-        advance     = advance,
-        getValue    = getValue,
+        -- methods
+        incLevel    = incLevel,
+        getLevel    = getLevel,
+        addExp      = addExp,
+        getExp      = getExp,
     }, ExpLevel)
 end
 
