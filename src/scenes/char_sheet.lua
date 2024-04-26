@@ -47,9 +47,12 @@ CharSheet.new = function(player)
         local name = player.name:upper()
         if not health:isAlive() then name = name .. ' (deceased)' end
 
+        local exp, exp_goal = exp_level:getExp()
+
         local lines = { 
             name,
             StringHelper.capitalize(player.class) .. ' level ' .. exp_level:getLevel(),
+            'Experience:    ' .. exp .. ' / ' .. exp_goal,
             '',
             'STATS',
             'strength:      ' .. getStatLine(stats, 'str'),

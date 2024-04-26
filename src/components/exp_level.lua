@@ -3,22 +3,46 @@
 --  Author: Wolfgang Schreurs
 --  info+despair@wolftrail.net
 
+local mmin = math.min
+
 local ExpLevel = {}
 
 ExpLevel.new = function(entity, def)
     local level = def['level']
 
+    -- for NPCs can use HD count to represent level
+    if not level then 
+        local hd = def['hd']
+        assert(hd ~= nil, 'missing field: "level" or "hd"')
+        level = ndn.dice(def['hd']).count()
+    end
+
+    -- current exp, resets to 0 every time a new level is gained
     local exp = def['exp'] or 0
 
     local incLevel = function(self)
         level = level + 1
-        print('advanced to level: ' .. level)
+        exp = 0
         return level
     end
 
-    local addExp = function(self, exp_) exp = exp + exp_ end
+    local addExp = function(self, exp_)
+        local _, exp_goal = self:getExp()
 
-    local getExp = function(self) return exp end
+        -- if current exp matches goal, no more gain possible, need to increase level first
+        if exp == exp_goal then return end
+
+        exp = mmin(exp + exp_, exp_goal)
+
+        if exp == exp_goal then
+            -- TODO: perhaps instead of showing text, glow portrait, add '+' icon (?)
+            Signal.emit(
+                'notify', 
+                StringHelper.capitalize(entity.name) .. ' gained enough experience to advance to level ' .. level + 1)
+        end
+    end
+
+    local getExp = function(self) return exp, level * 10 end
 
     local getLevel = function(self) return level end
 

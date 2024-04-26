@@ -95,6 +95,7 @@ M.create = function(id, coord)
         entity:addComponent(Health(entity, def))
         entity:addComponent(Offense(entity, def))
         entity:addComponent(Defense(entity, def))
+        entity:addComponent(ExpLevel(entity, def))
         entity:addComponent(MoveSpeed(entity, def))
         entity:addComponent(HealthBar(entity, def))
 

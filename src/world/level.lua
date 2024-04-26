@@ -186,6 +186,14 @@ Level.new = function(dungeon, level_info)
             local total = attack.roll + attack.attack
             print(total .. ' (' .. attack.roll .. ' + ' .. attack.attack .. ') vs ' .. status.ac)
         end
+
+        if entity.type == 'pc' and target.type == 'npc' then
+            if not target:getComponent(Health):isAlive() then
+                local exp_gain = target:getComponent(ExpLevel):getLevel()
+                print('gain exp', exp_gain)
+                entity:getComponent(ExpLevel):addExp(exp_gain)
+            end
+        end
     end
 
     local onEnergy = function(self, entity, message)

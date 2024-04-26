@@ -38,6 +38,28 @@ NotifyBar.new = function()
     -- the current notification
     local notification = nil
 
+    local update = function(self, dt)
+        if notification or #notifications == 0 then return end
+
+        notification = table.remove(notifications, 1)
+
+        -- fade in, show message, fade out
+        handle = Timer.tween(FADE_DURATION, notification, { alpha = 1.0 }, 'linear', function() 
+            handle = Timer.after(notification.duration, function()
+                self:dismiss()
+            end)
+        end)
+    end
+
+    local draw = function(self)
+        if not notification then return end
+
+        local x, y, w, h = notification.frame:unpack()
+        love.graphics.setColor(1.0, 1.0, 1.0, notification.alpha)
+        love.graphics.draw(notification.background, x, y)
+        love.graphics.printf(notification.message, x, y + MARGIN + 1, w, 'center')
+    end
+
     local show = function(self, message)
         if notification and notification.message ~= message then
             if handle then 
@@ -64,42 +86,29 @@ NotifyBar.new = function()
             table.insert(notifications, { 
                 background  = newBackground(w, h),
                 message     = message, 
-                duration    = lines * 1.0, 
+                duration    = lines * 1.5, 
                 alpha       = 0.0,
                 frame       = Rect(x, y, w, h),
             })
         end
     end
 
-    local update = function(self, dt)
-        if notification or #notifications == 0 then return end
-
-        notification = table.remove(notifications, 1)
-
-        -- fade in, show message, fade out
-        handle = Timer.tween(FADE_DURATION, notification, { alpha = 1.0 }, 'linear', function() 
-            handle = Timer.after(notification.duration, function()
-                handle = Timer.tween(FADE_DURATION, notification, { alpha = 0.0 }, 'linear', function() 
-                    notification = nil
-                    handle = nil
-                end)
-            end)
-        end)
-    end
-
-    local draw = function(self)
+    local dismiss = function(self)
         if not notification then return end
 
-        local x, y, w, h = notification.frame:unpack()
-        love.graphics.setColor(1.0, 1.0, 1.0, notification.alpha)
-        love.graphics.draw(notification.background, x, y)
-        love.graphics.printf(notification.message, x, y + MARGIN + 1, w, 'center')
+        if handle then Timer.cancel(handle) end
+
+        handle = Timer.tween(FADE_DURATION, notification, { alpha = 0.0 }, 'linear', function() 
+            notification = nil
+            handle = nil
+        end)        
     end
 
     return setmetatable({
         -- methods
         update  = update,
         show    = show,
+        dismiss = dismiss,
         draw    = draw,
     }, NotifyBar)
 end
