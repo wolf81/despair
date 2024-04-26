@@ -46,4 +46,7 @@ FLAGS = {
 
     -- weapon flags
     ['natural_weapon']  = 0x1, -- weapons like claws, tooth, tail, fists, ...
+
+    -- npc flags
+    ['shadow_blend'] = 0x1, -- disappaer in shadows, but revealed by means of a Daylight spell
 }

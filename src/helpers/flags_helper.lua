@@ -15,6 +15,8 @@ M.parseFlags = function(flags)
             val = bbor(val, FLAGS.projectile)
         elseif flag == 'NW' then            
             val = bbor(val, FLAGS.natural_weapon)
+        elseif flag == 'SB' then
+            val = bbor(val, FLAGS.shadow_blend)
         end
     end
 
