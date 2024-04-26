@@ -13,7 +13,7 @@ M.parseFlags = function(flags)
     for idx, flag in pairs(flags) do
         if flag == 'PR' then
             val = bbor(val, FLAGS.projectile)
-        elseif flag == 'NR' then
+        elseif flag == 'NW' then            
             val = bbor(val, FLAGS.natural_weapon)
         end
     end
@@ -21,8 +21,6 @@ M.parseFlags = function(flags)
     return val
 end
 
-M.hasFlag = function(value, flag)
-    return bband(value, flag) == flag
-end
+M.hasFlag = function(value, flag) return bband(value, flag) == flag end
 
 return M

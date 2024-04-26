@@ -12,6 +12,8 @@
 * feat: HealthBar system should not be drawn from Visual system after making above change
 * feat: Get experience for killing monsters and level up
 * feat: setters in components should return self, so builder pattern can be used, see Visual setRotation, setOffset
+* feat: use Dijkstra map distance to stop chase player when out of certain range, expect for creatures with some kind of tracking ability
+* feat: allow sleep if no monsters are nearby, regardless if monsters are still chasing player
 
 ## BUGS 
 

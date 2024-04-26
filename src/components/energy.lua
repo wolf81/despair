@@ -5,13 +5,13 @@
 
 local Energy = {}
 
-local MAX_ENERGY = 200
+local MAX_ENERGY = 300
 
 Energy.new = function(entity, def)
     local health = entity:getComponent(Health)
     assert(health ~= nil, 'missing component: "Health"')
 
-    local energy = MAX_ENERGY - 15
+    local energy = MAX_ENERGY - 25
 
     local expend = function(self, amount)
         energy = energy - (amount or 1)
@@ -25,7 +25,7 @@ Energy.new = function(entity, def)
 
     local eatFood = function(self, amount)
         assert(amount ~= nil, 'missing argument "amount"')
-        energy = energy + amount * 15
+        energy = energy + amount * 20
 
         -- when eating too much, the stomach explodes
         if energy > MAX_ENERGY then

@@ -13,7 +13,6 @@ Label.new = function(text, color)
     local update = function(self, dt) end
 
     local draw = function(self)
-        love.graphics.setFont(FONT)
         love.graphics.setColor(unpack(color))
 
         local x, y, w, h = frame:unpack()

@@ -17,4 +17,8 @@ M.capitalize = function(str)
     return str:gsub("^%l", string.upper)
 end
 
+M.endsWith = function(str, suffix) 
+    return str:match((suffix or '') .. '$') 
+end
+
 return M

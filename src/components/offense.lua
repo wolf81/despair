@@ -48,7 +48,7 @@ Offense.new = function(entity, def)
         -- add level bonus, if applicable
         local exp_level = entity:getComponent(ExpLevel)
         if exp_level ~= nil then
-            bonus = bonus + exp_level:getValue()
+            bonus = bonus + exp_level:getLevel()
         end
 
         return base + bonus

@@ -20,7 +20,7 @@ local useFood = function(self, target, level)
     if target == nil then return false end
 
     local energy = target:getComponent(Energy)
-    energy:eatFood(lrandom(4, 6))
+    energy:eatFood(5)
 
     return true
 end

@@ -16,7 +16,7 @@ Health.new = function(entity, def)
 
     local exp_level = entity:getComponent(ExpLevel)
     if exp_level ~= nil then
-        assert(exp_level:getValue() ~= 1, 'level should be 1, for additional levels call "increase"')
+        assert(exp_level:getLevel() ~= 1, 'level should be 1, for additional levels call "increase"')
     end
 
     if hd ~= nil then
