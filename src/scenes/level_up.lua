@@ -16,6 +16,7 @@ LevelUp.new = function(player)
     local game = nil
 
     local exp_level = player:getComponent(ExpLevel)
+    local health = player:getComponent(Health)
     local next_level = exp_level:getLevel() + 1
 
     local background = TextureGenerator.generateParchmentTexture(220, 160)
@@ -27,12 +28,14 @@ LevelUp.new = function(player)
     -- TODO: it should be possible to 'seed' ndn or provide your own rng or integrate prng
     local hp_gain = ndn.dice('1d6').roll()
 
-    local STR_PAD = 6
+    local hp = select(2, health:getValue())
+
+    local STR_PAD = 5
 
     local text = StringHelper.concat({
-        'Level:         ' .. StringHelper.padRight(tostring(next_level), STR_PAD),
+        'LEVEL ' .. next_level,
         '',
-        'hitpoint gain: ' .. StringHelper.padRight(tostring(hp_gain), STR_PAD),
+        'hitpoints (+' .. hp_gain .. '): ' .. StringHelper.padRight(tostring(hp + hp_gain), STR_PAD),
     }, '\n')
 
     local layout = tidy.Border(tidy.Margin(20), {
