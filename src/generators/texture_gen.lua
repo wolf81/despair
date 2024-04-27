@@ -14,7 +14,7 @@ M.generateParchmentTexture = function(w, h)
 
     local texture = TextureCache:get('uf_interface')
     local quads = QuadCache:get('uf_interface')
-    local _, _, quad_w, quad_h = quads[266]:getViewport()
+    local quad_w, quad_h = select(3, quads[266]:getViewport())
 
     local cols = mfloor(w / quad_w)
     local rows = mfloor(h / quad_h) 

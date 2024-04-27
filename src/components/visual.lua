@@ -25,7 +25,7 @@ Visual.new = function(entity, def, duration)
 
     local fade = { alpha = 1.0 }
 
-    local _, _, quad_w, quad_h = quads[1]:getViewport()
+    local quad_w, quad_h = select(3, quads[1]:getViewport())
 
     local anim_handle = nil
 
