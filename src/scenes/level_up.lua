@@ -18,7 +18,7 @@ LevelUp.new = function(player)
     local exp_level = player:getComponent(ExpLevel)
     local next_level = exp_level:getLevel() + 1
 
-    local background = TextureGenerator.generateParchmentTexture(220, 310)
+    local background = TextureGenerator.generateParchmentTexture(220, 340)
     local frame = getFrame(background)
 
     -- TODO: probably an entity Class component should be responsible for calculating hp gain
@@ -27,10 +27,12 @@ LevelUp.new = function(player)
     -- TODO: it should be possible to 'seed' ndn or provide your own rng or integrate prng
     local hp_gain = ndn.dice('1d6').roll()
 
+    local STR_PAD = 6
+
     local text = StringHelper.concat({
-        'Level:         ' .. next_level,
+        'Level:         ' .. StringHelper.padRight(tostring(next_level), STR_PAD),
         '',
-        'hitpoint gain: ' .. hp_gain,
+        'hitpoint gain: ' .. StringHelper.padRight(tostring(hp_gain), STR_PAD),
     }, '\n')
 
     local layout = tidy.Border(tidy.Margin(20), {

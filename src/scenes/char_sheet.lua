@@ -33,27 +33,29 @@ CharSheet.new = function(player)
     local name = player.name:upper()
     if not health:isAlive() then name = name .. ' (deceased)' end
 
+    local STR_PAD = 8
+
     local exp, exp_goal = exp_level:getExp()
     local text = StringHelper.concat({ 
         name,
         StringHelper.capitalize(player.class) .. ' level ' .. exp_level:getLevel(),
-        'Experience:    ' .. exp .. ' / ' .. exp_goal,
+        'Experience:    ' .. StringHelper.padRight(exp .. ' / ' .. exp_goal, STR_PAD),
         '',
         'STATS',
-        'strength:      ' .. getStatLine(stats, 'str'),
-        'dexterity:     ' .. getStatLine(stats, 'dex'),
-        'mind:          ' .. getStatLine(stats, 'mind'),
+        'strength:      ' .. StringHelper.padRight(getStatLine(stats, 'str'), STR_PAD),
+        'dexterity:     ' .. StringHelper.padRight(getStatLine(stats, 'dex'), STR_PAD),
+        'mind:          ' .. StringHelper.padRight(getStatLine(stats, 'mind'), STR_PAD),
         '',
         'SKILLS',
-        'physical:      ' .. skills:getValue('phys'),
-        'subterfuge:    ' .. skills:getValue('subt'),
-        'knowledge:     ' .. skills:getValue('know'),
-        'communication: ' .. skills:getValue('comm'),
+        'physical:      ' .. StringHelper.padRight(tostring(skills:getValue('phys')), STR_PAD),
+        'subterfuge:    ' .. StringHelper.padRight(tostring(skills:getValue('subt')), STR_PAD),
+        'knowledge:     ' .. StringHelper.padRight(tostring(skills:getValue('know')), STR_PAD),
+        'communication: ' .. StringHelper.padRight(tostring(skills:getValue('comm')), STR_PAD),
         '',
         'SAVES',
-        'fortitude:     ' .. skills:getValue('phys') + stats:getBonus('str'),
-        'reflex:        ' .. skills:getValue('phys') + stats:getBonus('dex'),
-        'will:          ' .. stats:getBonus('mind') + exp_level:getLevel(),
+        'fortitude:     ' .. StringHelper.padRight(tostring(skills:getValue('phys') + stats:getBonus('str')), STR_PAD),
+        'reflex:        ' .. StringHelper.padRight(tostring(skills:getValue('phys') + stats:getBonus('dex')), STR_PAD),
+        'will:          ' .. StringHelper.padRight(tostring(stats:getBonus('mind') + exp_level:getLevel()), STR_PAD),
     }, '\n')
 
     local update = function(self, dt) 
