@@ -3,6 +3,8 @@
 --  Author: Wolfgang Schreurs
 --  info+despair@wolftrail.net
 
+local mfloor = math.floor
+
 local LevelUp = {}
 
 local function getFrame(background)
@@ -10,6 +12,25 @@ local function getFrame(background)
     local x = (WINDOW_W - w) / 2
     local y = (WINDOW_H - h) / 2
     return Rect(x, y, w, h)
+end
+
+local function getCheckImage()
+    local texture = TextureCache:get('uf_interface')
+    local quad = QuadCache:get('uf_interface')[381]
+    local quad_w, quad_h = select(3, quad:getViewport())
+
+    local background = TextureGenerator.generatePanelTexture(24, 24)
+    local background_w, background_h = background:getDimensions()
+    local canvas = love.graphics.newCanvas(24, 24)
+
+    canvas:renderTo(function() 
+        love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
+        love.graphics.draw(background, 0, 0)
+        local x, y = mfloor((background_w - quad_w) / 2), mfloor((background_h - quad_h) / 2)
+        love.graphics.draw(texture, quad, x, y)
+    end)
+
+    return love.graphics.newImage(canvas:newImageData())
 end
 
 LevelUp.new = function(player)
@@ -35,12 +56,19 @@ LevelUp.new = function(player)
     local text = StringHelper.concat({
         'LEVEL ' .. next_level,
         '',
-        'hitpoints (+' .. hp_gain .. '): ' .. StringHelper.padRight(tostring(hp + hp_gain), STR_PAD),
+        'Hitpoints (+' .. hp_gain .. '): ' .. StringHelper.padRight(tostring(hp + hp_gain), STR_PAD),
     }, '\n')
+
+    local handles = {}
 
     local layout = tidy.Border(tidy.Margin(20), {
         tidy.VStack({
             UI.makeLabel(text, { 0.0, 0.0, 0.0, 0.7 }),
+            UI.makeFlexSpace(),
+            tidy.HStack(tidy.MinSize(24), {
+                UI.makeFlexSpace(),
+                UI.makeButton('accept', getCheckImage())
+            }),
         })
     })
     layout:setFrame(frame:unpack())
@@ -68,11 +96,16 @@ LevelUp.new = function(player)
 
         game = from
         game:showOverlay()
+
+        -- TODO: update player stats for new level
+        handle = Signal.register('accept', function() Gamestate.pop() end)
     end
 
     local leave = function(self, to)
         game:hideOverlay()
         game = nil
+
+        Signal.remove('accept', handle)
     end
 
     local keyReleased = function(self, key, scancode)

@@ -6,10 +6,11 @@
 local M = {}
 
 M.makeButton = function(action, image)
-    if not image then
-        return tidy.Elem(ActionButton(action), tidy.MinSize(48), tidy.Stretch(0))
+    if image then
+        local image_w, image_h = image:getDimensions()
+        return tidy.Elem(ImageButton(image, action), tidy.MinSize(image_w, image_h), tidy.Stretch(0))
     else
-        return tidy.Elem(ImageButton(image, action), tidy.MinSize(50), tidy.Stretch(0))
+        return tidy.Elem(ActionButton(action), tidy.MinSize(48), tidy.Stretch(0))
     end
 end
 
