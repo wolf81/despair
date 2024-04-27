@@ -18,7 +18,7 @@ ExpLevel.new = function(entity, def)
     end
 
     -- current exp, resets to 0 every time a new level is gained
-    local exp, exp_goal = def['exp'] or 0, level * 2
+    local exp, exp_goal = def['exp'] or 0, level
 
     local levelUp = function(self)
         assert(self:canLevelUp(), 'not enough experience to level up')

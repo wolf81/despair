@@ -30,6 +30,33 @@ CharSheet.new = function(player)
 
     local game = nil
 
+    local name = player.name:upper()
+    if not health:isAlive() then name = name .. ' (deceased)' end
+
+    -- TODO: make a single string, not seperate lines
+    local exp, exp_goal = exp_level:getExp()
+    local lines = { 
+        name,
+        StringHelper.capitalize(player.class) .. ' level ' .. exp_level:getLevel(),
+        'Experience:    ' .. exp .. ' / ' .. exp_goal,
+        '',
+        'STATS',
+        'strength:      ' .. getStatLine(stats, 'str'),
+        'dexterity:     ' .. getStatLine(stats, 'dex'),
+        'mind:          ' .. getStatLine(stats, 'mind'),
+        '',
+        'SKILLS',
+        'physical:      ' .. skills:getValue('phys'),
+        'subterfuge:    ' .. skills:getValue('subt'),
+        'knowledge:     ' .. skills:getValue('know'),
+        'communication: ' .. skills:getValue('comm'),
+        '',
+        'SAVES',
+        'fortitude:     ' .. skills:getValue('phys') + stats:getBonus('str'),
+        'reflex:        ' .. skills:getValue('phys') + stats:getBonus('dex'),
+        'will:          ' .. stats:getBonus('mind') + exp_level:getLevel(),
+    }
+
     local update = function(self, dt) 
         -- body
     end
@@ -43,33 +70,6 @@ CharSheet.new = function(player)
         love.graphics.draw(background, x, y)
 
         love.graphics.setColor(0.0, 0.0, 0.0, 0.7)
-
-        local name = player.name:upper()
-        if not health:isAlive() then name = name .. ' (deceased)' end
-
-        local exp, exp_goal = exp_level:getExp()
-
-        local lines = { 
-            name,
-            StringHelper.capitalize(player.class) .. ' level ' .. exp_level:getLevel(),
-            'Experience:    ' .. exp .. ' / ' .. exp_goal,
-            '',
-            'STATS',
-            'strength:      ' .. getStatLine(stats, 'str'),
-            'dexterity:     ' .. getStatLine(stats, 'dex'),
-            'mind:          ' .. getStatLine(stats, 'mind'),
-            '',
-            'SKILLS',
-            'physical:      ' .. skills:getValue('phys'),
-            'subterfuge:    ' .. skills:getValue('subt'),
-            'knowledge:     ' .. skills:getValue('know'),
-            'communication: ' .. skills:getValue('comm'),
-            '',
-            'SAVES',
-            'fortitude:     ' .. skills:getValue('phys') + stats:getBonus('str'),
-            'reflex:        ' .. skills:getValue('phys') + stats:getBonus('dex'),
-            'will:          ' .. stats:getBonus('mind') + exp_level:getLevel(),
-        }
 
         for idx, line in ipairs(lines) do
             love.graphics.print(line, x + 10, y + idx * 15)

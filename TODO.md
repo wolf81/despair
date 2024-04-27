@@ -21,6 +21,7 @@
 * fix: rendering is buggy if 2 items with same z-index (e.g. tomes) are stacked on top of each other
 * fix: when using keyboard for movement and pressing action buttons, sometimes the mouse pointer disappears
 * fix: sometimes NPCs walk away, if NPCs are horizontally aligned with player and 1 empty tile in between, why?
+* fix: sometimes the action bar only responds to double clicks with mouse, why?
 
 ## LIB
 

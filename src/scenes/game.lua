@@ -51,7 +51,13 @@ end
 
 local function onShowInventory(player) Gamestate.push(Inventory(player)) end
 
-local function onShowCharacterSheet(player) Gamestate.push(CharSheet(player)) end
+local function onShowCharacterSheet(player) 
+    if player:getComponent(ExpLevel):canLevelUp() then
+        Gamestate.push(LevelUp(player))
+    else
+        Gamestate.push(CharSheet(player)) 
+    end
+end
 
 local function getLeftActionButtons(player)
     local buttons = {}
