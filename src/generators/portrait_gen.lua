@@ -3,7 +3,7 @@
 --  Author: Wolfgang Schreurs
 --  info+despair@wolftrail.net
 
-local lrandom = love.math.random
+local prandom = prng.random
 
 local M = {}
 
@@ -40,25 +40,27 @@ M.generate = function(player)
     local exp, exp_goal = exp_level:getExp()
     local show_plus_icon = exp == exp_goal
 
+    prng.randomseed(player.name)
+
     -- TODO: adjust clothes, accessories for player race and/or class
 
-    local face_idx = lrandom(51, 65)
+    local face_idx = prandom(51, 65)
 
     local hair_idx, helm_idx = 200, 200
 
-    if lrandom(1, 3) > 1 then
+    if prandom(1, 3) > 1 then
         local helm_indices = HELM_INDICES[player.class]
-        helm_idx = helm_indices[lrandom(#helm_indices)]
-    elseif lrandom(1, 2) == 1 then
-        hair_idx = HAIR_INDICES[lrandom(#HAIR_INDICES)]
+        helm_idx = helm_indices[prandom(#helm_indices)]
+    elseif prandom(1, 2) == 1 then
+        hair_idx = HAIR_INDICES[prandom(#HAIR_INDICES)]
     end
 
     local armor_indices = ARMOR_INDICES[player.class]
-    local armor_idx = armor_indices[lrandom(#armor_indices)]
+    local armor_idx = armor_indices[prandom(#armor_indices)]
 
     local beard_idx = 200
-    if lrandom(1, 4) > 1 then
-        beard_idx = BEARD_INDICES[lrandom(#BEARD_INDICES)]
+    if prandom(1, 4) > 1 then
+        beard_idx = BEARD_INDICES[prandom(#BEARD_INDICES)]
     end
 
     -- TODO: add accesories
