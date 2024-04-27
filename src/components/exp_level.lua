@@ -14,23 +14,27 @@ ExpLevel.new = function(entity, def)
     if not level then 
         local hd = def['hd']
         assert(hd ~= nil, 'missing field: "level" or "hd"')
-        level = ndn.dice(def['hd']).count()
+        level = ndn.dice(hd).count()
     end
 
     -- current exp, resets to 0 every time a new level is gained
-    local exp = def['exp'] or 0
+    local exp, exp_goal = def['exp'] or 0, level * 2
 
-    local incLevel = function(self)
+    local levelUp = function(self)
+        assert(self:canLevelUp(), 'not enough experience to level up')
+
+        -- TODO: add level up logic based on class (maybe have class component with "levelUp" method?)
+
         level = level + 1
         exp = 0
+        exp_goal = level * 10
+
         return level
     end
 
     local addExp = function(self, exp_)
-        local _, exp_goal = self:getExp()
-
         -- if current exp matches goal, no more gain possible, need to increase level first
-        if exp == exp_goal then return end
+        if self:canLevelUp() then return end
 
         exp = mmin(exp + exp_, exp_goal)
 
@@ -41,14 +45,17 @@ ExpLevel.new = function(entity, def)
         end
     end
 
-    local getExp = function(self) return exp, level * 2 end
+    local getExp = function(self) return exp, exp_goal end
+
+    local canLevelUp = function(self) return exp == exp_goal end
 
     local getLevel = function(self) return level end
 
     return setmetatable({
         -- methods
-        incLevel    = incLevel,
+        canLevelUp  = canLevelUp,
         getLevel    = getLevel,
+        levelUp     = levelUp,
         addExp      = addExp,
         getExp      = getExp,
     }, ExpLevel)
