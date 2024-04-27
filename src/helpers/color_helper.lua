@@ -3,10 +3,12 @@
 --  Author: Wolfgang Schreurs
 --  info+despair@wolftrail.net
 
+local bband, blshift, brshift = bit.band, bit.lshift, bit.rshift
+
 local M = {}
 
 M.getColors = function(image, quad, is_sorted)
-    local _, _, w, h = quad:getViewport()
+    local w, h = select(3, quad:getViewport())
 
     -- draw image & quad on a canvas, so we can get the image data
     local canvas = love.graphics.newCanvas(w, h)
@@ -22,9 +24,9 @@ M.getColors = function(image, quad, is_sorted)
         for x = 0, w - 1 do
             local r, g, b, a = image_data:getPixel(x, y)
             local rgba = bit.bor(
-                bit.lshift(r * 255, 24),
-                bit.lshift(g * 255, 16),
-                bit.lshift(b * 255, 8),
+                blshift(r * 255, 24),
+                blshift(g * 255, 16),
+                blshift(b * 255, 8),
                 a * 255)
             local count = color_info[rgba] or 0
             color_info[rgba] = count + 1
@@ -34,10 +36,10 @@ M.getColors = function(image, quad, is_sorted)
     -- convert numeric color values into rgba components and store in table
     local colors = {}
     for rgba, count in pairs(color_info) do
-        local r = bit.band(bit.rshift(rgba, 24), 0xFF) / 255
-        local g = bit.band(bit.rshift(rgba, 16), 0xFF) / 255
-        local b = bit.band(bit.rshift(rgba, 8), 0xFF) / 255
-        local a = bit.band(rgba, 0xFF) / 255
+        local r = bband(brshift(rgba, 24), 0xFF) / 255
+        local g = bband(brshift(rgba, 16), 0xFF) / 255
+        local b = bband(brshift(rgba, 8), 0xFF) / 255
+        local a = bband(rgba, 0xFF) / 255
 
         table.insert(colors, {
             color = { r, g, b, a },

@@ -63,10 +63,7 @@ ResourceBar.new = function(entity, type)
 
     local setFrame = function(self, x, y, w, h) frame = Rect(x, y, w, h) end
 
-    local getSize = function(self) 
-        local _, _, w, h = empty_quad:getViewport()
-        return w, h 
-    end
+    local getSize = function(self) return select(3, empty_quad:getViewport()) end
 
     return setmetatable({
         -- methods
