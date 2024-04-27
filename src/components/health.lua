@@ -47,7 +47,6 @@ Health.new = function(entity, def)
     -- increase current & total by amount of hitpoints
     -- returns current & total health
     local increase = function(self, hitpoints)
-        assert(hitpoints >= 1 and hitpoints <= 6, '"hitpoints" should be a value between 1 and 6')
         total = total + hitpoints 
         current = current + hitpoints
         return current, total
@@ -58,8 +57,6 @@ Health.new = function(entity, def)
 
     -- get current & total health value
     local getValue = function(self) return current, total end
-
-    local update = function(self, dt) end
 
     return setmetatable({
         -- methods

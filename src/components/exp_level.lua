@@ -23,11 +23,11 @@ ExpLevel.new = function(entity, def)
     local levelUp = function(self)
         assert(self:canLevelUp(), 'not enough experience to level up')
 
-        -- TODO: add level up logic based on class (maybe have class component with "levelUp" method?)
-
         level = level + 1
         exp = 0
         exp_goal = level * 10
+
+        entity:getComponent(Class):levelUp(level)
 
         return level
     end

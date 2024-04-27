@@ -5,16 +5,19 @@
 
 local Skills = {}
 
+-- TODO: maybe ExpLevel component should initialize with correct values based on class, race or hd
 Skills.new = function(entity, def)
     local class = def['class']
     local level = def['level']
     local race = def['race']
-    local hd = def['hd']
 
-    assert(level ~= nil or hd ~= nil, 'missing field: "hd" or "level"')
-
-    -- if hitdice is defined, use the dice count as level
-    if hd ~= nil then level = ndn.dice(hd).count() end
+    if not level then
+        -- if hitdice is defined, use the dice count as level
+        local hd = def['hd']
+        assert(level ~= nil or hd ~= nil, 'missing field: "hd" or "level"')
+        
+        level = ndn.dice(hd).count()
+    end
 
     -- for humans add +1 to each skill
     if race == 'human' then level = level + 1 end
