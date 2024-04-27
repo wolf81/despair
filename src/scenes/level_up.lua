@@ -27,14 +27,24 @@ LevelUp.new = function(player)
     -- TODO: it should be possible to 'seed' ndn or provide your own rng or integrate prng
     local hp_gain = ndn.dice('1d6').roll()
 
-    local lines = {
+    local text = StringHelper.concat({
         'Level:         ' .. next_level,
         '',
         'hitpoint gain: ' .. hp_gain,
-    }
+    }, '\n')
+
+    local layout = tidy.Border(tidy.Margin(20), {
+        tidy.VStack({
+            UI.makeLabel(text, { 0.0, 0.0, 0.0, 0.7 }),
+        })
+    })
+    layout:setFrame(frame:unpack())
+    for e in layout:eachElement() do
+        e.widget:setFrame(e.rect:unpack())
+    end
 
     local update = function(self, dt)
-        -- body
+        for e in layout:eachElement() do e.widget:update(dt) end
     end
 
     local draw = function(self)
@@ -45,10 +55,7 @@ LevelUp.new = function(player)
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
         love.graphics.draw(background, x, y)
 
-        love.graphics.setColor(0.0, 0.0, 0.0, 0.7)
-        for idx, line in ipairs(lines) do
-            love.graphics.print(line, x + 10, y + idx * 15)
-        end        
+        for e in layout:eachElement() do e.widget:draw() end
     end
 
     local enter = function(self, from)

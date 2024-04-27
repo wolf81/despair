@@ -19,7 +19,7 @@ local function getFrame(background)
 end
 
 CharSheet.new = function(player)
-    local background = TextureGenerator.generateParchmentTexture(220, 310)
+    local background = TextureGenerator.generateParchmentTexture(220, 340)
 
     local exp_level = player:getComponent(ExpLevel)
     local skills = player:getComponent(Skills)
@@ -33,9 +33,8 @@ CharSheet.new = function(player)
     local name = player.name:upper()
     if not health:isAlive() then name = name .. ' (deceased)' end
 
-    -- TODO: make a single string, not seperate lines
     local exp, exp_goal = exp_level:getExp()
-    local lines = { 
+    local text = StringHelper.concat({ 
         name,
         StringHelper.capitalize(player.class) .. ' level ' .. exp_level:getLevel(),
         'Experience:    ' .. exp .. ' / ' .. exp_goal,
@@ -55,7 +54,7 @@ CharSheet.new = function(player)
         'fortitude:     ' .. skills:getValue('phys') + stats:getBonus('str'),
         'reflex:        ' .. skills:getValue('phys') + stats:getBonus('dex'),
         'will:          ' .. stats:getBonus('mind') + exp_level:getLevel(),
-    }
+    }, '\n')
 
     local update = function(self, dt) 
         -- body
@@ -71,9 +70,7 @@ CharSheet.new = function(player)
 
         love.graphics.setColor(0.0, 0.0, 0.0, 0.7)
 
-        for idx, line in ipairs(lines) do
-            love.graphics.print(line, x + 10, y + idx * 15)
-        end
+        love.graphics.print(text, x + 10, y + 15)
     end
 
     local enter = function(self, from)
