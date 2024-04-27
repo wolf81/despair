@@ -7,6 +7,8 @@ local lrandom = love.math.random
 
 local M = {}
 
+local SPACING = 2
+
 local FACE_INDICES = { 47, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 65, 65, }
 
 local HAIR_INDICES = { 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 
@@ -32,6 +34,11 @@ M.generate = function(player)
     local key = 'uf_portraits'
     local texture = TextureCache:get(key)
     local quads = QuadCache:get(key)
+
+    -- determine if we should show an icon indicating player can level up
+    local exp_level = player:getComponent(ExpLevel)
+    local exp, exp_goal = exp_level:getExp()
+    local show_plus_icon = exp == exp_goal
 
     -- TODO: adjust clothes, accessories for player race and/or class
 
@@ -68,6 +75,13 @@ M.generate = function(player)
         love.graphics.draw(texture, quads[beard_idx])
         love.graphics.draw(texture, quads[helm_idx])
         love.graphics.draw(texture, quads[7])
+
+        if show_plus_icon then
+            local plus_texture = TextureCache:get('uf_interface')
+            local plus_quad = QuadCache:get('uf_interface')[376]
+            local _, _, plus_w, _ = plus_quad:getViewport()
+            love.graphics.draw(plus_texture, plus_quad, quad_w - plus_w - SPACING, SPACING)
+        end
     end)
 
     return love.graphics.newImage(canvas:newImageData())

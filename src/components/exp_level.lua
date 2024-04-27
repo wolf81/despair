@@ -35,14 +35,13 @@ ExpLevel.new = function(entity, def)
         exp = mmin(exp + exp_, exp_goal)
 
         if exp == exp_goal then
-            -- TODO: perhaps instead of showing text, glow portrait, add '+' icon (?)
-            Signal.emit(
-                'notify', 
+            Signal.emit('level-up')
+            Signal.emit('notify', 
                 StringHelper.capitalize(entity.name) .. ' gained enough experience to advance to level ' .. level + 1)
         end
     end
 
-    local getExp = function(self) return exp, level * 10 end
+    local getExp = function(self) return exp, level * 2 end
 
     local getLevel = function(self) return level end
 
