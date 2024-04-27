@@ -65,7 +65,7 @@ M.generate = function(player)
 
     -- TODO: add accesories
 
-    local _, _, quad_w, quad_h = quads[1]:getViewport()
+    local quad_w, quad_h = select(3, quads[1]:getViewport())
 
     local canvas = love.graphics.newCanvas(quad_w, quad_h)
     canvas:renderTo(function() 
@@ -81,7 +81,7 @@ M.generate = function(player)
         if show_plus_icon then
             local plus_texture = TextureCache:get('uf_interface')
             local plus_quad = QuadCache:get('uf_interface')[376]
-            local _, _, plus_w, _ = plus_quad:getViewport()
+            local plus_w  = select(3, plus_quad:getViewport()) 
             love.graphics.draw(plus_texture, plus_quad, quad_w - plus_w - SPACING, SPACING)
         end
     end)
