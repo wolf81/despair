@@ -9,9 +9,9 @@ local MINIMUM_LOAD_DURATION = 0.5
 
 local Loading = {}
 
-local function registerQuadsByKey(key, size)
+local function registerQuadsByKey(key, size, ox, oy)
     local image = TextureCache:get(key)
-    local quads = QuadGenerator.generate(image, size, size)
+    local quads = QuadGenerator.generate(image, size, size, ox, oy)
     QuadCache:register(key, quads)    
 end
 
@@ -63,6 +63,12 @@ local function registerInterfaceQuads()
             end
         end
 
+        -- buttons
+        for y = 176, 224, 16 do
+            for _, quad in ipairs(QuadGenerator.generate(image, 16, 16, x, y, 16 * 9, 16)) do
+                table.insert(quads, quad)
+            end
+        end
     end
 
     QuadCache:register(key, quads)
@@ -144,9 +150,9 @@ local function registerQuads()
 
     registerQuadsByKey('uf_portraits', 50)
 
-    registerSkillsQuads()
+    registerQuadsByKey('uf_skills', 24, 584, 64)
+
     registerInterfaceQuads()
-    registerProjectilesQuads()
 end
 
 Loading.new = function(completion)
