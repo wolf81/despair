@@ -3,9 +3,9 @@
 --  Author: Wolfgang Schreurs
 --  info+despair@wolftrail.net
 
-local Loader = {}
+local Runner = {}
 
-Loader.new = function(loading, completion)
+Runner.new = function(loading, completion)
     -- wrap the loading function inside a coroutine
     -- yield the results of the call to the loading function back to coroutine.resume() 
     local loader = coroutine.create(function() 
@@ -35,9 +35,9 @@ Loader.new = function(loading, completion)
 
     return setmetatable({
         update      = update,        
-    }, Loader)
+    }, Runner)
 end
 
-return setmetatable(Loader, {
-    __call = function(_, ...) return Loader.new(...) end,
+return setmetatable(Runner, {
+    __call = function(_, ...) return Runner.new(...) end,
 })

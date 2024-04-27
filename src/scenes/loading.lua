@@ -149,7 +149,7 @@ local function registerQuads()
     registerProjectilesQuads()
 end
 
-Loading.new = function()
+Loading.new = function(completion)
     local background = love.graphics.newImage('gfx/loading.png')
     local background_w, background_h = background:getDimensions()
 
@@ -165,32 +165,34 @@ Loading.new = function()
     local onLoadLevels = function(level_info_) level_info = level_info_ end
 
     -- load assets in this order and show appropriate message
-    local loaders = {
-        { Loader(loadGraphics),             'load graphics'     },
-        { Loader(registerQuads),            'register quads'    },
+    local runners = {
+        { Runner(loadGraphics),             'load graphics'     },
+        { Runner(registerQuads),            'register quads'    },
         -- TODO: cleaner if we can load health bar as part of graphics, but needs to know quads
-        { Loader(HealthBar.preload),        'load health bar'   }, 
-        { Loader(loadShaders),              'load shaders'      },
-        { Loader(loadEntities),             'load entities'     },
-        { Loader(loadLevels, onLoadLevels), 'load levels'       },
+        { Runner(HealthBar.preload),        'load health bar'   }, 
+        { Runner(loadShaders),              'load shaders'      },
+        { Runner(loadEntities),             'load entities'     },
+        { Runner(loadLevels, onLoadLevels), 'load levels'       },
     }
 
-    local loader, message, message_x = nil, nil, 0
+    local runner, message, message_x = nil, nil, 0
 
     local enter = function(self)
-        loader, message = unpack(table.remove(loaders, 1))
+        runner, message = unpack(table.remove(runners, 1))
         message_x = mfloor((WINDOW_W - FONT:getWidth(message)) / 2)
     end
 
     local update = function(self, dt)
         time = mmax(time - dt, 0)
 
-        local is_done = loader:update()
-        if is_done and #loaders > 0 then
-            loader, message = unpack(table.remove(loaders, 1))
+        local is_runner_done = runner:update()
+        if is_runner_done and #runners > 0 then
+            runner, message = unpack(table.remove(runners, 1))
             message_x = mfloor((WINDOW_W - FONT:getWidth(message)) / 2)
-        elseif is_done and #loaders == 0 and time == 0 then
-            Gamestate.switch(Game(level_info))            
+        elseif is_runner_done and #runners == 0 and time == 0 then
+            if completion then return completion() end
+            
+            return Gamestate.switch(Game(level_info))
         end
     end
 
