@@ -18,7 +18,7 @@ LevelUp.new = function(player)
     local exp_level = player:getComponent(ExpLevel)
     local next_level = exp_level:getLevel() + 1
 
-    local background = TextureGenerator.generateParchmentTexture(220, 340)
+    local background = TextureGenerator.generateParchmentTexture(220, 160)
     local frame = getFrame(background)
 
     -- TODO: probably an entity Class component should be responsible for calculating hp gain
