@@ -6,7 +6,7 @@
 local ChooseItem = {}
 
 local function getImage(texture, quad)
-    local _, _, quad_w, quad_h = quad:getViewport()
+    local quad_w, quad_h = select(3, quad:getViewport())
     local canvas = love.graphics.newCanvas(quad_w, quad_h)
     canvas:renderTo(function()
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)

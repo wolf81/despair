@@ -34,7 +34,7 @@ M.generateParchmentTexture = function(w, h)
         end
     end
 
-    local _, _, quad_w, quad_h = quads[266]:getViewport()
+    local quad_w, quad_h = select(3, quads[266]:getViewport())
     local canvas = love.graphics.newCanvas(quad_w * cols, quad_h * rows)
     canvas:renderTo(function() 
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)

@@ -15,7 +15,7 @@ local QUAD_INFO = TableHelper.readOnly({
 })
 
 local function generateBarTexture(texture, empty_quad, filled_quad, value)
-    local _, _, quad_w, quad_h = empty_quad:getViewport()
+    local quad_w, quad_h = select(3, empty_quad:getViewport())
     local canvas = love.graphics.newCanvas(quad_w, quad_h)
 
     canvas:renderTo(function() 
