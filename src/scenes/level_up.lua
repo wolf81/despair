@@ -41,24 +41,25 @@ LevelUp.new = function(player)
 
     local next_level = class:getLevel() + 1
 
+    local preview = class:levelUp(true)
+
     local background = TextureGenerator.generateParchmentTexture(220, 160)
     local frame = getFrame(background)
 
-    -- TODO: probably an entity Class component should be responsible for calculating hp gain
-    -- hp gain should be cached for the current level, so repeatedly opening this scene will show
-    -- same hp gain
-    -- TODO: it should be possible to 'seed' ndn or provide your own rng or integrate prng
-    local hp_gain = ndn.dice('1d6').roll()
+    local STR_PAD = 10
 
-    local hp = select(2, health:getValue())
-
-    local STR_PAD = 5
-
-    local text = StringHelper.concat({
-        'LEVEL ' .. next_level,
+    local lines = {
+        'LEVEL ' .. preview.level,
         '',
-        'Hitpoints (+' .. hp_gain .. '): ' .. StringHelper.padRight(tostring(hp + hp_gain), STR_PAD),
-    }, '\n')
+        'Hitpoints: ' .. StringHelper.padRight('+' .. tostring(preview.hp_gain), STR_PAD),
+        'Attack:    ' .. StringHelper.padRight('+' .. tostring(preview.att_bonus), STR_PAD),
+    }
+
+    if preview.dmg_bonus then
+        table.insert(lines, 'Damage:    ' .. StringHelper.padRight('+' .. tostring(preview.dmg_bonus), STR_PAD))
+    end
+
+    local text = StringHelper.concat(lines, '\n')
 
     local handles = {}
 

@@ -35,7 +35,7 @@ Skills.new = function(entity, def)
         know = know,
     }
 
-    local getValue = function(self, skill)
+    local getValue = function(self, skill)         
         local base = 0
         if npc then base = base + npc:getLevel() end
         if class then base = base + class:getLevel() end

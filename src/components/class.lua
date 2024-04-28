@@ -21,35 +21,51 @@ Class.new = function(entity, def)
     -- fighters gain +1 to their attack and damage rolls at levels 5, 10, 15, ...
     local att_bonus, dmg_bonus = 0, 0
 
-    local levelUp = function(self)
+    -- cache level-up changes
+    local cache = nil
+
+    local levelUp = function(self, is_preview)
         assert(self:canLevelUp(), 'not enough experience to level up')
 
-        level = level + 1
-        exp = 0
-        exp_goal = level * 10
-
-        -- increase health
         local health = entity:getComponent(Health)
-        local current, total = health:getValue()
-        local gain = ndn.dice('1d6').roll()
-        health:increase(gain)
 
-        -- increase stats if level can be divided by 3
-        if level % 3 == 0 then
-            -- TODO: increase STR, DEX or MIND by 1
+        if not cache then
+            local level = level + 1
+            local att_bonus = 1
+            local dmg_bonus = nil
+
+            if class == 'fighter' and level % 5 == 0 then
+                att_bonus = att_bonus + 1
+                dmg_bonus = 1
+            end
+
+            -- for cleric & mage add spells at levels 3, 5, 7, ... (level % 2 == 1)
+
+            cache = {
+                level = level,
+                hp_gain = ndn.dice('1d6').roll(),
+                att_bonus = att_bonus,
+                dmg_bonus = dmg_bonus, 
+            }
         end
 
-        -- class specific adjustments
-        if class == 'fighter' and level % 5 == 0 then
-            att_bonus = mfloor(level / 5)
-            dmg_bonus = mfloor(level / 5)
-        elseif class == 'cleric' and level % 2 == 1 then
-            -- TODO: add new spells every uneven level
-        elseif class == 'mage' then
-            -- TODO: add new spells every uneven level
+        if not is_preview then
+            local stats = entity:getComponent(Stats)
+            if stats and stats:getPoints() ~= 0 then
+                error('assign ' .. stats:getPoints() .. ' point(s) to any stat')
+            end
+
+            level = cache.level
+            health:increase(cache.hp_gain)
+
+            exp, exp_goal = 0, level * 10
+
+            Signal.emit('level-up', entity)
+
+            cache = nil
         end
 
-        Signal.emit('level-up', entity)
+        return cache
     end
 
     local addExp = function(self, exp_)
@@ -59,6 +75,9 @@ Class.new = function(entity, def)
         exp = mmin(exp + exp_, exp_goal)
 
         if exp == exp_goal then
+            if (level + 1) % 3 == 0 then
+                entity:getComponent(Stats):addPoints(1)
+            end
             Signal.emit('level-up', entity)
             Signal.emit('notify', 
                 StringHelper.capitalize(entity.name) .. ' gained enough experience to advance to level ' .. level + 1)
