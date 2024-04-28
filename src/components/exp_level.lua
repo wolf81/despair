@@ -26,8 +26,22 @@ ExpLevel.new = function(entity, def)
         level = level + 1
         exp = 0
         exp_goal = level * 10
+        print('exp', exp, 'exp_goal', exp_goal)
+
+        -- increase health
+        local health = entity:getComponent(Health)
+        local current, total = health:getValue()
+        local gain = ndn.dice('1d6').roll()
+        health:increase(gain)
+
+        -- increase stats if level can be divided by 3
+        if level % 3 == 0 then
+            -- TODO: increase STR, DEX or MIND by 1
+        end
 
         entity:getComponent(Class):levelUp(level)
+
+        Signal.emit('level-up', entity)
 
         return level
     end
@@ -39,7 +53,7 @@ ExpLevel.new = function(entity, def)
         exp = mmin(exp + exp_, exp_goal)
 
         if exp == exp_goal then
-            Signal.emit('level-up')
+            Signal.emit('level-up', entity)
             Signal.emit('notify', 
                 StringHelper.capitalize(entity.name) .. ' gained enough experience to advance to level ' .. level + 1)
         end

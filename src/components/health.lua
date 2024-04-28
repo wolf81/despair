@@ -64,6 +64,7 @@ Health.new = function(entity, def)
         heal        = heal,
         update      = update,
         isAlive     = isAlive,
+        increase    = increase,
         getValue    = getValue,
     }, Health)
 end

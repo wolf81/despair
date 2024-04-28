@@ -246,8 +246,8 @@ Game.new = function(level_info)
         notify_bar:show(message, duration)
     end
 
-    local onLevelUp = function()
-        char_sheet_button.widget:setImage(PortraitGenerator.generate(player))
+    local onLevelUp = function(entity)
+        char_sheet_button.widget:setImage(PortraitGenerator.generate(entity))
     end
 
     local enter = function(self, from)

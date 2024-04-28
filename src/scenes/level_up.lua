@@ -38,6 +38,8 @@ LevelUp.new = function(player)
 
     local exp_level = player:getComponent(ExpLevel)
     local health = player:getComponent(Health)
+    local class = player:getComponent(Class)
+
     local next_level = exp_level:getLevel() + 1
 
     local background = TextureGenerator.generateParchmentTexture(220, 160)
@@ -98,7 +100,10 @@ LevelUp.new = function(player)
         game:showOverlay()
 
         -- TODO: update player stats for new level
-        handle = Signal.register('accept', function() Gamestate.pop() end)
+        handle = Signal.register('accept', function() 
+            exp_level:levelUp()
+            Gamestate.pop() 
+        end)
     end
 
     local leave = function(self, to)
