@@ -105,6 +105,7 @@ Skills              = require 'src.components.skills'
 Class               = require 'src.components.class'
 Stats               = require 'src.components.stats'
 Item                = require 'src.components.item'
+Race                = require 'src.components.race'
 Info                = require 'src.components.info'
 NPC                 = require 'src.components.npc'
 

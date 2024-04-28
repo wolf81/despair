@@ -38,7 +38,6 @@ LevelUp.new = function(player)
 
     local class = player:getComponent(Class)
     local health = player:getComponent(Health)
-    local class = player:getComponent(Class)
 
     local next_level = class:getLevel() + 1
 

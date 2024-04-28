@@ -7,29 +7,41 @@ local Skills = {}
 
 -- TODO: maybe Class component should initialize with correct values based on class, race or hd
 Skills.new = function(entity, def)
-    local class = def['class']
-    local level = def['level']
-    local race = def['race']
+    local class = entity:getComponent(Class)
+    local race = entity:getComponent(Race)
+    local npc = entity:getComponent(NPC)
 
-    if not level then
-        -- if hitdice is defined, use the dice count as level
-        local hd = def['hd']
-        assert(level ~= nil or hd ~= nil, 'missing field: "hd" or "level"')
-        
-        level = ndn.dice(hd).count()
+    -- add bonuses based on race and class, if applicable
+    local phys, comm, subt, know = 0, 0, 0, 0
+    
+    if race then
+        phys = phys + race:getSkillBonus('phys')
+        comm = comm + race:getSkillBonus('comm')
+        subt = subt + race:getSkillBonus('subt')
+        know = know + race:getSkillBonus('know')
     end
 
-    -- for humans add +1 to each skill
-    if race == 'human' then level = level + 1 end
+    if class then
+        phys = phys + class:getSkillBonus('phys')   
+        comm = comm + class:getSkillBonus('comm')
+        subt = subt + class:getSkillBonus('subt')
+        know = know + class:getSkillBonus('know')
+    end
 
     local skills = {
-        phys = level + (class == 'fighter' and 3 or 0),
-        comm = level + (class == 'cleric' and 3 or 0),
-        subt = level + (class == 'rogue' and 3 or 0),
-        know = level + (class == 'mage' and 3 or 0),
+        phys = phys,
+        comm = comm,
+        subt = subt,
+        know = know,
     }
 
-    local getValue = function(self, skill) return skills[skill] end
+    local getValue = function(self, skill)
+        local base = 0
+        if npc then base = base + npc:getLevel() end
+        if class then base = base + class:getLevel() end
+
+        return base + skills[skill]
+    end
 
     return setmetatable({
         -- methods

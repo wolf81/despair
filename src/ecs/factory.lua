@@ -62,12 +62,9 @@ M.create = function(id, coord)
 
     if entity.type == 'pc' then
         entity.z_index = 15
-        local class, race = def['class'], def['race']
-
-        assert(RACES[race] ~= nil, 'invalid race "' .. race .. '"')
-        entity.race = race
-
         entity:addComponent(Control(entity, def, Keyboard(entity), Mouse(entity)))
+        entity:addComponent(Class(entity, def))
+        entity:addComponent(Race(entity, def))
         entity:addComponent(Backpack(entity, def))
         entity:addComponent(Equipment(entity, def))
         entity:addComponent(Skills(entity, def))
@@ -79,7 +76,6 @@ M.create = function(id, coord)
         entity:addComponent(MoveSpeed(entity, def))
         entity:addComponent(HealthBar(entity, def))
         entity:addComponent(Energy(entity, def))
-        entity:addComponent(Class(entity, def))
 
         -- equip all from backpack
         entity:getComponent(Backpack):equipAll()

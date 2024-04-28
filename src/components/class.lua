@@ -75,6 +75,20 @@ Class.new = function(entity, def)
 
     local getDamageBonus = function(self) return dmg_bonus end
 
+    local getSkillBonus = function(self, skill)
+        if skill == 'phys' then 
+            return class == 'fighter' and 3 or 0
+        elseif skill == 'know' then 
+            return class == 'mage' and 3 or 0
+        elseif skill == 'comm' then 
+            return class == 'cleric' and 3 or 0
+        elseif skill == 'subt' then 
+            return class == 'rogue' and 3 or 0
+        end
+
+        return 0
+    end
+
     local getClassName = function(self) return class end
 
     local isAnyOf = function(self, ...)
@@ -89,6 +103,7 @@ Class.new = function(entity, def)
         -- methods
         getDamageBonus  = getDamageBonus,
         getAttackBonus  = getAttackBonus,
+        getSkillBonus   = getSkillBonus,
         getClassName    = getClassName,
         canLevelUp      = canLevelUp,
         getLevel        = getLevel,
