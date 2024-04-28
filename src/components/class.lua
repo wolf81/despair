@@ -16,7 +16,7 @@ Class.new = function(entity, def)
     assert(level ~= nil, 'missing field: "level"')
 
     -- current exp, resets to 0 every time a new level is gained
-    local exp, exp_goal = 0, 1 -- level * 10
+    local exp, exp_goal = 0, level * 10
 
     -- fighters gain +1 to their attack and damage rolls at levels 5, 10, 15, ...
     local att_bonus, dmg_bonus = 0, 0
