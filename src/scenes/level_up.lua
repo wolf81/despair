@@ -36,11 +36,11 @@ end
 LevelUp.new = function(player)
     local game = nil
 
-    local exp_level = player:getComponent(ExpLevel)
+    local class = player:getComponent(Class)
     local health = player:getComponent(Health)
     local class = player:getComponent(Class)
 
-    local next_level = exp_level:getLevel() + 1
+    local next_level = class:getLevel() + 1
 
     local background = TextureGenerator.generateParchmentTexture(220, 160)
     local frame = getFrame(background)
@@ -101,7 +101,7 @@ LevelUp.new = function(player)
 
         -- TODO: update player stats for new level
         handle = Signal.register('accept', function() 
-            exp_level:levelUp()
+            class:levelUp()
             Gamestate.pop() 
         end)
     end

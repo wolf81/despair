@@ -12,11 +12,11 @@ Health.new = function(entity, def)
     local stats = entity:getComponent(Stats)
     local current, total = 1, 1
 
-    assert(hd ~= nil or stats ~= nil, 'missing field "hd" or component "Stats"')
+    assert(hd ~= nil or stats ~= nil, 'missing field: "hd" or component "Stats"')
 
-    local exp_level = entity:getComponent(ExpLevel)
-    if exp_level ~= nil then
-        assert(exp_level:getLevel() ~= 1, 'level should be 1, for additional levels call "increase"')
+    local class = entity:getComponent(Class)
+    if class ~= nil then
+        assert(class:getLevel() ~= 1, 'level should be 1, for additional levels call "increase"')
     end
 
     if hd ~= nil then

@@ -5,7 +5,7 @@
 
 local Skills = {}
 
--- TODO: maybe ExpLevel component should initialize with correct values based on class, race or hd
+-- TODO: maybe Class component should initialize with correct values based on class, race or hd
 Skills.new = function(entity, def)
     local class = def['class']
     local level = def['level']

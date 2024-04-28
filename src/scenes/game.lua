@@ -52,7 +52,7 @@ end
 local function onShowInventory(player) Gamestate.push(Inventory(player)) end
 
 local function onShowCharacterSheet(player) 
-    if player:getComponent(ExpLevel):canLevelUp() then
+    if player:getComponent(Class):canLevelUp() then
         Gamestate.push(LevelUp(player))
     else
         Gamestate.push(CharSheet(player)) 

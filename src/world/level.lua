@@ -189,9 +189,7 @@ Level.new = function(dungeon, level_info)
 
         if entity.type == 'pc' and target.type == 'npc' then
             if not target:getComponent(Health):isAlive() then
-                local exp_gain = target:getComponent(ExpLevel):getLevel()
-                print('gain exp', exp_gain)
-                entity:getComponent(ExpLevel):addExp(exp_gain)
+                entity:getComponent(Class):addExp(target:getComponent(NPC):getLevel())
             end
         end
     end

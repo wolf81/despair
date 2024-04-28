@@ -21,7 +21,7 @@ end
 CharSheet.new = function(player)
     local background = TextureGenerator.generateParchmentTexture(220, 340)
 
-    local exp_level = player:getComponent(ExpLevel)
+    local class = player:getComponent(Class)
     local skills = player:getComponent(Skills)
     local stats = player:getComponent(Stats)
     local health = player:getComponent(Health)
@@ -35,10 +35,10 @@ CharSheet.new = function(player)
 
     local STR_PAD = 8
 
-    local exp, exp_goal = exp_level:getExp()
+    local exp, exp_goal = class:getExp()
     local text = StringHelper.concat({ 
         name,
-        StringHelper.capitalize(player.class) .. ' level ' .. exp_level:getLevel(),
+        StringHelper.capitalize(player.class) .. ' level ' .. class:getLevel(),
         'Experience:    ' .. StringHelper.padRight(exp .. ' / ' .. exp_goal, STR_PAD),
         '',
         'STATS',
@@ -55,7 +55,7 @@ CharSheet.new = function(player)
         'SAVES',
         'fortitude:     ' .. StringHelper.padRight(tostring(skills:getValue('phys') + stats:getBonus('str')), STR_PAD),
         'reflex:        ' .. StringHelper.padRight(tostring(skills:getValue('phys') + stats:getBonus('dex')), STR_PAD),
-        'will:          ' .. StringHelper.padRight(tostring(stats:getBonus('mind') + exp_level:getLevel()), STR_PAD),
+        'will:          ' .. StringHelper.padRight(tostring(stats:getBonus('mind') + class:getLevel()), STR_PAD),
     }, '\n')
 
     local update = function(self, dt) 

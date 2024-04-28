@@ -36,7 +36,7 @@ M.generate = function(player)
     local quads = QuadCache:get(key)
 
     -- determine if we should show an icon indicating player can level up
-    local show_plus_icon = player:getComponent(ExpLevel):canLevelUp()
+    local show_plus_icon = player:getComponent(Class):canLevelUp()
 
     prng.randomseed(player.name)
 

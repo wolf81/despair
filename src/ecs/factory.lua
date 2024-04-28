@@ -79,7 +79,6 @@ M.create = function(id, coord)
         entity:addComponent(Health(entity, def))
         entity:addComponent(Offense(entity, def))
         entity:addComponent(Defense(entity, def))
-        entity:addComponent(ExpLevel(entity, def))
         entity:addComponent(MoveSpeed(entity, def))
         entity:addComponent(HealthBar(entity, def))
         entity:addComponent(Energy(entity, def))
@@ -89,6 +88,7 @@ M.create = function(id, coord)
         entity:getComponent(Backpack):equipAll()
     elseif entity.type == 'npc' then
         entity.z_index = 10        
+        entity:addComponent(NPC(entity, def))
         entity:addComponent(Control(entity, def, Cpu(entity)))
         entity:addComponent(Backpack(entity, def))
         entity:addComponent(Equipment(entity, def))
@@ -96,9 +96,9 @@ M.create = function(id, coord)
         entity:addComponent(Health(entity, def))
         entity:addComponent(Offense(entity, def))
         entity:addComponent(Defense(entity, def))
-        entity:addComponent(ExpLevel(entity, def))
         entity:addComponent(MoveSpeed(entity, def))
         entity:addComponent(HealthBar(entity, def))
+        -- TODO: optionally allow some NPCs to have a class as described in Microlite20 manual?
 
         -- equip all from backpack
         entity:getComponent(Backpack):equipAll()
