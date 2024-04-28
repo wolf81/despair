@@ -23,12 +23,19 @@ Offense.new = function(entity, def)
     local getAttackValue = function(self, weapon, is_dual_wielding)
         assert(weapon ~= nil, 'missing argument: "weapon"')
         local base = weapon and weapon.attack or 0
+        local bonus = self:getAttackBonus(weapon, is_dual_wielding)
+                
+        return base + bonus
+    end
+
+    local getAttackBonus = function(self, weapon, is_dual_wielding)
         local bonus = (is_dual_wielding == true) and -2 or 0
 
-        -- add bonuses for player characters
+        local class = entity:getComponent(Class)
+
+        -- add stat bonuses
         if stats ~= nil then
-            local str_bonus = stats:getBonus('str')
-            local dex_bonus = stats:getBonus('dex')
+            local str_bonus, dex_bonus = stats:getBonus('str'), stats:getBonus('dex')
 
             if weapon.kind == 'ranged_1h' or weapon.kind == 'ranged_2h' then
                 -- for missle weapons add dexterity bonus
@@ -36,8 +43,7 @@ Offense.new = function(entity, def)
             else 
                 -- for melee weapons add strength bonus
                 -- for light weapons, fighters & rogues may use dexterity bonus, if higher                
-                if weapon.kind == 'light' and 
-                    (entity.class == 'fighter' or entity.class == 'rogue') then
+                if weapon.kind == 'light' and class:isAnyOf('fighter', 'rogue') then
                     bonus = bonus + mmax(str_bonus, dex_bonus)
                 else
                     bonus = bonus + str_bonus
@@ -45,13 +51,12 @@ Offense.new = function(entity, def)
             end
         end
 
-        -- add level bonus, if applicable
-        local class = entity:getComponent(Class)
+        -- add class bonus, if applicable
         if class ~= nil then
-            bonus = bonus + class:getLevel()
+            bonus = bonus + class:getAttackBonus()
         end
 
-        return base + bonus
+        return bonus
     end
 
     local getDamageValue = function(self, weapon, is_crit)
@@ -82,12 +87,19 @@ Offense.new = function(entity, def)
             bonus = (weapon.kind == '2h' and str_bonus * 2 or str_bonus)
         end
 
+        -- add class bonus, if applicable
+        local class = entity:getComponent(Class)
+        if class ~= nil then
+            bonus = bonus + class:getDamageBonus()
+        end
+
         return bonus
     end
 
     return setmetatable({
         -- methods
         getAttackValue  = getAttackValue,
+        getAttackBonus  = getAttackBonus,
         getDamageValue  = getDamageValue,
         getDamageBonus  = getDamageBonus,
     }, Offense)

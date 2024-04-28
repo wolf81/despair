@@ -64,7 +64,9 @@ local function getLeftActionButtons(player)
 
     table.insert(buttons, UI.makeButton('swap-weapon'))
 
-    for _, action in ipairs(CLASS_ACTIONS[player.class]) do
+    local class_name = player:getComponent(Class):getClassName()
+
+    for _, action in ipairs(CLASS_ACTIONS[class_name]) do
         table.insert(buttons, UI.makeButton(action))
     end
 

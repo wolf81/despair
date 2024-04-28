@@ -38,7 +38,7 @@ CharSheet.new = function(player)
     local exp, exp_goal = class:getExp()
     local text = StringHelper.concat({ 
         name,
-        StringHelper.capitalize(player.class) .. ' level ' .. class:getLevel(),
+        StringHelper.capitalize(class:getClassName()) .. ' level ' .. class:getLevel(),
         'Experience:    ' .. StringHelper.padRight(exp .. ' / ' .. exp_goal, STR_PAD),
         '',
         'STATS',

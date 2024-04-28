@@ -64,9 +64,6 @@ M.create = function(id, coord)
         entity.z_index = 15
         local class, race = def['class'], def['race']
 
-        assert(CLASSES[class] ~= nil, 'invalid class "' .. class .. '"')
-        entity.class = class
-
         assert(RACES[race] ~= nil, 'invalid race "' .. race .. '"')
         entity.race = race
 

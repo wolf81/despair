@@ -35,8 +35,8 @@ M.generate = function(player)
     local texture = TextureCache:get(key)
     local quads = QuadCache:get(key)
 
-    -- determine if we should show an icon indicating player can level up
-    local show_plus_icon = player:getComponent(Class):canLevelUp()
+    local class = player:getComponent(Class)
+    local class_name, show_plus_icon = class:getClassName(), class:canLevelUp()
 
     prng.randomseed(player.name)
 
@@ -47,13 +47,13 @@ M.generate = function(player)
     local hair_idx, helm_idx = 200, 200
 
     if prandom(1, 3) > 1 then
-        local helm_indices = HELM_INDICES[player.class]
+        local helm_indices = HELM_INDICES[class_name]
         helm_idx = helm_indices[prandom(#helm_indices)]
     elseif prandom(1, 2) == 1 then
         hair_idx = HAIR_INDICES[prandom(#HAIR_INDICES)]
     end
 
-    local armor_indices = ARMOR_INDICES[player.class]
+    local armor_indices = ARMOR_INDICES[class_name]
     local armor_idx = armor_indices[prandom(#armor_indices)]
 
     local beard_idx = 200

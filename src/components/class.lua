@@ -3,7 +3,7 @@
 --  Author: Wolfgang Schreurs
 --  info+despair@wolftrail.net
 
-local mmin = math.min
+local mmin, mfloor = math.min, math.floor
 
 local Class = {}
 
@@ -16,7 +16,10 @@ Class.new = function(entity, def)
     assert(level ~= nil, 'missing field: "level"')
 
     -- current exp, resets to 0 every time a new level is gained
-    local exp, exp_goal = 0, level * 10
+    local exp, exp_goal = 0, 1 -- level * 10
+
+    -- fighters gain +1 to their attack and damage rolls at levels 5, 10, 15, ...
+    local att_bonus, dmg_bonus = 0, 0
 
     local levelUp = function(self)
         assert(self:canLevelUp(), 'not enough experience to level up')
@@ -38,7 +41,8 @@ Class.new = function(entity, def)
 
         -- class specific adjustments
         if class == 'fighter' and level % 5 == 0 then
-            -- TODO: increase attack and damage by 1
+            att_bonus = mfloor(level / 5)
+            dmg_bonus = mfloor(level / 5)
         elseif class == 'cleric' and level % 2 == 1 then
             -- TODO: add new spells every uneven level
         elseif class == 'mage' then
@@ -67,13 +71,31 @@ Class.new = function(entity, def)
 
     local getLevel = function(self) return level end
 
+    local getAttackBonus = function(self) return level + att_bonus end
+
+    local getDamageBonus = function(self) return dmg_bonus end
+
+    local getClassName = function(self) return class end
+
+    local isAnyOf = function(self, ...)
+        local args = {...}
+        for _, class_ in ipairs(args) do
+            if class == class_ then return true end
+        end
+        return false
+    end
+
     return setmetatable({
         -- methods
-        canLevelUp  = canLevelUp,
-        getLevel    = getLevel,
-        levelUp     = levelUp,
-        addExp      = addExp,
-        getExp      = getExp,
+        getDamageBonus  = getDamageBonus,
+        getAttackBonus  = getAttackBonus,
+        getClassName    = getClassName,
+        canLevelUp      = canLevelUp,
+        getLevel        = getLevel,
+        levelUp         = levelUp,
+        isAnyOf         = isAnyOf,
+        addExp          = addExp,
+        getExp          = getExp,
     }, Class)
 end
 
