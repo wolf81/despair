@@ -3,6 +3,10 @@
 --  Author: Wolfgang Schreurs
 --  info+despair@wolftrail.net
 
+local mfloor = math.floor
+
+local padRight, capitalize = StringHelper.padRight, StringHelper.capitalize
+
 local CharSheet = {}
 
 local function getStatLine(stats, stat)
@@ -19,12 +23,14 @@ local function getFrame(background)
 end
 
 CharSheet.new = function(player)
-    local background = TextureGenerator.generateParchmentTexture(220, 340)
+    local background = TextureGenerator.generateParchmentTexture(460, 300)
 
+    local race = player:getComponent(Race)
     local class = player:getComponent(Class)
-    local skills = player:getComponent(Skills)
     local stats = player:getComponent(Stats)
+    local skills = player:getComponent(Skills)
     local health = player:getComponent(Health)
+    local offense = player:getComponent(Offense)
 
     local frame = getFrame(background)
 
@@ -35,28 +41,61 @@ CharSheet.new = function(player)
 
     local STR_PAD = 8
 
+    local hp, hp_total = health:getValue()
+
     local exp, exp_goal = class:getExp()
-    local text = StringHelper.concat({ 
+    local left_text = StringHelper.concat({ 
         name,
-        StringHelper.capitalize(class:getClassName()) .. ' level ' .. class:getLevel(),
-        'Experience:    ' .. StringHelper.padRight(exp .. ' / ' .. exp_goal, STR_PAD),
+        StringHelper.capitalize(race:getRaceName()) .. ' ' .. StringHelper.capitalize(class:getClassName()) .. ' level ' .. class:getLevel(),
+        '',
+        'Experience:    ' .. padRight(exp .. ' / ' .. exp_goal, STR_PAD),
+        'Hitpoints:     ' .. padRight(hp .. ' / ' .. hp_total, STR_PAD),
         '',
         'STATS',
-        'strength:      ' .. StringHelper.padRight(getStatLine(stats, 'str'), STR_PAD),
-        'dexterity:     ' .. StringHelper.padRight(getStatLine(stats, 'dex'), STR_PAD),
-        'mind:          ' .. StringHelper.padRight(getStatLine(stats, 'mind'), STR_PAD),
+        'strength:      ' .. padRight(getStatLine(stats, 'str'), STR_PAD),
+        'dexterity:     ' .. padRight(getStatLine(stats, 'dex'), STR_PAD),
+        'mind:          ' .. padRight(getStatLine(stats, 'mind'), STR_PAD),
         '',
         'SKILLS',
-        'physical:      ' .. StringHelper.padRight(tostring(skills:getValue('phys')), STR_PAD),
-        'subterfuge:    ' .. StringHelper.padRight(tostring(skills:getValue('subt')), STR_PAD),
-        'knowledge:     ' .. StringHelper.padRight(tostring(skills:getValue('know')), STR_PAD),
-        'communication: ' .. StringHelper.padRight(tostring(skills:getValue('comm')), STR_PAD),
-        '',
-        'SAVES',
-        'fortitude:     ' .. StringHelper.padRight(tostring(skills:getValue('phys') + stats:getBonus('str')), STR_PAD),
-        'reflex:        ' .. StringHelper.padRight(tostring(skills:getValue('phys') + stats:getBonus('dex')), STR_PAD),
-        'will:          ' .. StringHelper.padRight(tostring(stats:getBonus('mind') + class:getLevel()), STR_PAD),
+        'physical:      ' .. padRight(tostring(skills:getValue('phys')), STR_PAD),
+        'subterfuge:    ' .. padRight(tostring(skills:getValue('subt')), STR_PAD),
+        'knowledge:     ' .. padRight(tostring(skills:getValue('know')), STR_PAD),
+        'communication: ' .. padRight(tostring(skills:getValue('comm')), STR_PAD),
     }, '\n')
+
+    local right_text = StringHelper.concat({
+        'SAVES',
+        'fortitude:     ' .. padRight(tostring(skills:getValue('phys') + stats:getBonus('str')), STR_PAD),
+        'reflex:        ' .. padRight(tostring(skills:getValue('phys') + stats:getBonus('dex')), STR_PAD),
+        'will:          ' .. padRight(tostring(stats:getBonus('mind') + class:getLevel()), STR_PAD),
+        '',
+        'COMBAT',
+        'Attack:        ' .. padRight(tostring(''), STR_PAD),
+        'Damage:        ' .. padRight(tostring(''), STR_PAD),
+    }, '\n')
+
+    local textColor = { 0.0, 0.0, 0.0, 0.7 }
+    local background_w, background_h = background:getDimensions()
+
+    -- configure layout
+    local layout = tidy.Border(tidy.Margin(20), {
+        tidy.HStack({
+            tidy.VStack(tidy.Stretch(1), {
+                UI.makeLabel(left_text, textColor),
+            }),
+            UI.makeFixedSpace(40, 0),
+            tidy.VStack(tidy.Stretch(1), {
+                UI.makeLabel(right_text, textColor),
+            })
+        })
+    })
+    local x = mfloor((WINDOW_W - background_w) / 2)
+    local y = mfloor((WINDOW_H - background_h) / 2)
+    layout:setFrame(x, y, background_w, background_h)
+    for e in layout:eachElement() do
+        e.widget:setFrame(e.rect:unpack())
+    end
+    --]]
 
     local update = function(self, dt) 
         -- body
@@ -71,8 +110,13 @@ CharSheet.new = function(player)
         love.graphics.draw(background, x, y)
 
         love.graphics.setColor(0.0, 0.0, 0.0, 0.7)
+        love.graphics.line(x + background_w / 2, y, x + background_w / 2, y + background_h)
 
-        love.graphics.print(text, x + 10, y + 15)
+        for e in layout:eachElement() do
+            e.widget:draw()
+        end
+
+        -- love.graphics.print(text, x + 10, y + 15)
     end
 
     local enter = function(self, from)

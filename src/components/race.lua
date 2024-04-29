@@ -12,9 +12,12 @@ Race.new = function(entity, def)
 
     local getSkillBonus = function(self, skill) return race == 'human' and 1 or 0 end
 
+    local getRaceName = function(self) return race end
+
     return setmetatable({
         -- methods
-        getSkillBonus = getSkillBonus,
+        getSkillBonus   = getSkillBonus,
+        getRaceName     = getRaceName,
     }, Race)
 end
 

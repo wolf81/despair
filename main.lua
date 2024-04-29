@@ -15,9 +15,11 @@ local function trySetCursor()
     love.mouse.setCursor(cursor)
 end
 
-local function configureFont()
+local function configureGraphics()
     FONT:setLineHeight(2.0)
     love.graphics.setFont(FONT)
+
+    love.graphics.setLineStyle('rough')
 end
 
 function love.load(args)
@@ -41,7 +43,7 @@ function love.load(args)
         end
     end
 
-    configureFont()
+    configureGraphics()
 
     trySetCursor()
 
