@@ -109,6 +109,7 @@ NotifyBar.new = function()
         update  = update,
         dismiss = dismiss,
         show    = show,
+        dismiss = dismiss,
         draw    = draw,
     }, NotifyBar)
 end

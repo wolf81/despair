@@ -27,7 +27,6 @@ vampire       |npc   |vampire                 |1d8     |12  |       |       |30 
 vampire_lord  |npc   |vampire lord            |1d8     |12  |       |       |30     |bite     |uf_heroes |233,234,235,236 |        |
 lich          |npc   |lich                    |1d8     |12  |       |       |30     |bite     |uf_heroes |237,238,239,240 |        |
 wolf          |npc   |wolf                    |2d8+4   |14  |       |       |50     |bite     |uf_heroes |241,242,243,244 |        |
-sh_mastiff    |npc   |shadow mastiff          |4d8+12  |14  |       |SB     |50     |bite     |uf_heroes |241,242,243,244 |        |
 blink_dog     |npc   |blink dog               |4d10    |16  |       |       |40     |bite     |uf_heroes |245,246,247,248 |        |
 observer      |npc   |observer                |1d8     |12  |       |       |30     |bite     |uf_heroes |273,274,275,276 |        |
 spectator     |npc   |spectator               |1d8     |12  |       |       |30     |bite     |uf_heroes |277,278,279,280 |        |
