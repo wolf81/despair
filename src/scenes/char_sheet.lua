@@ -107,16 +107,18 @@ CharSheet.new = function(player)
     local background_w, background_h = background:getDimensions()
 
     -- configure layout
-    local layout = tidy.Border(tidy.Margin(20), {
-        tidy.HStack({
+    local layout = tidy.HStack({
+        tidy.Border(tidy.Margin(20), {
             tidy.VStack(tidy.Stretch(1), {
                 UI.makeLabel(left_text, textColor),
-            }),
-            UI.makeFixedSpace(40, 0),
+            }),            
+        }),
+        UI.makeSeperator(),
+        tidy.Border(tidy.Margin(20), {
             tidy.VStack(tidy.Stretch(1), {
                 UI.makeLabel(right_text, textColor),
-            })
-        })
+            })            
+        }),
     })
     local x = mfloor((WINDOW_W - background_w - STATUS_PANEL_W) / 2)
     local y = mfloor((WINDOW_H - background_h - ACTION_BAR_H) / 2)
@@ -134,9 +136,6 @@ CharSheet.new = function(player)
 
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
         love.graphics.draw(background, x, y)
-
-        love.graphics.setColor(0.0, 0.0, 0.0, 0.7)
-        love.graphics.line(x + background_w / 2, y, x + background_w / 2, y + background_h)
 
         for e in layout:eachElement() do e.widget:draw() end
     end

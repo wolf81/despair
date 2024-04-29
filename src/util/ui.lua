@@ -50,4 +50,10 @@ M.makeFixedSpace = function(w, h)
     return tidy.Elem(FlexSpace(), tidy.MinSize(w, h), tidy.Stretch(stretch_x, stretch_y))
 end
 
+M.makeSeperator = function()
+    local seperator = Seperator(0)
+    local w, h = seperator:getSize()
+    return tidy.Elem(seperator, tidy.MinSize(w, h), tidy.Stretch(0, 1))
+end
+
 return M

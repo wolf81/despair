@@ -49,6 +49,7 @@ StatusPanel         = require 'src.ui.status_panel'
 NotifyBar           = require 'src.ui.notify_bar'
 FlexPanel           = require 'src.ui.flex_panel'
 FlexSpace           = require 'src.ui.flex_space'
+Seperator           = require 'src.ui.seperator'
 Overlay             = require 'src.ui.overlay'
 Label               = require 'src.ui.label'
 
