@@ -12,7 +12,7 @@ M.generate = function()
     local texture = TextureCache:get(key)
     local quads = QuadCache:get(key)
 
-    local _, _, quad_w, quad_h = quads[1]:getViewport()
+    local quad_w, quad_h = select(3, quads[1]:getViewport())
     local out_w, out_h = (quad_w + 2) * string.len(chars) + 2, quad_h    
 
     local canvas = love.graphics.newCanvas(out_w, out_h)

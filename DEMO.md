@@ -11,7 +11,6 @@ Highlights for demo.
 	- Backpack
 	- Equipment (paper doll)
 	- Control (keyboard, mouse & CPU input)
-	- ExpLevel (for player character to handle level up)
 	- Health (for all entities that can die when health reaches 0)
 	- Item (currently a dummy component to identify items that can be picked up)
 	- MoveSpeed (to handle move speed calculations for players and NPCs)

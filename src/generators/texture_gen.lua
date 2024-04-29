@@ -14,7 +14,7 @@ M.generateParchmentTexture = function(w, h)
 
     local texture = TextureCache:get('uf_interface')
     local quads = QuadCache:get('uf_interface')
-    local _, _, quad_w, quad_h = quads[266]:getViewport()
+    local quad_w, quad_h = select(3, quads[266]:getViewport())
 
     local cols = mfloor(w / quad_w)
     local rows = mfloor(h / quad_h) 
@@ -34,20 +34,31 @@ M.generateParchmentTexture = function(w, h)
         end
     end
 
-    local _, _, quad_w, quad_h = quads[266]:getViewport()
-    local canvas = love.graphics.newCanvas(quad_w * cols, quad_h * rows)
+    local quad_w, quad_h = select(3, quads[266]:getViewport())
+    local canvas = love.graphics.newCanvas(w, h)
     canvas:renderTo(function() 
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
 
-        for coord, quad_idx in pairs(draw_info) do
-            local x = (coord.x - 1) * quad_w
-            local y = (coord.y - 1) * quad_h
-            love.graphics.draw(texture, quads[quad_idx], x, y)            
+        love.graphics.draw(texture, quads[266], 0, 0)
+        love.graphics.draw(texture, quads[271], w - quad_w, 0)
+        love.graphics.draw(texture, quads[276], 0, h - quad_h)
+        love.graphics.draw(texture, quads[275], w - quad_w, h - quad_h)
+
+        -- top & bottom rows
+        for x = 16, w - 24, 8 do
+            love.graphics.draw(texture, quads[267], x, 0)
+            love.graphics.draw(texture, quads[273], x, h - quad_h)
+        end
+
+        -- middle
+        for y = quad_h, h - quad_h, quad_h do
+            love.graphics.draw(texture, quads[274], 0, y)
+            love.graphics.draw(texture, quads[268], w - quad_w, y)
         end
 
         local color_info = ColorHelper.getColors(texture, quads[266], true)[1]
         love.graphics.setColor(unpack(color_info.color))
-        love.graphics.rectangle('fill', quad_w, quad_h, quad_w * (cols - 2), quad_h * (rows - 2))        
+        love.graphics.rectangle('fill', quad_w, quad_h, w - quad_w * 2, h - quad_h * 2)        
     end)
 
     return canvas

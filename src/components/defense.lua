@@ -9,23 +9,31 @@ Defense.new = function(entity, def)
     local equipment = entity:getComponent(Equipment)
     assert(equipment ~= nil, 'missing component: "Equipment"')
 
-    -- set base armor class, used for NPCs
-    local base = def['ac'] or 0
+    local base = 0
 
     local getArmorValue = function(self)
-        local bonus = 0
+        local npc = entity:getComponent(NPC)
+        if npc then return npc:getArmorClass() end
+
+        local ac = 0
 
         -- add AC for chest armor
         local chest = equipment:getItem('chest')
         if chest ~= nil then
-            bonus = bonus + chest.ac
+            ac = ac + chest.ac
         end
 
         -- add AC for offhand item, most likely a shield
         local offhand = equipment:getItem('offhand')
         if offhand ~= nil and offhand.type == 'armor' then
-            bonus = bonus + offhand.ac
+            ac = ac + offhand.ac
         end
+
+        return ac + self:getArmorBonus()
+    end
+
+    local getArmorBonus = function(self)
+        local bonus = 0
 
         -- add dexterity bonus in case of player characters
         local stats = entity:getComponent(Stats)
@@ -33,12 +41,13 @@ Defense.new = function(entity, def)
             bonus = bonus + stats:getBonus('dex')
         end
 
-        return base + bonus
+        return bonus
     end
 
     return setmetatable({
         -- methods
         getArmorValue   = getArmorValue,
+        getArmorBonus   = getArmorBonus,
     }, Defense)
 end
 

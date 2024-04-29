@@ -12,11 +12,11 @@ Health.new = function(entity, def)
     local stats = entity:getComponent(Stats)
     local current, total = 1, 1
 
-    assert(hd ~= nil or stats ~= nil, 'missing field "hd" or component "Stats"')
+    assert(hd ~= nil or stats ~= nil, 'missing field: "hd" or component "Stats"')
 
-    local exp_level = entity:getComponent(ExpLevel)
-    if exp_level ~= nil then
-        assert(exp_level:getLevel() ~= 1, 'level should be 1, for additional levels call "increase"')
+    local class = entity:getComponent(Class)
+    if class ~= nil then
+        assert(class:getLevel() ~= 1, 'level should be 1, for additional levels call "increase"')
     end
 
     if hd ~= nil then
@@ -47,7 +47,6 @@ Health.new = function(entity, def)
     -- increase current & total by amount of hitpoints
     -- returns current & total health
     local increase = function(self, hitpoints)
-        assert(hitpoints >= 1 and hitpoints <= 6, '"hitpoints" should be a value between 1 and 6')
         total = total + hitpoints 
         current = current + hitpoints
         return current, total
@@ -59,14 +58,13 @@ Health.new = function(entity, def)
     -- get current & total health value
     local getValue = function(self) return current, total end
 
-    local update = function(self, dt) end
-
     return setmetatable({
         -- methods
         harm        = harm,
         heal        = heal,
         update      = update,
         isAlive     = isAlive,
+        increase    = increase,
         getValue    = getValue,
     }, Health)
 end

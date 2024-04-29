@@ -4,7 +4,7 @@ return {
 	name = 'Cholmer',
 	class = 'mage',
 	race = 'elf',
-	level = 1,
+	level = 2,
 	sight = 60,
 	speed = 30,
 	str = 12,

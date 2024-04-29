@@ -6,10 +6,11 @@
 local M = {}
 
 M.makeButton = function(action, image)
-    if not image then
-        return tidy.Elem(ActionButton(action), tidy.MinSize(48), tidy.Stretch(0))
+    if image then
+        local image_w, image_h = image:getDimensions()
+        return tidy.Elem(ImageButton(image, action), tidy.MinSize(image_w, image_h), tidy.Stretch(0))
     else
-        return tidy.Elem(ImageButton(image, action), tidy.MinSize(50), tidy.Stretch(0))
+        return tidy.Elem(ActionButton(action), tidy.MinSize(48), tidy.Stretch(0))
     end
 end
 
@@ -47,6 +48,22 @@ M.makeFixedSpace = function(w, h)
     local stretch_x = (w == 0) and 1 or 0
     local stretch_y = (h == 0) and 1 or 0
     return tidy.Elem(FlexSpace(), tidy.MinSize(w, h), tidy.Stretch(stretch_x, stretch_y))
+end
+
+M.makeSeperator = function()
+    local seperator = Seperator(0)
+    local w, h = seperator:getSize()
+    return tidy.Elem(seperator, tidy.MinSize(w, h), tidy.Stretch(0, 1))
+end
+
+M.makeItemContainer = function(key)
+    local item_container = ItemContainer(key)
+    local w, h = item_container:getSize()
+    return tidy.Elem(item_container, tidy.MinSize(w, h), tidy.Stretch(0))
+end
+
+M.makeParchment = function(text)
+    return tidy.Elem(Parchment(text), tidy.Stretch(1))
 end
 
 return M

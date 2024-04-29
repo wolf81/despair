@@ -15,9 +15,11 @@ local function trySetCursor()
     love.mouse.setCursor(cursor)
 end
 
-local function configureFont()
+local function configureGraphics()
     FONT:setLineHeight(2.0)
     love.graphics.setFont(FONT)
+
+    love.graphics.setLineStyle('rough')
 end
 
 function love.load(args)
@@ -31,15 +33,17 @@ function love.load(args)
     -- PLEASE NOTE: for Windows might need to add `--console` as well
     for _, arg in ipairs(args) do
         if arg == '--quadsheet' then
-            QuadSheetGenerator.generate()
-            love.event.quit()
+            return Gamestate.switch(Loading(function() 
+                QuadSheetGenerator.generate()
+                love.event.quit()
+            end))
         elseif arg == '--imagefont' then
             FontSheetGenerator.generate()            
             love.event.quit()
         end
     end
 
-    configureFont()
+    configureGraphics()
 
     trySetCursor()
 

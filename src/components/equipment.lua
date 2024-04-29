@@ -43,6 +43,16 @@ Equipment.new = function(entity, def)
         return fn(item) and item or nil
     end
 
+    local getWeapons = function(self)
+        local mh_item, oh_item = self:getItem('mainhand'), self:getItem('offhand')
+
+        local weapons = {}
+        if mh_item and mh_item.type == 'weapon' then table.insert(weapons, mh_item) end
+        if oh_item and oh_item.type == 'weapon' then table.insert(weapons, oh_item) end
+
+        return weapons
+    end
+
     -- equip the first melee item that can be found in backpack
     -- do nothing if a melee item is already equipped
     local tryEquipMelee = function(self) 
@@ -203,6 +213,7 @@ Equipment.new = function(entity, def)
         unequip         = unequip,
         getItem         = getItem,
         didEquip        = didEquip,
+        getWeapons      = getWeapons,
         tryEquipMelee   = tryEquipMelee,
         tryEquipRanged  = tryEquipRanged,
     }, Equipment)

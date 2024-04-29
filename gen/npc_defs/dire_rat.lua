@@ -11,5 +11,4 @@ return {
 	texture = 'uf_heroes',
 	anim = { 205, 206, 207, 208 },
 	morale = 0,
-	special = { '' },
 }

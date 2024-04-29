@@ -60,6 +60,11 @@ ImageButton.new = function(image, action, ...)
     local getFrame = function(self) return frame:unpack() end
 
     local setEnabled = function(self, flag) is_enabled = (flag == true) end
+
+    local setImage = function(self, image_)
+        assert(image ~= nil, 'missing argument: "image_"')
+        image = image_ 
+    end
     
     return setmetatable({
         -- methods
@@ -68,6 +73,7 @@ ImageButton.new = function(image, action, ...)
         getSize     = getSize,
         getFrame    = getFrame,
         setFrame    = setFrame,
+        setImage    = setImage,
         setEnabled  = setEnabled,
     }, ImageButton)
 end

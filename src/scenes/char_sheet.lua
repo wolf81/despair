@@ -3,6 +3,10 @@
 --  Author: Wolfgang Schreurs
 --  info+despair@wolftrail.net
 
+local mfloor = math.floor
+
+local padRight, capitalize = StringHelper.padRight, StringHelper.capitalize
+
 local CharSheet = {}
 
 local function getStatLine(stats, stat)
@@ -11,27 +15,112 @@ local function getStatLine(stats, stat)
     return value .. ' (' .. (bonus < 0 and ('-' .. bonus) or ('+' .. bonus)) .. ')'
 end
 
-local function getFrame(background)
-    local w, h = background:getDimensions()
-    local x = (WINDOW_W - w) / 2
-    local y = (WINDOW_H - h) / 2
-    return Rect(x, y, w, h)
+local getAttBonusText = function(weapons, offense)
+    local s = ''
+
+    for idx, weapon in ipairs(weapons) do
+        s = s .. '+' .. offense:getAttackBonus(weapon, #weapons == 2)
+        if idx < #weapons then
+            s = s .. ' / '
+        end
+    end
+
+    return s
+end
+
+local getDmgBonusText = function(weapons, offense)
+    local s = ''
+
+    for idx, weapon in ipairs(weapons) do
+        s = s .. '+' .. offense:getDamageBonus(weapon, #weapons == 2)
+        if idx < #weapons then
+            s = s .. ' / '
+        end
+    end
+
+    return s
 end
 
 CharSheet.new = function(player)
-    local background = TextureGenerator.generateParchmentTexture(220, 310)
+    local background = TextureGenerator.generateParchmentTexture(460, 300)
+    local background_w, background_h = background:getDimensions()
+    local background_x = mfloor((WINDOW_W - background_w - STATUS_PANEL_W) / 2)
+    local background_y = mfloor((WINDOW_H - background_h - ACTION_BAR_H) / 2)
+    local frame = Rect(background_x, background_y, background_w, background_h)
 
-    local exp_level = player:getComponent(ExpLevel)
-    local skills = player:getComponent(Skills)
+    local race = player:getComponent(Race)
+    local class = player:getComponent(Class)
     local stats = player:getComponent(Stats)
+    local skills = player:getComponent(Skills)
     local health = player:getComponent(Health)
-
-    local frame = getFrame(background)
+    local equip = player:getComponent(Equipment)
+    local offense = player:getComponent(Offense)
+    local defense = player:getComponent(Defense)
 
     local game = nil
 
+    local name = player.name:upper()
+    if not health:isAlive() then name = name .. ' (deceased)' end
+
+    local STR_PAD = 8
+
+    local hp, hp_total = health:getValue()
+
+    local exp, exp_goal = class:getExp()
+    local left_text = StringHelper.concat({ 
+        name,
+        StringHelper.capitalize(race:getRaceName()) .. ' ' .. StringHelper.capitalize(class:getClassName()) .. ' level ' .. class:getLevel(),
+        '',
+        'Experience:    ' .. padRight(exp .. ' / ' .. exp_goal, STR_PAD),
+        'Hitpoints:     ' .. padRight(hp .. ' / ' .. hp_total, STR_PAD),
+        '',
+        'STATS',
+        'strength:      ' .. padRight(getStatLine(stats, 'str'), STR_PAD),
+        'dexterity:     ' .. padRight(getStatLine(stats, 'dex'), STR_PAD),
+        'mind:          ' .. padRight(getStatLine(stats, 'mind'), STR_PAD),
+        '',
+        'SKILLS',
+        'physical:      ' .. padRight(tostring(skills:getValue('phys')), STR_PAD),
+        'subterfuge:    ' .. padRight(tostring(skills:getValue('subt')), STR_PAD),
+        'knowledge:     ' .. padRight(tostring(skills:getValue('know')), STR_PAD),
+        'communication: ' .. padRight(tostring(skills:getValue('comm')), STR_PAD),
+    }, '\n')
+
+    local right_text = StringHelper.concat({
+        'COMBAT',
+        'Attack bonus:  ' .. padRight(getAttBonusText(equip:getWeapons(), offense), STR_PAD),
+        'Damage bonus:  ' .. padRight(getDmgBonusText(equip:getWeapons(), offense), STR_PAD),
+        'Armor bonus:   ' .. padRight('+' .. tostring(defense:getArmorBonus()), STR_PAD),
+        '',
+        'SAVES',
+        'fortitude:     ' .. padRight(tostring(skills:getValue('phys') + stats:getBonus('str')), STR_PAD),
+        'reflex:        ' .. padRight(tostring(skills:getValue('phys') + stats:getBonus('dex')), STR_PAD),
+        'will:          ' .. padRight(tostring(stats:getBonus('mind') + class:getLevel()), STR_PAD),
+    }, '\n')
+
+    local textColor = { 0.0, 0.0, 0.0, 0.7 }
+
+    -- configure layout
+    local layout = tidy.HStack({
+        tidy.Border(tidy.Margin(20), {
+            tidy.VStack(tidy.Stretch(1), {
+                UI.makeLabel(left_text, textColor),
+            }),            
+        }),
+        UI.makeSeperator(),
+        tidy.Border(tidy.Margin(20), {
+            tidy.VStack(tidy.Stretch(1), {
+                UI.makeLabel(right_text, textColor),
+            })            
+        }),
+    })    
+    layout:setFrame(frame:unpack())
+    for e in layout:eachElement() do
+        e.widget:setFrame(e.rect:unpack())
+    end
+
     local update = function(self, dt) 
-        -- body
+        for e in layout:eachElement() do e.widget:update(dt) end
     end
 
     local draw = function(self)
@@ -42,38 +131,7 @@ CharSheet.new = function(player)
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
         love.graphics.draw(background, x, y)
 
-        love.graphics.setColor(0.0, 0.0, 0.0, 0.7)
-
-        local name = player.name:upper()
-        if not health:isAlive() then name = name .. ' (deceased)' end
-
-        local exp, exp_goal = exp_level:getExp()
-
-        local lines = { 
-            name,
-            StringHelper.capitalize(player.class) .. ' level ' .. exp_level:getLevel(),
-            'Experience:    ' .. exp .. ' / ' .. exp_goal,
-            '',
-            'STATS',
-            'strength:      ' .. getStatLine(stats, 'str'),
-            'dexterity:     ' .. getStatLine(stats, 'dex'),
-            'mind:          ' .. getStatLine(stats, 'mind'),
-            '',
-            'SKILLS',
-            'physical:      ' .. skills:getValue('phys'),
-            'subterfuge:    ' .. skills:getValue('subt'),
-            'knowledge:     ' .. skills:getValue('know'),
-            'communication: ' .. skills:getValue('comm'),
-            '',
-            'SAVES',
-            'fortitude:     ' .. skills:getValue('phys') + stats:getBonus('str'),
-            'reflex:        ' .. skills:getValue('phys') + stats:getBonus('dex'),
-            'will:          ' .. stats:getBonus('mind') + exp_level:getLevel(),
-        }
-
-        for idx, line in ipairs(lines) do
-            love.graphics.print(line, x + 10, y + idx * 15)
-        end
+        for e in layout:eachElement() do e.widget:draw() end
     end
 
     local enter = function(self, from)

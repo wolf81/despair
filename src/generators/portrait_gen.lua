@@ -3,9 +3,11 @@
 --  Author: Wolfgang Schreurs
 --  info+despair@wolftrail.net
 
-local lrandom = love.math.random
+local prandom = prng.random
 
 local M = {}
+
+local SPACING = 2
 
 local FACE_INDICES = { 47, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 65, 65, }
 
@@ -33,30 +35,35 @@ M.generate = function(player)
     local texture = TextureCache:get(key)
     local quads = QuadCache:get(key)
 
+    local class = player:getComponent(Class)
+    local class_name, show_plus_icon = class:getClassName(), class:canLevelUp()
+
+    prng.randomseed(player.name)
+
     -- TODO: adjust clothes, accessories for player race and/or class
 
-    local face_idx = lrandom(51, 65)
+    local face_idx = prandom(51, 65)
 
     local hair_idx, helm_idx = 200, 200
 
-    if lrandom(1, 3) > 1 then
-        local helm_indices = HELM_INDICES[player.class]
-        helm_idx = helm_indices[lrandom(#helm_indices)]
-    elseif lrandom(1, 2) == 1 then
-        hair_idx = HAIR_INDICES[lrandom(#HAIR_INDICES)]
+    if prandom(1, 3) > 1 then
+        local helm_indices = HELM_INDICES[class_name]
+        helm_idx = helm_indices[prandom(#helm_indices)]
+    elseif prandom(1, 2) == 1 then
+        hair_idx = HAIR_INDICES[prandom(#HAIR_INDICES)]
     end
 
-    local armor_indices = ARMOR_INDICES[player.class]
-    local armor_idx = armor_indices[lrandom(#armor_indices)]
+    local armor_indices = ARMOR_INDICES[class_name]
+    local armor_idx = armor_indices[prandom(#armor_indices)]
 
     local beard_idx = 200
-    if lrandom(1, 4) > 1 then
-        beard_idx = BEARD_INDICES[lrandom(#BEARD_INDICES)]
+    if prandom(1, 4) > 1 then
+        beard_idx = BEARD_INDICES[prandom(#BEARD_INDICES)]
     end
 
     -- TODO: add accesories
 
-    local _, _, quad_w, quad_h = quads[1]:getViewport()
+    local quad_w, quad_h = select(3, quads[1]:getViewport())
 
     local canvas = love.graphics.newCanvas(quad_w, quad_h)
     canvas:renderTo(function() 
@@ -68,6 +75,13 @@ M.generate = function(player)
         love.graphics.draw(texture, quads[beard_idx])
         love.graphics.draw(texture, quads[helm_idx])
         love.graphics.draw(texture, quads[7])
+
+        if show_plus_icon then
+            local plus_texture = TextureCache:get('uf_interface')
+            local plus_quad = QuadCache:get('uf_interface')[376]
+            local plus_w  = select(3, plus_quad:getViewport()) 
+            love.graphics.draw(plus_texture, plus_quad, quad_w - plus_w - SPACING, SPACING)
+        end
     end)
 
     return love.graphics.newImage(canvas:newImageData())

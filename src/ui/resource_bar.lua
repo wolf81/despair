@@ -10,12 +10,12 @@ local ResourceBar = {}
 local SEGMENT_COUNT = 20
 
 local QUAD_INFO = TableHelper.readOnly({
-    ['health'] = { 354, 356 },
-    ['energy'] = { 388, 390 },
+    ['health'] = { 390, 392 },
+    ['energy'] = { 460, 462 },
 })
 
 local function generateBarTexture(texture, empty_quad, filled_quad, value)
-    local _, _, quad_w, quad_h = empty_quad:getViewport()
+    local quad_w, quad_h = select(3, empty_quad:getViewport())
     local canvas = love.graphics.newCanvas(quad_w, quad_h)
 
     canvas:renderTo(function() 
@@ -63,10 +63,7 @@ ResourceBar.new = function(entity, type)
 
     local setFrame = function(self, x, y, w, h) frame = Rect(x, y, w, h) end
 
-    local getSize = function(self) 
-        local _, _, w, h = empty_quad:getViewport()
-        return w, h 
-    end
+    local getSize = function(self) return select(3, empty_quad:getViewport()) end
 
     return setmetatable({
         -- methods

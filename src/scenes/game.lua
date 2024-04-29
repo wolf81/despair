@@ -51,14 +51,22 @@ end
 
 local function onShowInventory(player) Gamestate.push(Inventory(player)) end
 
-local function onShowCharacterSheet(player) Gamestate.push(CharSheet(player)) end
+local function onShowCharacterSheet(player) 
+    if player:getComponent(Class):canLevelUp() then
+        Gamestate.push(LevelUp(player))
+    else
+        Gamestate.push(CharSheet(player)) 
+    end
+end
 
 local function getLeftActionButtons(player)
     local buttons = {}
 
     table.insert(buttons, UI.makeButton('swap-weapon'))
 
-    for _, action in ipairs(CLASS_ACTIONS[player.class]) do
+    local class_name = player:getComponent(Class):getClassName()
+
+    for _, action in ipairs(CLASS_ACTIONS[class_name]) do
         table.insert(buttons, UI.makeButton(action))
     end
 
@@ -117,13 +125,15 @@ Game.new = function(level_info)
 
     local HALF_W = mfloor((WINDOW_W - STATUS_PANEL_W - portrait_w) / 2)
 
+    local char_sheet_button = UI.makeButton('char-sheet', portrait)
+
     -- configure layout
     local layout = tidy.HStack({
         tidy.VStack({
             UI.makeView(dungeon, tidy.Stretch(1)),
             tidy.HStack(tidy.MinSize(0, ACTION_BAR_H), {
                 tidy.HStack(getLeftActionButtons(player), tidy.MinSize(HALF_W, 0)),
-                UI.makeButton('char-sheet', portrait),
+                char_sheet_button,
                 tidy.HStack(getRightActionButtons(), tidy.MinSize(HALF_W, 0)),
             }),
         }),
@@ -234,8 +244,12 @@ Game.new = function(level_info)
         end        
     end
 
-    local onNotify = function(message, duration)        
+    local onNotify = function(message, duration)
         notify_bar:show(message, duration)
+    end
+
+    local onLevelUp = function(entity)
+        char_sheet_button.widget:setImage(PortraitGenerator.generate(entity))
     end
 
     local enter = function(self, from)
@@ -252,6 +266,7 @@ Game.new = function(level_info)
             ['destroy']         = function(...) onDestroy(...) end,
             ['change-level']    = function(...) onChangeLevel(...) end,
             ['notify']          = function(...) onNotify(...) end,
+            ['level-up']        = function(...) onLevelUp(...) end,
         }
         for action, handler in pairs(handlers) do
             handles[action] = Signal.register(action, handler)
