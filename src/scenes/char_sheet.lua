@@ -15,13 +15,6 @@ local function getStatLine(stats, stat)
     return value .. ' (' .. (bonus < 0 and ('-' .. bonus) or ('+' .. bonus)) .. ')'
 end
 
-local function getFrame(background)
-    local w, h = background:getDimensions()
-    local x = (WINDOW_W - w) / 2
-    local y = (WINDOW_H - h) / 2
-    return Rect(x, y, w, h)
-end
-
 local getAttBonusText = function(weapons, offense)
     local s = ''
 
@@ -50,6 +43,10 @@ end
 
 CharSheet.new = function(player)
     local background = TextureGenerator.generateParchmentTexture(460, 300)
+    local background_w, background_h = background:getDimensions()
+    local background_x = mfloor((WINDOW_W - background_w - STATUS_PANEL_W) / 2)
+    local background_y = mfloor((WINDOW_H - background_h - ACTION_BAR_H) / 2)
+    local frame = Rect(background_x, background_y, background_w, background_h)
 
     local race = player:getComponent(Race)
     local class = player:getComponent(Class)
@@ -59,8 +56,6 @@ CharSheet.new = function(player)
     local equip = player:getComponent(Equipment)
     local offense = player:getComponent(Offense)
     local defense = player:getComponent(Defense)
-
-    local frame = getFrame(background)
 
     local game = nil
 
@@ -104,7 +99,6 @@ CharSheet.new = function(player)
     }, '\n')
 
     local textColor = { 0.0, 0.0, 0.0, 0.7 }
-    local background_w, background_h = background:getDimensions()
 
     -- configure layout
     local layout = tidy.HStack({
@@ -119,10 +113,8 @@ CharSheet.new = function(player)
                 UI.makeLabel(right_text, textColor),
             })            
         }),
-    })
-    local x = mfloor((WINDOW_W - background_w - STATUS_PANEL_W) / 2)
-    local y = mfloor((WINDOW_H - background_h - ACTION_BAR_H) / 2)
-    layout:setFrame(x, y, background_w, background_h)
+    })    
+    layout:setFrame(frame:unpack())
     for e in layout:eachElement() do
         e.widget:setFrame(e.rect:unpack())
     end
@@ -133,6 +125,8 @@ CharSheet.new = function(player)
 
     local draw = function(self)
         game:draw()
+
+        local x, y = frame:unpack()
 
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
         love.graphics.draw(background, x, y)
