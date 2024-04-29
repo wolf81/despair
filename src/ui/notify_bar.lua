@@ -107,8 +107,8 @@ NotifyBar.new = function()
     return setmetatable({
         -- methods
         update  = update,
-        show    = show,
         dismiss = dismiss,
+        show    = show,
         draw    = draw,
     }, NotifyBar)
 end

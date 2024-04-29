@@ -56,4 +56,14 @@ M.makeSeperator = function()
     return tidy.Elem(seperator, tidy.MinSize(w, h), tidy.Stretch(0, 1))
 end
 
+M.makeItemContainer = function(key)
+    local item_container = ItemContainer(key)
+    local w, h = item_container:getSize()
+    return tidy.Elem(item_container, tidy.MinSize(w, h), tidy.Stretch(0))
+end
+
+M.makeParchment = function(text)
+    return tidy.Elem(Parchment(text), tidy.Stretch(1))
+end
+
 return M
