@@ -58,6 +58,7 @@ CharSheet.new = function(player)
     local health = player:getComponent(Health)
     local equip = player:getComponent(Equipment)
     local offense = player:getComponent(Offense)
+    local defense = player:getComponent(Defense)
 
     local frame = getFrame(background)
 
@@ -94,6 +95,7 @@ CharSheet.new = function(player)
         'COMBAT',
         'Attack bonus:  ' .. padRight(getAttBonusText(equip:getWeapons(), offense), STR_PAD),
         'Damage bonus:  ' .. padRight(getDmgBonusText(equip:getWeapons(), offense), STR_PAD),
+        'Armor bonus:   ' .. padRight('+' .. tostring(defense:getArmorBonus()), STR_PAD),
         '',
         'SAVES',
         'fortitude:     ' .. padRight(tostring(skills:getValue('phys') + stats:getBonus('str')), STR_PAD),

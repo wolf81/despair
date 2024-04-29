@@ -7,15 +7,21 @@ local NPC = {}
 
 NPC.new = function(entity, def)
     local hd = def['hd']
-    assert(hd ~= nil, 'missing field: "level" or "hd"')
+    assert(hd ~= nil, 'missing field: "hd"')
+
+    local ac = def['ac']
+    assert(ac ~= nil, 'missing field: "ac"')
     
     local level = ndn.dice(hd).count()
 
     local getLevel = function(self) return level end
 
+    local getArmorClass = function(self) return ac end
+
     return setmetatable({
         -- methods
-        getLevel = getLevel,
+        getLevel        = getLevel,
+        getArmorClass   = getArmorClass,
     }, NPC)
 end
 
