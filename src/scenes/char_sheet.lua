@@ -22,6 +22,32 @@ local function getFrame(background)
     return Rect(x, y, w, h)
 end
 
+local getAttBonusText = function(weapons, offense)
+    local s = ''
+
+    for idx, weapon in ipairs(weapons) do
+        s = s .. '+' .. offense:getAttackBonus(weapon, #weapons == 2)
+        if idx < #weapons then
+            s = s .. ' / '
+        end
+    end
+
+    return s
+end
+
+local getDmgBonusText = function(weapons, offense)
+    local s = ''
+
+    for idx, weapon in ipairs(weapons) do
+        s = s .. '+' .. offense:getDamageBonus(weapon, #weapons == 2)
+        if idx < #weapons then
+            s = s .. ' / '
+        end
+    end
+
+    return s
+end
+
 CharSheet.new = function(player)
     local background = TextureGenerator.generateParchmentTexture(460, 300)
 
@@ -30,6 +56,7 @@ CharSheet.new = function(player)
     local stats = player:getComponent(Stats)
     local skills = player:getComponent(Skills)
     local health = player:getComponent(Health)
+    local equip = player:getComponent(Equipment)
     local offense = player:getComponent(Offense)
 
     local frame = getFrame(background)
@@ -64,14 +91,14 @@ CharSheet.new = function(player)
     }, '\n')
 
     local right_text = StringHelper.concat({
+        'COMBAT',
+        'Attack bonus:  ' .. padRight(getAttBonusText(equip:getWeapons(), offense), STR_PAD),
+        'Damage bonus:  ' .. padRight(getDmgBonusText(equip:getWeapons(), offense), STR_PAD),
+        '',
         'SAVES',
         'fortitude:     ' .. padRight(tostring(skills:getValue('phys') + stats:getBonus('str')), STR_PAD),
         'reflex:        ' .. padRight(tostring(skills:getValue('phys') + stats:getBonus('dex')), STR_PAD),
         'will:          ' .. padRight(tostring(stats:getBonus('mind') + class:getLevel()), STR_PAD),
-        '',
-        'COMBAT',
-        'Attack:        ' .. padRight(tostring(''), STR_PAD),
-        'Damage:        ' .. padRight(tostring(''), STR_PAD),
     }, '\n')
 
     local textColor = { 0.0, 0.0, 0.0, 0.7 }
@@ -89,22 +116,19 @@ CharSheet.new = function(player)
             })
         })
     })
-    local x = mfloor((WINDOW_W - background_w) / 2)
-    local y = mfloor((WINDOW_H - background_h) / 2)
+    local x = mfloor((WINDOW_W - background_w - STATUS_PANEL_W) / 2)
+    local y = mfloor((WINDOW_H - background_h - ACTION_BAR_H) / 2)
     layout:setFrame(x, y, background_w, background_h)
     for e in layout:eachElement() do
         e.widget:setFrame(e.rect:unpack())
     end
-    --]]
 
     local update = function(self, dt) 
-        -- body
+        for e in layout:eachElement() do e.widget:update(dt) end
     end
 
     local draw = function(self)
         game:draw()
-
-        local x, y = frame:unpack()
 
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
         love.graphics.draw(background, x, y)
@@ -112,11 +136,7 @@ CharSheet.new = function(player)
         love.graphics.setColor(0.0, 0.0, 0.0, 0.7)
         love.graphics.line(x + background_w / 2, y, x + background_w / 2, y + background_h)
 
-        for e in layout:eachElement() do
-            e.widget:draw()
-        end
-
-        -- love.graphics.print(text, x + 10, y + 15)
+        for e in layout:eachElement() do e.widget:draw() end
     end
 
     local enter = function(self, from)
