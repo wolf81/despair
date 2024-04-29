@@ -76,8 +76,8 @@ end
 local newBackground = function(width, height)
     local texture = TextureGenerator.generatePanelTexture(width, height)
     local w, h = texture:getDimensions()
-    local x = mfloor((WINDOW_W - w) / 2)
-    local y = mfloor((WINDOW_H - h) / 2)
+    local x = mfloor((WINDOW_W - w - STATUS_PANEL_W) / 2)
+    local y = mfloor((WINDOW_H - h - ACTION_BAR_H) / 2)
 
     local draw = function()
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
@@ -103,6 +103,7 @@ local function getWeapons(equipment)
     if eq_mainhand ~= nil and eq_mainhand.type == 'weapon' then
         table.insert(weapons, eq_mainhand)
     end
+    
     local eq_offhand = equipment:getItem('offhand')
     if eq_offhand ~= nil and eq_offhand.type == 'weapon' then
         table.insert(weapons, eq_offhand)
@@ -238,9 +239,9 @@ Inventory.new = function(player)
             end
         end
 
-        local mid_x = WINDOW_W / 2
+        local mid_x = mfloor((WINDOW_W - STATUS_PANEL_W) / 2)
         local ox = mfloor((background.w / 2 - stats_w) / 3)
-        drawCombatStats(equipment, offense, defense, mid_x - stats_w - ox, stats_y, stats_w, stats_h)        
+        drawCombatStats(equipment, offense, defense, equip_x, stats_y, stats_w, stats_h)        
         drawItemInfo(mid_x + ox, stats_y, stats_w, stats_h)
 
         if not hover_slot_info then return end
