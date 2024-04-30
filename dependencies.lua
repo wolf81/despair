@@ -54,6 +54,7 @@ FlexSpace           = require 'src.ui.flex_space'
 Parchment           = require 'src.ui.parchment'
 Seperator           = require 'src.ui.seperator'
 Overlay             = require 'src.ui.overlay'
+Chooser             = require 'src.ui.chooser'
 Label               = require 'src.ui.label'
 
 -- util

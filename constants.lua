@@ -16,7 +16,7 @@ ORDINAL_MOVE_FACTOR = math.sqrt(2)
 
 WINDOW_W            = 800
 WINDOW_H            = 450
-UI_SCALE            = 0.5
+UI_SCALE            = 1.0
 
 STATUS_PANEL_W      = 48 * 3 -- equal to the size of 3 action buttons
 ACTION_BAR_H        = 50

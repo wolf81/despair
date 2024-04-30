@@ -28,6 +28,11 @@ M.makeLabel = function(text, color, align)
     return tidy.Elem(label, tidy.MinSize(w, h), tidy.Stretch(1, 0))
 end
 
+M.makeChooser = function(...)
+    local chooser = Chooser(...)
+    return tidy.Elem(chooser, tidy.Stretch(1))
+end
+
 M.makeResourceBar = function(entity, type)
     local resource_bar = ResourceBar(entity, type)
     local w, h = resource_bar:getSize()

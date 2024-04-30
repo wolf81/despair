@@ -10,7 +10,7 @@ local ChooseOption = {}
 ChooseOption.new = function(title, ...)
     local options = {...}
 
-    local background = TextureGenerator.generatePanelTexture(200, 200)
+    local background = TextureGenerator.generatePanelTexture(240, 200)
     local background_w, background_h = background:getDimensions()
     local background_x = mfloor((WINDOW_W - background_w) / 2)
     local background_y = mfloor((WINDOW_H - background_h) / 2)
@@ -20,17 +20,14 @@ ChooseOption.new = function(title, ...)
     local layout = tidy.Border(tidy.Margin(10), {
         tidy.VStack(tidy.Spacing(10), {
             UI.makeLabel(title, {1.0, 1.0, 1.0, 1.0}, 'center'),
-            UI.makeFlexSpace(),            
-        })
+            UI.makeChooser(...),            
+        }),
     })
 
     layout:setFrame(frame:unpack())
     for e in layout:eachElement() do
         e.widget:setFrame(e.rect:unpack())
     end
-
-    print(title)
-    print('#' .. #options .. ' options')
 
     local from_scene = nil
 
