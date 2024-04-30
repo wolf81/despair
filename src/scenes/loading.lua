@@ -15,6 +15,22 @@ local function registerQuadsByKey(key, size, ox, oy)
     QuadCache:register(key, quads)    
 end
 
+local function registerBorderQuads()
+    local image = TextureCache:get('border')
+
+    local quads = {}
+
+    for _, quad in ipairs(QuadGenerator.generate(image, 16, 16, 0, 0, 48, 32)) do
+        table.insert(quads, quad)
+    end
+
+    for _, quad in ipairs(QuadGenerator.generate(image, 16, 16, 56, 0)) do
+        table.insert(quads, quad)
+    end
+
+    QuadCache:register('border', quads)
+end
+
 local function registerInterfaceQuads()
     local key = 'uf_interface'
     local image = TextureCache:get(key)
@@ -153,6 +169,8 @@ local function registerQuads()
     registerQuadsByKey('uf_skills', 24, 584, 64)
 
     registerInterfaceQuads()
+
+    registerBorderQuads()
 end
 
 Loading.new = function(completion)

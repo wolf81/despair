@@ -17,8 +17,9 @@ Chooser.new = function(...)
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
         love.graphics.draw(background, x, y)
 
+        love.graphics.setColor(0.0, 0.0, 0.0, 0.7)
         for idx, option in ipairs(options) do
-            love.graphics.print(option, x + 10, y + 10 + (idx - 1) * 48)
+            love.graphics.print(option, x + 10, y + 10 + (idx - 1) * 32)
         end
     end
 
@@ -29,7 +30,7 @@ Chooser.new = function(...)
     local setFrame = function(self, x, y, w, h) 
         frame = Rect(x, y, w, h) 
 
-        background = TextureGenerator.generateContainerTexture(w, h)
+        background = TextureGenerator.generateBorderTexture(w, h)
     end
 
     local getFrame = function(self) return frame end

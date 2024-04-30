@@ -7,6 +7,60 @@ local mfloor = math.floor
 
 local M = {}
 
+local function getParchmentColor()
+    local texture = TextureCache:get('uf_interface')
+    local quads = QuadCache:get('uf_interface')    
+    local color_info = ColorHelper.getColors(texture, quads[266], true)[1]
+    return color_info.color
+end
+
+M.generateBorderTexture = function(w, h, bg_color)
+    assert(w ~= nil, 'missing argument: "w')
+
+    h = h or w
+
+    local texture = TextureCache:get('border')
+    local quads = QuadCache:get('border')
+    local quad_w, quad_h = select(3, quads[1]:getViewport())
+
+    bg_color = bg_color or getParchmentColor()
+
+    local canvas = love.graphics.newCanvas(w, h)
+    canvas:renderTo(function() 
+
+        love.graphics.setColor(unpack(bg_color))
+        love.graphics.rectangle('fill', 0, 0, w, h)
+
+        love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
+
+        -- corners
+        love.graphics.draw(texture, quads[1], 0, 0)
+        love.graphics.draw(texture, quads[7], w - quad_w, 0)
+        love.graphics.draw(texture, quads[4], 0, h - quad_h)
+        love.graphics.draw(texture, quads[8], w - quad_w, h - quad_h)
+
+        -- top & bottom rows
+        for x = quad_w, w - quad_w * 2, quad_w do
+            love.graphics.draw(texture, quads[2], x, 0)
+            love.graphics.draw(texture, quads[5], x, h - quad_h)
+        end
+
+        love.graphics.draw(texture, quads[2], w - quad_w * 2, 0)
+        love.graphics.draw(texture, quads[5], w - quad_w * 2, h - quad_h)
+
+        -- middle
+        for y = quad_h, h - quad_h * 2, quad_h do
+            love.graphics.draw(texture, quads[3], 0, y)
+            love.graphics.draw(texture, quads[6], w - quad_w, y)
+        end
+
+        love.graphics.draw(texture, quads[3], 0, h - quad_h * 2)
+        love.graphics.draw(texture, quads[6], w - quad_w, h - quad_h * 2)
+    end)
+
+    return canvas
+end
+
 M.generateParchmentTexture = function(w, h)
     assert(w ~= nil, 'missing argument: "w')
 
