@@ -42,7 +42,7 @@ local getDmgBonusText = function(weapons, offense)
 end
 
 CharSheet.new = function(player)
-    local background = TextureGenerator.generateParchmentTexture(460, 300)
+    local background = TextureGenerator.generateParchmentTexture(460, 304)
     local background_w, background_h = background:getDimensions()
     local background_x = mfloor((WINDOW_W - background_w - STATUS_PANEL_W) / 2)
     local background_y = mfloor((WINDOW_H - background_h - ACTION_BAR_H) / 2)
@@ -84,6 +84,7 @@ CharSheet.new = function(player)
         'subterfuge:    ' .. padRight(tostring(skills:getValue('subt')), STR_PAD),
         'knowledge:     ' .. padRight(tostring(skills:getValue('know')), STR_PAD),
         'communication: ' .. padRight(tostring(skills:getValue('comm')), STR_PAD),
+        'survival:      ' .. padRight(tostring(skills:getValue('surv')), STR_PAD),
     }, '\n')
 
     local right_text = StringHelper.concat({

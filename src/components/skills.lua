@@ -12,13 +12,14 @@ Skills.new = function(entity, def)
     local npc = entity:getComponent(NPC)
 
     -- add bonuses based on race and class, if applicable
-    local phys, comm, subt, know = 0, 0, 0, 0
+    local phys, comm, subt, know, surv = 0, 0, 0, 0, 0
     
     if race then
         phys = phys + race:getSkillBonus('phys')
         comm = comm + race:getSkillBonus('comm')
         subt = subt + race:getSkillBonus('subt')
         know = know + race:getSkillBonus('know')
+        surv = surv + race:getSkillBonus('surv')
     end
 
     if class then
@@ -26,6 +27,7 @@ Skills.new = function(entity, def)
         comm = comm + class:getSkillBonus('comm')
         subt = subt + class:getSkillBonus('subt')
         know = know + class:getSkillBonus('know')
+        surv = surv + class:getSkillBonus('surv')
     end
 
     local skills = {
@@ -33,6 +35,7 @@ Skills.new = function(entity, def)
         comm = comm,
         subt = subt,
         know = know,
+        surv = surv,
     }
 
     local getValue = function(self, skill)         

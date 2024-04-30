@@ -16,25 +16,6 @@ M.generateParchmentTexture = function(w, h)
     local quads = QuadCache:get('uf_interface')
     local quad_w, quad_h = select(3, quads[266]:getViewport())
 
-    local cols = mfloor(w / quad_w)
-    local rows = mfloor(h / quad_h) 
-
-    local draw_info = {}
-    for y = 1, rows do
-        for x = 1, cols do
-            if y == 1 then
-                draw_info[vector(x, y)] = (x == 1 and 266) or (x == cols and 271) or 267 
-            elseif y == rows then
-                draw_info[vector(x, y)] = (x == 1 and 276) or (x == cols and 275) or 273
-            elseif x == 1 then
-                draw_info[vector(x, y)] = 274
-            elseif x == cols then
-                draw_info[vector(x, y)] = 268
-            end
-        end
-    end
-
-    local quad_w, quad_h = select(3, quads[266]:getViewport())
     local canvas = love.graphics.newCanvas(w, h)
     canvas:renderTo(function() 
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
@@ -51,7 +32,7 @@ M.generateParchmentTexture = function(w, h)
         end
 
         -- middle
-        for y = quad_h, h - quad_h, quad_h do
+        for y = quad_h, h - quad_h - 1, quad_h do
             love.graphics.draw(texture, quads[274], 0, y)
             love.graphics.draw(texture, quads[268], w - quad_w, y)
         end
