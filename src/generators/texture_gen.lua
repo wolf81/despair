@@ -27,16 +27,22 @@ M.generateParchmentTexture = function(w, h)
         love.graphics.draw(texture, quads[275], w - quad_w, h - quad_h)
 
         -- top & bottom rows
-        for x = quad_w, w - quad_w - 1, quad_w do
+        for x = quad_w, w - quad_w * 2, quad_w do
             love.graphics.draw(texture, quads[267], x, 0)
             love.graphics.draw(texture, quads[273], x, h - quad_h)
         end
 
+        love.graphics.draw(texture, quads[267], w - quad_w * 2, 0)
+        love.graphics.draw(texture, quads[273], w - quad_w * 2, h - quad_h)
+
         -- middle
-        for y = quad_h, h - quad_h - 1, quad_h do
+        for y = quad_h, h - quad_h * 2, quad_h do
             love.graphics.draw(texture, quads[274], 0, y)
             love.graphics.draw(texture, quads[268], w - quad_w, y)
         end
+
+        love.graphics.draw(texture, quads[274], 0, h - quad_h * 2)
+        love.graphics.draw(texture, quads[268], w - quad_w, h - quad_h * 2)
 
         local color_info = ColorHelper.getColors(texture, quads[266], true)[1]
         love.graphics.setColor(unpack(color_info.color))
@@ -64,27 +70,23 @@ M.generateContainerTexture = function(w, h)
         love.graphics.draw(texture, quads[339], 0, h - quad_h)
         love.graphics.draw(texture, quads[343], w - quad_w, h - quad_h)
 
-
         -- top & bottom rows
-        for x = quad_w, w - quad_w - 1, quad_w do
+        for x = quad_w, w - quad_w * 2, quad_w do
             love.graphics.draw(texture, quads[335], x, 0)
             love.graphics.draw(texture, quads[340], x, h - quad_h)
         end
 
+        love.graphics.draw(texture, quads[335], w - quad_w * 2, 0)
+        love.graphics.draw(texture, quads[340], w - quad_w * 2, h - quad_h)
+
         -- middle
-        for y = quad_h, h - quad_h - 1, quad_h do
+        for y = quad_h, h - quad_h * 2, quad_h do
             love.graphics.draw(texture, quads[336], 0, y)
             love.graphics.draw(texture, quads[341], w - quad_w, y)
         end
 
-        --[[
-        love.graphics.draw(texture, quads[335], quad_w, 0)
-
-        love.graphics.draw(texture, quads[336], 0, quad_h)
-        love.graphics.draw(texture, quads[341], w - quad_w, quad_h)
-
-        love.graphics.draw(texture, quads[340], quad_w, h - quad_h)
-        ]]
+        love.graphics.draw(texture, quads[336], 0, h - quad_h * 2)
+        love.graphics.draw(texture, quads[341], w - quad_w, h - quad_h * 2)
 
         local color_info = ColorHelper.getColors(texture, quads[334], true)[1]
         love.graphics.setColor(color_info.color)
@@ -97,6 +99,7 @@ end
 M.generatePanelTexture = function(w, h)
     local texture = TextureCache:get('uf_interface')
     local quads = QuadCache:get('uf_interface')
+    local quad_w, quad_h = select(3, quads[324]:getViewport())
 
     local offset = 34 * 0 -- offset of 0, 1, 2 to change themes: gray, blue, brown
 
@@ -111,16 +114,22 @@ M.generatePanelTexture = function(w, h)
         love.graphics.draw(texture, quads[333 + offset], w - 16, h - 16)
 
         -- top & bottom rows
-        for x = 16, w - 24, 8 do
+        for x = quad_w, w - quad_w * 2, quad_w do
             love.graphics.draw(texture, quads[325 + offset], x, 0)
-            love.graphics.draw(texture, quads[330 + offset], x, h - 16)
+            love.graphics.draw(texture, quads[330 + offset], x, h - quad_h)
         end
 
+        love.graphics.draw(texture, quads[325 + offset], w - quad_w * 2, 0)
+        love.graphics.draw(texture, quads[330 + offset], w - quad_w * 2, h - quad_h)
+
         -- middle
-        for y = 16, h - 24, 8 do
+        for y = quad_h, h - quad_h * 2, quad_h do
             love.graphics.draw(texture, quads[326 + offset], 0, y)
-            love.graphics.draw(texture, quads[331 + offset], w - 16, y)
+            love.graphics.draw(texture, quads[331 + offset], w - quad_w, y)
         end
+
+        love.graphics.draw(texture, quads[326 + offset], 0, h - quad_h * 2)
+        love.graphics.draw(texture, quads[331 + offset], w - quad_w, h - quad_h * 2)
 
         local color_info = ColorHelper.getColors(texture, quads[326 + offset], true)[1]
         love.graphics.setColor(unpack(color_info.color))
