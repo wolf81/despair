@@ -271,6 +271,10 @@ Game.new = function(level_info)
         for action, handler in pairs(handlers) do
             handles[action] = Signal.register(action, handler)
         end
+
+        Timer.after(0.2, function() 
+            Gamestate.push(ChooseOption('SELECT CLASS', 'Fighter', 'Mage', 'Cleric', 'Rogue')) 
+        end)
     end
 
     local leave = function(self, to)
