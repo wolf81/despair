@@ -273,7 +273,7 @@ Game.new = function(level_info)
         end
 
         Timer.after(0.2, function() 
-            Gamestate.push(ChooseOption('SELECT CLASS', 'Fighter', 'Mage', 'Cleric', 'Rogue')) 
+            Gamestate.push(ChooseOption('SELECT CLASS', 'Fighter', 'Mage', 'Cleric', 'Rogue', 'Paladin', 'Bard', 'Druid', 'Illusionist')) 
         end)
     end
 

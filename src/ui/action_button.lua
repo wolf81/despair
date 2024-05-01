@@ -50,7 +50,7 @@ ActionButton.new = function(action, ...)
         local mx, my = love.mouse.getPosition()
         is_highlighted = is_selected or frame:contains(mx / UI_SCALE, my / UI_SCALE)
 
-        if is_highlighted and is_pressed and (not love.mouse.isDown(1)) then
+        if is_highlighted and is_pressed and not love.mouse.isDown(1) then
             -- TODO: support actions that are functions, in line with ImageButton
             Signal.emit(action, unpack(args))
         end
