@@ -47,17 +47,20 @@ ChooserItem.new = function(text)
 
     local wasPressed = function(self) return is_released end
 
+    local isHighlighted = function(self) return is_highlighted end
+
     local getText = function(self) return text end
 
     return setmetatable({
         -- methods
-        draw        = draw,
-        update      = update,
-        getSize     = getSize,
-        getText     = getText,
-        setFrame    = setFrame,
-        getFrame    = getFrame,
-        wasPressed  = wasPressed,
+        draw            = draw,
+        update          = update,
+        getSize         = getSize,
+        getText         = getText,
+        setFrame        = setFrame,
+        getFrame        = getFrame,
+        wasPressed      = wasPressed,
+        isHighlighted   = isHighlighted,
     }, ChooserItem)
 end
 
