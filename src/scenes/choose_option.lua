@@ -26,8 +26,12 @@ ChooseOption.new = function(title, ...)
 
     local from_scene = nil
 
+    local overlay = Overlay()
+
     local draw = function(self)
         from_scene:draw()
+
+        overlay:draw()
 
         local x, y = frame:unpack()
 
@@ -45,6 +49,8 @@ ChooseOption.new = function(title, ...)
 
     local enter = function(self, from)
         from_scene = from
+
+        overlay:fadeIn()
     end
 
     local leave = function(self, to)
@@ -53,13 +59,13 @@ ChooseOption.new = function(title, ...)
 
     local keyReleased = function(self, key, scancode)
         if Gamestate.current() == self and key == 'escape' then
-            Gamestate.pop()
+            overlay:fadeOut(Gamestate.pop)
         end
     end
 
     local mouseReleased = function(self, mx, my, button, istouch, presses)
         if Gamestate.current() == self and not frame:contains(mx, my) then
-            Gamestate.pop()
+            overlay:fadeOut(Gamestate.pop)
         end
     end
 

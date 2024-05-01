@@ -46,6 +46,8 @@ LevelUp.new = function(player)
     local background = TextureGenerator.generateParchmentTexture(220, 160)
     local frame = getFrame(background)
 
+    local overlay = Overlay()
+
     local STR_PAD = 10
 
     local lines = {
@@ -80,6 +82,7 @@ LevelUp.new = function(player)
 
     local draw = function(self)
         game:draw()
+        overlay:draw()
 
         local x, y = frame:unpack()
 
@@ -93,7 +96,7 @@ LevelUp.new = function(player)
         assert(getmetatable(from) == Game, 'invalid argument for "from", expected: "Game"')
 
         game = from
-        game:showOverlay()
+        overlay:fadeIn()
 
         -- TODO: update player stats for new level
         handle = Signal.register('accept', function() 
@@ -103,21 +106,20 @@ LevelUp.new = function(player)
     end
 
     local leave = function(self, to)
-        game:hideOverlay()
         game = nil
 
         Signal.remove('accept', handle)
     end
 
     local keyReleased = function(self, key, scancode)
-        if Gamestate.current() == self and key == 'escape' then
-            Gamestate.pop()
+        if Gamestate.current() == self and key == 'escape' then 
+            overlay:fadeOut(Gamestate.pop) 
         end
     end
 
     local mouseReleased = function(self, mx, my, button, istouch, presses)
         if Gamestate.current() == self and not frame:contains(mx, my) then
-            Gamestate.pop()
+            overlay:fadeOut(Gamestate.pop) 
         end
     end
         

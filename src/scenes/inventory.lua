@@ -205,6 +205,8 @@ Inventory.new = function(player)
         }),
     }):setFrame(background_x, background_y, background_w, background_h)
 
+    local overlay = Overlay()
+
     updateItemContainers(item_containers, equipment, backpack)
     updateCombatInfo(combat_info, equipment, offense, defense)        
 
@@ -229,21 +231,20 @@ Inventory.new = function(player)
         assert(getmetatable(from) == Game, 'invalid argument for "from", expected: "Game"')
         
         game = from
-        game:showOverlay()
+        overlay:fadeIn()
 
         -- TODO: maybe we don't need this 'hacky' way to change mouse visibility if we control 
         -- visiblity from Game class, instead of Pointer class
         love.mouse.setVisible(true)
     end
 
-    local leave = function(self, to)
-        game:hideOverlay()
-        game = nil
-    end
+    local leave = function(self, to) game = nil end
 
     local draw = function(self)
         -- draw game behind inventory        
         game:draw()
+
+        overlay:draw()
 
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
         love.graphics.draw(background, background_x, background_y)
@@ -253,12 +254,12 @@ Inventory.new = function(player)
 
     local keyReleased = function(self, key, scancode)
         if Gamestate.current() == self and key == 'escape' then
-            Gamestate.pop()
+            overlay:fadeOut(Gamestate.pop)
         end
     end
 
     local mouseReleased = function(self, mx, my, mouse_btn)
-        if not frame:contains(mx, my) then return Gamestate.pop() end
+        if not frame:contains(mx, my) then return overlay:fadeOut(Gamestate.pop) end
 
         if mouse_btn ~= 2 then return end
         

@@ -112,9 +112,6 @@ Game.new = function(level_info)
 
     local notify_bar = NotifyBar()
 
-    -- a semi-transparent overlay, used when showing char-sheet, inventory on top ...
-    local overlay = Overlay()
-
     -- handles for observer pattern with Signal, added on enter, removed on leave
     local handles = {}
 
@@ -162,14 +159,8 @@ Game.new = function(level_info)
 
         if item_bar then item_bar:draw() end
 
-        overlay:draw()
-
         notify_bar:draw()
     end
-
-    local showOverlay = function(self) overlay:fadeIn() end
-
-    local hideOverlay = function(self) overlay:fadeOut() end
 
     local onShowItems = function(items, action)
         if #items == 0 then return print('empty item list') end
@@ -311,8 +302,6 @@ Game.new = function(level_info)
         update              = update,
         getDungeon          = getDungeon,
         keyReleased         = keyReleased,
-        showOverlay         = showOverlay,
-        hideOverlay         = hideOverlay,
         mouseReleased       = mouseReleased,
         setActionsEnabled   = setActionsEnabled,
     }, Game)
