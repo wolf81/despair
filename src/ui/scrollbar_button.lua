@@ -45,12 +45,15 @@ ScrollbarButton.new = function(direction)
 
     local getFrame = function(self) return frame end
 
+    local isPressed = function(self) return is_pressed end
+
     return setmetatable({
         -- methods
         draw        = draw,
         update      = update,
         setFrame    = setFrame,
         getFrame    = getFrame,
+        isPressed   = isPressed,
     }, ScrollbarButton)
 end
 

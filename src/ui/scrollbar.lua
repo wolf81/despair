@@ -10,7 +10,7 @@ Scrollbar.new = function()
 
     local direction = 'none' -- 'up', 'down'
 
-    local enabled = true
+    local is_enabled = true
 
     local up_button, dn_button = ScrollbarButton('up'), ScrollbarButton('down')
 
@@ -28,25 +28,12 @@ Scrollbar.new = function()
     end
 
     local update = function(self, dt) 
-        direction = 'none'
-
         up_button:update(dt)
         dn_button:update(dt)
 
-        if love.mouse.isDown(1) then
-            local x, y, w, h = frame:unpack()
-
-            local mx, my = love.mouse.getPosition()
-            -- is_highlighted = frame:contains(mx / UI_SCALE, my / UI_SCALE)
-
-            if my > y and my < y + w then
-                direction = 'up'
-            end
-
-            if my > y + h - w and my < y + h then
-                direction = 'down'
-            end
-        end
+        direction = 'none'
+        if up_button:isPressed() then direction = 'up' end
+        if dn_button:isPressed() then direction = 'down' end
     end
 
     local setFrame = function(self, x, y, w, h) 
@@ -60,7 +47,7 @@ Scrollbar.new = function()
 
     local getDirection = function(self) return direction end
 
-    local setEnabled = function(self, flag) enabled = (flag == true) end
+    local setEnabled = function(self, flag) is_enabled = (flag == true) end
 
     return setmetatable({
         -- methods
