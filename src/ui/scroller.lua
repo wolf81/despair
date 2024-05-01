@@ -8,7 +8,11 @@ local Scroller = {}
 Scroller.new = function()
     local frame = Rect(0)
 
+    local is_visible = true
+
     local draw = function(self)
+        if not is_visible then return end
+        
         local x, y, w, h = frame:unpack()
 
         love.graphics.setColor(1.0, 1.0, 1.0, 0.5)
@@ -27,6 +31,8 @@ Scroller.new = function()
     end
 
     local getFrame = function(self) return frame:unpack() end
+
+    local setVisible = function(self, flag) is_visible = (flag == true) end
     
     return setmetatable({
         -- methods 
@@ -34,6 +40,7 @@ Scroller.new = function()
         update      = update,
         getFrame    = getFrame,
         setFrame    = setFrame,
+        setVisible  = setVisible,
     }, Scroller)
 end
 

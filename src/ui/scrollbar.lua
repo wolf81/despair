@@ -10,13 +10,15 @@ Scrollbar.new = function()
 
     local direction = 'none' -- 'up', 'down'
 
-    local is_enabled = true
+    local is_visible = true
 
     local up_button, dn_button = ScrollbarButton('up'), ScrollbarButton('down')
 
     local scroller = Scroller()
 
     local draw = function(self)
+        if not is_visible then return end
+
         local x, y, w, h = frame:unpack()
 
         love.graphics.setColor(1.0, 1.0, 1.0, 0.3)
@@ -30,7 +32,9 @@ Scrollbar.new = function()
         love.graphics.rectangle('line', x, y, w, h)
     end
 
-    local update = function(self, dt) 
+    local update = function(self, dt)
+        if not is_visible then return end
+
         up_button:update(dt)
         dn_button:update(dt)
         scroller:update(dt)
@@ -52,7 +56,7 @@ Scrollbar.new = function()
 
     local getDirection = function(self) return direction end
 
-    local setEnabled = function(self, flag) is_enabled = (flag == true) end
+    local setVisible = function(self, flag) is_visible = (flag == true) end
 
     local setScrollAmount = function(self, value)
         local x, y, w, h = frame:unpack()
@@ -62,13 +66,13 @@ Scrollbar.new = function()
 
     return setmetatable({
         -- methods
-        draw            = draw,
-        update          = update,
-        getFrame        = getFrame,
-        setFrame        = setFrame,
-        setEnabled      = setEnabled,
-        getDirection    = getDirection,
-        setScrollAmount = setScrollAmount,
+        draw                = draw,
+        update              = update,
+        getFrame            = getFrame,
+        setFrame            = setFrame,
+        setVisible          = setVisible,
+        getDirection        = getDirection,
+        setScrollAmount     = setScrollAmount,
     }, Scrollbar)
 end
 
