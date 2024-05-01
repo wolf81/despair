@@ -43,6 +43,7 @@ Level               = require 'src.world.level'
 Map                 = require 'src.world.map'
 
 -- ui
+ScrollbarButton     = require 'src.ui.scrollbar_button'
 ItemContainer       = require 'src.ui.item_container'
 ActionButton        = require 'src.ui.action_button'
 ResourceBar         = require 'src.ui.resource_bar'

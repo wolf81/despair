@@ -14,6 +14,27 @@ local function getParchmentColor()
     return color_info.color
 end
 
+M.generateScrollerTexture = function(w, h, direction)
+    local margin = 4
+
+    local canvas = love.graphics.newCanvas(w, h)
+    canvas:renderTo(function() 
+        local x1, y1 = margin, margin
+        local x2, y2 = w - x1, h - y1
+        local x_mid = mfloor(w / 2)
+
+        love.graphics.setColor(0.0, 0.0, 0.0, 1.0)
+
+        if direction == 'up' then
+            love.graphics.polygon('fill', x1, y2, x2, y2, x_mid, y1)
+        else
+            love.graphics.polygon('fill', x1, y1, x2, y1, x_mid, y2)
+        end
+    end)
+
+    return canvas
+end
+
 M.generateBorderTexture = function(w, h, bg_color)
     assert(w ~= nil, 'missing argument: "w')
 
