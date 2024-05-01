@@ -145,11 +145,7 @@ Game.new = function(level_info)
                 UI.makeButton('settings'),
             })
         })
-    })
-    layout:setFrame(0, 0, WINDOW_W, WINDOW_H)
-    for e in layout:eachElement() do
-        e.widget:setFrame(e.rect:unpack())
-    end
+    }):setFrame(0, 0, WINDOW_W, WINDOW_H)
 
     local update = function(self, dt) 
         for e in layout:eachElement() do
@@ -169,14 +165,6 @@ Game.new = function(level_info)
         overlay:draw()
 
         notify_bar:draw()
-    end
-
-    local keyReleased = function(self, key, scancode)        
-        if key == 'i' then Signal.emit('inventory') end
-
-        if Gamestate.current() == self and key == 'escape' then
-            love.event.quit()
-        end
     end
 
     local showOverlay = function(self) overlay:fadeIn() end
@@ -271,10 +259,6 @@ Game.new = function(level_info)
         for action, handler in pairs(handlers) do
             handles[action] = Signal.register(action, handler)
         end
-
-        Timer.after(0.2, function() 
-            Gamestate.push(ChooseOption('SELECT CLASS', 'Fighter', 'Mage', 'Cleric', 'Rogue', 'Paladin', 'Bard', 'Druid', 'Illusionist')) 
-        end)
     end
 
     local leave = function(self, to)
@@ -305,6 +289,14 @@ Game.new = function(level_info)
 
     local mouseReleased = function(self, mx, my, button, istouch, presses)
         love.mouse.setVisible(true) 
+    end
+
+    local keyReleased = function(self, key, scancode)        
+        if key == 'i' then Signal.emit('inventory') end
+
+        if Gamestate.current() == self and key == 'escape' then
+            love.event.quit()
+        end
     end
 
     -- set initial state for "use" buttons, e.g. enable wand button if we have at least 1 wand

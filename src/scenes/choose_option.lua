@@ -22,12 +22,7 @@ ChooseOption.new = function(title, ...)
             UI.makeLabel(title, {1.0, 1.0, 1.0, 1.0}, 'center'),
             UI.makeChooser(...),            
         }),
-    })
-
-    layout:setFrame(frame:unpack())
-    for e in layout:eachElement() do
-        e.widget:setFrame(e.rect:unpack())
-    end
+    }):setFrame(frame:unpack())
 
     local from_scene = nil
 

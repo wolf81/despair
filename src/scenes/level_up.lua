@@ -72,11 +72,7 @@ LevelUp.new = function(player)
                 UI.makeButton('accept', getCheckImage())
             }),
         })
-    })
-    layout:setFrame(frame:unpack())
-    for e in layout:eachElement() do
-        e.widget:setFrame(e.rect:unpack())
-    end
+    }):setFrame(frame:unpack())
 
     local update = function(self, dt)
         for e in layout:eachElement() do e.widget:update(dt) end

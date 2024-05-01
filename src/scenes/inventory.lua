@@ -203,12 +203,7 @@ Inventory.new = function(player)
                 hover_info,
             }),
         }),
-    })
-
-    layout:setFrame(background_x, background_y, background_w, background_h)
-    for e in layout:eachElement() do
-        e.widget:setFrame(e.rect:unpack())
-    end
+    }):setFrame(background_x, background_y, background_w, background_h)
 
     updateItemContainers(item_containers, equipment, backpack)
     updateCombatInfo(combat_info, equipment, offense, defense)        

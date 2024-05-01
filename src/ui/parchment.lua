@@ -34,7 +34,6 @@ Parchment.new = function(text)
         frame = Rect(x, y, w, h)
 
         layout:setFrame(x, y, w, h) 
-        for e in layout:eachElement() do e.widget:setFrame(e.rect:unpack()) end
     end
 
     local getFrame = function(self) return frame:unpack() end

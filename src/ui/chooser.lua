@@ -87,13 +87,19 @@ Chooser.new = function(...)
             item_w = w
         end
 
+        local show_scrollbar = content_h > h
+
         for _, item in ipairs(items) do
             item:setFrame(x, item_y, item_w, ITEM_H)
             item_y = item_y + ITEM_H
+
+            if show_scrollbar then
+                item:setTextOffset(SCROLLBAR_W / 2, 0)
+            end
         end
 
         scrollbar:setFrame(x + w - SCROLLBAR_W, y, SCROLLBAR_W, h)
-        scrollbar:setVisible(content_h > h)
+        scrollbar:setVisible(show_scrollbar)
     end
 
     local getFrame = function(self) return frame end

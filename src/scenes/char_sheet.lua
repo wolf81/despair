@@ -114,11 +114,7 @@ CharSheet.new = function(player)
                 UI.makeLabel(right_text, textColor),
             })            
         }),
-    })    
-    layout:setFrame(frame:unpack())
-    for e in layout:eachElement() do
-        e.widget:setFrame(e.rect:unpack())
-    end
+    }):setFrame(frame:unpack())
 
     local update = function(self, dt) 
         for e in layout:eachElement() do e.widget:update(dt) end

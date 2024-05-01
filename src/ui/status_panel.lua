@@ -66,9 +66,6 @@ StatusPanel.new = function(player)
             background = TextureGenerator.generatePanelTexture(w, h)
 
             layout:setFrame(frame:unpack())
-            for e in layout:eachElement() do
-                e.widget:setFrame(e.rect:unpack())
-            end
         end
     end
 

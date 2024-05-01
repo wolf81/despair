@@ -14,6 +14,8 @@ ChooserItem.new = function(text)
 
     local text_w, text_h = FONT:getWidth(text), FONT:getHeight()
 
+    local text_offset = { x = 0, y = 0 }
+
     local is_highlighted, is_pressed, is_released = false, false, false
     
     local update = function(self, dt)
@@ -35,7 +37,7 @@ ChooserItem.new = function(text)
 
         love.graphics.setColor(unpack(TEXT_COLOR))
         local text_x, text_y = mfloor((w - text_w) / 2), mfloor((h - text_h) / 2)
-        love.graphics.print(text, x + text_x, y + text_y)
+        love.graphics.print(text, x + text_x + text_offset.x, y + text_y + text_offset.y)
     end
 
     local getFrame = function(self) return frame:unpack() end
@@ -50,6 +52,11 @@ ChooserItem.new = function(text)
 
     local getText = function(self) return text end
 
+    local setTextOffset = function(self, ox, oy)  
+        text_offset.x = ox or 0
+        text_offset.y = oy or 0
+    end
+
     return setmetatable({
         -- methods
         draw            = draw,
@@ -59,6 +66,7 @@ ChooserItem.new = function(text)
         setFrame        = setFrame,
         getFrame        = getFrame,
         wasPressed      = wasPressed,
+        setTextOffset   = setTextOffset,
         isHighlighted   = isHighlighted,
         setHighlighted  = setHighlighted,
     }, ChooserItem)
