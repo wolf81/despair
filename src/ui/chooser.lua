@@ -9,7 +9,7 @@ local Chooser = {}
 
 local DISABLED_ALPHA = 0.7
 local SCROLLBAR_W = 20
-local SCROLL_SPEED = 10
+local SCROLL_SPEED = 60
 local ITEM_H = 32
 
 Chooser.new = function(...)
@@ -36,7 +36,7 @@ Chooser.new = function(...)
 
         love.graphics.setScissor(x + 1, y + 1, w - 2, h - 2)
         love.graphics.push()
-        love.graphics.translate(0, oy)
+        love.graphics.translate(0, -oy)
         for _, item in ipairs(items) do item:draw() end
         love.graphics.pop()
 
@@ -61,7 +61,7 @@ Chooser.new = function(...)
         if scroll_direction == 'up' then
             oy = mmax(oy - SCROLL_SPEED * dt, 0)
         elseif scroll_direction == 'down' then
-            oy = mmax(oy + SCROLL_SPEED * dt, #items * ITEM_H)
+            oy = mmin(oy + SCROLL_SPEED * dt, #items * ITEM_H - select(2, frame:getSize()))
         end
     end
 

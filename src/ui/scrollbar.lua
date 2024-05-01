@@ -15,12 +15,30 @@ Scrollbar.new = function()
     local draw = function(self)
         local x, y, w, h = frame:unpack()
 
-        love.graphics.setColor(1.0, 1.0, 1.0, 0.5)
+        love.graphics.setColor(1.0, 1.0, 1.0, 0.3)
         love.graphics.rectangle('fill', x, y, w, h)
+
+        love.graphics.setColor(0.0, 0.0, 0.0, 0.7)
+        love.graphics.rectangle('line', x, y, w, h)
     end
 
     local update = function(self, dt) 
+        direction = 'none'
 
+        if love.mouse.isDown(1) then
+            local x, y, w, h = frame:unpack()
+
+            local mx, my = love.mouse.getPosition()
+            is_highlighted = frame:contains(mx / UI_SCALE, my / UI_SCALE)
+
+            if my > y and my < y + w then
+                direction = 'up'
+            end
+
+            if my > y + h - w and my < y + h then
+                direction = 'down'
+            end
+        end
     end
 
     local setFrame = function(self, x, y, w, h) frame = Rect(x, y, w, h) end
