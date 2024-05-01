@@ -48,13 +48,6 @@ Chooser.new = function(...)
     local update = function(self, dt)
         if not is_enabled then return end
 
-        for _, item in ipairs(items) do 
-            item:update(dt) 
-            if item:wasPressed() then
-                print('pressed', item:getText())
-            end
-        end
-
         scrollbar:update(dt)
 
         local scroll_direction = scrollbar:getDirection()
@@ -62,6 +55,19 @@ Chooser.new = function(...)
             oy = mmax(oy - SCROLL_SPEED * dt, 0)
         elseif scroll_direction == 'down' then
             oy = mmin(oy + SCROLL_SPEED * dt, #items * ITEM_H - select(2, frame:getSize()))
+        end
+
+        local mx, my = love.mouse.getPosition()
+
+        for _, item in ipairs(items) do
+            local item_frame = Rect(item:getFrame())
+            item:setHighlighted(item_frame:contains(mx / UI_SCALE, my / UI_SCALE + oy))
+
+            item:update(dt) 
+            
+            if item:wasPressed() then
+                print('pressed', item:getText())
+            end
         end
     end
 

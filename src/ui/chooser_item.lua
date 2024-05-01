@@ -17,9 +17,6 @@ ChooserItem.new = function(text)
     local is_highlighted, is_pressed, is_released = false, false, false
     
     local update = function(self, dt)
-        local mx, my = love.mouse.getPosition()
-        is_highlighted = frame:contains(mx / UI_SCALE, my / UI_SCALE)
-
         is_released = false
         if is_highlighted and is_pressed and not love.mouse.isDown(1) then
             is_released = true
@@ -41,13 +38,15 @@ ChooserItem.new = function(text)
         love.graphics.print(text, x + text_x, y + text_y)
     end
 
-    local getFrame = function(self) return frame end
+    local getFrame = function(self) return frame:unpack() end
 
     local setFrame = function(self, x, y, w, h) frame = Rect(x, y, w, h) end 
 
     local wasPressed = function(self) return is_released end
 
     local isHighlighted = function(self) return is_highlighted end
+
+    local setHighlighted = function(self, flag) is_highlighted = (flag == true) end
 
     local getText = function(self) return text end
 
@@ -61,6 +60,7 @@ ChooserItem.new = function(text)
         getFrame        = getFrame,
         wasPressed      = wasPressed,
         isHighlighted   = isHighlighted,
+        setHighlighted  = setHighlighted,
     }, ChooserItem)
 end
 
