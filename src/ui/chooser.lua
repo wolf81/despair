@@ -9,7 +9,7 @@ local Chooser = {}
 
 local DISABLED_ALPHA = 0.7
 local SCROLLBAR_W = 20
-local SCROLL_SPEED = 60
+local SCROLL_SPEED = 150
 local ITEM_H = 32
 
 Chooser.new = function(...)
@@ -19,12 +19,13 @@ Chooser.new = function(...)
     local frame = Rect(0)
     local is_enabled = true
 
-    local oy = 0
-
     local items = {}
     for _, option in ipairs(options) do
         table.insert(items, ChooserItem(option))
     end
+
+    local content_h = #items * ITEM_H
+    local content_y = 0
 
     local scrollbar = Scrollbar()
 
@@ -36,7 +37,7 @@ Chooser.new = function(...)
 
         love.graphics.setScissor(x + 1, y + 1, w - 2, h - 2)
         love.graphics.push()
-        love.graphics.translate(0, -oy)
+        love.graphics.translate(0, -content_y)
         for _, item in ipairs(items) do item:draw() end
         love.graphics.pop()
 
@@ -48,20 +49,24 @@ Chooser.new = function(...)
     local update = function(self, dt)
         if not is_enabled then return end
 
+        local h = select(2, frame:getSize())
+
         scrollbar:update(dt)
 
         local scroll_direction = scrollbar:getDirection()
         if scroll_direction == 'up' then
-            oy = mmax(oy - SCROLL_SPEED * dt, 0)
+            content_y = mmax(content_y - SCROLL_SPEED * dt, 0)
         elseif scroll_direction == 'down' then
-            oy = mmin(oy + SCROLL_SPEED * dt, #items * ITEM_H - select(2, frame:getSize()))
+            content_y = mmin(content_y + SCROLL_SPEED * dt, content_h - h)
         end
+
+        scrollbar:setScrollAmount(content_y / (content_h - h))
 
         local mx, my = love.mouse.getPosition()
 
         for _, item in ipairs(items) do
             local item_frame = Rect(item:getFrame())
-            item:setHighlighted(item_frame:contains(mx / UI_SCALE, my / UI_SCALE + oy))
+            item:setHighlighted(item_frame:contains(mx / UI_SCALE, my / UI_SCALE + content_y))
 
             item:update(dt) 
             
@@ -84,7 +89,7 @@ Chooser.new = function(...)
         end
 
         scrollbar:setFrame(x + w - SCROLLBAR_W, y, SCROLLBAR_W, h)
-        scrollbar:setEnabled(#items * ITEM_H > h)
+        scrollbar:setEnabled(content_y > h)
     end
 
     local getFrame = function(self) return frame end
