@@ -18,21 +18,49 @@ local function generateButtonTexture(image, text)
     return canvas
 end
 
+local function onSelectGender()
+    Gamestate.push(ChooseOption('CHOOSE GENDER', 'Male', 'Female'))
+end
+
+local function onSelectRace()
+    Gamestate.push(ChooseOption('CHOOSE RACE', 'Human', 'Elf', 'Dwarf', 'Halfling'))
+end
+
+local function onSelectClass()
+    Gamestate.push(ChooseOption('CHOOSE CLASS', 'Fighter', 'Mage', 'Cleric', 'Rogue'))
+end
+
+local function onSelectStats()
+    print('adjust stats')
+end
+
+local function onSelectSkills()
+    print('choose skills')
+end
+
+local function onChangeName()
+    print('change name')
+end
+
+local function onChangePortrait()
+    print('change portrait')
+end
+
 NewPlayer.new = function()
     local image = TextureGenerator.generatePanelTexture(120, 48)
 
     local layout = tidy.Border(tidy.Margin(180, 10, 180, 10), {
         tidy.HStack(tidy.Spacing(10), {
             tidy.VStack(tidy.MinSize(0, 120), tidy.Spacing(2), {
-                UI.makeButton('gender', generateButtonTexture(image, 'GENDER')),
-                UI.makeButton('race', generateButtonTexture(image, 'RACE')),
-                UI.makeButton('class', generateButtonTexture(image, 'CLASS')),
-                UI.makeButton('stats', generateButtonTexture(image, 'STATS')),
-                UI.makeButton('skills', generateButtonTexture(image, 'SKILLS')),
-                UI.makeButton('name', generateButtonTexture(image, 'NAME')),
-                UI.makeButton('portrait', generateButtonTexture(image, 'PORTRAIT')),
+                UI.makeButton(onSelectGender, generateButtonTexture(image, 'GENDER')),
+                UI.makeButton(onSelectRace, generateButtonTexture(image, 'RACE')),
+                UI.makeButton(onSelectClass, generateButtonTexture(image, 'CLASS')),
+                UI.makeButton(onSelectStats, generateButtonTexture(image, 'STATS')),
+                UI.makeButton(onSelectSkills, generateButtonTexture(image, 'SKILLS')),
+                UI.makeButton(onChangeName, generateButtonTexture(image, 'NAME')),
+                UI.makeButton(onChangePortrait, generateButtonTexture(image, 'PORTRAIT')),
             }),
-            UI.makeParchment('HI'),
+            UI.makeParchment('...'),
         }),
     }):setFrame(0, 0, WINDOW_W, WINDOW_H)
 

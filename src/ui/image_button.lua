@@ -22,7 +22,9 @@ ImageButton.new = function(image, action, ...)
         local mx, my = love.mouse.getPosition()
         is_highlighted = frame:contains(mx / UI_SCALE, my / UI_SCALE)
 
-        if is_highlighted and is_pressed and (not love.mouse.isDown(1)) then
+        if is_highlighted and is_pressed and not love.mouse.isDown(1) then
+            is_pressed = false
+            
             if action then
                 local action_type = type(action)
                 if action_type == 'string' then
