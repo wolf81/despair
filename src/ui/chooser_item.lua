@@ -17,6 +17,7 @@ ChooserItem.new = function(text)
     local text_offset = { x = 0, y = 0 }
 
     local is_highlighted, is_pressed, is_released = false, false, false
+    local is_selected = false
     
     local update = function(self, dt)
         is_released = false
@@ -30,8 +31,8 @@ ChooserItem.new = function(text)
     local draw = function(self)
         local x, y, w, h = frame:unpack()
 
-        if is_highlighted then
-            love.graphics.setColor(0.4, 0.9, 0.8, 0.5)
+        if is_highlighted or is_selected then
+            love.graphics.setColor(0.4, 0.9, 0.8, is_selected and 0.8 or 0.5)
             love.graphics.rectangle('fill', x, y, w, h)
         end
 
@@ -50,6 +51,10 @@ ChooserItem.new = function(text)
 
     local setHighlighted = function(self, flag) is_highlighted = (flag == true) end
 
+    local setSelected = function(self, flag) is_selected = (flag == true) end
+
+    local isSelected = function(self) return is_selected end
+
     local getText = function(self) return text end
 
     local setTextOffset = function(self, ox, oy)  
@@ -66,6 +71,8 @@ ChooserItem.new = function(text)
         setFrame        = setFrame,
         getFrame        = getFrame,
         wasPressed      = wasPressed,
+        isSelected      = isSelected,
+        setSelected     = setSelected,
         setTextOffset   = setTextOffset,
         isHighlighted   = isHighlighted,
         setHighlighted  = setHighlighted,

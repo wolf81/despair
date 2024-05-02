@@ -6,45 +6,47 @@ local function generateButtonTexture(title)
     return TextureGenerator.generateButtonTexture(120, 48, title)
 end
 
-local function onSelectGender()
-    Gamestate.push(ChooseOption(
-        'CHOOSE GENDER', 
-        function(gender) print('selected', gender) end,
-        'Male', 'Female'))
-end
-
-local function onSelectRace()
-    Gamestate.push(ChooseOption(
-        'CHOOSE RACE', 
-        function(race) print('selected', race) end,
-        'Human', 'Elf', 'Dwarf', 'Halfling'))
-end
-
-local function onSelectClass()
-    Gamestate.push(ChooseOption(
-        'CHOOSE CLASS', 
-        function(class) print('selected', class) end,
-        'Fighter', 'Mage', 'Cleric', 'Rogue'))
-end
-
-local function onSelectStats()
-    print('adjust stats')
-end
-
-local function onSelectSkills()
-    print('choose skills')
-end
-
-local function onChangeName()
-    print('change name')
-end
-
-local function onChangePortrait()
-    print('change portrait')
-end
-
 NewPlayer.new = function()
     local image = TextureGenerator.generatePanelTexture(120, 48)
+
+    local lines = {}
+    
+    local function onSelectGender()
+        Gamestate.push(ChooseOption(
+            'CHOOSE GENDER', 
+            function(gender) print('selected', gender) end,
+            'Male', 'Female'))
+    end
+
+    local function onSelectRace()
+        Gamestate.push(ChooseOption(
+            'CHOOSE RACE', 
+            function(race) print('selected', race) end,
+            'Human', 'Elf', 'Dwarf', 'Halfling'))
+    end
+
+    local function onSelectClass()
+        Gamestate.push(ChooseOption(
+            'CHOOSE CLASS', 
+            function(class) print('selected', class) end,
+            'Fighter', 'Mage', 'Cleric', 'Rogue'))
+    end
+
+    local function onSelectStats()
+        print('adjust stats')
+    end
+
+    local function onSelectSkills()
+        print('choose skills')
+    end
+
+    local function onChangeName()
+        print('change name')
+    end
+
+    local function onChangePortrait()
+        print('change portrait')
+    end
 
     local layout = tidy.Border(tidy.Margin(180, 10, 180, 10), {
         tidy.HStack(tidy.Spacing(10), {

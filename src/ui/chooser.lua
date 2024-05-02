@@ -22,9 +22,16 @@ Chooser.new = function(fn, ...)
     local frame = Rect(0)
     local is_enabled = true
 
+    local selected_idx = 0
+
     local items = {}
     for _, option in ipairs(options) do
         table.insert(items, ChooserItem(option))
+    end
+    
+    if #items > 0 then
+        selected_idx = 1
+        items[selected_idx]:setSelected(true)
     end
 
     local content_h = #items * ITEM_H
@@ -68,12 +75,19 @@ Chooser.new = function(fn, ...)
         local mx, my = love.mouse.getPosition()
         mx, my = mx / UI_SCALE, my / UI_SCALE
 
-        for _, item in ipairs(items) do
+        for idx, item in ipairs(items) do
             local item_frame = Rect(item:getFrame())
             item:setHighlighted(item_frame:contains(mx, my + content_y))
 
             item:update(dt) 
-            if item:wasPressed() then fn(item) end
+            if item:wasPressed() then 
+                if selected_idx ~= idx then
+                    items[selected_idx]:setSelected(false)
+                    selected_idx = idx
+                    item:setSelected(true)
+                end
+                fn(item) 
+            end
         end
     end
 
