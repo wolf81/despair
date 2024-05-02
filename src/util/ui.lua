@@ -28,8 +28,8 @@ M.makeLabel = function(text, color, align)
     return tidy.Elem(label, tidy.MinSize(w, h), tidy.Stretch(1, 0))
 end
 
-M.makeChooser = function(...)
-    local chooser = Chooser(...)
+M.makeChooser = function(fn, ...)
+    local chooser = Chooser(fn, ...)
     return tidy.Elem(chooser, tidy.Stretch(1))
 end
 

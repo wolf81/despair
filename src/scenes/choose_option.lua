@@ -7,26 +7,42 @@ local mfloor = math.floor
 
 local ChooseOption = {}
 
-ChooseOption.new = function(title, ...)
+local function generateButtonTexture(title)
+    return TextureGenerator.generateButtonTexture(80, 32, title)
+end
+
+ChooseOption.new = function(title, fn, ...)
+    assert(fn ~= nil, 'missing argument: "fn"')
+    assert(type(fn) == 'function', 'invalid argument for "fn", expected: "function"')
+
     local options = {...}
 
-    local background = TextureGenerator.generatePanelTexture(240, 200)
+    local background = TextureGenerator.generatePanelTexture(240, 210)
     local background_w, background_h = background:getDimensions()
     local background_x = mfloor((WINDOW_W - background_w) / 2)
     local background_y = mfloor((WINDOW_H - background_h) / 2)
 
     local frame = Rect(background_x, background_y, background_w, background_h)
 
+    local overlay = Overlay()
+
+    local dismiss = function() overlay:fadeOut(Gamestate.pop) end
+
     local layout = tidy.Border(tidy.Margin(10), {
         tidy.VStack(tidy.Spacing(10), {
             UI.makeLabel(title, {1.0, 1.0, 1.0, 1.0}, 'center'),
-            UI.makeChooser(...),            
+            UI.makeChooser(function(item)
+                fn(item:getText()) 
+            end, ...),
+            tidy.HStack({
+                UI.makeButton(dismiss, generateButtonTexture('Cancel')),
+                UI.makeFlexSpace(),
+                UI.makeButton(dismiss, generateButtonTexture('OK')),
+            }),
         }),
     }):setFrame(frame:unpack())
 
     local from_scene = nil
-
-    local overlay = Overlay()
 
     local draw = function(self)
         from_scene:draw()
@@ -42,8 +58,6 @@ ChooseOption.new = function(title, ...)
     end
 
     local update = function(self, dt)
-        from_scene:update(0)
-
         for e in layout:eachElement() do e.widget:update(dt) end
     end
 

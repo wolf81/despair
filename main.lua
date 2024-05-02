@@ -11,7 +11,7 @@ require 'constants'
 local function trySetCursor()
     if not love.mouse.isCursorSupported() then return end
 
-    local cursor = love.mouse.newCursor('gfx/pointer.png', 6, 6)
+    local cursor = love.mouse.newCursor('gfx/pointer.png', 1, 1)
     love.mouse.setCursor(cursor)
 end
 

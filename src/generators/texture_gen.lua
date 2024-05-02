@@ -14,6 +14,23 @@ local function getParchmentColor()
     return color_info.color
 end
 
+M.generateButtonTexture = function(w, h, text) 
+    local image = TextureGenerator.generatePanelTexture(w, h)
+    local w, h = image:getDimensions()
+
+    local text_w, text_h = FONT:getWidth(text), FONT:getHeight()
+    local text_x, text_y = mfloor((w - text_w) / 2), mfloor((h - text_h) / 2)
+
+    local canvas = love.graphics.newCanvas(w, h)
+    canvas:renderTo(function()
+        love.graphics.setColor(1.0, 1.0, 1.0, 1.0) 
+        love.graphics.draw(image, 0, 0)
+        love.graphics.print(text, text_x, text_y)
+    end)
+
+    return canvas
+end
+
 M.generateScrollerTexture = function(w, h, direction)
     local margin = 4
 
@@ -197,14 +214,16 @@ M.generatePanelTexture = function(w, h)
         love.graphics.draw(texture, quads[325 + offset], w - quad_w * 2, 0)
         love.graphics.draw(texture, quads[330 + offset], w - quad_w * 2, h - quad_h)
 
-        -- middle
-        for y = quad_h, h - quad_h * 2, quad_h do
-            love.graphics.draw(texture, quads[326 + offset], 0, y)
-            love.graphics.draw(texture, quads[331 + offset], w - quad_w, y)
-        end
+        if h > 32 then
+            -- middle
+            for y = quad_h, h - quad_h * 2, quad_h do
+                love.graphics.draw(texture, quads[326 + offset], 0, y)
+                love.graphics.draw(texture, quads[331 + offset], w - quad_w, y)
+            end
 
-        love.graphics.draw(texture, quads[326 + offset], 0, h - quad_h * 2)
-        love.graphics.draw(texture, quads[331 + offset], w - quad_w, h - quad_h * 2)
+            love.graphics.draw(texture, quads[326 + offset], 0, h - quad_h * 2)
+            love.graphics.draw(texture, quads[331 + offset], w - quad_w, h - quad_h * 2)
+        end
 
         local color_info = ColorHelper.getColors(texture, quads[326 + offset], true)[1]
         love.graphics.setColor(unpack(color_info.color))

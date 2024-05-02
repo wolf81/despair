@@ -12,7 +12,10 @@ local SCROLLBAR_W = 20
 local SCROLL_SPEED = 150
 local ITEM_H = 32
 
-Chooser.new = function(...)
+Chooser.new = function(fn, ...)
+    assert(fn ~= nil, 'missing argument: "fn"')
+    assert(type(fn) == 'function', 'invalid argument for "fn", expected: "function"')
+
     local options = {...}
 
     local background = nil
@@ -63,16 +66,14 @@ Chooser.new = function(...)
         scrollbar:setScrollAmount(content_y / (content_h - h))
 
         local mx, my = love.mouse.getPosition()
+        mx, my = mx / UI_SCALE, my / UI_SCALE
 
         for _, item in ipairs(items) do
             local item_frame = Rect(item:getFrame())
-            item:setHighlighted(item_frame:contains(mx / UI_SCALE, my / UI_SCALE + content_y))
+            item:setHighlighted(item_frame:contains(mx, my + content_y))
 
             item:update(dt) 
-            
-            if item:wasPressed() then
-                print('pressed', item:getText())
-            end
+            if item:wasPressed() then fn(item) end
         end
     end
 

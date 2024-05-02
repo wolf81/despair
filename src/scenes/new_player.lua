@@ -2,32 +2,29 @@ local mfloor = math.floor
 
 local NewPlayer = {}
 
-local function generateButtonTexture(image, text) 
-    local w, h = image:getDimensions()
-
-    local text_w, text_h = FONT:getWidth(text), FONT:getHeight()
-    local text_x, text_y = mfloor((w - text_w) / 2), mfloor((h - text_h) / 2)
-
-    local canvas = love.graphics.newCanvas(w, h)
-    canvas:renderTo(function()
-        love.graphics.setColor(1.0, 1.0, 1.0, 1.0) 
-        love.graphics.draw(image, 0, 0)
-        love.graphics.print(text, text_x, text_y)
-    end)
-
-    return canvas
+local function generateButtonTexture(title)
+    return TextureGenerator.generateButtonTexture(120, 48, title)
 end
 
 local function onSelectGender()
-    Gamestate.push(ChooseOption('CHOOSE GENDER', 'Male', 'Female'))
+    Gamestate.push(ChooseOption(
+        'CHOOSE GENDER', 
+        function(gender) print('selected', gender) end,
+        'Male', 'Female'))
 end
 
 local function onSelectRace()
-    Gamestate.push(ChooseOption('CHOOSE RACE', 'Human', 'Elf', 'Dwarf', 'Halfling'))
+    Gamestate.push(ChooseOption(
+        'CHOOSE RACE', 
+        function(race) print('selected', race) end,
+        'Human', 'Elf', 'Dwarf', 'Halfling'))
 end
 
 local function onSelectClass()
-    Gamestate.push(ChooseOption('CHOOSE CLASS', 'Fighter', 'Mage', 'Cleric', 'Rogue'))
+    Gamestate.push(ChooseOption(
+        'CHOOSE CLASS', 
+        function(class) print('selected', class) end,
+        'Fighter', 'Mage', 'Cleric', 'Rogue'))
 end
 
 local function onSelectStats()
@@ -52,13 +49,13 @@ NewPlayer.new = function()
     local layout = tidy.Border(tidy.Margin(180, 10, 180, 10), {
         tidy.HStack(tidy.Spacing(10), {
             tidy.VStack(tidy.MinSize(0, 120), tidy.Spacing(2), {
-                UI.makeButton(onSelectGender, generateButtonTexture(image, 'GENDER')),
-                UI.makeButton(onSelectRace, generateButtonTexture(image, 'RACE')),
-                UI.makeButton(onSelectClass, generateButtonTexture(image, 'CLASS')),
-                UI.makeButton(onSelectStats, generateButtonTexture(image, 'STATS')),
-                UI.makeButton(onSelectSkills, generateButtonTexture(image, 'SKILLS')),
-                UI.makeButton(onChangeName, generateButtonTexture(image, 'NAME')),
-                UI.makeButton(onChangePortrait, generateButtonTexture(image, 'PORTRAIT')),
+                UI.makeButton(onSelectGender,  generateButtonTexture('GENDER')),
+                UI.makeButton(onSelectRace, generateButtonTexture('RACE')),
+                UI.makeButton(onSelectClass, generateButtonTexture('CLASS')),
+                UI.makeButton(onSelectStats, generateButtonTexture('STATS')),
+                UI.makeButton(onSelectSkills, generateButtonTexture('SKILLS')),
+                UI.makeButton(onChangeName, generateButtonTexture('NAME')),
+                UI.makeButton(onChangePortrait, generateButtonTexture('PORTRAIT')),
             }),
             UI.makeParchment('...'),
         }),
