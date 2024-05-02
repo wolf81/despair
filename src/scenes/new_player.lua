@@ -33,11 +33,21 @@ NewPlayer.new = function()
     end
 
     local function onSelectStats()
-        print('adjust stats')
+        Gamestate.push(AssignPoints({
+            ['Strength']    = 12,
+            ['Dexterity']   = 9,
+            ['Mind']        = 4,
+        }), 3)
     end
 
     local function onSelectSkills()
-        print('choose skills')
+        Gamestate.push(AssignPoints({
+            ['Physical']    = 1,
+            ['Subterfuge']  = 1,
+            ['Knowledge']   = 1,
+            ['Mind']        = 1,
+            ['Survival']    = 1,
+        }), 0)
     end
 
     local function onChangeName()
