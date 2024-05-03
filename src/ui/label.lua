@@ -8,9 +8,11 @@ local mfloor = math.floor
 local Label = {}
 
 Label.new = function(text, color, align)
-    text = text or ''
-    text_w = FONT:getWidth(text)
-    text_h = FONT:getHeight()
+    local text_info = {
+        text    = text or '',
+        width   = FONT:getWidth(text),
+        height  = FONT:getHeight(),
+    }
 
     local frame = Rect(0)
 
@@ -22,24 +24,27 @@ Label.new = function(text, color, align)
         love.graphics.setColor(unpack(color))
 
         local x, y, w, h = frame:unpack()
+        local oy = mfloor(text_info.height / 4)
         if align == 'right' then
-            love.graphics.print(text, x + w - text_w, y)
+            love.graphics.print(text_info.text, x + w - text_info.width, y + oy)
         elseif align == 'center' then
-            love.graphics.print(text, x + mfloor((w - text_w) / 2), y)
+            love.graphics.print(text, x + mfloor((w - text_info.width) / 2), y + oy)
         else
-            love.graphics.print(text, x, y)
+            love.graphics.print(text, x, y + oy)
         end
     end
 
-    local setFrame = function(self, x, y, w, h) frame = Rect(x, y, w, h) end
+    local setFrame = function(self, x, y, w, h) 
+        frame = Rect(x, y, w, h) 
+    end
 
     local getFrame = function(self) return frame:unpack() end
 
-    local getSize = function(self) return text_w, text_h end 
+    local getSize = function(self) return text_info.width, text_info.height end 
 
     local setText = function(self, text_) 
-        text = text_ or '' 
-        text_w = FONT:getWidth(text)
+        text_info.text = text_ or ''
+        text_info.width = FONT:getWidth(text_)
     end
     
     return setmetatable({

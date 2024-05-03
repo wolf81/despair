@@ -33,21 +33,27 @@ NewPlayer.new = function()
     end
 
     local function onSelectStats()
-        Gamestate.push(AssignPoints({
-            ['Strength']    = 12,
-            ['Dexterity']   = 9,
-            ['Mind']        = 4,
-        }), 3)
+        Gamestate.push(AssignPoints(
+            'ASSIGN STATS',
+            {
+                { key = 'Strength',         value = 12 },
+                { key = 'Dexterity',        value = 13 },
+                { key = 'Mind',             value = 14 },
+            }, 
+            3))
     end
 
     local function onSelectSkills()
-        Gamestate.push(AssignPoints({
-            ['Physical']    = 1,
-            ['Subterfuge']  = 1,
-            ['Knowledge']   = 1,
-            ['Mind']        = 1,
-            ['Survival']    = 1,
-        }), 0)
+        Gamestate.push(AssignPoints(
+            'ASSIGN SKILLS', 
+            {
+                { key = 'Physical',         value = 1 },
+                { key = 'Subterfuge',       value = 1 },
+                { key = 'Knowledge',        value = 1 },
+                { key = 'Communication',    value = 1 },
+                { key = 'Survival',         value = 1 },
+            }, 
+            0))
     end
 
     local function onChangeName()

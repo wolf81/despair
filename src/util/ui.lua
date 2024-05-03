@@ -40,7 +40,6 @@ M.makeResourceBar = function(entity, type)
 end
 
 M.makeChart = function(cartographer)
-    -- local chart = cartographer:getChart()
     local w, h = cartographer:getSize()
     return tidy.Elem(cartographer, tidy.MinSize(w, h), tidy.Stretch(1, 0))
 end

@@ -24,22 +24,20 @@ ChooseOption.new = function(title, fn, ...)
 
     local frame = Rect(background_x, background_y, background_w, background_h)
 
-    local overlay = Overlay()
+    local overlay, from_scene = Overlay()
 
     local dismiss = function() overlay:fadeOut(Gamestate.pop) end
 
     local layout = tidy.Border(tidy.Margin(10), {
-        tidy.VStack(tidy.Spacing(10), {
-            UI.makeLabel(title, {1.0, 1.0, 1.0, 1.0}, 'center'),
-            UI.makeChooser(function(item)
-                fn(item:getText()) 
-            end, ...),
+        tidy.VStack(tidy.Spacing(10), tidy.Stretch(1), {
+            UI.makeLabel(title, { 1.0, 1.0, 1.0, 1.0 }, 'center'),
+            UI.makeChooser(function(item) fn(item:getText()) end, ...),
             tidy.HStack({
                 UI.makeButton(dismiss, generateButtonTexture('Cancel')),
                 UI.makeFlexSpace(),
                 UI.makeButton(dismiss, generateButtonTexture('OK')),
             }),
-        }),
+        })
     }):setFrame(frame:unpack())
 
     local from_scene = nil
@@ -77,12 +75,6 @@ ChooseOption.new = function(title, fn, ...)
         end
     end
 
-    local mouseReleased = function(self, mx, my, button, istouch, presses)
-        if Gamestate.current() == self and not frame:contains(mx, my) then
-            overlay:fadeOut(Gamestate.pop)
-        end
-    end
-
     return setmetatable({
         -- methods
         draw            = draw,
@@ -90,7 +82,6 @@ ChooseOption.new = function(title, fn, ...)
         enter           = enter,
         update          = update,
         keyReleased     = keyReleased,
-        mouseReleased   = mouseReleased,
     }, ChooseOption)
 end
 
