@@ -41,7 +41,7 @@ local function generateMinusButton()
     return canvas
 end
 
-AssignPoints.new = function(title, points_info, remaining)
+AssignPoints.new = function(title, fn, points_info, remaining)
     local frame = Rect(0)
 
     local background = TextureGenerator.generatePanelTexture(240, 126 + #points_info * 24 + 4 * (#points_info - 1))
@@ -56,6 +56,17 @@ AssignPoints.new = function(title, points_info, remaining)
     local from_scene = nil
 
     local dismiss = function() overlay:fadeOut(Gamestate.pop) end
+
+    local confirm = function() 
+        if fn then 
+            local points = {}
+            for _, point_info in ipairs(points_info) do
+                table.insert(points, point_info.value)
+            end
+            fn(unpack(points))
+        end
+        dismiss()
+    end
 
     local value_labels = {}
     for idx, point_info in ipairs(points_info) do
@@ -117,7 +128,7 @@ AssignPoints.new = function(title, points_info, remaining)
             tidy.HStack({
                 UI.makeButton(dismiss, generateTextButtonTexture('Cancel')),
                 UI.makeFlexSpace(),
-                UI.makeButton(dismiss, generateTextButtonTexture('OK')),
+                UI.makeButton(confirm, generateTextButtonTexture('OK')),
             }),
         }),
     }):setFrame(frame:unpack())
