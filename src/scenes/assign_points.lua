@@ -11,10 +11,40 @@ local function generateTextButtonTexture(title)
     return TextureGenerator.generateButtonTexture(80, 32, title)
 end
 
+local function generatePlusButton()    
+    local canvas = TextureGenerator.generateBorderTexture(24, 24, { 0.5, 0.1, 0.1, 1.0 })
+
+    local texture = TextureCache:get('uf_interface')
+    local quad = QuadCache:get('uf_interface')[376]
+    local quad_w, quad_h = select(3, quad:getViewport())
+
+    canvas:renderTo(function() 
+        love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
+        local w, h = canvas:getDimensions()
+        love.graphics.draw(texture, quad, mfloor((w - quad_w) / 2), mfloor((h - quad_h) / 2))
+    end)
+    return canvas
+end
+
+local function generateMinusButton()
+    local canvas = TextureGenerator.generateBorderTexture(24, 24, { 0.5, 0.1, 0.1, 1.0 })
+
+    local texture = TextureCache:get('uf_interface')
+    local quad = QuadCache:get('uf_interface')[377]
+    local quad_w, quad_h = select(3, quad:getViewport())
+
+    canvas:renderTo(function() 
+        love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
+        local w, h = canvas:getDimensions()
+        love.graphics.draw(texture, quad, mfloor((w - quad_w) / 2), mfloor((h - quad_h) / 2))
+    end)
+    return canvas
+end
+
 AssignPoints.new = function(title, points_info, remaining)
     local frame = Rect(0)
 
-    local background = TextureGenerator.generatePanelTexture(240, 100 + #points_info * 20)
+    local background = TextureGenerator.generatePanelTexture(240, 100 + #points_info * 30)
     local background_w, background_h = background:getDimensions()
     local background_x = mfloor((WINDOW_W - background_w) / 2)
     local background_y = mfloor((WINDOW_H - background_h) / 2)
@@ -28,18 +58,23 @@ AssignPoints.new = function(title, points_info, remaining)
     local dismiss = function() overlay:fadeOut(Gamestate.pop) end
 
     local items = {}
-    for _, point_info in ipairs(points_info) do
+    for idx, point_info in ipairs(points_info) do
         table.insert(items, tidy.HStack(tidy.MinSize(0, 10), { 
-            UI.makeLabel(point_info.key),
+            UI.makeLabel(point_info.key, { 1.0, 1.0, 1.0, 1.0 }, 'left', tidy.MinSize(0, 24)),
             UI.makeFlexSpace(),
-            UI.makeLabel(point_info.value, { 1.0, 1.0, 1.0, 1.0 }, 'right'),
+            tidy.HStack(tidy.Spacing(4), {
+                UI.makeLabel(point_info.value, { 1.0, 1.0, 1.0, 1.0 }, 'right', tidy.MinSize(32, 24)),
+                UI.makeFixedSpace(2, 0),
+                UI.makeButton(function() end, generateMinusButton()),
+                UI.makeButton(function() end, generatePlusButton()),
+            }),
         }))
     end
 
     local layout = tidy.Border(tidy.Margin(10), {
         tidy.VStack(tidy.Spacing(10), {            
             UI.makeLabel(title, { 1.0, 1.0, 1.0, 1.0 }, 'center'),
-            tidy.VStack(tidy.Stretch(1, 0), tidy.Spacing(10), items),
+            tidy.VStack(tidy.Stretch(1, 0), tidy.Spacing(4), items),
             tidy.Border(tidy.Margin(0, 10, 0, 10), {                
                 tidy.HStack(tidy.Stretch(1, 0), {
                     UI.makeLabel('Points remaining'),

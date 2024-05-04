@@ -3,7 +3,7 @@
 --  Author: Wolfgang Schreurs
 --  info+despair@wolftrail.net
 
-local mfloor = math.floor
+local mfloor, mmax = math.floor, math.max
 
 local Label = {}
 
@@ -24,7 +24,7 @@ Label.new = function(text, color, align)
         love.graphics.setColor(unpack(color))
 
         local x, y, w, h = frame:unpack()
-        local oy = mfloor(text_info.height / 4)
+        local oy = mfloor(mmax(0, (h - text_info.height) / 2))
         if align == 'right' then
             love.graphics.print(text_info.text, x + w - text_info.width, y + oy)
         elseif align == 'center' then

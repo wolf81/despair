@@ -77,7 +77,7 @@ ActionButton.new = function(action, ...)
         love.graphics.draw(background, x, y)
 
         if is_highlighted or is_selected then
-            love.graphics.setColor(0.4, 0.9, 0.8, 1.0)
+            love.graphics.setColor(0.5, 1.0, 0.9, 1.0)
         end
 
         love.graphics.draw(texture, quads[quad_idx], x, y)

@@ -46,7 +46,7 @@ ImageButton.new = function(image, action, ...)
         love.graphics.setColor(1.0, 1.0, 1.0, is_enabled and 1.0 or 0.8)
 
         if is_highlighted then
-            love.graphics.setColor(0.4, 0.9, 0.8, 1.0)
+            love.graphics.setColor(0.5, 1.0, 0.9, 1.0)
         end
 
         local image_w, image_h = image:getDimensions()

@@ -22,10 +22,11 @@ M.makeView = function(view, ...)
     return tidy.Elem(view, ...)
 end
 
-M.makeLabel = function(text, color, align)
+M.makeLabel = function(text, color, align, min_size)
     local label = Label(text, color or { 1.0, 1.0, 1.0, 1.0 }, align or 'left')
-    local w, h = label:getSize()
-    return tidy.Elem(label, tidy.MinSize(w, h), tidy.Stretch(1, 0))
+    local stretch = min_size and tidy.Stretch(1) or tidy.Stretch(1, 0)
+    min_size = min_size or tidy.MinSize(label:getSize())
+    return tidy.Elem(label, min_size, stretch)
 end
 
 M.makeChooser = function(fn, ...)

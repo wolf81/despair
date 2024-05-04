@@ -65,7 +65,6 @@ M.generateBorderTexture = function(w, h, bg_color)
 
     local canvas = love.graphics.newCanvas(w, h)
     canvas:renderTo(function() 
-
         love.graphics.setColor(unpack(bg_color))
         love.graphics.rectangle('fill', 0, 0, w, h)
 
@@ -83,17 +82,21 @@ M.generateBorderTexture = function(w, h, bg_color)
             love.graphics.draw(texture, quads[5], x, h - quad_h)
         end
 
-        love.graphics.draw(texture, quads[2], w - quad_w * 2, 0)
-        love.graphics.draw(texture, quads[5], w - quad_w * 2, h - quad_h)
-
-        -- middle
-        for y = quad_h, h - quad_h * 2, quad_h do
-            love.graphics.draw(texture, quads[3], 0, y)
-            love.graphics.draw(texture, quads[6], w - quad_w, y)
+        if w > 32 then
+            love.graphics.draw(texture, quads[2], w - quad_w * 2, 0)
+            love.graphics.draw(texture, quads[5], w - quad_w * 2, h - quad_h)
         end
 
-        love.graphics.draw(texture, quads[3], 0, h - quad_h * 2)
-        love.graphics.draw(texture, quads[6], w - quad_w, h - quad_h * 2)
+        if h > 32 then
+            -- middle
+            for y = quad_h, h - quad_h * 2, quad_h do
+                love.graphics.draw(texture, quads[3], 0, y)
+                love.graphics.draw(texture, quads[6], w - quad_w, y)
+            end
+
+            love.graphics.draw(texture, quads[3], 0, h - quad_h * 2)
+            love.graphics.draw(texture, quads[6], w - quad_w, h - quad_h * 2)
+        end
     end)
 
     return canvas
@@ -211,8 +214,10 @@ M.generatePanelTexture = function(w, h)
             love.graphics.draw(texture, quads[330 + offset], x, h - quad_h)
         end
 
-        love.graphics.draw(texture, quads[325 + offset], w - quad_w * 2, 0)
-        love.graphics.draw(texture, quads[330 + offset], w - quad_w * 2, h - quad_h)
+        if w > 32 then
+            love.graphics.draw(texture, quads[325 + offset], w - quad_w * 2, 0)
+            love.graphics.draw(texture, quads[330 + offset], w - quad_w * 2, h - quad_h)
+        end
 
         if h > 32 then
             -- middle
