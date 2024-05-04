@@ -44,7 +44,7 @@ end
 AssignPoints.new = function(title, points_info, remaining)
     local frame = Rect(0)
 
-    local background = TextureGenerator.generatePanelTexture(240, 100 + #points_info * 30)
+    local background = TextureGenerator.generatePanelTexture(240, 126 + #points_info * 24 + 4 * (#points_info - 1))
     local background_w, background_h = background:getDimensions()
     local background_x = mfloor((WINDOW_W - background_w) / 2)
     local background_y = mfloor((WINDOW_H - background_h) / 2)
@@ -59,11 +59,10 @@ AssignPoints.new = function(title, points_info, remaining)
 
     local items = {}
     for idx, point_info in ipairs(points_info) do
-        table.insert(items, tidy.HStack(tidy.MinSize(0, 10), { 
-            UI.makeLabel(point_info.key, { 1.0, 1.0, 1.0, 1.0 }, 'left', tidy.MinSize(0, 24)),
-            UI.makeFlexSpace(),
+        table.insert(items, tidy.HStack({ 
+            UI.makeLabel(point_info.key, { 1.0, 1.0, 1.0, 1.0 }, 'left', 'center'),
             tidy.HStack(tidy.Spacing(4), {
-                UI.makeLabel(point_info.value, { 1.0, 1.0, 1.0, 1.0 }, 'right', tidy.MinSize(32, 24)),
+                UI.makeLabel(point_info.value, { 1.0, 1.0, 1.0, 1.0 }, 'end', 'center'),
                 UI.makeFixedSpace(2, 0),
                 UI.makeButton(function() end, generateMinusButton()),
                 UI.makeButton(function() end, generatePlusButton()),
@@ -71,15 +70,17 @@ AssignPoints.new = function(title, points_info, remaining)
         }))
     end
 
+    -- 10 + (8 + 10 + 24 * n_items + 4 * (n_items - 1) + 10 + 32) + 10
+
     local layout = tidy.Border(tidy.Margin(10), {
         tidy.VStack(tidy.Spacing(10), {            
-            UI.makeLabel(title, { 1.0, 1.0, 1.0, 1.0 }, 'center'),
+            UI.makeLabel(title, { 1.0, 1.0, 1.0, 1.0 }, 'center', 'center'),
             tidy.VStack(tidy.Stretch(1, 0), tidy.Spacing(4), items),
             tidy.Border(tidy.Margin(0, 10, 0, 10), {                
                 tidy.HStack(tidy.Stretch(1, 0), {
                     UI.makeLabel('Points remaining'),
                     UI.makeFlexSpace(),
-                    UI.makeLabel(remaining, { 1.0, 1.0, 1.0, 1.0 }, 'right'),
+                    UI.makeLabel(remaining, { 1.0, 1.0, 1.0, 1.0 }, 'end'),
                 }),
             }),
             tidy.HStack({

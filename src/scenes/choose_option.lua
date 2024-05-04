@@ -30,7 +30,7 @@ ChooseOption.new = function(title, fn, ...)
 
     local layout = tidy.Border(tidy.Margin(10), {
         tidy.VStack(tidy.Spacing(10), tidy.Stretch(1), {
-            UI.makeLabel(title, { 1.0, 1.0, 1.0, 1.0 }, 'center'),
+            UI.makeLabel(title, { 1.0, 1.0, 1.0, 1.0 }, 'center', 'start'),
             UI.makeChooser(function(item) fn(item:getText()) end, ...),
             tidy.HStack({
                 UI.makeButton(dismiss, generateButtonTexture('Cancel')),
