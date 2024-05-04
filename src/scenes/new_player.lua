@@ -6,9 +6,41 @@ local function generateButtonTexture(title)
     return TextureGenerator.generateButtonTexture(120, 48, title)
 end
 
-local function getStatValues(race)
-    -- TODO: add race bonus
+local function getSkillValues(race)
+    local phys = {
+        value = 1,
+        min = 1,
+        max = 1,
+    }
 
+    local subt = {
+        value = 1,
+        min = 1,
+        max = 1,        
+    }
+
+    local know = {
+        value = 1,
+        min = 1,
+        max = 1,        
+    }
+
+    local comm = {
+        value = 1,
+        min = 1,
+        max = 1,        
+    }
+
+    local surv = {
+        value = 1,
+        min = 1,
+        max = 1,        
+    }
+
+    return phys, subt, know, comm, surv
+end
+
+local function getStatValues(race)
     local str = {
         value = 0,
         min = 3 + (race == 'Dwarf' and 2 or 0),
@@ -52,26 +84,33 @@ NewPlayer.new = function()
 
     local buttons = {}
 
-    local gender, race, class = nil, nil, nil
+    local gender, race, class, stats, skills = nil, nil, nil, nil, nil
     
     local function onSelectGender()
         Gamestate.push(ChooseOption(
             'CHOOSE GENDER', 
-            function(gender_) gender = gender_ end,
+            function(gender_) 
+                gender = gender_ 
+            end,
             'Male', 'Female'))
     end
 
     local function onSelectRace()        
         Gamestate.push(ChooseOption(
             'CHOOSE RACE', 
-            function(race_) race = race_ end,
+            function(race_) 
+                race = race_
+                class = nil 
+            end,
             'Human', 'Elf', 'Dwarf', 'Halfling'))
     end
 
     local function onSelectClass()
         Gamestate.push(ChooseOption(
             'CHOOSE CLASS', 
-            function(class_) class = class_ end,
+            function(class_) 
+                class = class_ 
+            end,
             'Fighter', 'Mage', 'Cleric', 'Rogue'))
     end
 
@@ -89,16 +128,18 @@ NewPlayer.new = function()
     end
 
     local function onSelectSkills()
+        local phys, subt, know, comm, surv = getSkillValues(race)
+
         Gamestate.push(AssignPoints(
             'ASSIGN SKILLS', 
             {
-                { key = 'Physical',         value = 1, min = 1, max = 2 },
-                { key = 'Subterfuge',       value = 1, min = 1, max = 2 },
-                { key = 'Knowledge',        value = 1, min = 1, max = 2 },
-                { key = 'Communication',    value = 1, min = 1, max = 2 },
-                { key = 'Survival',         value = 1, min = 1, max = 2 },
+                { key = 'Physical',         value = phys.value, min = phys.min, max = phys.max },
+                { key = 'Subterfuge',       value = subt.value, min = subt.min, max = subt.max },
+                { key = 'Knowledge',        value = know.value, min = know.min, max = know.max },
+                { key = 'Communication',    value = comm.value, min = comm.min, max = comm.max },
+                { key = 'Survival',         value = surv.value, min = surv.min, max = surv.max },
             }, 
-            2))
+            0))
     end
 
     local function onChangeName()
@@ -149,7 +190,7 @@ NewPlayer.new = function()
     local resume = function(self, from)
         if gender then buttons[2].widget:setEnabled(true) end
         if race then buttons[3].widget:setEnabled(true) end
-        if class then buttons[4].widget:setEnabled(true) end
+        buttons[4].widget:setEnabled(class ~= nil)
     end
 
     local keyReleased = function(self, key, scancode)        
