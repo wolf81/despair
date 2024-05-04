@@ -180,8 +180,10 @@ NewPlayer.new = function()
         UI.makeButton(onSelectSkills, generateButtonTexture('SKILLS')),
         UI.makeButton(onChangeName, generateButtonTexture('NAME')),
         UI.makeButton(onChangePortrait, generateButtonTexture('PORTRAIT')),
+        UI.makeFlexSpace(),
+        UI.makeButton(onRandom, generateButtonTexture('RANDOM'))
     }
-    for idx = 2, #buttons do buttons[idx].widget:setEnabled(false) end
+    for idx = 2, 7 do buttons[idx].widget:setEnabled(false) end
 
     local layout = tidy.Border(tidy.Margin(180, 10, 180, 10), {
         tidy.HStack(tidy.Spacing(10), {
