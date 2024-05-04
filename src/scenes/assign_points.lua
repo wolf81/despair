@@ -68,20 +68,26 @@ AssignPoints.new = function(title, points_info, remaining)
         if remaining == 0 then return end
 
         local point_info = points_info[idx]
-        point_info.value = point_info.value + 1
-        value_labels[idx].widget:setText(point_info.value)
+        local value = math.min(point_info.max, math.max(point_info.min, point_info.value + 1))
+        if value ~= point_info.value then
+            point_info.value = value
+            value_labels[idx].widget:setText(point_info.value)
 
-        remaining = remaining - 1
-        value_labels[#value_labels].widget:setText(remaining)
+            remaining = remaining - 1
+            value_labels[#value_labels].widget:setText(remaining)
+        end
     end
 
     local decrementValue = function(idx)
         local point_info = points_info[idx]
-        point_info.value = point_info.value - 1
-        value_labels[idx].widget:setText(point_info.value)
+        local value = math.min(point_info.max, math.max(point_info.min, point_info.value - 1))
+        if value ~= point_info.value then
+            point_info.value = value
+            value_labels[idx].widget:setText(point_info.value)
 
-        remaining = remaining + 1
-        value_labels[#value_labels].widget:setText(remaining)
+            remaining = remaining + 1
+            value_labels[#value_labels].widget:setText(remaining)
+        end
     end
 
     local items = {}

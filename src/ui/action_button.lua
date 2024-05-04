@@ -76,7 +76,7 @@ ActionButton.new = function(action, ...)
         love.graphics.setColor(1.0, 1.0, 1.0, (is_enabled and 1.0 or DISABLED_ALPHA))
         love.graphics.draw(background, x, y)
 
-        if is_highlighted or is_selected then
+        if is_enabled and (is_highlighted or is_selected) then
             love.graphics.setColor(0.5, 1.0, 0.9, 1.0)
         end
 

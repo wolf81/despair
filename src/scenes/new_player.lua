@@ -6,11 +6,28 @@ local function generateButtonTexture(title)
     return TextureGenerator.generateButtonTexture(120, 48, title)
 end
 
-local function getStatValues()
+local function getStatValues(race)
     -- TODO: add race bonus
 
-    local stats = {}
-    for i = 1, 3 do
+    local str = {
+        value = 0,
+        min = 3 + (race == 'Dwarf' and 2 or 0),
+        max = 18 + (race == 'Dwarf' and 2 or 0)
+    }
+
+    local dex = {
+        value = 0,
+        min = 3 + (race == 'Halfling' and 2 or 0),
+        max = 18 + (race == 'Halfling' and 2 or 0),
+    }
+
+    local mind = {
+        value = 0,
+        min = 3 + (race == 'Elf' and 2 or 0),
+        max = 18 + (race == 'Elf' and 2 or 0),
+    }
+
+    for _, stat in ipairs({ str, dex, mind }) do
         -- roll 1d6, store 4 values
         local values = {}
         for i = 1, 4 do
@@ -22,63 +39,66 @@ local function getStatValues()
 
         -- use the 3 highest values as stat value
         local value = 0
-        for j = 1, 3 do value = value + values[j] end
-        
-        table.insert(stats, value)
+        for j = 1, 3 do stat.value = stat.value + values[j] end        
     end
-    
-    return stats
+
+    return str, dex, mind
 end
 
 NewPlayer.new = function()
     local image = TextureGenerator.generatePanelTexture(120, 48)
 
     local lines = {}
+
+    local buttons = {}
+
+    local gender, race, class = nil, nil, nil
     
     local function onSelectGender()
         Gamestate.push(ChooseOption(
             'CHOOSE GENDER', 
-            function(gender) print('selected', gender) end,
+            function(gender_) gender = gender_ end,
             'Male', 'Female'))
     end
 
-    local function onSelectRace()
+    local function onSelectRace()        
         Gamestate.push(ChooseOption(
             'CHOOSE RACE', 
-            function(race) print('selected', race) end,
+            function(race_) race = race_ end,
             'Human', 'Elf', 'Dwarf', 'Halfling'))
     end
 
     local function onSelectClass()
         Gamestate.push(ChooseOption(
             'CHOOSE CLASS', 
-            function(class) print('selected', class) end,
+            function(class_) class = class_ end,
             'Fighter', 'Mage', 'Cleric', 'Rogue'))
     end
 
-    local stats = getStatValues()
     local function onSelectStats()
+        local str, dex, mind = getStatValues(race)
+        
         Gamestate.push(AssignPoints(
             'ASSIGN STATS',
             {
-                { key = 'Strength',         value = stats[1] },
-                { key = 'Dexterity',        value = stats[2] },
-                { key = 'Mind',             value = stats[3] },
+                { key = 'Strength',  value = str.value,  min = str.min,  max = str.max  },                
+                { key = 'Dexterity', value = dex.value,  min = dex.min,  max = dex.max  },
+                { key = 'Mind',      value = mind.value, min = mind.min, max = mind.max },
             }, 
-            3))
+            0))
     end
 
     local function onSelectSkills()
         Gamestate.push(AssignPoints(
             'ASSIGN SKILLS', 
             {
-                { key = 'Physical',         value = 1 },
-                { key = 'Subterfuge',       value = 1 },
-                { key = 'Knowledge',        value = 1 },
-                { key = 'Communication',    value = 1 },
-                { key = 'Survival',         value = 1 },
+                { key = 'Physical',         value = 1, min = 1, max = 2 },
+                { key = 'Subterfuge',       value = 1, min = 1, max = 2 },
+                { key = 'Knowledge',        value = 1, min = 1, max = 2 },
+                { key = 'Communication',    value = 1, min = 1, max = 2 },
+                { key = 'Survival',         value = 1, min = 1, max = 2 },
             }, 
-            0))
+            2))
     end
 
     local function onChangeName()
@@ -89,17 +109,20 @@ NewPlayer.new = function()
         print('change portrait')
     end
 
+    buttons = {
+        UI.makeButton(onSelectGender, generateButtonTexture('GENDER')),
+        UI.makeButton(onSelectRace, generateButtonTexture('RACE')),
+        UI.makeButton(onSelectClass, generateButtonTexture('CLASS')),
+        UI.makeButton(onSelectStats, generateButtonTexture('STATS')),
+        UI.makeButton(onSelectSkills, generateButtonTexture('SKILLS')),
+        UI.makeButton(onChangeName, generateButtonTexture('NAME')),
+        UI.makeButton(onChangePortrait, generateButtonTexture('PORTRAIT')),
+    }
+    for idx = 2, #buttons do buttons[idx].widget:setEnabled(false) end
+
     local layout = tidy.Border(tidy.Margin(180, 10, 180, 10), {
         tidy.HStack(tidy.Spacing(10), {
-            tidy.VStack(tidy.MinSize(0, 120), tidy.Spacing(2), {
-                UI.makeButton(onSelectGender,  generateButtonTexture('GENDER')),
-                UI.makeButton(onSelectRace, generateButtonTexture('RACE')),
-                UI.makeButton(onSelectClass, generateButtonTexture('CLASS')),
-                UI.makeButton(onSelectStats, generateButtonTexture('STATS')),
-                UI.makeButton(onSelectSkills, generateButtonTexture('SKILLS')),
-                UI.makeButton(onChangeName, generateButtonTexture('NAME')),
-                UI.makeButton(onChangePortrait, generateButtonTexture('PORTRAIT')),
-            }),
+            tidy.VStack(tidy.MinSize(0, 120), tidy.Spacing(2), buttons),
             UI.makeParchment('...'),
         }),
     }):setFrame(0, 0, WINDOW_W, WINDOW_H)
@@ -123,6 +146,12 @@ NewPlayer.new = function()
         -- body
     end
 
+    local resume = function(self, from)
+        if gender then buttons[2].widget:setEnabled(true) end
+        if race then buttons[3].widget:setEnabled(true) end
+        if class then buttons[4].widget:setEnabled(true) end
+    end
+
     local keyReleased = function(self, key, scancode)        
         if key == 'i' then Signal.emit('inventory') end
 
@@ -137,6 +166,7 @@ NewPlayer.new = function()
         enter       = enter,
         leave       = leave,
         update      = update,
+        resume      = resume,
         keyReleased = keyReleased,
     }, NewPlayer)
 end

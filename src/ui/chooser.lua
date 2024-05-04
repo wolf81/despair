@@ -29,11 +29,6 @@ Chooser.new = function(fn, ...)
         table.insert(items, ChooserItem(option))
     end
     
-    if #items > 0 then
-        selected_idx = 1
-        items[selected_idx]:setSelected(true)
-    end
-
     local content_h = #items * ITEM_H
     local content_y = 0
 
@@ -82,7 +77,9 @@ Chooser.new = function(fn, ...)
             item:update(dt) 
             if item:wasPressed() then 
                 if selected_idx ~= idx then
-                    items[selected_idx]:setSelected(false)
+                    if selected_idx > 0 then
+                        items[selected_idx]:setSelected(false)
+                    end
                     selected_idx = idx
                     item:setSelected(true)
                 end
