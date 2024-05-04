@@ -19,7 +19,7 @@ WINDOW_H            = 450
 UI_SCALE            = 1.0
 
 STATUS_PANEL_W      = 48 * 3 -- equal to the size of 3 action buttons
-ACTION_BAR_H        = 50
+ACTION_BAR_H        = 48
 
 CLASSES = TableHelper.readOnly({
     ['fighter']     = true,

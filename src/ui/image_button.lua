@@ -51,7 +51,7 @@ ImageButton.new = function(image, action, ...)
 
         local image_w, image_h = image:getDimensions()
 
-        love.graphics.draw(image, x - 1, y - 1)
+        love.graphics.draw(image, x, y)
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
     end
 

@@ -70,4 +70,10 @@ M.makeParchment = function(text)
     return tidy.Elem(Parchment(text), tidy.Stretch(1))
 end
 
+M.makePortrait = function(scale)
+    local portrait = Portrait(scale)
+    local w, h = portrait:getSize()
+    return tidy.Elem(portrait, tidy.MinSize(w, h), tidy.Stretch(0))
+end
+
 return M

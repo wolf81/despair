@@ -1,3 +1,8 @@
+--  Dungeon of Despair
+--
+--  Author: Wolfgang Schreurs
+--  info+despair@wolftrail.net
+
 local mfloor = math.floor
 
 local NewPlayer = {}
@@ -185,7 +190,7 @@ NewPlayer.new = function()
         UI.makeFlexSpace(),
         UI.makeButton(onRandom, generateButtonTexture('RANDOM'))
     }
-    for idx = 2, 7 do buttons[idx].widget:setEnabled(false) end
+    for idx = 2, 6 do buttons[idx].widget:setEnabled(false) end
 
     local layout = tidy.Border(tidy.Margin(180, 10, 180, 10), {
         tidy.HStack(tidy.Spacing(10), {

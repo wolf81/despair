@@ -9,9 +9,10 @@ local MINIMUM_LOAD_DURATION = 0.5
 
 local Loading = {}
 
-local function registerQuadsByKey(key, size, ox, oy)
+local function registerQuadsByKey(key, size, ox, oy, fn)
     local image = TextureCache:get(key)
     local quads = QuadGenerator.generate(image, size, size, ox, oy)
+    if fn then fn(quads) end
     QuadCache:register(key, quads)    
 end
 
@@ -164,7 +165,13 @@ local function registerQuads()
         registerQuadsByKey(key, 24)
     end
 
-    registerQuadsByKey('uf_portraits', 50)
+    registerQuadsByKey('uf_portraits', 50, 1, 1, function(quads) 
+        for _, quad in ipairs(quads) do
+            -- adjust viewport from 50 x 50 to 48 x 48
+            local x, y, w, h = quad:getViewport()
+            quad:setViewport(x + 1, y + 1, w - 2, h - 2)
+        end
+    end)
 
     registerQuadsByKey('uf_skills', 24, 584, 64)
 
