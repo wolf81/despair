@@ -7,8 +7,8 @@ local mfloor = math.floor
 
 local ChooseOption = {}
 
-local function generateButtonTexture(title)
-    return TextureGenerator.generateButtonTexture(80, 32, title)
+local function generateTextButtonTexture(title)
+    return TextureGenerator.generateTextButtonTexture(80, 32, title)
 end
 
 ChooseOption.new = function(title, fn, ...)
@@ -33,9 +33,9 @@ ChooseOption.new = function(title, fn, ...)
             UI.makeLabel(title, { 1.0, 1.0, 1.0, 1.0 }, 'center', 'start'),
             UI.makeChooser(function(item) fn(item:getText()) end, ...),
             tidy.HStack({
-                UI.makeButton(dismiss, generateButtonTexture('Cancel')),
+                UI.makeButton(dismiss, generateTextButtonTexture('Cancel')),
                 UI.makeFlexSpace(),
-                UI.makeButton(dismiss, generateButtonTexture('OK')),
+                UI.makeButton(dismiss, generateTextButtonTexture('OK')),
             }),
         })
     }):setFrame(frame:unpack())

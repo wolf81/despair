@@ -19,11 +19,15 @@ local FACE = {
 }
 
 local function generateTextButtonTexture(title)
-    return TextureGenerator.generateButtonTexture(80, 32, title)
+    return TextureGenerator.generateTextButtonTexture(80, 32, title)
+end
+
+local function generateImageButtonTexture(quad_idx)
+    return TextureGenerator.generateImageButtonTexture(24, 24, quad_idx)
 end
 
 MakePortrait.new = function(gender, race, fn)
-    local background = TextureGenerator.generatePanelTexture(240, 210)
+    local background = TextureGenerator.generatePanelTexture(220, 286)
     local background_w, background_h = background:getDimensions()
     local background_x = mfloor((WINDOW_W - background_w) / 2)
     local background_y = mfloor((WINDOW_H - background_h) / 2)
@@ -41,9 +45,48 @@ MakePortrait.new = function(gender, race, fn)
     local layout = tidy.Border(tidy.Margin(10), {
         tidy.VStack(tidy.Spacing(10), tidy.Stretch(1), {
             UI.makeLabel('MAKE PORTRAIT', { 1.0, 1.0, 1.0, 1.0 }, 'center', 'start'),
-            tidy.HStack({
-                UI.makePortrait(2),
-                UI.makeFlexSpace(),
+            tidy.VStack(tidy.Spacing(2), tidy.Stretch(1), {
+                tidy.HStack({
+                    UI.makeFlexSpace(),
+                    UI.makePortrait(1),
+                    UI.makeFlexSpace(),
+                }),
+                tidy.HStack(tidy.Spacing(2), { 
+                    UI.makeLabel('Headdress', { 1.0, 1.0, 1.0, 1.0 }, 'start', 'center'),
+                    UI.makeFlexSpace(),
+                    UI.makeButton(dismiss, generateImageButtonTexture(375)),
+                    UI.makeButton(dismiss, generateImageButtonTexture(373)),
+                }),
+                tidy.HStack(tidy.Spacing(2), { 
+                    UI.makeLabel('Hair', { 1.0, 1.0, 1.0, 1.0 }, 'start', 'center'),
+                    UI.makeFlexSpace(),
+                    UI.makeButton(dismiss, generateImageButtonTexture(375)),
+                    UI.makeButton(dismiss, generateImageButtonTexture(373)),
+                }),
+                tidy.HStack(tidy.Spacing(2), { 
+                    UI.makeLabel('Clothing', { 1.0, 1.0, 1.0, 1.0 }, 'start', 'center'),
+                    UI.makeFlexSpace(),
+                    UI.makeButton(dismiss, generateImageButtonTexture(375)),
+                    UI.makeButton(dismiss, generateImageButtonTexture(373)),
+                }),
+                tidy.HStack(tidy.Spacing(2), { 
+                    UI.makeLabel('Beard', { 1.0, 1.0, 1.0, 1.0 }, 'start', 'center'),
+                    UI.makeFlexSpace(),
+                    UI.makeButton(dismiss, generateImageButtonTexture(375)),
+                    UI.makeButton(dismiss, generateImageButtonTexture(373)),
+                }),
+                tidy.HStack(tidy.Spacing(2), { 
+                    UI.makeLabel('Accessory 1', { 1.0, 1.0, 1.0, 1.0 }, 'start', 'center'),
+                    UI.makeFlexSpace(),
+                    UI.makeButton(dismiss, generateImageButtonTexture(375)),
+                    UI.makeButton(dismiss, generateImageButtonTexture(373)),
+                }),
+                tidy.HStack(tidy.Spacing(2), { 
+                    UI.makeLabel('Accessory 2', { 1.0, 1.0, 1.0, 1.0 }, 'start', 'center'),
+                    UI.makeFlexSpace(),
+                    UI.makeButton(dismiss, generateImageButtonTexture(375)),
+                    UI.makeButton(dismiss, generateImageButtonTexture(373)),
+                }),
             }),
             tidy.HStack({
                 UI.makeButton(dismiss, generateTextButtonTexture('Cancel')),

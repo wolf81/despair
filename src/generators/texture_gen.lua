@@ -14,7 +14,7 @@ local function getParchmentColor()
     return color_info.color
 end
 
-M.generateButtonTexture = function(w, h, text) 
+M.generateTextButtonTexture = function(w, h, text) 
     local image = TextureGenerator.generatePanelTexture(w, h)
     local w, h = image:getDimensions()
 
@@ -28,6 +28,22 @@ M.generateButtonTexture = function(w, h, text)
         love.graphics.print(text, text_x, text_y)
     end)
 
+    return canvas
+end
+
+M.generateImageButtonTexture = function(w, h, quad_idx)
+    local canvas = TextureGenerator.generateBorderTexture(24, 24, { 0.5, 0.1, 0.1, 1.0 })
+
+    local texture = TextureCache:get('uf_interface')
+    local quad = QuadCache:get('uf_interface')[quad_idx]
+    local quad_w, quad_h = select(3, quad:getViewport())
+
+    canvas:renderTo(function() 
+        love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
+        local w, h = canvas:getDimensions()
+        love.graphics.draw(texture, quad, mfloor((w - quad_w) / 2), mfloor((h - quad_h) / 2))
+    end)
+    
     return canvas
 end
 

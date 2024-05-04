@@ -8,37 +8,11 @@ local mfloor = math.floor
 local AssignPoints = {}
 
 local function generateTextButtonTexture(title)
-    return TextureGenerator.generateButtonTexture(80, 32, title)
+    return TextureGenerator.generateTextButtonTexture(80, 32, title)
 end
 
-local function generatePlusButton()    
-    local canvas = TextureGenerator.generateBorderTexture(24, 24, { 0.5, 0.1, 0.1, 1.0 })
-
-    local texture = TextureCache:get('uf_interface')
-    local quad = QuadCache:get('uf_interface')[376]
-    local quad_w, quad_h = select(3, quad:getViewport())
-
-    canvas:renderTo(function() 
-        love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
-        local w, h = canvas:getDimensions()
-        love.graphics.draw(texture, quad, mfloor((w - quad_w) / 2), mfloor((h - quad_h) / 2))
-    end)
-    return canvas
-end
-
-local function generateMinusButton()
-    local canvas = TextureGenerator.generateBorderTexture(24, 24, { 0.5, 0.1, 0.1, 1.0 })
-
-    local texture = TextureCache:get('uf_interface')
-    local quad = QuadCache:get('uf_interface')[377]
-    local quad_w, quad_h = select(3, quad:getViewport())
-
-    canvas:renderTo(function() 
-        love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
-        local w, h = canvas:getDimensions()
-        love.graphics.draw(texture, quad, mfloor((w - quad_w) / 2), mfloor((h - quad_h) / 2))
-    end)
-    return canvas
+local function generateImageButtonTexture(quad_idx)
+    return TextureGenerator.generateImageButtonTexture(24, 24, quad_idx)
 end
 
 AssignPoints.new = function(title, fn, points_info, remaining)
@@ -108,8 +82,8 @@ AssignPoints.new = function(title, fn, points_info, remaining)
             tidy.HStack(tidy.Spacing(4), {
                 value_labels[idx],
                 UI.makeFixedSpace(2, 0),
-                UI.makeButton(function() decrementValue(idx) end, generateMinusButton()),
-                UI.makeButton(function() incrementValue(idx) end, generatePlusButton()),
+                UI.makeButton(function() decrementValue(idx) end, generateImageButtonTexture(377)),
+                UI.makeButton(function() incrementValue(idx) end, generateImageButtonTexture(376)),
             }),
         }))
     end

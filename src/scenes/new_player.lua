@@ -7,8 +7,8 @@ local mfloor = math.floor
 
 local NewPlayer = {}
 
-local function generateButtonTexture(title)
-    return TextureGenerator.generateButtonTexture(120, 48, title)
+local function generateTextButtonTexture(title)
+    return TextureGenerator.generateTextButtonTexture(120, 48, title)
 end
 
 local function getSkillValues(race)
@@ -180,15 +180,15 @@ NewPlayer.new = function()
     end
 
     buttons = {
-        UI.makeButton(onSelectGender, generateButtonTexture('GENDER')),
-        UI.makeButton(onSelectRace, generateButtonTexture('RACE')),
-        UI.makeButton(onSelectClass, generateButtonTexture('CLASS')),
-        UI.makeButton(onSelectStats, generateButtonTexture('STATS')),
-        UI.makeButton(onSelectSkills, generateButtonTexture('SKILLS')),
-        UI.makeButton(onChangeName, generateButtonTexture('NAME')),
-        UI.makeButton(onChangePortrait, generateButtonTexture('PORTRAIT')),
+        UI.makeButton(onSelectGender, generateTextButtonTexture('GENDER')),
+        UI.makeButton(onSelectRace, generateTextButtonTexture('RACE')),
+        UI.makeButton(onSelectClass, generateTextButtonTexture('CLASS')),
+        UI.makeButton(onSelectStats, generateTextButtonTexture('STATS')),
+        UI.makeButton(onSelectSkills, generateTextButtonTexture('SKILLS')),
+        UI.makeButton(onChangeName, generateTextButtonTexture('NAME')),
+        UI.makeButton(onChangePortrait, generateTextButtonTexture('PORTRAIT')),
         UI.makeFlexSpace(),
-        UI.makeButton(onRandom, generateButtonTexture('RANDOM'))
+        UI.makeButton(onRandom, generateTextButtonTexture('RANDOM'))
     }
     for idx = 2, 6 do buttons[idx].widget:setEnabled(false) end
 
