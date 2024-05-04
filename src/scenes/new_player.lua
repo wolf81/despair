@@ -170,6 +170,8 @@ NewPlayer.new = function()
 
     local function onChangePortrait()
         print('change portrait')
+
+        Gamestate.push(MakePortrait('Male', 'Human'))
     end
 
     buttons = {
@@ -217,12 +219,10 @@ NewPlayer.new = function()
         buttons[4].widget:setEnabled(class ~= nil)
         buttons[5].widget:setEnabled(stats ~= nil)
         buttons[6].widget:setEnabled(skills ~= nil)
-        buttons[7].widget:setEnabled(name ~= nil)
+        buttons[7].widget:setEnabled(true) -- name ~= nil
     end
 
     local keyReleased = function(self, key, scancode)        
-        if key == 'i' then Signal.emit('inventory') end
-
         if Gamestate.current() == self and key == 'escape' then
             love.event.quit()
         end
