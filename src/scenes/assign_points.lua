@@ -57,20 +57,45 @@ AssignPoints.new = function(title, points_info, remaining)
 
     local dismiss = function() overlay:fadeOut(Gamestate.pop) end
 
+    local value_labels = {}
+    for idx, point_info in ipairs(points_info) do
+        table.insert(value_labels, 
+            UI.makeLabel(point_info.value, { 1.0, 1.0, 1.0, 1.0 }, 'end', 'center'))
+    end
+    table.insert(value_labels, UI.makeLabel(remaining, { 1.0, 1.0, 1.0, 1.0 }, 'end'))
+
+    local incrementValue = function(idx)
+        if remaining == 0 then return end
+
+        local point_info = points_info[idx]
+        point_info.value = point_info.value + 1
+        value_labels[idx].widget:setText(point_info.value)
+
+        remaining = remaining - 1
+        value_labels[#value_labels].widget:setText(remaining)
+    end
+
+    local decrementValue = function(idx)
+        local point_info = points_info[idx]
+        point_info.value = point_info.value - 1
+        value_labels[idx].widget:setText(point_info.value)
+
+        remaining = remaining + 1
+        value_labels[#value_labels].widget:setText(remaining)
+    end
+
     local items = {}
     for idx, point_info in ipairs(points_info) do
         table.insert(items, tidy.HStack({ 
             UI.makeLabel(point_info.key, { 1.0, 1.0, 1.0, 1.0 }, 'left', 'center'),
             tidy.HStack(tidy.Spacing(4), {
-                UI.makeLabel(point_info.value, { 1.0, 1.0, 1.0, 1.0 }, 'end', 'center'),
+                value_labels[idx],
                 UI.makeFixedSpace(2, 0),
-                UI.makeButton(function() end, generateMinusButton()),
-                UI.makeButton(function() end, generatePlusButton()),
+                UI.makeButton(function() decrementValue(idx) end, generateMinusButton()),
+                UI.makeButton(function() incrementValue(idx) end, generatePlusButton()),
             }),
         }))
     end
-
-    -- 10 + (8 + 10 + 24 * n_items + 4 * (n_items - 1) + 10 + 32) + 10
 
     local layout = tidy.Border(tidy.Margin(10), {
         tidy.VStack(tidy.Spacing(10), {            
@@ -80,7 +105,7 @@ AssignPoints.new = function(title, points_info, remaining)
                 tidy.HStack(tidy.Stretch(1, 0), {
                     UI.makeLabel('Points remaining'),
                     UI.makeFlexSpace(),
-                    UI.makeLabel(remaining, { 1.0, 1.0, 1.0, 1.0 }, 'end'),
+                    value_labels[#value_labels],
                 }),
             }),
             tidy.HStack({

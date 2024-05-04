@@ -65,11 +65,14 @@ Label.new = function(text, color, halign, valign)
         text_info.width = FONT:getWidth(text_ or '')
         text_info.height = getHeight(text_ or '')
     end
+
+    local getText = function(self) return text_info.text or '' end
     
     return setmetatable({
         -- methods
         draw        = draw,
         update      = update,
+        getText     = getText,
         setText     = setText,
         getSize     = getSize,
         setFrame    = setFrame,
