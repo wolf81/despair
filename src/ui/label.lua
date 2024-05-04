@@ -30,8 +30,6 @@ Label.new = function(text, color, halign, valign)
     local update = function(self, dt) end
 
     local draw = function(self)
-        love.graphics.setColor(unpack(color))
-
         local x, y, w, h = frame:unpack()
         
         -- valign: 'start', 'center', 'end'
@@ -50,6 +48,7 @@ Label.new = function(text, color, halign, valign)
             ox = mmax(mfloor((w - text_info.width) / 2), 0)
         end
 
+        love.graphics.setColor(unpack(color))
         love.graphics.print(text_info.text, x + ox, y + oy)
     end
 
