@@ -26,22 +26,22 @@ local function generateImageButtonTexture(quad_idx)
     return TextureGenerator.generateImageButtonTexture(24, 24, quad_idx)
 end
 
-local HAIR_INDICES = { 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 
+local HAIR_INDICES = { 0, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 
     46, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, }
 
-local BEARD_INDICES = { 76, 77, 78, 79, 80, 87, 88, 89, 90, 105, 106, 107, 108, 109, 110 }
+local BEARD_INDICES = { 0, 76, 77, 78, 79, 80, 87, 88, 89, 90, 105, 106, 107, 108, 109, 110 }
 
 local HELM_INDICES = {
-    ['fighter'] = { 66, },
-    ['cleric']  = { 70, },
-    ['rogue']   = { 67, 68, 69, },
-    ['mage']    = { 71, 72, }
+    ['fighter'] = { 0, 66, },
+    ['cleric']  = { 0, 70, },
+    ['rogue']   = { 0, 67, 68, 69, },
+    ['mage']    = { 0, 71, 72, }
 }
 local ARMOR_INDICES = {
-    ['fighter'] = { 1, 2, 3, 4, },
-    ['cleric']  = { 14, 15, 16, },
-    ['rogue']   = { 125, 126, 127, },
-    ['mage']    = { 17, 18, 116, 117, 118 }
+    ['fighter'] = { 0, 1, 2, 3, 4, },
+    ['cleric']  = { 0, 14, 15, 16, },
+    ['rogue']   = { 0, 125, 126, 127, },
+    ['mage']    = { 0, 17, 18, 116, 117, 118 }
 }
 
 MakePortrait.new = function(gender, race, class, fn)
