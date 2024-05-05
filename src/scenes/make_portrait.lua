@@ -8,13 +8,13 @@ local mfloor = math.floor
 local MakePortrait = {}
 
 local FACE = {
-    ['human-male'] = 61,
-    ['human-female'] = 58,
-    ['elf-male'] = 56,
-    ['elf-female'] = 55,
-    ['dwarf-male'] = 60,
-    ['dwarf-female'] = 57,
-    ['halfling-male'] = 62,
+    ['human-male']      = 61,
+    ['human-female']    = 58,
+    ['elf-male']        = 56,
+    ['elf-female']      = 55,
+    ['dwarf-male']      = 60,
+    ['dwarf-female']    = 57,
+    ['halfling-male']   = 62,
     ['halfling-female'] = 59,
 }
 
@@ -26,8 +26,13 @@ local function generateImageButtonTexture(quad_idx)
     return TextureGenerator.generateImageButtonTexture(24, 24, quad_idx)
 end
 
-local HAIR_INDICES = { 0, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 
-    46, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, }
+local HAIR_INDICES = {
+    ['male']    = { 0, 11, 19, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 98, 99, 100, 101, 102, 103 },
+    ['female']  = { 0, 27, 28, 29, 44, 45, 46, 104, 114, 115, 122 },
+}
+
+-- local HAIR_INDICES = { 0, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 
+--     46, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, }
 
 local BEARD_INDICES = { 0, 76, 77, 78, 79, 80, 87, 88, 89, 90, 105, 106, 107, 108, 109, 110 }
 
@@ -60,16 +65,18 @@ MakePortrait.new = function(gender, race, class, fn)
     local face_idx = FACE[string.lower(race .. '-' .. gender)]
     portrait.widget:setFaceIndex(face_idx)
 
-    local hair_idx, beard_idx, armor_idx, helmet_idx = 0, 0, 0, 0
+    local hair_idx, beard_idx, armor_idx, helmet_idx = 1, 1, 1, 1
+
+    local hair_indices = HAIR_INDICES[string.lower(gender)]
 
     local showNextHair = function()
-        hair_idx = (hair_idx % #HAIR_INDICES) + 1
-        portrait.widget:setHairIndex(HAIR_INDICES[hair_idx])
+        hair_idx = (hair_idx % #hair_indices) + 1
+        portrait.widget:setHairIndex(hair_indices[hair_idx])
     end
 
     local showPrevHair = function()
-        hair_idx = (hair_idx % #HAIR_INDICES) - 1
-        portrait.widget:setHairIndex(HAIR_INDICES[hair_idx])
+        hair_idx = (hair_idx - 1) % #hair_indices
+        portrait.widget:setHairIndex(hair_indices[hair_idx])
     end
 
     local showNextBeard = function()
@@ -78,7 +85,7 @@ MakePortrait.new = function(gender, race, class, fn)
     end
 
     local showPrevBeard = function()
-        beard_idx = (beard_idx % #BEARD_INDICES) - 1
+        beard_idx = (beard_idx - 1) % #BEARD_INDICES
         portrait.widget:setBeardIndex(BEARD_INDICES[beard_idx])
     end
 
@@ -90,7 +97,7 @@ MakePortrait.new = function(gender, race, class, fn)
     end
 
     local showPrevArmor = function()
-        armor_idx = (armor_idx % #armor_indices) - 1
+        armor_idx = (armor_idx - 1) % #armor_indices
         portrait.widget:setArmorIndex(armor_indices[armor_idx])
     end
 
@@ -102,7 +109,7 @@ MakePortrait.new = function(gender, race, class, fn)
     end
 
     local showPrevHelmet = function()
-        helmet_idx = (helmet_idx % #helmet_indices) - 1
+        helmet_idx = (helmet_idx - 1) % #helmet_indices
         portrait.widget:setHelmetIndex(helmet_indices[helmet_idx])
     end
 
