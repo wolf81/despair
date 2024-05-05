@@ -26,7 +26,12 @@ local function generateImageButtonTexture(quad_idx)
     return TextureGenerator.generateImageButtonTexture(24, 24, quad_idx)
 end
 
-MakePortrait.new = function(gender, race, fn)
+local HAIR_INDICES = { 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 
+    46, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, }
+
+local BEARD_INDICES = { 76, 77, 78, 79, 80, 87, 88, 89, 90, 105, 106, 107, 108, 109, 110 }
+
+MakePortrait.new = function(gender, race, class, fn)
     local background = TextureGenerator.generatePanelTexture(220, 286)
     local background_w, background_h = background:getDimensions()
     local background_x = mfloor((WINDOW_W - background_w) / 2)
@@ -38,9 +43,35 @@ MakePortrait.new = function(gender, race, fn)
 
     local dismiss = function() overlay:fadeOut(Gamestate.pop) end
 
-    local portrait = {
-        face = FACE[string.lower(gender .. '_' .. race)],
-    }
+    local portrait = UI.makePortrait()
+    local face_idx = FACE[string.lower(race .. '-' .. gender)]
+    portrait.widget:setFaceIndex(face_idx)
+
+    local hair_idx, beard_idx = 0, 0
+
+    local showNextHair = function()
+        hair_idx = (hair_idx % #HAIR_INDICES) + 1
+        print('hair_idx', HAIR_INDICES[hair_idx])
+        portrait.widget:setHairIndex(HAIR_INDICES[hair_idx])
+    end
+
+    local showPrevHair = function()
+        hair_idx = (hair_idx % #HAIR_INDICES) - 1
+        print('hair_idx', HAIR_INDICES[hair_idx])
+        portrait.widget:setHairIndex(HAIR_INDICES[hair_idx])
+    end
+
+    local showNextBeard = function()
+        beard_idx = (beard_idx % #BEARD_INDICES) + 1
+        print('beard_idx', BEARD_INDICES[beard_idx])
+        portrait.widget:setBeardIndex(BEARD_INDICES[beard_idx])
+    end
+
+    local showPrevBeard = function()
+        beard_idx = (beard_idx % #BEARD_INDICES) - 1
+        print('beard_idx', BEARD_INDICES[beard_idx])
+        portrait.widget:setBeardIndex(BEARD_INDICES[beard_idx])
+    end
 
     local layout = tidy.Border(tidy.Margin(10), {
         tidy.VStack(tidy.Spacing(10), tidy.Stretch(1), {
@@ -48,7 +79,7 @@ MakePortrait.new = function(gender, race, fn)
             tidy.VStack(tidy.Spacing(2), tidy.Stretch(1), {
                 tidy.HStack({
                     UI.makeFlexSpace(),
-                    UI.makePortrait(1),
+                    portrait,
                     UI.makeFlexSpace(),
                 }),
                 tidy.HStack(tidy.Spacing(2), { 
@@ -60,8 +91,8 @@ MakePortrait.new = function(gender, race, fn)
                 tidy.HStack(tidy.Spacing(2), { 
                     UI.makeLabel('Hair', { 1.0, 1.0, 1.0, 1.0 }, 'start', 'center'),
                     UI.makeFlexSpace(),
-                    UI.makeButton(dismiss, generateImageButtonTexture(375)),
-                    UI.makeButton(dismiss, generateImageButtonTexture(373)),
+                    UI.makeButton(showPrevHair, generateImageButtonTexture(375)),
+                    UI.makeButton(showNextHair, generateImageButtonTexture(373)),
                 }),
                 tidy.HStack(tidy.Spacing(2), { 
                     UI.makeLabel('Clothing', { 1.0, 1.0, 1.0, 1.0 }, 'start', 'center'),
@@ -72,8 +103,8 @@ MakePortrait.new = function(gender, race, fn)
                 tidy.HStack(tidy.Spacing(2), { 
                     UI.makeLabel('Beard', { 1.0, 1.0, 1.0, 1.0 }, 'start', 'center'),
                     UI.makeFlexSpace(),
-                    UI.makeButton(dismiss, generateImageButtonTexture(375)),
-                    UI.makeButton(dismiss, generateImageButtonTexture(373)),
+                    UI.makeButton(showPrevBeard, generateImageButtonTexture(375)),
+                    UI.makeButton(showNextBeard, generateImageButtonTexture(373)),
                 }),
                 tidy.HStack(tidy.Spacing(2), { 
                     UI.makeLabel('Accessory 1', { 1.0, 1.0, 1.0, 1.0 }, 'start', 'center'),

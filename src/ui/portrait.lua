@@ -14,14 +14,29 @@ Portrait.new = function(scale)
     local quad_w, quad_h = select(3, quads[1]:getViewport())
     local frame = Rect(0, 0, quad_w * scale, quad_h * scale)
 
-    local background_idx, border_idx = quads[6], quads[7]
+    local background_quad, border_quad = quads[6], quads[7]
+
+    local face_quad, hair_quad, beard_quad = nil, nil, nil
 
     local draw = function(self)
         local x, y, w, h = frame:unpack()
 
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
-        love.graphics.draw(texture, background_idx, x, y, 0, scale, scale)
-        love.graphics.draw(texture, border_idx, x, y, 0, scale, scale)
+        love.graphics.draw(texture, background_quad, x, y, 0, scale, scale)
+
+        if face_quad then
+            love.graphics.draw(texture, face_quad, x, y, 0, scale, scale)
+        end
+
+        if beard_quad then
+            love.graphics.draw(texture, beard_quad, x, y, 0, scale, scale)
+        end
+
+        if hair_quad then
+            love.graphics.draw(texture, hair_quad, x, y, 0, scale, scale)
+        end
+
+        love.graphics.draw(texture, border_quad, x, y, 0, scale, scale)
     end
 
     local update = function(self)
@@ -32,14 +47,23 @@ Portrait.new = function(scale)
     local setFrame = function(self, x, y, w, h) frame = Rect(x, y, w, h) end
 
     local getSize = function(self) return frame:getSize() end
+
+    local setFaceIndex = function(self, quad_idx) face_quad = quads[quad_idx] end
+
+    local setHairIndex = function(self, quad_idx) hair_quad = quads[quad_idx] end
     
+    local setBeardIndex = function(self, quad_idx) beard_quad = quads[quad_idx] end
+
     return setmetatable({
         -- methods
-        draw        = draw,
-        update      = update,
-        getSize     = getSize,
-        getFrame    = getFrame,
-        setFrame    = setFrame,        
+        draw            = draw,
+        update          = update,
+        getSize         = getSize,
+        getFrame        = getFrame,
+        setFrame        = setFrame,
+        setFaceIndex    = setFaceIndex,
+        setHairIndex    = setHairIndex,
+        setBeardIndex   = setBeardIndex,
     }, Portrait)
 end
 

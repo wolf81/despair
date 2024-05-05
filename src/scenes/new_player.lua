@@ -176,7 +176,7 @@ NewPlayer.new = function()
     local function onChangePortrait()
         print('change portrait')
 
-        Gamestate.push(MakePortrait('Male', 'Human'))
+        Gamestate.push(MakePortrait('Male', 'Human', 'Fighter'))
     end
 
     buttons = {
