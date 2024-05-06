@@ -18,17 +18,20 @@ local FACE_INDICES = {
 
 local HAIR_INDICES = {
     ['male']    = { 0, 11, 19, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 98, 99, 100, 101, 102, 103 },
-    ['female']  = { 0, 27, 28, 29, 30, 31, 32, 44, 45, 46, 104, 114, 115, 122 },
+    ['female']  = { 0, 27, 28, 29, 30, 31, 32, 44, 45, 46, 104 },
 }
 
 local EYEBROWS_INDICES = { 24, 25, 26, 81, 82, 83, 84, 85, 86 }
 
-local BEARD_INDICES = { 0, 76, 77, 78, 79, 80, 87, 88, 89, 90, 105, 106, 107, 108, 109, 110 }
+local BEARD_INDICES = {
+    ['male']    = { 0, 76, 77, 78, 79, 80, 87, 88, 89, 90, 105, 106, 107, 108, 109, 110 },
+    ['female']  = { 0 },
+}
 
 -- earrings: 20, 21, 22
 -- not using horns
 local ACCESSORY_INDICES = {
-    ['fighter'] = { 0, 9, 13, 23, 111, 112, 114, 115, 121, 123, 124 },
+    ['fighter'] = { 0, 9, 13, 23, 111, 112, 114, 115, 123, 124 },
     ['cleric']  = { 0, 8, 48, 49, 50, 75, 111, 112 },
     ['rogue']   = { 0, 9, 10, 13, 23, 20, 111, 112, 114, 115, 121 },
     ['mage']    = { 0, 48, 49, 50, 75, 111, 112, 122 },
@@ -62,6 +65,7 @@ Portrait.new = function(gender, race, class)
     local background_quad, border_quad = quads[6], quads[7]
 
     local accessory_indices = ACCESSORY_INDICES[class]
+    local beard_indices = BEARD_INDICES[gender]
     local armor_indices = ARMOR_INDICES[class]
     local hair_indices = HAIR_INDICES[gender]
     local helm_indices = HELM_INDICES[class]
@@ -89,12 +93,12 @@ Portrait.new = function(gender, race, class)
             love.graphics.draw(texture, quads[BEARD_INDICES[beard_idx]], x, y, 0)
         end
 
-        if hair_idx > 1 then
-            love.graphics.draw(texture, quads[hair_indices[hair_idx]], x, y, 0)
-        end
-
         if accessory_idx > 1 then
             love.graphics.draw(texture, quads[accessory_indices[accessory_idx]], x, y, 0)
+        end
+
+        if helm_idx == 1 and hair_idx > 1 then
+            love.graphics.draw(texture, quads[hair_indices[hair_idx]], x, y, 0)
         end
 
         if helm_idx > 1 then
@@ -116,9 +120,9 @@ Portrait.new = function(gender, race, class)
 
     local nextHair = function(self) hair_idx = (hair_idx % #hair_indices) + 1 end
 
-    local prevBeard = function(self) beard_idx = (beard_idx - 1) % #BEARD_INDICES end
+    local prevBeard = function(self) beard_idx = (beard_idx - 1) % #beard_indices end
 
-    local nextBeard = function(self) beard_idx = (beard_idx % #BEARD_INDICES) + 1 end
+    local nextBeard = function(self) beard_idx = (beard_idx % #beard_indices) + 1 end
 
     local prevArmor = function(self) armor_idx = (armor_idx - 1) % #armor_indices end
 
