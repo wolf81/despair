@@ -25,7 +25,14 @@ local EYEBROWS_INDICES = { 24, 25, 26, 81, 82, 83, 84, 85, 86 }
 
 local BEARD_INDICES = { 0, 76, 77, 78, 79, 80, 87, 88, 89, 90, 105, 106, 107, 108, 109, 110 }
 
-local ACCESSORY_INDICES = { 8, 9, 10, 11, 12, 13, 20, 21, 22, 23, 48, 49, 50, 73, 74, 75, 111, 112, 113, 114, 115, 121, 122, 123, 124 }
+-- earrings: 20, 21, 22
+-- not using horns
+local ACCESSORY_INDICES = {
+    ['fighter'] = { 0, 9, 13, 23, 111, 112, 114, 115, 121, 123, 124 },
+    ['cleric']  = { 0, 8, 48, 49, 50, 75, 111, 112 },
+    ['rogue']   = { 0, 9, 10, 13, 23, 20, 111, 112, 114, 115, 121 },
+    ['mage']    = { 0, 48, 49, 50, 75, 111, 112, 122 },
+}
 
 local HELM_INDICES = {
     ['fighter'] = { 0, 66 },
@@ -35,7 +42,7 @@ local HELM_INDICES = {
 }
 
 local ARMOR_INDICES = {
-    ['fighter'] = { 0, 1, 2, 3, 4, 113, 119, 120 },
+    ['fighter'] = { 0, 1, 2, 3, 4, 19, 113, 119, 120 },
     ['cleric']  = { 0, 14, 15, 16 },
     ['rogue']   = { 0, 125, 126, 127 },
     ['mage']    = { 0, 17, 18, 116, 117, 118 }
@@ -54,6 +61,7 @@ Portrait.new = function(gender, race, class)
 
     local background_quad, border_quad = quads[6], quads[7]
 
+    local accessory_indices = ACCESSORY_INDICES[class]
     local armor_indices = ARMOR_INDICES[class]
     local hair_indices = HAIR_INDICES[gender]
     local helm_indices = HELM_INDICES[class]
@@ -86,7 +94,7 @@ Portrait.new = function(gender, race, class)
         end
 
         if accessory_idx > 1 then
-            love.graphics.draw(texture, quads[ACCESSORY_INDICES[accessory_idx]], x, y, 0)
+            love.graphics.draw(texture, quads[accessory_indices[accessory_idx]], x, y, 0)
         end
 
         if helm_idx > 1 then
@@ -124,9 +132,15 @@ Portrait.new = function(gender, race, class)
 
     local prevEyebrows = function(self) eyebrows_idx = (eyebrows_idx - 1) % #EYEBROWS_INDICES end
 
-    local nextAccessory = function(self) accessory_idx = (accessory_idx % #ACCESSORY_INDICES) + 1 end
+    local nextAccessory = function(self) 
+        accessory_idx = (accessory_idx % #accessory_indices) + 1 
+        print(accessory_indices[accessory_idx])
+    end
 
-    local prevAccessory = function(self) accessory_idx = (accessory_idx - 1) % #ACCESSORY_INDICES end
+    local prevAccessory = function(self) 
+        accessory_idx = (accessory_idx - 1) % #accessory_indices 
+        print(accessory_indices[accessory_idx])
+    end
 
     return setmetatable({
         -- methods
