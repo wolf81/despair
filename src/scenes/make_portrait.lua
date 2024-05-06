@@ -55,9 +55,7 @@ MakePortrait.new = function(gender, race, class, fn)
 
     local dismiss = function() overlay:fadeOut(Gamestate.pop) end
 
-    local portrait = UI.makePortrait()
-    local face_idx = FACE[string.lower(race .. '-' .. gender)]
-    portrait.widget:setFaceIndex(face_idx)
+    local portrait = UI.makePortrait(gender, race, class)
 
     local armor_idx, helmet_idx, eyebrow_idx, accessory_idx = 1, 1, 1, 1
 
@@ -71,15 +69,9 @@ MakePortrait.new = function(gender, race, class, fn)
 
     local armor_indices = ARMOR_INDICES[string.lower(class)]
 
-    local showNextArmor = function()
-        armor_idx = (armor_idx % #armor_indices) + 1
-        portrait.widget:setArmorIndex(armor_indices[armor_idx])
-    end
+    local showNextArmor = function() portrait.widget:nextArmor() end
 
-    local showPrevArmor = function()
-        armor_idx = (armor_idx - 1) % #armor_indices
-        portrait.widget:setArmorIndex(armor_indices[armor_idx])
-    end
+    local showPrevArmor = function() portrait.widget:prevArmor() end
 
     local helmet_indices = HELM_INDICES[string.lower(class)]
 
