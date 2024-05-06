@@ -3,7 +3,7 @@
 --  Author: Wolfgang Schreurs
 --  info+despair@wolftrail.net
 
-local mfloor = math.floor
+local mfloor, lrandom = math.floor, love.math.random
 
 local MakePortrait = {}
 
@@ -233,6 +233,7 @@ MakePortrait.new = function(gender, race, class, fn)
         enter       = enter,
         leave       = leave,
         update      = update,
+        random      = random,
         setFrame    = setFrame,
         getFrame    = getFrame,
         keyReleased = keyReleased,

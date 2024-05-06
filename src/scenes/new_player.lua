@@ -14,35 +14,11 @@ end
 local function getSkillValues(race)
     local base = race == 'Human' and 2 or 1
     
-    local phys = {
-        value = base,
-        min = base,
-        max = base,
-    }
-
-    local subt = {
-        value = base,
-        min = base,
-        max = base,
-    }
-
-    local know = {
-        value = base,
-        min = base,
-        max = base,
-    }
-
-    local comm = {
-        value = base,
-        min = base,
-        max = base,
-    }
-
-    local surv = {
-        value = base,
-        min = base,
-        max = base,
-    }
+    local phys = { value = base, min = base, max = base }
+    local subt = { value = base, min = base, max = base }
+    local know = { value = base, min = base, max = base }
+    local comm = { value = base, min = base, max = base }
+    local surv = { value = base, min = base, max = base }
 
     return phys, subt, know, comm, surv
 end
