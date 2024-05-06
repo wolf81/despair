@@ -26,13 +26,6 @@ local function generateImageButtonTexture(quad_idx)
     return TextureGenerator.generateImageButtonTexture(24, 24, quad_idx)
 end
 
-local HAIR_INDICES = {
-    ['male']    = { 0, 11, 19, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 98, 99, 100, 101, 102, 103 },
-    ['female']  = { 0, 27, 28, 29, 30, 31, 32, 44, 45, 46, 104, 114, 115, 122 },
-}
-
-local BEARD_INDICES = { 0, 76, 77, 78, 79, 80, 87, 88, 89, 90, 105, 106, 107, 108, 109, 110 }
-
 local ACCESSORY_INDICES = { 8, 9, 10, 11, 12, 13, 20, 21, 22, 23, 48, 49, 50, 73, 74, 75, 111, 112, 113, 114, 115, 121, 122, 123, 124 }
 
 local HELM_INDICES = {
@@ -66,29 +59,15 @@ MakePortrait.new = function(gender, race, class, fn)
     local face_idx = FACE[string.lower(race .. '-' .. gender)]
     portrait.widget:setFaceIndex(face_idx)
 
-    local hair_idx, beard_idx, armor_idx, helmet_idx, eyebrow_idx, accessory_idx = 1, 1, 1, 1, 1, 1
+    local armor_idx, helmet_idx, eyebrow_idx, accessory_idx = 1, 1, 1, 1
 
-    local hair_indices = HAIR_INDICES[string.lower(gender)]
+    local showNextHair = function() portrait.widget:nextHair() end
 
-    local showNextHair = function()
-        hair_idx = (hair_idx % #hair_indices) + 1
-        portrait.widget:setHairIndex(hair_indices[hair_idx])
-    end
+    local showPrevHair = function() portrait.widget:prevHair() end
 
-    local showPrevHair = function()
-        hair_idx = (hair_idx - 1) % #hair_indices
-        portrait.widget:setHairIndex(hair_indices[hair_idx])
-    end
+    local showNextBeard = function() portrait.widget:nextBeard() end
 
-    local showNextBeard = function()
-        beard_idx = (beard_idx % #BEARD_INDICES) + 1
-        portrait.widget:setBeardIndex(BEARD_INDICES[beard_idx])
-    end
-
-    local showPrevBeard = function()
-        beard_idx = (beard_idx - 1) % #BEARD_INDICES
-        portrait.widget:setBeardIndex(BEARD_INDICES[beard_idx])
-    end
+    local showPrevBeard = function() portrait.widget:prevBeard() end
 
     local armor_indices = ARMOR_INDICES[string.lower(class)]
 
