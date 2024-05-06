@@ -90,7 +90,7 @@ Portrait.new = function(gender, race, class)
         end
 
         if beard_idx > 1 then
-            love.graphics.draw(texture, quads[BEARD_INDICES[beard_idx]], x, y, 0)
+            love.graphics.draw(texture, quads[beard_indices[beard_idx]], x, y, 0)
         end
 
         if accessory_idx > 1 then
@@ -146,10 +146,20 @@ Portrait.new = function(gender, race, class)
         print(accessory_indices[accessory_idx])
     end
 
+    local random = function(self)
+        accessory_idx = accessory_indices[lrandom(#accessory_indices)] 
+        eyebrows_idx = EYEBROWS_INDICES[lrandom(#EYEBROWS_INDICES)]
+        armor_idx = armor_indices[lrandom(#armor_indices)]
+        beard_idx = beard_indices[lrandom(#beard_indices)]
+        helm_idx = helm_indices[lrandom(#helm_indices)]
+        hair_idx = hair_indices[lrandom(#hair_indices)] 
+    end
+
     return setmetatable({
         -- methods
         draw            = draw,
         update          = update,
+        random          = random,
         getSize         = getSize,
         getFrame        = getFrame,
         setFrame        = setFrame,
@@ -164,7 +174,7 @@ Portrait.new = function(gender, race, class)
         prevEyebrows    = prevEyebrows,
         nextEyebrows    = nextEyebrows,
         prevAccessory   = prevAccessory,
-        nextAccessory   = nextAccessory,
+        nextAccessory   = nextAccessory,        
     }, Portrait)
 end
 
