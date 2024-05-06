@@ -21,21 +21,23 @@ local HAIR_INDICES = {
     ['female']  = { 0, 27, 28, 29, 30, 31, 32, 44, 45, 46, 104, 114, 115, 122 },
 }
 
+local EYEBROWS_INDICES = { 24, 25, 26, 81, 82, 83, 84, 85, 86 }
+
 local BEARD_INDICES = { 0, 76, 77, 78, 79, 80, 87, 88, 89, 90, 105, 106, 107, 108, 109, 110 }
 
 local ACCESSORY_INDICES = { 8, 9, 10, 11, 12, 13, 20, 21, 22, 23, 48, 49, 50, 73, 74, 75, 111, 112, 113, 114, 115, 121, 122, 123, 124 }
 
 local HELM_INDICES = {
-    ['fighter'] = { 0, 66, },
-    ['cleric']  = { 0, 70, },
-    ['rogue']   = { 0, 67, 68, 69, },
-    ['mage']    = { 0, 71, 72, }
+    ['fighter'] = { 0, 66 },
+    ['cleric']  = { 0, 70 },
+    ['rogue']   = { 0, 67, 68, 69 },
+    ['mage']    = { 0, 71, 72 }
 }
 
 local ARMOR_INDICES = {
-    ['fighter'] = { 0, 1, 2, 3, 4, 113, 119, 120, },
-    ['cleric']  = { 0, 14, 15, 16, },
-    ['rogue']   = { 0, 125, 126, 127, },
+    ['fighter'] = { 0, 1, 2, 3, 4, 113, 119, 120 },
+    ['cleric']  = { 0, 14, 15, 16 },
+    ['rogue']   = { 0, 125, 126, 127 },
     ['mage']    = { 0, 17, 18, 116, 117, 118 }
 }
 
@@ -52,11 +54,12 @@ Portrait.new = function(gender, race, class)
 
     local background_quad, border_quad = quads[6], quads[7]
 
+    local armor_indices = ARMOR_INDICES[class]
     local hair_indices = HAIR_INDICES[gender]
-    local armor_indices = ARMOR_INDICES[string.lower(class)]
-    local face_idx, hair_idx, beard_idx, armor_idx = FACE_INDICES[race..'-'..gender], 1, 1, 1
+    local helm_indices = HELM_INDICES[class]
 
-    local helmet_quad, eyebrow_quad, accessory_quad = nil, nil, nil
+    local face_idx = FACE_INDICES[race..'-'..gender]
+    local hair_idx, beard_idx, armor_idx, helm_idx, eyebrows_idx, accessory_idx = 1, 1, 1, 1, 1, 1
 
     local draw = function(self)
         local x, y, w, h = frame:unpack()
@@ -66,8 +69,8 @@ Portrait.new = function(gender, race, class)
 
         love.graphics.draw(texture, quads[face_idx], x, y, 0)
 
-        if eyebrow_quad then
-            love.graphics.draw(texture, eyebrow_quad, x, y, 0)
+        if eyebrows_idx > 1 then
+            love.graphics.draw(texture, quads[EYEBROWS_INDICES[eyebrows_idx]], x, y, 0)
         end
 
         if armor_idx > 1 then
@@ -82,12 +85,12 @@ Portrait.new = function(gender, race, class)
             love.graphics.draw(texture, quads[hair_indices[hair_idx]], x, y, 0)
         end
 
-        if accessory_quad then
-            love.graphics.draw(texture, accessory_quad, x, y, 0)
+        if accessory_idx > 1 then
+            love.graphics.draw(texture, quads[ACCESSORY_INDICES[accessory_idx]], x, y, 0)
         end
 
-        if helmet_quad then
-            love.graphics.draw(texture, helmet_quad, x, y, 0)
+        if helm_idx > 1 then
+            love.graphics.draw(texture, quads[helm_indices[helm_idx]], x, y, 0)
         end
 
         love.graphics.draw(texture, border_quad, x, y, 0)
@@ -113,33 +116,37 @@ Portrait.new = function(gender, race, class)
 
     local nextArmor = function(self) armor_idx = (armor_idx % #armor_indices) + 1 end
 
-    local setHairIndex = function(self, quad_idx) hair_quad = quads[quad_idx] end
-    
-    local setArmorIndex = function(self, quad_idx) armor_quad = quads[quad_idx] end
+    local prevHelm = function(self) helm_idx = (helm_idx - 1) % #helm_indices end
 
-    local setHelmetIndex = function(self, quad_idx) helmet_quad = quads[quad_idx] end
+    local nextHelm = function(self) helm_idx = (helm_idx % #helm_indices) + 1 end
 
-    local setEyebrowIndex = function(self, quad_idx) eyebrow_quad = quads[quad_idx] end
+    local nextEyebrows = function(self) eyebrows_idx = (eyebrows_idx % #EYEBROWS_INDICES) + 1 end
 
-    local setAccessoryIndex = function(self, quad_idx) accessory_quad = quads[quad_idx] end
+    local prevEyebrows = function(self) eyebrows_idx = (eyebrows_idx - 1) % #EYEBROWS_INDICES end
+
+    local nextAccessory = function(self) accessory_idx = (accessory_idx % #ACCESSORY_INDICES) + 1 end
+
+    local prevAccessory = function(self) accessory_idx = (accessory_idx - 1) % #ACCESSORY_INDICES end
 
     return setmetatable({
         -- methods
-        draw                = draw,
-        update              = update,
-        getSize             = getSize,
-        getFrame            = getFrame,
-        setFrame            = setFrame,
-        prevHair            = prevHair,
-        nextHair            = nextHair,
-        prevBeard           = prevBeard,
-        nextBeard           = nextBeard,
-        prevArmor           = prevArmor,
-        nextArmor           = nextArmor,
-        setArmorIndex       = setArmorIndex,
-        setHelmetIndex      = setHelmetIndex,
-        setEyebrowIndex     = setEyebrowIndex,
-        setAccessoryIndex   = setAccessoryIndex,
+        draw            = draw,
+        update          = update,
+        getSize         = getSize,
+        getFrame        = getFrame,
+        setFrame        = setFrame,
+        prevHair        = prevHair,
+        nextHair        = nextHair,
+        prevHelm        = prevHelm,
+        nextHelm        = nextHelm,
+        prevBeard       = prevBeard,
+        nextBeard       = nextBeard,
+        prevArmor       = prevArmor,
+        nextArmor       = nextArmor,
+        prevEyebrows    = prevEyebrows,
+        nextEyebrows    = nextEyebrows,
+        prevAccessory   = prevAccessory,
+        nextAccessory   = nextAccessory,
     }, Portrait)
 end
 
