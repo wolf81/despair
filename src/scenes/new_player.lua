@@ -147,6 +147,7 @@ NewPlayer.new = function()
 
     local function onChangeName()
         print('change name')
+        Gamestate.push(EnterName(gender, race))
     end
 
     local function onChangePortrait()
