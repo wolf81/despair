@@ -16,7 +16,8 @@ Portrait.new = function(scale)
 
     local background_quad, border_quad = quads[6], quads[7]
 
-    local face_quad, hair_quad, beard_quad, armor_quad, helmet_quad = nil, nil, nil, nil, nil
+    local face_quad, hair_quad, beard_quad, armor_quad = nil, nil, nil, nil
+    local helmet_quad, eyebrow_quad, accessory_quad = nil, nil, nil
 
     local draw = function(self)
         local x, y, w, h = frame:unpack()
@@ -26,6 +27,10 @@ Portrait.new = function(scale)
 
         if face_quad then
             love.graphics.draw(texture, face_quad, x, y, 0, scale, scale)
+        end
+
+        if eyebrow_quad then
+            love.graphics.draw(texture, eyebrow_quad, x, y, 0, scale, scale)
         end
 
         if armor_quad then
@@ -38,6 +43,10 @@ Portrait.new = function(scale)
 
         if hair_quad then
             love.graphics.draw(texture, hair_quad, x, y, 0, scale, scale)
+        end
+
+        if accessory_quad then
+            love.graphics.draw(texture, accessory_quad, x, y, 0, scale, scale)
         end
 
         if helmet_quad then
@@ -65,18 +74,24 @@ Portrait.new = function(scale)
 
     local setHelmetIndex = function(self, quad_idx) helmet_quad = quads[quad_idx] end
 
+    local setEyebrowIndex = function(self, quad_idx) eyebrow_quad = quads[quad_idx] end
+
+    local setAccessoryIndex = function(self, quad_idx) accessory_quad = quads[quad_idx] end
+
     return setmetatable({
         -- methods
-        draw            = draw,
-        update          = update,
-        getSize         = getSize,
-        getFrame        = getFrame,
-        setFrame        = setFrame,
-        setFaceIndex    = setFaceIndex,
-        setHairIndex    = setHairIndex,
-        setBeardIndex   = setBeardIndex,
-        setArmorIndex   = setArmorIndex,
-        setHelmetIndex  = setHelmetIndex,
+        draw                = draw,
+        update              = update,
+        getSize             = getSize,
+        getFrame            = getFrame,
+        setFrame            = setFrame,
+        setFaceIndex        = setFaceIndex,
+        setHairIndex        = setHairIndex,
+        setBeardIndex       = setBeardIndex,
+        setArmorIndex       = setArmorIndex,
+        setHelmetIndex      = setHelmetIndex,
+        setEyebrowIndex     = setEyebrowIndex,
+        setAccessoryIndex   = setAccessoryIndex,
     }, Portrait)
 end
 

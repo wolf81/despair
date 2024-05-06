@@ -28,13 +28,12 @@ end
 
 local HAIR_INDICES = {
     ['male']    = { 0, 11, 19, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 98, 99, 100, 101, 102, 103 },
-    ['female']  = { 0, 27, 28, 29, 44, 45, 46, 104, 114, 115, 122 },
+    ['female']  = { 0, 27, 28, 29, 30, 31, 32, 44, 45, 46, 104, 114, 115, 122 },
 }
 
--- local HAIR_INDICES = { 0, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 
---     46, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, }
-
 local BEARD_INDICES = { 0, 76, 77, 78, 79, 80, 87, 88, 89, 90, 105, 106, 107, 108, 109, 110 }
+
+local ACCESSORY_INDICES = { 8, 9, 10, 11, 12, 13, 20, 21, 22, 23, 48, 49, 50, 73, 74, 75, 111, 112, 113, 114, 115, 121, 122, 123, 124 }
 
 local HELM_INDICES = {
     ['fighter'] = { 0, 66, },
@@ -43,11 +42,13 @@ local HELM_INDICES = {
     ['mage']    = { 0, 71, 72, }
 }
 local ARMOR_INDICES = {
-    ['fighter'] = { 0, 1, 2, 3, 4, },
+    ['fighter'] = { 0, 1, 2, 3, 4, 113, 119, 120, },
     ['cleric']  = { 0, 14, 15, 16, },
     ['rogue']   = { 0, 125, 126, 127, },
     ['mage']    = { 0, 17, 18, 116, 117, 118 }
 }
+
+local EYEBROW_INDICES = { 24, 25, 26, 81, 82, 83, 84, 85, 86 }
 
 MakePortrait.new = function(gender, race, class, fn)
     local background = TextureGenerator.generatePanelTexture(220, 286)
@@ -65,7 +66,7 @@ MakePortrait.new = function(gender, race, class, fn)
     local face_idx = FACE[string.lower(race .. '-' .. gender)]
     portrait.widget:setFaceIndex(face_idx)
 
-    local hair_idx, beard_idx, armor_idx, helmet_idx = 1, 1, 1, 1
+    local hair_idx, beard_idx, armor_idx, helmet_idx, eyebrow_idx, accessory_idx = 1, 1, 1, 1, 1, 1
 
     local hair_indices = HAIR_INDICES[string.lower(gender)]
 
@@ -113,6 +114,26 @@ MakePortrait.new = function(gender, race, class, fn)
         portrait.widget:setHelmetIndex(helmet_indices[helmet_idx])
     end
 
+    local showPrevEyebrows = function()
+        eyebrow_idx = (eyebrow_idx - 1) % #EYEBROW_INDICES
+        portrait.widget:setEyebrowIndex(EYEBROW_INDICES[eyebrow_idx])
+    end
+
+    local showNextEyebrows = function()
+        eyebrow_idx = (eyebrow_idx + 1) % #EYEBROW_INDICES
+        portrait.widget:setEyebrowIndex(EYEBROW_INDICES[eyebrow_idx])
+    end
+
+    local showPrevAccessory = function()
+        accessory_idx = (accessory_idx - 1) % #ACCESSORY_INDICES
+        portrait.widget:setAccessoryIndex(ACCESSORY_INDICES[accessory_idx])
+    end
+
+    local showNextAccessory = function()
+        accessory_idx = (accessory_idx + 1) % #ACCESSORY_INDICES
+        portrait.widget:setAccessoryIndex(ACCESSORY_INDICES[accessory_idx])
+    end
+
     local layout = tidy.Border(tidy.Margin(10), {
         tidy.VStack(tidy.Spacing(10), tidy.Stretch(1), {
             UI.makeLabel('MAKE PORTRAIT', { 1.0, 1.0, 1.0, 1.0 }, 'center', 'start'),
@@ -147,16 +168,16 @@ MakePortrait.new = function(gender, race, class, fn)
                     UI.makeButton(showNextBeard, generateImageButtonTexture(373)),
                 }),
                 tidy.HStack(tidy.Spacing(2), { 
-                    UI.makeLabel('Accessory 1', { 1.0, 1.0, 1.0, 1.0 }, 'start', 'center'),
+                    UI.makeLabel('Eyebrows', { 1.0, 1.0, 1.0, 1.0 }, 'start', 'center'),
                     UI.makeFlexSpace(),
-                    UI.makeButton(dismiss, generateImageButtonTexture(375)),
-                    UI.makeButton(dismiss, generateImageButtonTexture(373)),
+                    UI.makeButton(showPrevEyebrows, generateImageButtonTexture(375)),
+                    UI.makeButton(showNextEyebrows, generateImageButtonTexture(373)),
                 }),
                 tidy.HStack(tidy.Spacing(2), { 
-                    UI.makeLabel('Accessory 2', { 1.0, 1.0, 1.0, 1.0 }, 'start', 'center'),
+                    UI.makeLabel('Accessory', { 1.0, 1.0, 1.0, 1.0 }, 'start', 'center'),
                     UI.makeFlexSpace(),
-                    UI.makeButton(dismiss, generateImageButtonTexture(375)),
-                    UI.makeButton(dismiss, generateImageButtonTexture(373)),
+                    UI.makeButton(showPrevAccessory, generateImageButtonTexture(375)),
+                    UI.makeButton(showNextAccessory, generateImageButtonTexture(373)),
                 }),
             }),
             tidy.HStack({
