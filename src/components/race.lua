@@ -5,6 +5,13 @@
 
 local Race = {}
 
+RACES = TableHelper.readOnly({
+    ['halfling']    = true,
+    ['human']       = true,
+    ['dwarf']       = true,
+    ['elf']         = true,
+})
+
 Race.new = function(entity, def)
     local race = def['race']
     assert(race ~= nil, 'missing field: "race"')

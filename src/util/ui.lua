@@ -66,8 +66,8 @@ M.makeItemContainer = function(key)
     return tidy.Elem(item_container, tidy.MinSize(w, h), tidy.Stretch(0))
 end
 
-M.makeParchment = function(text)
-    return tidy.Elem(Parchment(text), tidy.Stretch(1))
+M.makeParchment = function(text, margin)
+    return tidy.Elem(Parchment(text, margin), tidy.Stretch(1))
 end
 
 M.makePortrait = function(gender, race, class)

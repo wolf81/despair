@@ -7,6 +7,13 @@ local mmin, mfloor = math.min, math.floor
 
 local Class = {}
 
+CLASSES = TableHelper.readOnly({
+    ['fighter'] = true,
+    ['cleric']  = true,
+    ['rogue']   = true,
+    ['mage']    = true,
+})
+
 Class.new = function(entity, def)
     local class = def['class']
     assert(class ~= nil, 'missing field: "class"')

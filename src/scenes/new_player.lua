@@ -3,9 +3,13 @@
 --  Author: Wolfgang Schreurs
 --  info+despair@wolftrail.net
 
-local mfloor = math.floor
+local mfloor, lrandom = math.floor, love.math.random
 
 local NewPlayer = {}
+
+local GENDERS   = { 'Male', 'Female' }
+local RACES     = { 'Human', 'Elf', 'Dwarf', 'Halfling' }
+local CLASSES   = { 'Fighter' , 'Mage', 'Cleric', 'Rogue' }
 
 local function generateTextButtonTexture(title)
     return TextureGenerator.generateTextButtonTexture(120, 48, title)
@@ -68,6 +72,8 @@ NewPlayer.new = function()
     local buttons = {}
 
     local gender, race, class, stats, skills, name = nil, nil, nil, nil, nil, nil
+
+    local needs_update = true
     
     local function onSelectGender()
         Gamestate.push(ChooseOption(
@@ -80,7 +86,7 @@ NewPlayer.new = function()
                 skills = nil
                 name = nil
             end,
-            'Male', 'Female'))
+            unpack(GENDERS)))
     end
 
     local function onSelectRace()        
@@ -93,7 +99,7 @@ NewPlayer.new = function()
                 skills = nil
                 name = nil
             end,
-            'Human', 'Elf', 'Dwarf', 'Halfling'))
+            unpack(RACES)))
     end
 
     local function onSelectClass()
@@ -105,7 +111,7 @@ NewPlayer.new = function()
                 skills = nil
                 name = nil
             end,
-            'Fighter', 'Mage', 'Cleric', 'Rogue'))
+            unpack(CLASSES)))
     end
 
     local function onSelectStats()
@@ -132,7 +138,7 @@ NewPlayer.new = function()
         Gamestate.push(AssignPoints(
             'ASSIGN SKILLS',
             function(phys_, subt_, know_, comm_, surv_) 
-                skills = { phys = phys_, subt_ = subt, know = know_, comm = comm_, surv = surv_ }
+                skills = { phys = phys_, subt = subt_, know = know_, comm = comm_, surv = surv_ }
                 name = nil
             end,
             {
@@ -156,6 +162,22 @@ NewPlayer.new = function()
         Gamestate.push(MakePortrait(gender or 'Male', race or 'Human', class or 'Fighter'))
     end
 
+    local function onChooseRandom()
+        print('choose random character')
+
+        gender = GENDERS[lrandom(#GENDERS)]
+        race = RACES[lrandom(#RACES)]
+        class = CLASSES[lrandom(#CLASSES)]
+
+        local str, dex, mind = getStatValues(race)
+        stats = { str = str, dex = dex, mind = mind }
+
+        local phys, subt, know, comm, surv = getSkillValues(race)
+        skills = { phys = phys, subt = subt, know = know, comm = comm, surv = surv }
+
+        needs_update = true
+    end
+
     buttons = {
         UI.makeButton(onSelectGender, generateTextButtonTexture('GENDER')),
         UI.makeButton(onSelectRace, generateTextButtonTexture('RACE')),
@@ -165,14 +187,14 @@ NewPlayer.new = function()
         UI.makeButton(onChangeName, generateTextButtonTexture('NAME')),
         UI.makeButton(onChangePortrait, generateTextButtonTexture('PORTRAIT')),
         UI.makeFlexSpace(),
-        UI.makeButton(onRandom, generateTextButtonTexture('RANDOM'))
+        UI.makeButton(onChooseRandom, generateTextButtonTexture('RANDOM'))
     }
     for idx = 2, 6 do buttons[idx].widget:setEnabled(false) end
 
     local layout = tidy.Border(tidy.Margin(180, 10, 180, 10), {
         tidy.HStack(tidy.Spacing(10), {
             tidy.VStack(tidy.MinSize(0, 120), tidy.Spacing(2), buttons),
-            UI.makeParchment('...'),
+            UI.makeParchment('...', 20),
         }),
     }):setFrame(0, 0, WINDOW_W, WINDOW_H)
 
@@ -184,6 +206,16 @@ NewPlayer.new = function()
     end
 
     local update = function(self, dt)
+        if needs_update then
+            buttons[2].widget:setEnabled(gender ~= nil)
+            buttons[3].widget:setEnabled(race ~= nil)
+            buttons[4].widget:setEnabled(class ~= nil)
+            buttons[5].widget:setEnabled(stats ~= nil)
+            buttons[6].widget:setEnabled(skills ~= nil)
+            buttons[7].widget:setEnabled(true) -- name ~= nil
+            needs_update = false
+        end
+
         for e in layout:eachElement() do e.widget:update(dt) end
     end
 
@@ -195,14 +227,7 @@ NewPlayer.new = function()
         -- body
     end
 
-    local resume = function(self, from)
-        buttons[2].widget:setEnabled(gender ~= nil)
-        buttons[3].widget:setEnabled(race ~= nil)
-        buttons[4].widget:setEnabled(class ~= nil)
-        buttons[5].widget:setEnabled(stats ~= nil)
-        buttons[6].widget:setEnabled(skills ~= nil)
-        buttons[7].widget:setEnabled(true) -- name ~= nil
-    end
+    local resume = function(self, from) needs_update = true end
 
     local keyReleased = function(self, key, scancode)        
         if Gamestate.current() == self and key == 'escape' then

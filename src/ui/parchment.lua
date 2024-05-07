@@ -5,13 +5,13 @@
 
 local Parchment = {}
 
-Parchment.new = function(text)
+Parchment.new = function(text, margin)
     local background = nil
 
     local frame = Rect(0)
 
     local label = UI.makeLabel(text, { 0.0, 0.0, 0.0, 0.7 })
-    local layout = tidy.Border(tidy.Margin(10), {
+    local layout = tidy.Border(tidy.Margin(margin or 10), {
         label,
     })
 
