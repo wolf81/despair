@@ -3,6 +3,8 @@
 --  Author: Wolfgang Schreurs
 --  info+despair@wolftrail.net
 
+local lrandom = love.math.random
+
 local Portrait = {}
 
 local FACE_INDICES = {
@@ -97,6 +99,7 @@ Portrait.new = function(gender, race, class)
             love.graphics.draw(texture, quads[accessory_indices[accessory_idx]], x, y, 0)
         end
 
+        -- don't show hair when wearing head covering
         if helm_idx == 1 and hair_idx > 1 then
             love.graphics.draw(texture, quads[hair_indices[hair_idx]], x, y, 0)
         end
@@ -110,7 +113,7 @@ Portrait.new = function(gender, race, class)
 
     local update = function(self) end
 
-    local getFrame = function(self) return frame end
+    local getFrame = function(self) return frame:unpack() end
 
     local setFrame = function(self, x, y, w, h) frame = Rect(x, y, w, h) end
 
@@ -136,24 +139,22 @@ Portrait.new = function(gender, race, class)
 
     local prevEyebrows = function(self) eyebrows_idx = (eyebrows_idx - 1) % #EYEBROWS_INDICES end
 
-    local nextAccessory = function(self) 
-        accessory_idx = (accessory_idx % #accessory_indices) + 1 
-        print(accessory_indices[accessory_idx])
-    end
+    local nextAccessory = function(self) accessory_idx = (accessory_idx % #accessory_indices) + 1 end
 
-    local prevAccessory = function(self) 
-        accessory_idx = (accessory_idx - 1) % #accessory_indices 
-        print(accessory_indices[accessory_idx])
-    end
+    local prevAccessory = function(self) accessory_idx = (accessory_idx - 1) % #accessory_indices end
 
     local random = function(self)
-        accessory_idx = accessory_indices[lrandom(#accessory_indices)] 
+        print(#quads)
+        accessory_idx = accessory_indices[lrandom(#accessory_indices)]
         eyebrows_idx = EYEBROWS_INDICES[lrandom(#EYEBROWS_INDICES)]
         armor_idx = armor_indices[lrandom(#armor_indices)]
         beard_idx = beard_indices[lrandom(#beard_indices)]
         helm_idx = helm_indices[lrandom(#helm_indices)]
-        hair_idx = hair_indices[lrandom(#hair_indices)] 
+        hair_idx = hair_indices[lrandom(#hair_indices)]
+        print(accessory_idx, eyebrows_idx, armor_idx, beard_idx, helm_idx, hair_idx)
     end
+
+    random(nil)
 
     return setmetatable({
         -- methods
