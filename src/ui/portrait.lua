@@ -144,14 +144,12 @@ Portrait.new = function(gender, race, class)
     local prevAccessory = function(self) accessory_idx = (accessory_idx - 1) % #accessory_indices end
 
     local random = function(self)
-        print(#quads)
-        accessory_idx = accessory_indices[lrandom(#accessory_indices)]
-        eyebrows_idx = EYEBROWS_INDICES[lrandom(#EYEBROWS_INDICES)]
-        armor_idx = armor_indices[lrandom(#armor_indices)]
-        beard_idx = beard_indices[lrandom(#beard_indices)]
-        helm_idx = helm_indices[lrandom(#helm_indices)]
-        hair_idx = hair_indices[lrandom(#hair_indices)]
-        print(accessory_idx, eyebrows_idx, armor_idx, beard_idx, helm_idx, hair_idx)
+        accessory_idx = lrandom(#accessory_indices)
+        eyebrows_idx = lrandom(#EYEBROWS_INDICES)
+        armor_idx = lrandom(#armor_indices)
+        beard_idx = lrandom(#beard_indices)
+        helm_idx = lrandom(#helm_indices)
+        hair_idx = lrandom(#hair_indices)
     end
 
     random(nil)

@@ -49,6 +49,23 @@ function love.load(args)
 
     GamestateHelper.fixGamestatePushPop()
 
+    local name = NameGenerator.generate('human', 'male', function(type)
+        print('type', type)
+        return {
+            'Lucien',
+            'Marius',
+            'Mathieu',
+            'Neirin',
+            'Oisin',
+            'Orion',
+            'Remus',
+            'Sabastian',
+        } 
+    end)
+    print('name', name)
+
+    love.event.quit()
+
     Gamestate.switch(Loading(function() 
         Gamestate.switch(NewPlayer())
     end))
