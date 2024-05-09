@@ -87,7 +87,11 @@ function love.load(args)
 
     local filters = {
         '[aei]$',
-        'rl$',
+        'r[lb]$',
+        'sp$',
+        'iu$',
+        '[Oo]i[ue]',
+        '[Dd]rb',
         '%a*(%a)%1%a*',        
     }
 

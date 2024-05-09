@@ -132,20 +132,17 @@ M.generate = function(race, gender, fn, filters)
 
     local chain = markovChain(type)
     if chain then
-        local matched_filters = #filters > 0
         local name = nil
 
         while not name do
             name = markovName(chain)
-            for _, filter in ipairs(filters) do
+            for _, filter in ipairs(filters or {}) do
                 if string.find(name, filter) then
                     print('invalid "' .. name .. '", matched: ' .. filter)
                     name = nil
-                    goto continue
+                    break
                 end
-            end
-
-            ::continue::            
+            end            
         end
         
         return name
