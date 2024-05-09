@@ -22,33 +22,7 @@ local function configureGraphics()
     love.graphics.setLineStyle('rough')
 end
 
-function love.load(args)
-    love.window.setTitle('Dungeon of Despair')
-
-    success = love.window.setMode(WINDOW_W * UI_SCALE, WINDOW_H * UI_SCALE, {
-        highdpi = false,
-    })
-
-    -- handle command line args, if any
-    -- PLEASE NOTE: for Windows might need to add `--console` as well
-    for _, arg in ipairs(args) do
-        if arg == '--quadsheet' then
-            return Gamestate.switch(Loading(function() 
-                QuadSheetGenerator.generate()
-                love.event.quit()
-            end))
-        elseif arg == '--imagefont' then
-            FontSheetGenerator.generate()            
-            love.event.quit()
-        end
-    end
-
-    configureGraphics()
-
-    trySetCursor()
-
-    GamestateHelper.fixGamestatePushPop()
-
+local function testNameGenerator()
     local names = {
         'Adair',
         'Altair',
@@ -101,6 +75,37 @@ function love.load(args)
     end
 
     love.event.quit()
+end
+
+function love.load(args)
+    love.window.setTitle('Dungeon of Despair')
+
+    success = love.window.setMode(WINDOW_W * UI_SCALE, WINDOW_H * UI_SCALE, {
+        highdpi = false,
+    })
+
+    -- handle command line args, if any
+    -- PLEASE NOTE: for Windows might need to add `--console` as well
+    for _, arg in ipairs(args) do
+        if arg == '--quadsheet' then
+            return Gamestate.switch(Loading(function() 
+                QuadSheetGenerator.generate()
+                love.event.quit()
+            end))
+        elseif arg == '--imagefont' then
+            FontSheetGenerator.generate()            
+            love.event.quit()
+        end
+    end
+
+    -- TODO: remove
+    testNameGenerator()
+
+    configureGraphics()
+
+    trySetCursor()
+
+    GamestateHelper.fixGamestatePushPop()
 
     Gamestate.switch(Loading(function() 
         Gamestate.switch(NewPlayer())
