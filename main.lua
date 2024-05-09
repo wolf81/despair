@@ -23,42 +23,6 @@ local function configureGraphics()
 end
 
 local function testNameGenerator()
-    local names = {
-        'Adair',
-        'Altair',
-        'Caspian',
-        'Cassius',
-        'Corbin',
-        'Darius',
-        'Destin',
-        'Drystan',
-        'Fineas',
-        'Gearwyn',
-        'Hasperos',
-        'Ignatius',
-        'Korbin',
-        'Liron',
-        'Lucien',
-        'Marius',
-        'Mathieu',
-        'Neirin',
-        'Oisin',
-        'Orion',
-        'Remus',
-        'Sabastian',
-        'Serian',
-        'Sirius',
-        'Séverin',
-        'Tearlach',
-        'Thaniel',
-        'Torian',
-        'Torin',
-        'Urien',
-        'Vasilis',
-        'Zarek',
-        'Zephyr',        
-    }
-
     local filters = {
         '[aei]$',
         'r[lb]$',
@@ -70,7 +34,13 @@ local function testNameGenerator()
     }
 
     for i = 1, 50 do
-    local name = NameGenerator.generate('human', 'male', function(type) return names end, filters)
+    local name = NameGenerator.generate('human', 'male', function(type)
+        local path = 'dat/names/' .. type .. '.lua' 
+        print('p', path)
+        local chunk, err = love.filesystem.load(path)
+        local name_info = chunk()
+
+        return name_info['names'] end, filters)
     print(name)
     end
 
