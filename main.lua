@@ -49,20 +49,52 @@ function love.load(args)
 
     GamestateHelper.fixGamestatePushPop()
 
-    local name = NameGenerator.generate('human', 'male', function(type)
-        print('type', type)
-        return {
-            'Lucien',
-            'Marius',
-            'Mathieu',
-            'Neirin',
-            'Oisin',
-            'Orion',
-            'Remus',
-            'Sabastian',
-        } 
-    end)
-    print('name', name)
+    local names = {
+        'Adair',
+        'Altair',
+        'Caspian',
+        'Cassius',
+        'Corbin',
+        'Darius',
+        'Destin',
+        'Drystan',
+        'Fineas',
+        'Gearwyn',
+        'Hasperos',
+        'Ignatius',
+        'Korbin',
+        'Liron',
+        'Lucien',
+        'Marius',
+        'Mathieu',
+        'Neirin',
+        'Oisin',
+        'Orion',
+        'Remus',
+        'Sabastian',
+        'Serian',
+        'Sirius',
+        'Séverin',
+        'Tearlach',
+        'Thaniel',
+        'Torian',
+        'Torin',
+        'Urien',
+        'Vasilis',
+        'Zarek',
+        'Zephyr',        
+    }
+
+    local filters = {
+        '[aei]$',
+        'rl$',
+        '%a*(%a)%1%a*',        
+    }
+
+    for i = 1, 50 do
+    local name = NameGenerator.generate('human', 'male', function(type) return names end, filters)
+    print(name)
+    end
 
     love.event.quit()
 

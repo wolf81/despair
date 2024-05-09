@@ -40,11 +40,8 @@ return {
         'Zephyr',
     },
     filters = {
-        '-',
-        '(.)\\1$',
-        'sp$',
-        '[aeiu]$',
-        '(.)\\1\\1',
-        '(?i)\b[b-df-hj-np-tv-z]+\\b',
+        '[aei]$',
+        '[rw|rl|rb]$',
+        '%a*(%a)%1%a*',
     },
 }
