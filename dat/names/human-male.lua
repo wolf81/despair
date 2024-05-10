@@ -39,7 +39,7 @@ return {
         'Zarek',
         'Zephyr',
     },
-    filters = {
+    exclude = {
         '[aei]$',
         '[rw|rl|rb]$',
         '%a*(%a)%1%a*',

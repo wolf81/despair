@@ -20,16 +20,5 @@ return {
         'Valindra',
         'Teharissa',
     },
-    filters = {
-        '-',
-        '^.{1,5}$',
-        'rnd',
-        '[bcdfghjklmnpqrstvwxz]$',
-        'drn',
-        'dr$',
-        '$thr',
-        'lr$',
-        '(.)\\1\\1',
-        '(?i)\b[b-df-hj-np-tv-z]+\\b',
-    },
+    exclude = {},
 }

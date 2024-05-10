@@ -123,29 +123,14 @@ local function markovName(chain)
     return table.concat(names, ' ')
 end
 
-M.generate = function(race, gender, fn, filters)
+M.generate = function(race, gender, fn)
     local type = race..'-'..gender
 
-    if not name_set[type] then
-        name_set[type] = fn(type)
-    end
+    if not name_set[type] then name_set[type] = fn(type) end
 
     local chain = markovChain(type)
     if chain then
-        local name = nil
-
-        while not name do
-            name = markovName(chain)
-            for _, filter in ipairs(filters or {}) do
-                if string.find(name, filter) then
-                    print('invalid "' .. name .. '", matched: ' .. filter)
-                    name = nil
-                    break
-                end
-            end            
-        end
-        
-        return name
+        return markovName(chain)
     end
 
     return ''

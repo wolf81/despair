@@ -42,14 +42,5 @@ return {
         'Vespera',
         'Zara',
     },
-    filters = {
-        '-',
-        '(.)\\1$',
-        '[bcdfghijklmnpqrstvwxz]$',
-        'sp$',
-        'eiei',
-        'aiai',
-        '(.)\\1\\1',
-        '(?i)\b[b-df-hj-np-tv-z]+\\b',
-    },
+    exclude = {},
 }

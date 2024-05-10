@@ -40,7 +40,7 @@ local function testNameGenerator()
         local chunk, err = love.filesystem.load(path)
         local name_info = chunk()
 
-        return name_info['names'] end, filters)
+        return name_info['names'], name_info['filters'] end)
     print(name)
     end
 
