@@ -140,6 +140,8 @@ MakePortrait.new = function(gender, race, class, fn)
 
     local getFrame = function(self) return frame:unpack() end
 
+    local getImage = function(self) return portrait.widget:getImage() end
+
     local keyReleased = function(self, key, scancode)
         if Gamestate.current() == self and key == 'escape' then
             dismiss()
@@ -155,6 +157,7 @@ MakePortrait.new = function(gender, race, class, fn)
         random      = random,
         setFrame    = setFrame,
         getFrame    = getFrame,
+        getImage    = getImage,
         keyReleased = keyReleased,
     }, MakePortrait)
 end

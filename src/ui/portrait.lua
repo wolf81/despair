@@ -75,40 +75,56 @@ Portrait.new = function(gender, race, class)
     local face_idx = FACE_INDICES[race..'-'..gender]
     local hair_idx, beard_idx, armor_idx, helm_idx, eyebrows_idx, accessory_idx = 1, 1, 1, 1, 1, 1
 
+    local image = nil
+
+    local getImage = function()
+        local w, h = select(3, frame:unpack())
+
+        local canvas = love.graphics.newCanvas(w, h)
+        canvas:renderTo(function() 
+            love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
+            love.graphics.draw(texture, background_quad, x, y, 0)
+
+            love.graphics.draw(texture, quads[face_idx], x, y, 0)
+
+            if eyebrows_idx > 1 then
+                love.graphics.draw(texture, quads[EYEBROWS_INDICES[eyebrows_idx]], x, y, 0)
+            end
+
+            if armor_idx > 1 then
+                love.graphics.draw(texture, quads[armor_indices[armor_idx]], x, y, 0)
+            end
+
+            if beard_idx > 1 then
+                love.graphics.draw(texture, quads[beard_indices[beard_idx]], x, y, 0)
+            end
+
+            if accessory_idx > 1 then
+                love.graphics.draw(texture, quads[accessory_indices[accessory_idx]], x, y, 0)
+            end
+
+            -- don't show hair when wearing head covering
+            if helm_idx == 1 and hair_idx > 1 then
+                love.graphics.draw(texture, quads[hair_indices[hair_idx]], x, y, 0)
+            end
+
+            if helm_idx > 1 then
+                love.graphics.draw(texture, quads[helm_indices[helm_idx]], x, y, 0)
+            end
+
+            love.graphics.draw(texture, border_quad, x, y, 0)
+        end)
+
+        return canvas
+    end
+
     local draw = function(self)
         local x, y, w, h = frame:unpack()
 
+        if not image then image = getImage() end
+
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
-        love.graphics.draw(texture, background_quad, x, y, 0)
-
-        love.graphics.draw(texture, quads[face_idx], x, y, 0)
-
-        if eyebrows_idx > 1 then
-            love.graphics.draw(texture, quads[EYEBROWS_INDICES[eyebrows_idx]], x, y, 0)
-        end
-
-        if armor_idx > 1 then
-            love.graphics.draw(texture, quads[armor_indices[armor_idx]], x, y, 0)
-        end
-
-        if beard_idx > 1 then
-            love.graphics.draw(texture, quads[beard_indices[beard_idx]], x, y, 0)
-        end
-
-        if accessory_idx > 1 then
-            love.graphics.draw(texture, quads[accessory_indices[accessory_idx]], x, y, 0)
-        end
-
-        -- don't show hair when wearing head covering
-        if helm_idx == 1 and hair_idx > 1 then
-            love.graphics.draw(texture, quads[hair_indices[hair_idx]], x, y, 0)
-        end
-
-        if helm_idx > 1 then
-            love.graphics.draw(texture, quads[helm_indices[helm_idx]], x, y, 0)
-        end
-
-        love.graphics.draw(texture, border_quad, x, y, 0)
+        love.graphics.draw(image, x, y)
     end
 
     local update = function(self) end
@@ -119,29 +135,65 @@ Portrait.new = function(gender, race, class)
 
     local getSize = function(self) return frame:getSize() end
 
-    local prevHair = function(self) hair_idx = (hair_idx - 1) % #hair_indices end
+    local prevHair = function(self) 
+        hair_idx = (hair_idx - 1) % #hair_indices 
+        image = nil
+    end
 
-    local nextHair = function(self) hair_idx = (hair_idx % #hair_indices) + 1 end
+    local nextHair = function(self) 
+        hair_idx = (hair_idx % #hair_indices) + 1 
+        image = nil
+    end
 
-    local prevBeard = function(self) beard_idx = (beard_idx - 1) % #beard_indices end
+    local prevBeard = function(self) 
+        beard_idx = (beard_idx - 1) % #beard_indices 
+        image = nil
+    end
 
-    local nextBeard = function(self) beard_idx = (beard_idx % #beard_indices) + 1 end
+    local nextBeard = function(self) 
+        beard_idx = (beard_idx % #beard_indices) + 1 
+        image = nil
+    end
 
-    local prevArmor = function(self) armor_idx = (armor_idx - 1) % #armor_indices end
+    local prevArmor = function(self) 
+        armor_idx = (armor_idx - 1) % #armor_indices 
+        image = nil
+    end
 
-    local nextArmor = function(self) armor_idx = (armor_idx % #armor_indices) + 1 end
+    local nextArmor = function(self) 
+        armor_idx = (armor_idx % #armor_indices) + 1 
+        image = nil
+    end
 
-    local prevHelm = function(self) helm_idx = (helm_idx - 1) % #helm_indices end
+    local prevHelm = function(self) 
+        helm_idx = (helm_idx - 1) % #helm_indices 
+        image = nil
+    end
 
-    local nextHelm = function(self) helm_idx = (helm_idx % #helm_indices) + 1 end
+    local nextHelm = function(self) 
+        helm_idx = (helm_idx % #helm_indices) + 1 
+        image = nil
+    end
 
-    local nextEyebrows = function(self) eyebrows_idx = (eyebrows_idx % #EYEBROWS_INDICES) + 1 end
+    local nextEyebrows = function(self) 
+        eyebrows_idx = (eyebrows_idx % #EYEBROWS_INDICES) + 1 
+        image = nil
+    end
 
-    local prevEyebrows = function(self) eyebrows_idx = (eyebrows_idx - 1) % #EYEBROWS_INDICES end
+    local prevEyebrows = function(self) 
+        eyebrows_idx = (eyebrows_idx - 1) % #EYEBROWS_INDICES 
+        image = nil
+    end
 
-    local nextAccessory = function(self) accessory_idx = (accessory_idx % #accessory_indices) + 1 end
+    local nextAccessory = function(self) 
+        accessory_idx = (accessory_idx % #accessory_indices) + 1 
+        image = nil
+    end
 
-    local prevAccessory = function(self) accessory_idx = (accessory_idx - 1) % #accessory_indices end
+    local prevAccessory = function(self) 
+        accessory_idx = (accessory_idx - 1) % #accessory_indices 
+        image = nil
+    end
 
     local random = function(self)
         accessory_idx = lrandom(#accessory_indices)
@@ -150,6 +202,7 @@ Portrait.new = function(gender, race, class)
         beard_idx = lrandom(#beard_indices)
         helm_idx = lrandom(#helm_indices)
         hair_idx = lrandom(#hair_indices)
+        image = nil
     end
 
     random(nil)
@@ -160,6 +213,7 @@ Portrait.new = function(gender, race, class)
         update          = update,
         random          = random,
         getSize         = getSize,
+        getImage        = getImage,
         getFrame        = getFrame,
         setFrame        = setFrame,
         prevHair        = prevHair,

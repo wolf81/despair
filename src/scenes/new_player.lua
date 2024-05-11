@@ -103,6 +103,8 @@ NewPlayer.new = function()
 
     local parchment = UI.makeParchment('...', 20)
 
+    local portrait = nil
+
     local gender, race, class, stats, skills, name = nil, nil, nil, nil, nil, nil
 
     local needs_update = true
@@ -221,6 +223,8 @@ NewPlayer.new = function()
         local phys, subt, know, comm, surv = getSkillValues(race)
         skills = { phys = phys, subt = subt, know = know, comm = comm, surv = surv }
 
+        portrait = MakePortrait(gender, race, class):getImage()
+
         needs_update = true
     end
 
@@ -249,6 +253,14 @@ NewPlayer.new = function()
         love.graphics.rectangle('fill', 0, 0, WINDOW_W, WINDOW_H)
 
         for e in layout:eachElement() do e.widget:draw() end
+
+        if portrait then
+            love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
+            local x, y, w, h = parchment.widget:getFrame()
+            local portrait_w, portrait_h = portrait:getDimensions()
+            love.graphics.draw(portrait, x + w - portrait_w - 20, y + 10, 0.1)
+            -- love.graphics.draw()
+        end
     end
 
     local update = function(self, dt)
