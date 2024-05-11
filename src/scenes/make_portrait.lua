@@ -25,9 +25,14 @@ MakePortrait.new = function(gender, race, class, fn)
 
     local overlay, from_scene = Overlay(), nil
 
+    local portrait = UI.makePortrait(gender, race, class)
+
     local dismiss = function() overlay:fadeOut(Gamestate.pop) end
 
-    local portrait = UI.makePortrait(gender, race, class)
+    local confirm = function() 
+        if fn then fn(portrait.widget:getImage()) end
+        dismiss()
+    end
 
     local showNextHair = function() portrait.widget:nextHair() end
 
@@ -102,7 +107,7 @@ MakePortrait.new = function(gender, race, class, fn)
             tidy.HStack({
                 UI.makeButton(dismiss, generateTextButtonTexture('Cancel')),
                 UI.makeFlexSpace(),
-                UI.makeButton(dismiss, generateTextButtonTexture('OK')),
+                UI.makeButton(confirm, generateTextButtonTexture('OK')),
             }),
         })
     }):setFrame(frame:unpack())

@@ -206,7 +206,9 @@ NewPlayer.new = function()
     local function onChangePortrait()
         print('change portrait')
 
-        Gamestate.push(MakePortrait(gender or 'Male', race or 'Human', class or 'Fighter'))
+        Gamestate.push(MakePortrait(gender or 'Male', race or 'Human', class or 'Fighter', function(image)
+            portrait = image
+        end))
     end
 
     local function onChooseRandom()
