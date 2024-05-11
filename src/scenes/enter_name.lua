@@ -11,18 +11,7 @@ local function generateTextButtonTexture(title)
     return TextureGenerator.generateTextButtonTexture(80, 32, title)
 end
 
-local function getRandomName(gender, race)
-    local name = NameGenerator.generate(race, gender, function(type)
-	    local path = 'dat/names/' .. type .. '.lua' 
-	    local chunk, err = love.filesystem.load(path)
-	    local name_info = chunk()
-	    return name_info['names'] 
-	end)
-
-	return name
-end
-
-EnterName.new = function(gender, race)
+EnterName.new = function(fn)
     local background = TextureGenerator.generatePanelTexture(220, 100)
     local background_w, background_h = background:getDimensions()
     local background_x = mfloor((WINDOW_W - background_w) / 2)
@@ -36,6 +25,11 @@ EnterName.new = function(gender, race)
 
 	local dismiss = function() overlay:fadeOut(Gamestate.pop) end
 
+    local confirm = function() 
+        if fn then fn(textfield.widget:getText()) end
+        dismiss()
+    end
+
     local layout = tidy.Border(tidy.Margin(10), {
         tidy.VStack(tidy.Spacing(10), tidy.Stretch(1), {
             UI.makeLabel('ENTER NAME', { 1.0, 1.0, 1.0, 1.0 }, 'center', 'start'),
@@ -43,7 +37,7 @@ EnterName.new = function(gender, race)
             tidy.HStack({
                 UI.makeButton(dismiss, generateTextButtonTexture('Cancel')),
                 UI.makeFlexSpace(),
-                UI.makeButton(dismiss, generateTextButtonTexture('OK')),
+                UI.makeButton(confirm, generateTextButtonTexture('OK')),
             }),
         })
     }):setFrame(frame:unpack())
@@ -93,15 +87,14 @@ EnterName.new = function(gender, race)
 
     local getName = function(self) return textfield.widget:getText() end
 
-    -- set a random name by default
-    setName(nil, getRandomName(gender, race))
-
 	return setmetatable({
 		-- methods
 		draw 		= draw,
 		enter 		= enter,
 		leave 		= leave,
 		update 		= update,
+        setName     = setName,
+        getName     = getName,
 		setFrame 	= setFrame,
 		getFrame 	= getFrame,
 		textInput	= textInput,

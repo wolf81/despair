@@ -64,6 +64,17 @@ local function getStatValues(race)
     return str, dex, mind
 end
 
+local function getName(gender, race)
+    local name = NameGenerator.generate(race, gender, function(type)
+        local path = 'dat/names/' .. type .. '.lua' 
+        local chunk, err = love.filesystem.load(path)
+        local name_info = chunk()
+        return name_info['names'] 
+    end)
+
+    return name
+end
+
 NewPlayer.new = function()
     local image = TextureGenerator.generatePanelTexture(120, 48)
 
@@ -153,7 +164,10 @@ NewPlayer.new = function()
 
     local function onChangeName()
         print('change name')
-        Gamestate.push(EnterName(gender, race))
+        local enter_name = EnterName(function(name_) name = name_ end)
+        enter_name:setName(name)
+
+        Gamestate.push(enter_name)
     end
 
     local function onChangePortrait()
@@ -168,6 +182,7 @@ NewPlayer.new = function()
         gender = GENDERS[lrandom(#GENDERS)]
         race = RACES[lrandom(#RACES)]
         class = CLASSES[lrandom(#CLASSES)]
+        name = getName(gender, race)
 
         local str, dex, mind = getStatValues(race)
         stats = { str = str, dex = dex, mind = mind }
@@ -212,7 +227,7 @@ NewPlayer.new = function()
             buttons[4].widget:setEnabled(class ~= nil)
             buttons[5].widget:setEnabled(stats ~= nil)
             buttons[6].widget:setEnabled(skills ~= nil)
-            buttons[7].widget:setEnabled(true) -- name ~= nil
+            buttons[7].widget:setEnabled(name ~= nil)
             needs_update = false
         end
 
