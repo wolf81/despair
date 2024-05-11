@@ -17,7 +17,7 @@ Textfield.new = function()
         frame = Rect(0),
         ox = 0,
     }
-
+    
     local draw = function(self)
         local x, y, w, h = frame:unpack()
 
