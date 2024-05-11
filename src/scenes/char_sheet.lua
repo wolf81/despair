@@ -69,7 +69,7 @@ CharSheet.new = function(player)
     local overlay = Overlay()
 
     local exp, exp_goal = class:getExp()
-    local left_text = StringHelper.concat({ 
+    local left_text = table.concat({ 
         name,
         StringHelper.capitalize(race:getRaceName()) .. ' ' .. StringHelper.capitalize(class:getClassName()) .. ' level ' .. class:getLevel(),
         '',
@@ -89,7 +89,7 @@ CharSheet.new = function(player)
         'survival:      ' .. padRight(tostring(skills:getValue('surv')), STR_PAD),
     }, '\n')
 
-    local right_text = StringHelper.concat({
+    local right_text = table.concat({
         'COMBAT',
         'Attack bonus:  ' .. padRight(getAttBonusText(equip:getWeapons(), offense), STR_PAD),
         'Damage bonus:  ' .. padRight(getDmgBonusText(equip:getWeapons(), offense), STR_PAD),

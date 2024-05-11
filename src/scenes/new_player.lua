@@ -11,6 +11,25 @@ local GENDERS   = { 'Male', 'Female' }
 local RACES     = { 'Human', 'Elf', 'Dwarf', 'Halfling' }
 local CLASSES   = { 'Fighter' , 'Mage', 'Cleric', 'Rogue' }
 
+local function padRight(value, len)
+    return StringHelper.padRight(tostring(value), len)
+end
+
+local function padLeft(value, len)
+    return StringHelper.padLeft(tostring(value), len)
+end
+
+local function getStatLine(value, len)
+    local s = tostring(value)
+    local bonus = mfloor((value - 10) / 2)
+    if bonus < 0 then 
+        s = s .. ' (' .. bonus .. ')'
+    else
+        s = s .. ' (+' .. bonus .. ')'
+    end
+    return padRight(s, len)
+end
+
 local function generateTextButtonTexture(title)
     return TextureGenerator.generateTextButtonTexture(120, 48, title)
 end
@@ -82,6 +101,8 @@ NewPlayer.new = function()
 
     local buttons = {}
 
+    local parchment = UI.makeParchment('...', 20)
+
     local gender, race, class, stats, skills, name = nil, nil, nil, nil, nil, nil
 
     local needs_update = true
@@ -131,7 +152,11 @@ NewPlayer.new = function()
         Gamestate.push(AssignPoints(
             'ASSIGN STATS',
             function(str_, dex_, mind_) 
-                stats = { str = str_, dex = dex_, mind = mind_ }
+                stats = { 
+                    str = { value = str_ }, 
+                    dex = { value = dex_ }, 
+                    mind = { value = mind_ },
+                }
                 skills = nil
                 name = nil
             end,
@@ -149,7 +174,13 @@ NewPlayer.new = function()
         Gamestate.push(AssignPoints(
             'ASSIGN SKILLS',
             function(phys_, subt_, know_, comm_, surv_) 
-                skills = { phys = phys_, subt = subt_, know = know_, comm = comm_, surv = surv_ }
+                skills = { 
+                    phys = { value = phys_ }, 
+                    subt = { value = subt_ }, 
+                    know = { value = know_ }, 
+                    comm = { value = comm_ }, 
+                    surv = { value = surv_ },
+                }
                 name = nil
             end,
             {
@@ -206,10 +237,10 @@ NewPlayer.new = function()
     }
     for idx = 2, 6 do buttons[idx].widget:setEnabled(false) end
 
-    local layout = tidy.Border(tidy.Margin(180, 10, 180, 10), {
+    local layout = tidy.Border(tidy.Margin(200, 10, 200, 10), {
         tidy.HStack(tidy.Spacing(10), {
             tidy.VStack(tidy.MinSize(0, 120), tidy.Spacing(2), buttons),
-            UI.makeParchment('...', 20),
+            parchment,
         }),
     }):setFrame(0, 0, WINDOW_W, WINDOW_H)
 
@@ -228,6 +259,41 @@ NewPlayer.new = function()
             buttons[5].widget:setEnabled(stats ~= nil)
             buttons[6].widget:setEnabled(skills ~= nil)
             buttons[7].widget:setEnabled(name ~= nil)
+
+            local lines = {}
+            if name then 
+                table.insert(lines, name) 
+            else
+                table.insert(lines, 'Anonymous')
+            end
+            
+            if gender then table.insert(lines, gender) end
+            
+            if race then
+                if class then table.insert(lines, race .. ' ' .. class) 
+                else table.insert(lines, race) end
+            end
+
+            if stats then
+                table.insert(lines, '\n')
+                table.insert(lines, 'STATS')
+                table.insert(lines, padLeft('Strength:', 16)      .. getStatLine(stats.str.value, 12))
+                table.insert(lines, padLeft('Dexterity:', 16)     .. getStatLine(stats.dex.value, 12))
+                table.insert(lines, padLeft('Mind:', 16)          .. getStatLine(stats.mind.value, 12))
+            end
+
+            if skills then
+                table.insert(lines, '\n')
+                table.insert(lines, 'SKILLS')
+                table.insert(lines, padLeft('Physical:', 16)      .. padRight(skills.phys.value, 12))
+                table.insert(lines, padLeft('Subterfuge:', 16)    .. padRight(skills.subt.value, 12))
+                table.insert(lines, padLeft('Communication:', 16) .. padRight(skills.comm.value, 12))
+                table.insert(lines, padLeft('Knowledge:', 16)     .. padRight(skills.know.value, 12))
+                table.insert(lines, padLeft('Survival:', 16)      .. padRight(skills.surv.value, 12))
+            end
+
+            parchment.widget:setText(table.concat(lines, '\n'))
+
             needs_update = false
         end
 

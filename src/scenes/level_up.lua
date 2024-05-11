@@ -61,7 +61,7 @@ LevelUp.new = function(player)
         table.insert(lines, 'Damage:    ' .. StringHelper.padRight('+' .. tostring(preview.dmg_bonus), STR_PAD))
     end
 
-    local text = StringHelper.concat(lines, '\n')
+    local text = table.concat(lines, '\n')
 
     local handles = {}
 
