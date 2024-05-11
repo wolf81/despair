@@ -101,11 +101,9 @@ NewPlayer.new = function()
 
     local buttons = {}
 
-    local parchment = UI.makeParchment('...', 20)
+    local parchment = UI.makeParchment('', 20)
 
-    local portrait = nil
-
-    local gender, race, class, stats, skills, name = nil, nil, nil, nil, nil, nil
+    local gender, race, class, stats, skills, name, portrait = nil, nil, nil, nil, nil, nil, nil
 
     local needs_update = true
     
@@ -119,6 +117,7 @@ NewPlayer.new = function()
                 stats = nil
                 skills = nil
                 name = nil
+                portrait = nil
             end,
             unpack(GENDERS)))
     end
@@ -132,6 +131,7 @@ NewPlayer.new = function()
                 stats = nil
                 skills = nil
                 name = nil
+                portrait = nil
             end,
             unpack(RACES)))
     end
@@ -144,6 +144,7 @@ NewPlayer.new = function()
                 stats = nil
                 skills = nil
                 name = nil
+                portrait = nil
             end,
             unpack(CLASSES)))
     end
@@ -161,6 +162,7 @@ NewPlayer.new = function()
                 }
                 skills = nil
                 name = nil
+                portrait = nil
             end,
             {
                 { key = 'Strength',  value = str.value,  min = str.min,  max = str.max  },                
@@ -184,6 +186,7 @@ NewPlayer.new = function()
                     surv = { value = surv_ },
                 }
                 name = nil
+                portrait = nil
             end,
             {
                 { key = 'Physical',         value = phys.value, min = phys.min, max = phys.max },
@@ -197,7 +200,10 @@ NewPlayer.new = function()
 
     local function onChangeName()
         print('change name')
-        local enter_name = EnterName(function(name_) name = name_ end)
+        local enter_name = EnterName(function(name_) 
+            name = name_ 
+            portrait = nil
+        end)
         enter_name:setName(name)
 
         Gamestate.push(enter_name)
@@ -261,7 +267,6 @@ NewPlayer.new = function()
             local x, y, w, h = parchment.widget:getFrame()
             local portrait_w, portrait_h = portrait:getDimensions()
             love.graphics.draw(portrait, x + w - portrait_w - 20, y + 10, 0.1)
-            -- love.graphics.draw()
         end
     end
 
