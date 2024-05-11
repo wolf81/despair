@@ -11,11 +11,24 @@ local function generateTextButtonTexture(title)
     return TextureGenerator.generateTextButtonTexture(80, 32, title)
 end
 
+local function getRandomName(gender, race)
+    local name = NameGenerator.generate(race, gender, function(type)
+	    local path = 'dat/names/' .. type .. '.lua' 
+	    local chunk, err = love.filesystem.load(path)
+	    local name_info = chunk()
+	    return name_info['names'] 
+	end)
+
+	return name
+end
+
 EnterName.new = function(gender, race)
-    local background = TextureGenerator.generatePanelTexture(220, 140)
+    local background = TextureGenerator.generatePanelTexture(220, 100)
     local background_w, background_h = background:getDimensions()
     local background_x = mfloor((WINDOW_W - background_w) / 2)
     local background_y = mfloor((WINDOW_H - background_h) / 2)
+
+    local textfield = UI.makeTextfield()
 
     local frame = Rect(background_x, background_y, background_w, background_h)
 
@@ -26,7 +39,7 @@ EnterName.new = function(gender, race)
     local layout = tidy.Border(tidy.Margin(10), {
         tidy.VStack(tidy.Spacing(10), tidy.Stretch(1), {
             UI.makeLabel('ENTER NAME', { 1.0, 1.0, 1.0, 1.0 }, 'center', 'start'),
-            tidy.VStack(tidy.Spacing(2), tidy.Stretch(1), { }),
+        	textfield,
             tidy.HStack({
                 UI.makeButton(dismiss, generateTextButtonTexture('Cancel')),
                 UI.makeFlexSpace(),
@@ -68,7 +81,20 @@ EnterName.new = function(gender, race)
         if Gamestate.current() == self and key == 'escape' then
             dismiss()
         end
+
+        textfield.widget:keyReleased(key, scancode)
     end
+
+    local textInput = function(self, text)
+    	textfield.widget:textInput(text)
+    end
+
+    local setName = function(self, name) textfield.widget:setText(name) end
+
+    local getName = function(self) return textfield.widget:getText() end
+
+    -- set a random name by default
+    setName(nil, getRandomName(gender, race))
 
 	return setmetatable({
 		-- methods
@@ -78,6 +104,7 @@ EnterName.new = function(gender, race)
 		update 		= update,
 		setFrame 	= setFrame,
 		getFrame 	= getFrame,
+		textInput	= textInput,
 		keyReleased = keyReleased,
 	}, EnterName)
 end

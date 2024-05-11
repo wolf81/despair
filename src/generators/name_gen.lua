@@ -117,7 +117,7 @@ local function markovName(chain)
             last_char = char
         end
 
-        names[#names + 1] = name
+        table.insert(names, name)
     end
 
     return table.concat(names, ' ')
@@ -129,10 +129,9 @@ M.generate = function(race, gender, fn)
     if not name_set[type] then name_set[type] = fn(type) end
 
     local chain = markovChain(type)
-    if chain then
-        return markovName(chain)
-    end
-
+    
+    if chain then return markovName(chain) end
+    
     return ''
 end
 

@@ -22,31 +22,6 @@ local function configureGraphics()
     love.graphics.setLineStyle('rough')
 end
 
-local function testNameGenerator()
-    local filters = {
-        '[aei]$',
-        'r[lb]$',
-        'sp$',
-        'iu$',
-        '[Oo]i[ue]',
-        '[Dd]rb',
-        '%a*(%a)%1%a*',        
-    }
-
-    for i = 1, 50 do
-    local name = NameGenerator.generate('human', 'male', function(type)
-        local path = 'dat/names/' .. type .. '.lua' 
-        print('p', path)
-        local chunk, err = love.filesystem.load(path)
-        local name_info = chunk()
-
-        return name_info['names'], name_info['filters'] end)
-    print(name)
-    end
-
-    love.event.quit()
-end
-
 function love.load(args)
     love.window.setTitle('Dungeon of Despair')
 
@@ -67,9 +42,6 @@ function love.load(args)
             love.event.quit()
         end
     end
-
-    -- TODO: remove
-    testNameGenerator()
 
     configureGraphics()
 
@@ -92,6 +64,10 @@ function love.draw()
     love.graphics.scale(UI_SCALE)
     Gamestate.draw()
     love.graphics.pop()
+end
+
+function love.textinput(t)
+    Gamestate.textInput(t)
 end
 
 function love.keypressed(key, scancode, isrepeat)

@@ -70,6 +70,12 @@ M.makeParchment = function(text, margin)
     return tidy.Elem(Parchment(text, margin), tidy.Stretch(1))
 end
 
+M.makeTextfield = function()
+    local textfield = Textfield()
+    local w, h = textfield:getSize()
+    return tidy.Elem(textfield, tidy.MinSize(w, h), tidy.Stretch(1, 0))
+end
+
 M.makePortrait = function(gender, race, class)
     local portrait = Portrait(gender, race, class)
     local w, h = portrait:getSize()
