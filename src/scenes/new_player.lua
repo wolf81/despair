@@ -31,7 +31,7 @@ local function getStatLine(value, len)
 end
 
 local function generateTextButtonTexture(title)
-    return TextureGenerator.generateTextButtonTexture(120, 48, title)
+    return TextureGenerator.generateTextButtonTexture(120, 32, title)
 end
 
 local function getSkillValues(race)
@@ -245,14 +245,22 @@ NewPlayer.new = function()
         UI.makeButton(onChangeName, generateTextButtonTexture('NAME')),
         UI.makeButton(onChangePortrait, generateTextButtonTexture('PORTRAIT')),
         UI.makeFlexSpace(),
-        UI.makeButton(onChooseRandom, generateTextButtonTexture('RANDOM'))
+        UI.makeButton(onChooseRandom, generateTextButtonTexture('RANDOM')),
+        UI.makeFlexSpace(),
     }
     for idx = 2, 6 do buttons[idx].widget:setEnabled(false) end
 
     local layout = tidy.Border(tidy.Margin(200, 10, 200, 10), {
-        tidy.HStack(tidy.Spacing(10), {
-            tidy.VStack(tidy.MinSize(0, 120), tidy.Spacing(2), buttons),
-            parchment,
+        tidy.VStack(tidy.Spacing(10), {
+            tidy.HStack(tidy.Spacing(10), tidy.Stretch(1), {
+                tidy.VStack(tidy.MinSize(0, 120), tidy.Spacing(2), buttons),
+                parchment,
+            }),
+            tidy.HStack({
+                UI.makeButton(function() end, generateTextButtonTexture('BACK')),
+                UI.makeFlexSpace(),
+                UI.makeButton(function() end, generateTextButtonTexture('START')),
+            }),
         }),
     }):setFrame(0, 0, WINDOW_W, WINDOW_H)
 
