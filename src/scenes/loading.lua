@@ -180,9 +180,16 @@ local function registerQuads()
     registerBorderQuads()
 end
 
-Loading.new = function(T)
+Loading.new = function(T, opts)
     local background = love.graphics.newImage('gfx/loading.png')
     local background_w, background_h = background:getDimensions()
+
+    if not opts then
+        opts = {
+            ['game'] = true,
+            ['ui']   = true,
+        }        
+    end
 
     local text = 'LOADING'
     local text_h = FONT:getHeight()
@@ -205,6 +212,18 @@ Loading.new = function(T)
         { Runner(loadEntities),             'load entities'     },
         { Runner(loadLevels, onLoadLevels), 'load levels'       },
     }
+
+    if opts['game'] then
+        table.insert(runners, { Runner(loadGraphics), 'load graphics' })
+        table.insert(runners, { Runner(registerQuads), 'register quads' })
+        table.insert(runners, { Runner(HealthBar.preload), 'load health bar' })
+        table.insert(runners, { Runner(loadShaders), 'load shaders' })
+        table.insert(runners, { Runner(loadLevels, onLoadLevels), 'load levels' })
+    end
+
+    if opts['ui'] then
+    end
+
 
     local runner, message, message_x = nil, nil, 0
 
