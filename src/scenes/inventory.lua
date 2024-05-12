@@ -49,9 +49,10 @@ local function updateCombatInfo(combat_info, equipment, offense, defense)
     for idx, weapon in ipairs(weapons) do
         local dmg_min, dmg_max = ndn.dice(weapon.damage):range()
         local bonus = offense:getDamageBonus(weapon)
+        -- TODO: offense should have a getDamageRange method to use here instead
 
         att_value = att_value .. offense:getAttackValue(weapon, is_dual_wielding)
-        dmg_value = dmg_value .. (dmg_min + bonus) .. '-' .. (dmg_max + bonus)
+        dmg_value = dmg_value .. math.max((dmg_min + bonus), 1) .. '-' .. math.max((dmg_max + bonus), 1)
 
         if idx < #weapons then
             att_value = att_value .. '/' 

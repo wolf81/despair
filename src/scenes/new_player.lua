@@ -11,6 +11,34 @@ local GENDERS   = { 'Male', 'Female' }
 local RACES     = { 'Human', 'Elf', 'Dwarf', 'Halfling' }
 local CLASSES   = { 'Fighter' , 'Mage', 'Cleric', 'Rogue' }
 
+local CLASS_ANIM = {
+    ['fighter'] = { 21, 22, 23, 24 },
+    ['cleric']  = { 17, 18, 19, 20 },
+    ['rogue']   = { 29, 30, 31, 32 },
+    ['mage']    = {  1,  2,  3,  4 },
+}
+
+local CLASS_EQUIP = {
+    ['fighter'] = { 'chain_mail', 'light_shield', 'longsword', 'food_1', 'food_1' },
+    ['cleric']  = { 'chain_mail', 'morningstar', 'food_1', 'food_1' },
+    ['rogue']   = { 'stud_leather', 'short_sword', 'short_sword', 'food_1', 'food_1' },
+    ['mage']    = { 'robe', 'quarterstaff', 'food_1', 'food_1' },    
+}
+
+local RACE_FLAGS = {
+    ['halfling']    = {},
+    ['dwarf']       = { 'DV' }, -- TODO: implement darkvision
+    ['human']       = {},
+    ['elf']         = {},
+}
+
+local RACE_SPEED = {
+    ['halfling']    = 30,
+    ['dwarf']       = 25,
+    ['human']       = 30,
+    ['elf']         = 30,
+}
+
 local function padRight(value, len)
     return StringHelper.padRight(tostring(value), len)
 end
@@ -94,7 +122,7 @@ local function getName(gender, race)
     return name
 end
 
-NewPlayer.new = function()
+NewPlayer.new = function(level_info)
     local image = TextureGenerator.generatePanelTexture(120, 48)
 
     local lines = {}
@@ -236,6 +264,35 @@ NewPlayer.new = function()
         needs_update = true
     end
 
+    local function onMainMenu()
+        print('navigate back')
+    end
+
+    local function onPlay()
+        local class_name = string.lower(class)
+        local race_name = string.lower(race)
+
+        local player = EntityFactory.create({
+            id = 'pc1',
+            type = 'pc',
+            name = name,
+            class = class_name,
+            race = race_name,
+            level = 1,
+            sight = 60,
+            speed = RACE_SPEED[race_name],
+            str = stats.str.value,
+            dex = stats.dex.value,
+            mind = stats.mind.value,
+            flags = RACE_FLAGS[race_name],
+            equip = CLASS_EQUIP[class_name],
+            texture = 'uf_heroes',
+            anim = CLASS_ANIM[class_name],
+        })
+
+        Gamestate.switch(Game(level_info, player))
+    end
+
     buttons = {
         UI.makeButton(onSelectGender, generateTextButtonTexture('GENDER')),
         UI.makeButton(onSelectRace, generateTextButtonTexture('RACE')),
@@ -257,9 +314,9 @@ NewPlayer.new = function()
                 parchment,
             }),
             tidy.HStack({
-                UI.makeButton(function() end, generateTextButtonTexture('BACK')),
+                UI.makeButton(onMainMenu, generateTextButtonTexture('MAIN MENU')),
                 UI.makeFlexSpace(),
-                UI.makeButton(function() end, generateTextButtonTexture('START')),
+                UI.makeButton(onPlay, generateTextButtonTexture('PLAY')),
             }),
         }),
     }):setFrame(0, 0, WINDOW_W, WINDOW_H)

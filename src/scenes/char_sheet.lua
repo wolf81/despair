@@ -12,14 +12,24 @@ local CharSheet = {}
 local function getStatLine(stats, stat)
     local value = stats:getValue(stat)
     local bonus = stats:getBonus(stat)
-    return value .. ' (' .. (bonus < 0 and ('-' .. bonus) or ('+' .. bonus)) .. ')'
+    return value .. ' (' .. (bonus < 0 and bonus or ('+' .. bonus)) .. ')'
+end
+
+local getArmorBonusText = function(bonus)
+    if bonus < 0 then return tostring(bonus) else return '+' .. tostring(bonus) end
 end
 
 local getAttBonusText = function(weapons, offense)
     local s = ''
 
     for idx, weapon in ipairs(weapons) do
-        s = s .. '+' .. offense:getAttackBonus(weapon, #weapons == 2)
+        local attack_bonus = offense:getAttackBonus(weapon, #weapons == 2)
+        if attack_bonus < 0 then 
+            s = s .. tostring(attack_bonus)
+        else 
+            s = s .. '+' .. tostring(attack_bonus) 
+        end
+
         if idx < #weapons then
             s = s .. ' / '
         end
@@ -32,7 +42,13 @@ local getDmgBonusText = function(weapons, offense)
     local s = ''
 
     for idx, weapon in ipairs(weapons) do
-        s = s .. '+' .. offense:getDamageBonus(weapon, #weapons == 2)
+        local damage_bonus = offense:getDamageBonus(weapon, #weapons == 2)
+        if damage_bonus < 0 then
+            s = s .. tostring(damage_bonus)
+        else
+            s = s .. '+' .. tostring(damage_bonus)
+        end
+
         if idx < #weapons then
             s = s .. ' / '
         end
@@ -93,7 +109,7 @@ CharSheet.new = function(player)
         'COMBAT',
         'Attack bonus:  ' .. padRight(getAttBonusText(equip:getWeapons(), offense), STR_PAD),
         'Damage bonus:  ' .. padRight(getDmgBonusText(equip:getWeapons(), offense), STR_PAD),
-        'Armor bonus:   ' .. padRight('+' .. tostring(defense:getArmorBonus()), STR_PAD),
+        'Armor bonus:   ' .. padRight(getArmorBonusText(defense:getArmorBonus()), STR_PAD),
         '',
         'SAVES',
         'fortitude:     ' .. padRight(tostring(skills:getValue('phys') + stats:getBonus('str')), STR_PAD),

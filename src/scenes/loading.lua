@@ -180,7 +180,7 @@ local function registerQuads()
     registerBorderQuads()
 end
 
-Loading.new = function(completion)
+Loading.new = function(T)
     local background = love.graphics.newImage('gfx/loading.png')
     local background_w, background_h = background:getDimensions()
 
@@ -221,9 +221,7 @@ Loading.new = function(completion)
             runner, message = unpack(table.remove(runners, 1))
             message_x = mfloor((WINDOW_W - FONT:getWidth(message)) / 2)
         elseif is_runner_done and #runners == 0 and time == 0 then
-            if completion then return completion() end
-            
-            return Gamestate.switch(Game(level_info))
+            return Gamestate.switch(T(level_info))
         end
     end
 

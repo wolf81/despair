@@ -49,9 +49,7 @@ function love.load(args)
 
     GamestateHelper.fixGamestatePushPop()
 
-    Gamestate.switch(Loading(function() 
-        Gamestate.switch(NewPlayer())
-    end))
+    Gamestate.switch(Loading(NewPlayer))
 end
 
 function love.update(dt)

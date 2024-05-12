@@ -99,10 +99,11 @@ local function getActionButton(layout, action)
     return nil
 end
 
-Game.new = function(level_info)
+Game.new = function(level_info, player)
     -- love.math.setRandomSeed(5)
 
-    local player = EntityFactory.create('pc' .. lrandom(1, 4))
+    if not player then player = EntityFactory.create('pc' .. lrandom(1, 4)) end
+
     local status_panel = StatusPanel(player)
 
     local backpack = player:getComponent(Backpack)
