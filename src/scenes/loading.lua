@@ -5,98 +5,76 @@
 
 local mfloor, mmax = math.floor, math.max
 
-local MINIMUM_LOAD_DURATION = 0.5
-
 local Loading = {}
 
-local function registerQuadsByKey(key, size, ox, oy, fn)
-    local image = TextureCache:get(key)
-    local quads = QuadGenerator.generate(image, size, size, ox, oy)
-    if fn then fn(quads) end
-    QuadCache:register(key, quads)    
-end
+local MINIMUM_LOAD_DURATION = 0.5
 
-local function registerBorderQuads()
-    local image = TextureCache:get('border')
-
-    local quads = {}
-
-    for _, quad in ipairs(QuadGenerator.generate(image, 16, 16, 0, 0, 48, 32)) do
-        table.insert(quads, quad)
-    end
-
-    for _, quad in ipairs(QuadGenerator.generate(image, 16, 16, 56, 0)) do
-        table.insert(quads, quad)
-    end
-
-    QuadCache:register('border', quads)
-end
-
-local function registerInterfaceQuads()
-    local key = 'uf_interface'
-    local image = TextureCache:get(key)
-    local image_w, image_h = image:getDimensions()
-
-    local quads = {}
-
-    for _, quad in ipairs(QuadGenerator.generate(image, 8, 8, 584, 8, 264, 30)) do
-        table.insert(quads, quad)
-    end
-
-    for _, quad in ipairs(QuadGenerator.generate(image, 24, 24, 584, 64)) do
-        table.insert(quads, quad)
-    end
-
-    for _, quad in ipairs(QuadGenerator.generate(image, 28, 5, 481, 29, 28, 60)) do
-        table.insert(quads, quad)
-    end
-
-    for _, quad in ipairs(QuadGenerator.generate(image, 16, 16, 480, 256, 96, 144)) do
-        table.insert(quads, quad)
-    end
-
-    -- UI: gray, blue, brown
-    for _, x in ipairs({ 8, 168, 328 }) do
-
-        -- health, mana, energy bars
-        for _, y in ipairs({ 10, 26 }) do
-            for _, quad in ipairs(QuadGenerator.generate(image, 48, 12, x, y, 96, 12)) do
-                table.insert(quads, quad)
-            end
-        end
-
+local ASSETS = {
+    ['uf_skills'] = {
+        { 24, 24 },
+    },
+    ['uf_fx'] = {
+        { 24, 24 },
+    },
+    ['projectiles'] = {
+        { 24, 24 },
+    },
+    ['uf_terrain'] = {
+        { 48, 48 }, 
+    },
+    ['uf_heroes'] = {
+        { 48, 48 }, 
+    },
+    ['uf_items'] = {
+        { 48, 48 }, 
+    },
+    ['uf_fx_impact'] = {
+        { 48, 48 }, 
+    },
+    ['actionbar'] = {
+        { 48, 48 }, 
+    },
+    ['uf_portraits'] = {
+        { 50, 50 },
+    },
+    ['border'] = {
+        { 16, 16,  0, 0, 48, 32 },
+        { 16, 16, 56, 0         },
+    },
+    ['uf_interface'] = {
+        {  8,   8, 584,   8, 264,  30 },
+        { 24,  24, 584,  64           },
+        { 28,   5, 481,  29,  28,  60 },
+        { 16,  16, 480, 256,  96, 144 },
+        -- health, mana & energy bars
+        { 48,  12,   8,  10,  96,  12 },
+        { 48,  12,   8,  26,  96,  12 },
+        { 48,  12, 168,  10,  96,  12 },
+        { 48,  12, 168,  26,  96,  12 },
+        { 48,  12, 328,  10,  96,  12 },
+        { 48,  12, 328,  26,  96,  12 },
         -- panels
-        for y = 56, 136, 16 do
-            for _, quad in ipairs(QuadGenerator.generate(image, 16, 16, x, y, 48, 16)) do
-                table.insert(quads, quad)
-            end
-
-            for _, quad in ipairs(QuadGenerator.generate(image, 8, 16, x + 48, y, 8, 16)) do
-                table.insert(quads, quad)
-            end
-
-            for _, quad in ipairs(QuadGenerator.generate(image, 16, 16, x + 56, y, 16, 16)) do
-                table.insert(quads, quad)
-            end
-        end
-
+        { 16,  16,   8,  56,  48,  16 },
+        {  8,  16,  56,  56,   8,  16 },
+        { 16,  16,  64,  56,  16,  16 },
+        { 16,  16,   8,  72,  48,  16 },
+        {  8,  16,  56,  72,   8,  16 },
+        { 16,  16,  64,  72,  16,  16 },
+        { 16,  16,   8,  88,  48,  16 },
+        {  8,  16,  56,  88,   8,  16 },
+        { 16,  16,  64,  88,  16,  16 },
+        { 16,  16,   8, 104,  48,  16 },
+        {  8,  16,  56, 104,   8,  16 },
+        { 16,  16,  64, 104,  16,  16 },
+        { 16,  16,   8, 120,  48,  16 },
+        {  8,  16,  56, 120,   8,  16 },
+        { 16,  16,  64, 120,  16,  16 },
         -- buttons
-        for y = 176, 224, 16 do
-            for _, quad in ipairs(QuadGenerator.generate(image, 16, 16, x, y, 16 * 9, 16)) do
-                table.insert(quads, quad)
-            end
-        end
-    end
-
-    QuadCache:register(key, quads)
-end
-
-local function registerSkillsQuads()
-    local key = 'uf_skills'
-    local image = TextureCache:get(key)
-    local quads = QuadGenerator.generate(image, 24, 24, 584, 64)
-    QuadCache:register(key, quads)
-end
+        { 16,  16,   8, 176, 144,  16 },
+        { 16,  16,   8, 192, 144,  16 },
+        { 16,  16,   8, 208, 144,  16 },
+    },
+}
 
 local function loadLevels()
     local levels_dir = 'gen/levels'
@@ -140,56 +118,28 @@ local function loadEntities()
     end
 end
 
-local function loadGraphics()
-    local gfx_dir = 'gfx'
-    files = love.filesystem.getDirectoryItems(gfx_dir)
-    for _, file in ipairs(files) do
-        if PathHelper.getExtension(file) ~= '.png' then goto continue end 
+local function loadGraphics(type)
+    local path = 'gfx/' .. type .. '.png'
+    -- TODO: check if file exists
 
-        local key = PathHelper.getFilename(file)
+    local image = love.graphics.newImage(path)
+    image:setFilter('nearest', 'nearest')
+    TextureCache:register(type, image)
 
-        local image = love.graphics.newImage(gfx_dir .. '/' .. file)
-        image:setFilter('nearest', 'nearest')
-        TextureCache:register(key, image)
-
-        ::continue::
-    end
-end
-
-local function registerQuads()
-    for _, key in ipairs({ 'uf_terrain', 'uf_heroes', 'uf_items', 'uf_fx_impact', 'actionbar' }) do
-        registerQuadsByKey(key, 48)
-    end
-
-    for _, key in ipairs({ 'uf_fx', 'projectiles' }) do
-        registerQuadsByKey(key, 24)
-    end
-
-    registerQuadsByKey('uf_portraits', 50, 1, 1, function(quads) 
-        for _, quad in ipairs(quads) do
-            -- adjust viewport from 50 x 50 to 48 x 48
-            local x, y, w, h = quad:getViewport()
-            quad:setViewport(x + 1, y + 1, w - 2, h - 2)
+    local quads = {}
+    local quads_list = ASSETS[type]
+    for _, quads_item in ipairs(quads_list) do
+        for _, quad in ipairs(QuadGenerator.generate(image, unpack(quads_item))) do
+            table.insert(quads, quad)
         end
-    end)
+    end
 
-    registerQuadsByKey('uf_skills', 24, 584, 64)
-
-    registerInterfaceQuads()
-
-    registerBorderQuads()
+    QuadCache:register(type, quads)
 end
 
-Loading.new = function(T, opts)
+Loading.new = function(T)
     local background = love.graphics.newImage('gfx/loading.png')
     local background_w, background_h = background:getDimensions()
-
-    if not opts then
-        opts = {
-            ['game'] = true,
-            ['ui']   = true,
-        }        
-    end
 
     local text = 'LOADING'
     local text_h = FONT:getHeight()
@@ -204,26 +154,23 @@ Loading.new = function(T, opts)
 
     -- load assets in this order and show appropriate message
     local runners = {
-        { Runner(loadGraphics),             'load graphics'     },
-        { Runner(registerQuads),            'register quads'    },
+        { Runner(function() loadGraphics('uf_terrain') end),    'load terrain'          },
+        { Runner(function() loadGraphics('uf_heroes') end),     'load heroes'           },
+        { Runner(function() loadGraphics('uf_items') end),      'load items'            },
+        { Runner(function() loadGraphics('uf_fx_impact') end),  'load impact effects'   },
+        { Runner(function() loadGraphics('uf_skills') end),     'load skills'           },
+        { Runner(function() loadGraphics('actionbar') end),     'load action bar icons' },
+        { Runner(function() loadGraphics('uf_fx') end),         'load effects'          },
+        { Runner(function() loadGraphics('projectiles') end),   'load projectiles'      },
+        { Runner(function() loadGraphics('border') end),        'load border'           },
+        { Runner(function() loadGraphics('uf_interface') end),  'load interface'        },
+        { Runner(function() loadGraphics('uf_portraits') end),  'load portraits'        },
         -- TODO: cleaner if we can load health bar as part of graphics, but needs to know quads
-        { Runner(HealthBar.preload),        'load health bar'   }, 
-        { Runner(loadShaders),              'load shaders'      },
-        { Runner(loadEntities),             'load entities'     },
-        { Runner(loadLevels, onLoadLevels), 'load levels'       },
+        { Runner(HealthBar.preload),                            'load health bar'       }, 
+        { Runner(loadEntities),                                 'load entities'         },
+        { Runner(loadLevels, onLoadLevels),                     'load levels'           },
+        { Runner(loadShaders),                                  'load shaders'          },
     }
-
-    if opts['game'] then
-        table.insert(runners, { Runner(loadGraphics), 'load graphics' })
-        table.insert(runners, { Runner(registerQuads), 'register quads' })
-        table.insert(runners, { Runner(HealthBar.preload), 'load health bar' })
-        table.insert(runners, { Runner(loadShaders), 'load shaders' })
-        table.insert(runners, { Runner(loadLevels, onLoadLevels), 'load levels' })
-    end
-
-    if opts['ui'] then
-    end
-
 
     local runner, message, message_x = nil, nil, 0
 

@@ -10,8 +10,8 @@ local ResourceBar = {}
 local SEGMENT_COUNT = 20
 
 local QUAD_INFO = TableHelper.readOnly({
-    ['health'] = { 390, 392 },
-    ['energy'] = { 460, 462 },
+    ['health'] = { 324, 326 },
+    ['energy'] = { 328, 330 },
 })
 
 local function generateBarTexture(texture, empty_quad, filled_quad, value)
