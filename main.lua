@@ -49,7 +49,7 @@ function love.load(args)
 
     GamestateHelper.fixGamestatePushPop()
 
-    Gamestate.switch(Loading(Game))
+    Gamestate.switch(Loading(MainMenu, 'ui'))
 end
 
 function love.update(dt)

@@ -9,7 +9,7 @@ local function onSettings()
 end
 
 local function onNewGame()
-    Gamestate.switch(Loading(NewPlayer)) 
+    Gamestate.switch(NewPlayer())
 end
 
 local function onContinue()
@@ -22,9 +22,11 @@ MainMenu.new = function()
     local layout = tidy.HStack({
         UI.makeFlexSpace(),
         tidy.VStack(tidy.Spacing(10), {
+            UI.makeFlexSpace(),
             UI.makeButton(onNewGame, generateTextButtonTexture('NEW GAME')),
             UI.makeButton(onContinue, generateTextButtonTexture('CONTINUE')),
             UI.makeButton(onSettings, generateTextButtonTexture('SETTINGS')),
+            UI.makeFlexSpace(),
         }),
         UI.makeFlexSpace(),
     }):setFrame(0, 0, WINDOW_W, WINDOW_H)

@@ -58,6 +58,23 @@ local function getStatLine(value, len)
     return padRight(s, len)
 end
 
+local function loadLevels()
+    local levels_dir = 'gen/levels'
+    local dir_path = love.filesystem.getRealDirectory(levels_dir)
+    local files = love.filesystem.getDirectoryItems(levels_dir)
+    local level_data = {}
+    for _, file in ipairs(files) do
+        local filepath = dir_path .. '/' .. levels_dir .. '/' .. file
+        local getContents = assert(loadfile(filepath))
+        table.insert(level_data, getContents())
+    end
+
+    -- sort by level index
+    table.sort(level_data, function(a, b) return a.level < b.level end)
+
+    return level_data
+end
+
 local function generateTextButtonTexture(title)
     return TextureGenerator.generateTextButtonTexture(120, 32, title)
 end
@@ -290,7 +307,8 @@ NewPlayer.new = function(level_info)
             anim = CLASS_ANIM[class_name],
         })
 
-        Gamestate.switch(Game(level_info, player))
+        local level_info = loadLevels()
+        Gamestate.switch(Loading(Game, 'game', level_info, player))
     end
 
     buttons = {

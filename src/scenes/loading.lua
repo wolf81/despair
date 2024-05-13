@@ -76,23 +76,6 @@ local ASSETS = {
     },
 }
 
-local function loadLevels()
-    local levels_dir = 'gen/levels'
-    local dir_path = love.filesystem.getRealDirectory(levels_dir)
-    local files = love.filesystem.getDirectoryItems(levels_dir)
-    local level_data = {}
-    for _, file in ipairs(files) do
-        local filepath = dir_path .. '/' .. levels_dir .. '/' .. file
-        local getContents = assert(loadfile(filepath))
-        table.insert(level_data, getContents())
-    end
-
-    -- sort by level index
-    table.sort(level_data, function(a, b) return a.level < b.level end)
-
-    return level_data
-end
-
 local function loadShaders()
     local shd_dir = 'shd'
     files = love.filesystem.getDirectoryItems(shd_dir)
@@ -118,7 +101,7 @@ local function loadEntities()
     end
 end
 
-local function loadGraphics(type)
+local function loadGraphics(type)     
     local path = 'gfx/' .. type .. '.png'
     -- TODO: check if file exists
 
@@ -137,7 +120,38 @@ local function loadGraphics(type)
     QuadCache:register(type, quads)
 end
 
-Loading.new = function(T)
+local function addGameGraphicsLoaders(runners)
+    table.insert(runners, { Runner(function() loadGraphics('uf_terrain') end),      'load terrain'          })
+    table.insert(runners, { Runner(function() loadGraphics('uf_heroes') end),       'load heroes'           })
+    table.insert(runners, { Runner(function() loadGraphics('uf_items') end),        'load items'            })
+    table.insert(runners, { Runner(function() loadGraphics('uf_fx_impact') end),    'load impact effects'   })
+    table.insert(runners, { Runner(function() loadGraphics('uf_skills') end),       'load skills'           })
+    table.insert(runners, { Runner(function() loadGraphics('uf_fx') end),           'load effects'          })
+    table.insert(runners, { Runner(function() loadGraphics('actionbar') end),       'load action bar icons' })
+    table.insert(runners, { Runner(function() loadGraphics('projectiles') end),     'load projectiles'      })
+end
+
+local function addGameAssetLoaders(runners)
+    table.insert(runners, { Runner(loadEntities),               'load entities' })
+    table.insert(runners, { Runner(loadLevels, onLoadLevels),   'load levels' })
+end
+
+local function addShaderLoaders(runners)
+    table.insert(runners, { Runner(loadShaders), 'load shaders' })
+end
+
+local function addUIGraphicsLoaders(runners)
+    table.insert(runners, { Runner(function() loadGraphics('uf_interface') end),    'load interface'  })
+    table.insert(runners, { Runner(function() loadGraphics('uf_portraits') end),    'load portraits'  })
+    table.insert(runners, { Runner(function() loadGraphics('border') end),          'load border'     })
+    -- TODO: cleaner if we can load health bar as part of graphics, but needs to know quads
+    table.insert(runners, { Runner(HealthBar.preload),                              'load health bar' }) 
+end
+
+Loading.new = function(T, opts, ...)
+    opts = opts or 'all' -- 'ui', 'game', 'none'
+    local args = {...}
+
     local background = love.graphics.newImage('gfx/loading.png')
     local background_w, background_h = background:getDimensions()
 
@@ -148,29 +162,19 @@ Loading.new = function(T)
 
     local time = MINIMUM_LOAD_DURATION
 
-    local level_info = nil
+    local runners = {}
+    
+    if opts == 'ui' or opts == 'all' then
+        addUIGraphicsLoaders(runners)
+    end
 
-    local onLoadLevels = function(level_info_) level_info = level_info_ end
+    if opts == 'game' or opts == 'all' then
+        addGameGraphicsLoaders(runners)
+        addShaderLoaders(runners)
+        addGameAssetLoaders(runners)
+    end
 
     -- load assets in this order and show appropriate message
-    local runners = {
-        { Runner(function() loadGraphics('uf_terrain') end),    'load terrain'          },
-        { Runner(function() loadGraphics('uf_heroes') end),     'load heroes'           },
-        { Runner(function() loadGraphics('uf_items') end),      'load items'            },
-        { Runner(function() loadGraphics('uf_fx_impact') end),  'load impact effects'   },
-        { Runner(function() loadGraphics('uf_skills') end),     'load skills'           },
-        { Runner(function() loadGraphics('actionbar') end),     'load action bar icons' },
-        { Runner(function() loadGraphics('uf_fx') end),         'load effects'          },
-        { Runner(function() loadGraphics('projectiles') end),   'load projectiles'      },
-        { Runner(function() loadGraphics('border') end),        'load border'           },
-        { Runner(function() loadGraphics('uf_interface') end),  'load interface'        },
-        { Runner(function() loadGraphics('uf_portraits') end),  'load portraits'        },
-        -- TODO: cleaner if we can load health bar as part of graphics, but needs to know quads
-        { Runner(HealthBar.preload),                            'load health bar'       }, 
-        { Runner(loadEntities),                                 'load entities'         },
-        { Runner(loadLevels, onLoadLevels),                     'load levels'           },
-        { Runner(loadShaders),                                  'load shaders'          },
-    }
 
     local runner, message, message_x = nil, nil, 0
 
@@ -187,7 +191,7 @@ Loading.new = function(T)
             runner, message = unpack(table.remove(runners, 1))
             message_x = mfloor((WINDOW_W - FONT:getWidth(message)) / 2)
         elseif is_runner_done and #runners == 0 and time == 0 then
-            return Gamestate.switch(T(level_info))
+            return Gamestate.switch(T(unpack(args)))
         end
     end
 
