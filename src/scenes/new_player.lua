@@ -293,6 +293,7 @@ NewPlayer.new = function()
     local function onPlay()
         local class_name = string.lower(class)
         local race_name = string.lower(race)
+        local gender_name = string.lower(gender)
         local player_id = 'pc'
         local portrait_id = portrait.widget:getIdentifier()
 
@@ -300,8 +301,9 @@ NewPlayer.new = function()
             id = player_id,
             type = 'pc',
             name = name,
-            class = class_name,
+            gender = gender_name,
             race = race_name,
+            class = class_name,
             level = 1,
             sight = 60,
             speed = RACE_SPEED[race_name],
