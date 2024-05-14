@@ -1,12 +1,17 @@
+--  Dungeon of Despair
+--
+--  Author: Wolfgang Schreurs
+--  info+despair@wolftrail.net
+
 local Parchment = {}
 
-Parchment.new = function(text)
+Parchment.new = function(text, margin)
     local background = nil
 
     local frame = Rect(0)
 
     local label = UI.makeLabel(text, { 0.0, 0.0, 0.0, 0.7 })
-    local layout = tidy.Border(tidy.Margin(10), {
+    local layout = tidy.Border(tidy.Margin(margin or 10), {
         label,
     })
 
@@ -29,7 +34,6 @@ Parchment.new = function(text)
         frame = Rect(x, y, w, h)
 
         layout:setFrame(x, y, w, h) 
-        for e in layout:eachElement() do e.widget:setFrame(e.rect:unpack()) end
     end
 
     local getFrame = function(self) return frame:unpack() end

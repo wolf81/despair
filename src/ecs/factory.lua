@@ -8,52 +8,15 @@ local M = {}
 local definitions = {}
 local type_info = {}
 
-M.register = function(dir_path, fn)
-    fn = fn or function() end
-    
-    local filenames = love.filesystem.getDirectoryItems(dir_path)
-    local base_path = love.filesystem.getRealDirectory(dir_path)
-    for _, filename in ipairs(filenames) do     
-        if not string.find(filename, '.*%.lua') then goto continue end
+local function createEntity(def, coord)
+    assert(def ~= nil, 'missing argument: "def"')
+    assert(coord ~= nil, 'missing argument: "coord"')
 
-        local filepath = base_path .. '/' .. dir_path .. '/' .. filename
-        print('register: ' .. filepath)
-        local getContents = assert(loadfile(filepath))
-        local definition = getContents()
-
-        assert(definition.id ~= nil, 'id is required')
-        definitions[definition.id] = definition
-
-        assert(definition.type ~= nil, 'type is required')
-        if type_info[definition.type] == nil then
-            type_info[definition.type] = {}
-        end
-        table.insert(type_info[definition.type], definition.id)
-
-        -- if a function is provided, execute on the prototype, this can be 
-        -- useful for preloading data
-        fn(definition)
-
-        ::continue::
-    end 
-end
-
-M.clear = function()
-    definitions = {}
-    type_info = {}
-    id = 0
-end
-
-M.create = function(id, coord)
-    local def = definitions[id]
-
-    assert(id ~= nil, 'missing argument: "id"')
-    
+    local id = def['id']
     print('create: ' .. id .. ' ' .. tostring(coord))
 
-    assert(def ~= nil, 'entity not registered \'' .. id .. '\'')
+    local entity = Entity(def, coord) 
 
-    local entity = Entity(def, coord or vector(0, 0)) 
     entity.flags = M.getFlags(id) 
     -- provice every entity with an Info component, for displaying name and details in UI
     entity:addComponent(Info(entity, def))
@@ -148,6 +111,46 @@ M.create = function(id, coord)
     end
 
     return entity
+end
+
+M.register = function(definition)
+    assert(definition.id ~= nil, 'id is required')
+    assert(definition.type ~= nil, 'type is required')
+
+    definitions[definition.id] = definition
+    if type_info[definition.type] == nil then
+        type_info[definition.type] = {}
+    end
+
+    table.insert(type_info[definition.type], definition.id)
+end
+
+M.clear = function()
+    definitions = {}
+    type_info = {}
+    id = 0
+end
+
+M.create = function(...)
+    local args = {...}
+
+    local arg = args[1]
+    assert(arg ~= nil, 'missing argument: "string" or "table"')
+
+    local def = nil
+
+    local arg_type = type(arg)
+    if arg_type == 'string' then
+        def = definitions[arg]
+    elseif arg_type == 'table' then
+        def = arg
+    else
+        error('invalid argument type: "' .. arg_type .. '"')
+    end
+
+    local coord = #args > 1 and args[2] or vector(0, 0)
+
+    return createEntity(def, coord)
 end
 
 M.getIds = function(type_name)

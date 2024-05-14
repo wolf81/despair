@@ -2,7 +2,7 @@
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
 #                             #
-#  Dungeon of Despair         #
+#     Dungeon of Despair      #
 #                             #
 #  Author: Wolfgang Schreurs  #
 #  info+despair@wolftrail.net #

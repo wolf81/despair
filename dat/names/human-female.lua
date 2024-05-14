@@ -1,0 +1,46 @@
+--  Dungeon of Despair
+--
+--  Author: Wolfgang Schreurs
+--  info+despair@wolftrail.net
+
+return {
+    names = {
+        'Abigail',
+        'Agnes',
+        'Alissa',
+        'Aurelia',
+        'Britta',
+        'Carys',
+        'Cora',
+        'Daire',
+        'Elysia',
+        'Ginerva',
+        'Guinevere',
+        'Ignacia',
+        'Isolde',
+        'Jessalyn',
+        'Joan',
+        'Katriel',
+        'Kessa',
+        'Lessa',
+        'Leira',
+        'Lilith',
+        'Lisbeth',
+        'Lyra',
+        'Maia',
+        'Meira',
+        'Mook',
+        'Margery',
+        'Oleisa',
+        'Orinthea',
+        'Pyralia',
+        'Riona',
+        'Saira',
+        'Tressa',
+        'Tamoko',
+        'Tristana',
+        'Vespera',
+        'Zara',
+    },
+    exclude = {},
+}

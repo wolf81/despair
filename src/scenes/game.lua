@@ -99,10 +99,10 @@ local function getActionButton(layout, action)
     return nil
 end
 
-Game.new = function(level_info)
+Game.new = function(level_info, player_id)
     -- love.math.setRandomSeed(5)
+    local player = EntityFactory.create(player_id or 'pc' .. lrandom(1, 4))
 
-    local player = EntityFactory.create('pc' .. lrandom(1, 4))
     local status_panel = StatusPanel(player)
 
     local backpack = player:getComponent(Backpack)
@@ -111,9 +111,6 @@ Game.new = function(level_info)
     dungeon:enter()
 
     local notify_bar = NotifyBar()
-
-    -- a semi-transparent overlay, used when showing char-sheet, inventory on top ...
-    local overlay = Overlay()
 
     -- handles for observer pattern with Signal, added on enter, removed on leave
     local handles = {}
@@ -145,11 +142,7 @@ Game.new = function(level_info)
                 UI.makeButton('settings'),
             })
         })
-    })
-    layout:setFrame(0, 0, WINDOW_W, WINDOW_H)
-    for e in layout:eachElement() do
-        e.widget:setFrame(e.rect:unpack())
-    end
+    }):setFrame(0, 0, WINDOW_W, WINDOW_H)
 
     local update = function(self, dt) 
         for e in layout:eachElement() do
@@ -166,22 +159,8 @@ Game.new = function(level_info)
 
         if item_bar then item_bar:draw() end
 
-        overlay:draw()
-
         notify_bar:draw()
     end
-
-    local keyReleased = function(self, key, scancode)        
-        if key == 'i' then Signal.emit('inventory') end
-
-        if Gamestate.current() == self and key == 'escape' then
-            love.event.quit()
-        end
-    end
-
-    local showOverlay = function(self) overlay:fadeIn() end
-
-    local hideOverlay = function(self) overlay:fadeOut() end
 
     local onShowItems = function(items, action)
         if #items == 0 then return print('empty item list') end
@@ -303,6 +282,14 @@ Game.new = function(level_info)
         love.mouse.setVisible(true) 
     end
 
+    local keyReleased = function(self, key, scancode)        
+        if key == 'i' then Signal.emit('inventory') end
+
+        if Gamestate.current() == self and key == 'escape' then
+            love.event.quit()
+        end
+    end
+
     -- set initial state for "use" buttons, e.g. enable wand button if we have at least 1 wand
     onInventoryChanged(nil)
 
@@ -315,8 +302,6 @@ Game.new = function(level_info)
         update              = update,
         getDungeon          = getDungeon,
         keyReleased         = keyReleased,
-        showOverlay         = showOverlay,
-        hideOverlay         = hideOverlay,
         mouseReleased       = mouseReleased,
         setActionsEnabled   = setActionsEnabled,
     }, Game)

@@ -29,12 +29,14 @@ Overlay.new = function()
         end)
     end
 
-    local fadeOut = function(self)
+    local fadeOut = function(self, fn)
         if handle then Timer.cancel(handle) end
 
         handle = Timer.tween(FADE_DURATION, background, { alpha = 0.0 }, 'linear', function()
             background.alpha = 0.0
             handle = nil
+
+            if fn then fn() end
         end)
     end
 

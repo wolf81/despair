@@ -22,7 +22,9 @@ ImageButton.new = function(image, action, ...)
         local mx, my = love.mouse.getPosition()
         is_highlighted = frame:contains(mx / UI_SCALE, my / UI_SCALE)
 
-        if is_highlighted and is_pressed and (not love.mouse.isDown(1)) then
+        if is_highlighted and is_pressed and not love.mouse.isDown(1) then
+            is_pressed = false
+            
             if action then
                 local action_type = type(action)
                 if action_type == 'string' then
@@ -41,15 +43,15 @@ ImageButton.new = function(image, action, ...)
     local draw = function(self)
         local x, y, w, h = frame:unpack()
 
-        love.graphics.setColor(1.0, 1.0, 1.0, is_enabled and 1.0 or 0.8)
+        love.graphics.setColor(1.0, 1.0, 1.0, is_enabled and 1.0 or 0.5)
 
-        if is_highlighted then
-            love.graphics.setColor(0.4, 0.9, 0.8, 1.0)
+        if is_enabled and is_highlighted then
+            love.graphics.setColor(0.5, 1.0, 0.9, 1.0)
         end
 
         local image_w, image_h = image:getDimensions()
 
-        love.graphics.draw(image, x - 1, y - 1)
+        love.graphics.draw(image, x, y)
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
     end
 

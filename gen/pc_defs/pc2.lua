@@ -4,7 +4,7 @@ return {
 	name = 'Morris',
 	class = 'rogue',
 	race = 'human',
-	level = 2,
+	level = 1,
 	sight = 60,
 	speed = 30,
 	str = 12,

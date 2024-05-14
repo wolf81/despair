@@ -19,21 +19,7 @@ WINDOW_H            = 450
 UI_SCALE            = 1.0
 
 STATUS_PANEL_W      = 48 * 3 -- equal to the size of 3 action buttons
-ACTION_BAR_H        = 50
-
-CLASSES = TableHelper.readOnly({
-    ['fighter']     = true,
-    ['cleric']      = true,
-    ['rogue']       = true,
-    ['mage']        = true,
-})
-
-RACES = TableHelper.readOnly({
-    ['halfling']    = true,
-    ['human']       = true,
-    ['dwarf']       = true,
-    ['elf']         = true,
-})
+ACTION_BAR_H        = 48
 
 FONT = love.graphics.newImageFont('gfx/image_font.png', 
     '1234567890!#$%&*()-+=[]:;"\'<' ..

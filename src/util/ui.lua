@@ -22,10 +22,15 @@ M.makeView = function(view, ...)
     return tidy.Elem(view, ...)
 end
 
-M.makeLabel = function(text, color)
-    local label = Label(text, color or { 1.0, 1.0, 1.0, 1.0 })
-    local w, h = label:getSize()
-    return tidy.Elem(label, tidy.MinSize(w, h), tidy.Stretch(1, 0))
+M.makeLabel = function(text, color, align, valign)
+    local label = Label(text, color or { 1.0, 1.0, 1.0, 1.0 }, align or 'left', valign or 'start')
+    local stretch = valign == 'start' and tidy.Stretch(1, 0) or tidy.Stretch(1)
+    return tidy.Elem(label, tidy.MinSize(label:getSize()), stretch)
+end
+
+M.makeChooser = function(fn, ...)
+    local chooser = Chooser(fn, ...)
+    return tidy.Elem(chooser, tidy.Stretch(1))
 end
 
 M.makeResourceBar = function(entity, type)
@@ -35,7 +40,6 @@ M.makeResourceBar = function(entity, type)
 end
 
 M.makeChart = function(cartographer)
-    -- local chart = cartographer:getChart()
     local w, h = cartographer:getSize()
     return tidy.Elem(cartographer, tidy.MinSize(w, h), tidy.Stretch(1, 0))
 end
@@ -62,8 +66,20 @@ M.makeItemContainer = function(key)
     return tidy.Elem(item_container, tidy.MinSize(w, h), tidy.Stretch(0))
 end
 
-M.makeParchment = function(text)
-    return tidy.Elem(Parchment(text), tidy.Stretch(1))
+M.makeParchment = function(text, margin)
+    return tidy.Elem(Parchment(text, margin), tidy.Stretch(1))
+end
+
+M.makeTextfield = function()
+    local textfield = Textfield()
+    local w, h = textfield:getSize()
+    return tidy.Elem(textfield, tidy.MinSize(w, h), tidy.Stretch(1, 0))
+end
+
+M.makePortrait = function(gender, race, class)
+    local portrait = Portrait(gender, race, class)
+    local w, h = portrait:getSize()
+    return tidy.Elem(portrait, tidy.MinSize(w, h), tidy.Stretch(0))
 end
 
 return M

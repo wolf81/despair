@@ -3,10 +3,25 @@
 --  Author: Wolfgang Schreurs
 --  info+despair@wolftrail.net
 
+local mfloor, mmin, mmax = math.floor, math.min, math.max
+
 local Label = {}
 
-Label.new = function(text, color)
-    text = text or ''
+local function getHeight(text)
+    local n_lines = select(2, string.gsub(text, '\n', '\n'))
+    if n_lines > 1 then
+        return n_lines * (FONT:getHeight() * FONT:getLineHeight()) + FONT:getHeight()
+    end
+
+    return FONT:getHeight()
+end
+
+Label.new = function(text, color, halign, valign)
+    local text_info = {
+        text    = text or '',
+        width   = FONT:getWidth(text or ''),
+        height  = getHeight(text or ''),
+    }
 
     local frame = Rect(0)
 
@@ -15,24 +30,49 @@ Label.new = function(text, color)
     local update = function(self, dt) end
 
     local draw = function(self)
-        love.graphics.setColor(unpack(color))
-
         local x, y, w, h = frame:unpack()
-        love.graphics.print(text, x, y)
+        
+        -- valign: 'start', 'center', 'end'
+        local oy = 0
+        if valign == 'end' then
+            oy = mmin(h - text_info.height, w)
+        elseif valign == 'center' then
+            oy = mmax(mfloor((h - text_info.height) / 2), 0)
+        end
+
+        -- halign: 'start', 'center', 'end'
+        local ox = 0
+        if halign == 'end' then
+            ox = mmin(w - text_info.width, w)
+        elseif halign == 'center' then
+            ox = mmax(mfloor((w - text_info.width) / 2), 0)
+        end
+
+        love.graphics.setColor(unpack(color))
+        love.graphics.print(text_info.text, x + ox, y + oy)
     end
 
-    local setFrame = function(self, x, y, w, h) frame = Rect(x, y, w, h) end
+    local setFrame = function(self, x, y, w, h) 
+        frame = Rect(x, y, w, h) 
+    end
 
     local getFrame = function(self) return frame:unpack() end
 
-    local getSize = function(self) return FONT:getWidth(text), FONT:getHeight() end 
+    local getSize = function(self) return text_info.width, text_info.height end 
 
-    local setText = function(self, text_) text = text_ or '' end
+    local setText = function(self, text_) 
+        text_info.text = text_ or ''
+        text_info.width = FONT:getWidth(text_ or '')
+        text_info.height = getHeight(text_ or '')
+    end
+
+    local getText = function(self) return text_info.text or '' end
     
     return setmetatable({
         -- methods
         draw        = draw,
         update      = update,
+        getText     = getText,
         setText     = setText,
         getSize     = getSize,
         setFrame    = setFrame,

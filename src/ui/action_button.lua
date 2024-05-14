@@ -50,9 +50,15 @@ ActionButton.new = function(action, ...)
         local mx, my = love.mouse.getPosition()
         is_highlighted = is_selected or frame:contains(mx / UI_SCALE, my / UI_SCALE)
 
-        if is_highlighted and is_pressed and (not love.mouse.isDown(1)) then
-            -- TODO: support actions that are functions, in line with ImageButton
-            Signal.emit(action, unpack(args))
+        if is_highlighted and is_pressed and not love.mouse.isDown(1) then
+            is_pressed = false
+            
+            local action_type = type(action)
+            if action_type == 'string' then
+                Signal.emit(action, unpack(args))
+            elseif action_type == 'function' then
+                action(unpack(args))
+            end
         end
 
         is_pressed = is_highlighted and love.mouse.isDown(1)
@@ -70,8 +76,8 @@ ActionButton.new = function(action, ...)
         love.graphics.setColor(1.0, 1.0, 1.0, (is_enabled and 1.0 or DISABLED_ALPHA))
         love.graphics.draw(background, x, y)
 
-        if is_highlighted or is_selected then
-            love.graphics.setColor(0.4, 0.9, 0.8, 1.0)
+        if is_enabled and (is_highlighted or is_selected) then
+            love.graphics.setColor(0.5, 1.0, 0.9, 1.0)
         end
 
         love.graphics.draw(texture, quads[quad_idx], x, y)

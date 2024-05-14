@@ -3,7 +3,6 @@
 # FEATURES
 
 * feat: Prevent stairs from being hidden under fog of war
-* feat: Generate monsters randomly just outside visible area of player
 * feat: Implement level saving and loading
 * feat: Improve variety of textures in dungeon
 * feat: Implement magic missile spell
@@ -14,6 +13,9 @@
 * feat: setters in components should return self, so builder pattern can be used, see Visual setRotation, setOffset
 * feat: use Dijkstra map distance to stop chase player when out of certain range, expect for creatures with some kind of tracking ability
 * feat: allow sleep if no monsters are nearby, regardless if monsters are still chasing player
+* feat: give all UI components an alpha property to use when drawing, in order to allow for smoother fade-in & fade-out transitions
+* feat: the Textfield UI component should have a focus or hightlight state that shows a cursor
+* feat: the Textfield UI cursor mentioned above should allow for editing text at arbitrary position
 
 ## BUGS 
 
@@ -30,6 +32,7 @@
 
 # DONE
 
+* feat: Generate monsters randomly just outside visible area of player
 * feat: Implement sleep & health recovery over sleep, remove automatic health recovery
 * feat: Implement dual-wield attacks
 * feat: consuming a potion should assign a "use" action to player

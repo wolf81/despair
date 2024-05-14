@@ -12,14 +12,24 @@ local CharSheet = {}
 local function getStatLine(stats, stat)
     local value = stats:getValue(stat)
     local bonus = stats:getBonus(stat)
-    return value .. ' (' .. (bonus < 0 and ('-' .. bonus) or ('+' .. bonus)) .. ')'
+    return value .. ' (' .. (bonus < 0 and bonus or ('+' .. bonus)) .. ')'
+end
+
+local getArmorBonusText = function(bonus)
+    if bonus < 0 then return tostring(bonus) else return '+' .. tostring(bonus) end
 end
 
 local getAttBonusText = function(weapons, offense)
     local s = ''
 
     for idx, weapon in ipairs(weapons) do
-        s = s .. '+' .. offense:getAttackBonus(weapon, #weapons == 2)
+        local attack_bonus = offense:getAttackBonus(weapon, #weapons == 2)
+        if attack_bonus < 0 then 
+            s = s .. tostring(attack_bonus)
+        else 
+            s = s .. '+' .. tostring(attack_bonus) 
+        end
+
         if idx < #weapons then
             s = s .. ' / '
         end
@@ -32,7 +42,13 @@ local getDmgBonusText = function(weapons, offense)
     local s = ''
 
     for idx, weapon in ipairs(weapons) do
-        s = s .. '+' .. offense:getDamageBonus(weapon, #weapons == 2)
+        local damage_bonus = offense:getDamageBonus(weapon, #weapons == 2)
+        if damage_bonus < 0 then
+            s = s .. tostring(damage_bonus)
+        else
+            s = s .. '+' .. tostring(damage_bonus)
+        end
+
         if idx < #weapons then
             s = s .. ' / '
         end
@@ -42,7 +58,7 @@ local getDmgBonusText = function(weapons, offense)
 end
 
 CharSheet.new = function(player)
-    local background = TextureGenerator.generateParchmentTexture(460, 300)
+    local background = TextureGenerator.generateParchmentTexture(460, 304)
     local background_w, background_h = background:getDimensions()
     local background_x = mfloor((WINDOW_W - background_w - STATUS_PANEL_W) / 2)
     local background_y = mfloor((WINDOW_H - background_h - ACTION_BAR_H) / 2)
@@ -66,8 +82,10 @@ CharSheet.new = function(player)
 
     local hp, hp_total = health:getValue()
 
+    local overlay = Overlay()
+
     local exp, exp_goal = class:getExp()
-    local left_text = StringHelper.concat({ 
+    local left_text = table.concat({ 
         name,
         StringHelper.capitalize(race:getRaceName()) .. ' ' .. StringHelper.capitalize(class:getClassName()) .. ' level ' .. class:getLevel(),
         '',
@@ -84,13 +102,14 @@ CharSheet.new = function(player)
         'subterfuge:    ' .. padRight(tostring(skills:getValue('subt')), STR_PAD),
         'knowledge:     ' .. padRight(tostring(skills:getValue('know')), STR_PAD),
         'communication: ' .. padRight(tostring(skills:getValue('comm')), STR_PAD),
+        'survival:      ' .. padRight(tostring(skills:getValue('surv')), STR_PAD),
     }, '\n')
 
-    local right_text = StringHelper.concat({
+    local right_text = table.concat({
         'COMBAT',
         'Attack bonus:  ' .. padRight(getAttBonusText(equip:getWeapons(), offense), STR_PAD),
         'Damage bonus:  ' .. padRight(getDmgBonusText(equip:getWeapons(), offense), STR_PAD),
-        'Armor bonus:   ' .. padRight('+' .. tostring(defense:getArmorBonus()), STR_PAD),
+        'Armor bonus:   ' .. padRight(getArmorBonusText(defense:getArmorBonus()), STR_PAD),
         '',
         'SAVES',
         'fortitude:     ' .. padRight(tostring(skills:getValue('phys') + stats:getBonus('str')), STR_PAD),
@@ -113,11 +132,7 @@ CharSheet.new = function(player)
                 UI.makeLabel(right_text, textColor),
             })            
         }),
-    })    
-    layout:setFrame(frame:unpack())
-    for e in layout:eachElement() do
-        e.widget:setFrame(e.rect:unpack())
-    end
+    }):setFrame(frame:unpack())
 
     local update = function(self, dt) 
         for e in layout:eachElement() do e.widget:update(dt) end
@@ -125,6 +140,8 @@ CharSheet.new = function(player)
 
     local draw = function(self)
         game:draw()
+
+        overlay:draw()
 
         local x, y = frame:unpack()
 
@@ -138,23 +155,23 @@ CharSheet.new = function(player)
         assert(getmetatable(from) == Game, 'invalid argument for "from", expected: "Game"')
         
         game = from
-        game:showOverlay()
+
+        overlay:fadeIn()
     end
 
     local leave = function(self, to)
-        game:hideOverlay()
         game = nil
     end
 
     local keyReleased = function(self, key, scancode)
         if Gamestate.current() == self and key == 'escape' then
-            Gamestate.pop()
+            overlay:fadeOut(Gamestate.pop)
         end
     end
 
     local mouseReleased = function(self, mx, my, button, istouch, presses)
         if Gamestate.current() == self and not frame:contains(mx, my) then
-            Gamestate.pop()
+            overlay:fadeOut(Gamestate.pop)
         end
     end
 

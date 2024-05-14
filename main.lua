@@ -11,7 +11,7 @@ require 'constants'
 local function trySetCursor()
     if not love.mouse.isCursorSupported() then return end
 
-    local cursor = love.mouse.newCursor('gfx/pointer.png', 6, 6)
+    local cursor = love.mouse.newCursor('gfx/pointer.png', 1, 1)
     love.mouse.setCursor(cursor)
 end
 
@@ -49,7 +49,7 @@ function love.load(args)
 
     GamestateHelper.fixGamestatePushPop()
 
-    Gamestate.switch(Loading())
+    Gamestate.switch(Loading(MainMenu, 'ui'))
 end
 
 function love.update(dt)
@@ -62,6 +62,10 @@ function love.draw()
     love.graphics.scale(UI_SCALE)
     Gamestate.draw()
     love.graphics.pop()
+end
+
+function love.textinput(t)
+    Gamestate.textInput(t)
 end
 
 function love.keypressed(key, scancode, isrepeat)
