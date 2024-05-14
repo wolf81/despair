@@ -207,6 +207,8 @@ Portrait.new = function(gender, race, class)
     end
 
     local getIdentifier = function(self)
+        if is_hidden then return nil end
+        
         local values = {
             string.char(face_idx + ASCII_CHAR_OFFSET),
             string.char(hair_idx + ASCII_CHAR_OFFSET),

@@ -139,7 +139,7 @@ local function getName(gender, race)
     return name
 end
 
-NewPlayer.new = function(level_info)
+NewPlayer.new = function()
     local image = TextureGenerator.generatePanelTexture(120, 48)
 
     local lines = {}
@@ -366,7 +366,7 @@ NewPlayer.new = function(level_info)
             char_buttons[5].widget:setEnabled(stats ~= nil)
             char_buttons[6].widget:setEnabled(skills ~= nil)
             char_buttons[7].widget:setEnabled(name ~= nil)
-            play_button.widget:setEnabled(portrait ~= nil)
+            play_button.widget:setEnabled(portrait.widget:getIdentifier() ~= nil)
 
             local lines = {}
             if name then 
