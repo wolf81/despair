@@ -99,10 +99,9 @@ local function getActionButton(layout, action)
     return nil
 end
 
-Game.new = function(level_info, player)
+Game.new = function(level_info, player_id)
     -- love.math.setRandomSeed(5)
-
-    if not player then player = EntityFactory.create('pc' .. lrandom(1, 4)) end
+    local player = EntityFactory.create(player_id or 'pc' .. lrandom(1, 4))
 
     local status_panel = StatusPanel(player)
 

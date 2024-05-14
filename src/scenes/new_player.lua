@@ -144,8 +144,6 @@ NewPlayer.new = function(level_info)
 
     local lines = {}
 
-    local buttons = {}
-
     local parchment = UI.makeParchment('', 20)
 
     local gender, race, class, stats, skills, name, portrait = nil, nil, nil, nil, nil, nil, nil
@@ -281,16 +279,17 @@ NewPlayer.new = function(level_info)
         needs_update = true
     end
 
-    local function onMainMenu()
-        print('navigate back')
+    local function onBack()
+        Gamestate.switch(MainMenu())
     end
 
     local function onPlay()
         local class_name = string.lower(class)
         local race_name = string.lower(race)
+        local player_id = 'pc'
 
-        local player = EntityFactory.create({
-            id = 'pc1',
+        EntityFactory.register({
+            id = player_id,
             type = 'pc',
             name = name,
             class = class_name,
@@ -308,10 +307,10 @@ NewPlayer.new = function(level_info)
         })
 
         local level_info = loadLevels()
-        Gamestate.switch(Loading(Game, 'game', level_info, player))
+        Gamestate.switch(Loading(Game, 'game', level_info, player_id))
     end
-
-    buttons = {
+    
+    local char_buttons = {
         UI.makeButton(onSelectGender, generateTextButtonTexture('GENDER')),
         UI.makeButton(onSelectRace, generateTextButtonTexture('RACE')),
         UI.makeButton(onSelectClass, generateTextButtonTexture('CLASS')),
@@ -323,18 +322,19 @@ NewPlayer.new = function(level_info)
         UI.makeButton(onChooseRandom, generateTextButtonTexture('RANDOM')),
         UI.makeFlexSpace(),
     }
-    for idx = 2, 6 do buttons[idx].widget:setEnabled(false) end
+    local back_button = UI.makeButton(onBack, generateTextButtonTexture('BACK'))
+    local play_button = UI.makeButton(onPlay, generateTextButtonTexture('PLAY'))
 
     local layout = tidy.Border(tidy.Margin(200, 10, 200, 10), {
         tidy.VStack(tidy.Spacing(10), {
             tidy.HStack(tidy.Spacing(10), tidy.Stretch(1), {
-                tidy.VStack(tidy.MinSize(0, 120), tidy.Spacing(2), buttons),
+                tidy.VStack(tidy.MinSize(0, 120), tidy.Spacing(2), char_buttons),
                 parchment,
             }),
             tidy.HStack({
-                UI.makeButton(onMainMenu, generateTextButtonTexture('MAIN MENU')),
+                back_button,
                 UI.makeFlexSpace(),
-                UI.makeButton(onPlay, generateTextButtonTexture('PLAY')),
+                play_button,
             }),
         }),
     }):setFrame(0, 0, WINDOW_W, WINDOW_H)
@@ -355,12 +355,13 @@ NewPlayer.new = function(level_info)
 
     local update = function(self, dt)
         if needs_update then
-            buttons[2].widget:setEnabled(gender ~= nil)
-            buttons[3].widget:setEnabled(race ~= nil)
-            buttons[4].widget:setEnabled(class ~= nil)
-            buttons[5].widget:setEnabled(stats ~= nil)
-            buttons[6].widget:setEnabled(skills ~= nil)
-            buttons[7].widget:setEnabled(name ~= nil)
+            char_buttons[2].widget:setEnabled(gender ~= nil)
+            char_buttons[3].widget:setEnabled(race ~= nil)
+            char_buttons[4].widget:setEnabled(class ~= nil)
+            char_buttons[5].widget:setEnabled(stats ~= nil)
+            char_buttons[6].widget:setEnabled(skills ~= nil)
+            char_buttons[7].widget:setEnabled(name ~= nil)
+            play_button.widget:setEnabled(portrait ~= nil)
 
             local lines = {}
             if name then 
@@ -417,6 +418,10 @@ NewPlayer.new = function(level_info)
             love.event.quit()
         end
     end
+
+    -- configure initial state
+    for idx = 2, 6 do char_buttons[idx].widget:setEnabled(false) end
+    play_button.widget:setEnabled(false)
 
     return setmetatable({
         -- methods

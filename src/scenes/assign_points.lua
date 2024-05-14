@@ -82,8 +82,8 @@ AssignPoints.new = function(title, fn, points_info, remaining)
             tidy.HStack(tidy.Spacing(4), {
                 value_labels[idx],
                 UI.makeFixedSpace(2, 0),
-                UI.makeButton(function() decrementValue(idx) end, generateImageButtonTexture(377)),
-                UI.makeButton(function() incrementValue(idx) end, generateImageButtonTexture(376)),
+                UI.makeButton(function() decrementValue(idx) end, generateImageButtonTexture(380)),
+                UI.makeButton(function() incrementValue(idx) end, generateImageButtonTexture(379)),
             }),
         }))
     end

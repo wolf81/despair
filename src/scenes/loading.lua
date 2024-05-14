@@ -96,7 +96,21 @@ local function loadEntities()
     for _, dir in ipairs(dirs) do
         -- by convention, all /entity/ directory names end in 'defs' 
         if StringHelper.endsWith(dir, 'defs') then
-            EntityFactory.register(data_dir .. '/' .. dir)
+            local dir_path = data_dir .. '/' .. dir
+
+            local filenames = love.filesystem.getDirectoryItems(dir_path)
+            local base_path = love.filesystem.getRealDirectory(dir_path)
+            for _, filename in ipairs(filenames) do     
+                if not string.find(filename, '.*%.lua') then goto continue end
+
+                local filepath = base_path .. '/' .. dir_path .. '/' .. filename
+                local getContents = assert(loadfile(filepath))
+                local definition = getContents()
+
+                EntityFactory.register(definition)
+
+                ::continue::
+            end 
         end
     end
 end

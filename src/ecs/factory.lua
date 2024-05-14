@@ -113,34 +113,16 @@ local function createEntity(def, coord)
     return entity
 end
 
-M.register = function(dir_path, fn)
-    fn = fn or function() end
-    
-    local filenames = love.filesystem.getDirectoryItems(dir_path)
-    local base_path = love.filesystem.getRealDirectory(dir_path)
-    for _, filename in ipairs(filenames) do     
-        if not string.find(filename, '.*%.lua') then goto continue end
+M.register = function(definition)
+    assert(definition.id ~= nil, 'id is required')
+    assert(definition.type ~= nil, 'type is required')
 
-        local filepath = base_path .. '/' .. dir_path .. '/' .. filename
-        print('register: ' .. filepath)
-        local getContents = assert(loadfile(filepath))
-        local definition = getContents()
+    definitions[definition.id] = definition
+    if type_info[definition.type] == nil then
+        type_info[definition.type] = {}
+    end
 
-        assert(definition.id ~= nil, 'id is required')
-        definitions[definition.id] = definition
-
-        assert(definition.type ~= nil, 'type is required')
-        if type_info[definition.type] == nil then
-            type_info[definition.type] = {}
-        end
-        table.insert(type_info[definition.type], definition.id)
-
-        -- if a function is provided, execute on the prototype, this can be 
-        -- useful for preloading data
-        fn(definition)
-
-        ::continue::
-    end 
+    table.insert(type_info[definition.type], definition.id)
 end
 
 M.clear = function()
