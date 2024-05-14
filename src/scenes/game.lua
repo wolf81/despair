@@ -117,7 +117,7 @@ Game.new = function(level_info, player_id)
 
     local item_bar = nil
 
-    local portrait = PortraitGenerator.generate(player)
+    local portrait = player:getComponent(PC):getPortrait():getImage()
     local portrait_w = portrait:getDimensions()
 
     local HALF_W = mfloor((WINDOW_W - STATUS_PANEL_W - portrait_w) / 2)
@@ -228,6 +228,7 @@ Game.new = function(level_info, player_id)
     end
 
     local onLevelUp = function(entity)
+        -- TODO: handle showing '+' icon in Portrait class, remove PortraitGenerator
         char_sheet_button.widget:setImage(PortraitGenerator.generate(entity))
     end
 

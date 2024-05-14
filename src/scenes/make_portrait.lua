@@ -30,7 +30,7 @@ MakePortrait.new = function(gender, race, class, fn)
     local dismiss = function() overlay:fadeOut(Gamestate.pop) end
 
     local confirm = function() 
-        if fn then fn(portrait.widget:getImage()) end
+        if fn then fn(portrait.widget:getIdentifier()) end
         dismiss()
     end
 
@@ -147,6 +147,10 @@ MakePortrait.new = function(gender, race, class, fn)
 
     local getImage = function(self) return portrait.widget:getImage() end
 
+    local getIdentifier = function(self) return portrait.widget:getIdentifier() end
+
+    local setIdentifier = function(self, id) portrait.widget:setIdentifier(id) end
+
     local keyReleased = function(self, key, scancode)
         if Gamestate.current() == self and key == 'escape' then
             dismiss()
@@ -155,15 +159,17 @@ MakePortrait.new = function(gender, race, class, fn)
 
     return setmetatable({
         -- methods
-        draw        = draw,
-        enter       = enter,
-        leave       = leave,
-        update      = update,
-        random      = random,
-        setFrame    = setFrame,
-        getFrame    = getFrame,
-        getImage    = getImage,
-        keyReleased = keyReleased,
+        draw            = draw,
+        enter           = enter,
+        leave           = leave,
+        update          = update,
+        random          = random,
+        setFrame        = setFrame,
+        getFrame        = getFrame,
+        getImage        = getImage,
+        keyReleased     = keyReleased,
+        getIdentifier   = getIdentifier,
+        setIdentifier   = setIdentifier,
     }, MakePortrait)
 end
 

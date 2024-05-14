@@ -7,6 +7,8 @@ local lrandom = love.math.random
 
 local Portrait = {}
 
+local ASCII_CHAR_OFFSET = 65 -- start at letter 'A'
+
 local FACE_INDICES = {
     ['human-male']      = 61,
     ['human-female']    = 58,
@@ -54,9 +56,7 @@ local ARMOR_INDICES = {
 }
 
 Portrait.new = function(gender, race, class)
-    gender = string.lower(gender or 'male')
-    race = string.lower(race or 'human')
-    class = string.lower(class or 'fighter')
+    local is_hidden = true 
 
     local texture = TextureCache:get('uf_portraits')
     local quads = QuadCache:get('uf_portraits')
@@ -66,16 +66,15 @@ Portrait.new = function(gender, race, class)
 
     local background_quad, border_quad = quads[6], quads[7]
 
-    local accessory_indices = ACCESSORY_INDICES[class]
-    local beard_indices = BEARD_INDICES[gender]
-    local armor_indices = ARMOR_INDICES[class]
-    local hair_indices = HAIR_INDICES[gender]
-    local helm_indices = HELM_INDICES[class]
+    local accessory_indices = nil
+    local beard_indices = nil
+    local armor_indices = nil
+    local hair_indices = nil
+    local helm_indices = nil
 
-    local face_idx = FACE_INDICES[race..'-'..gender]
-    local hair_idx, beard_idx, armor_idx, helm_idx, eyebrows_idx, accessory_idx = 1, 1, 1, 1, 1, 1
+    local face_idx, hair_idx, beard_idx, armor_idx, helm_idx, eyebrows_idx, accessory_idx = 1, 1, 1, 1, 1, 1, 1
 
-    local image = nil
+    local image, angle = nil, 0
 
     local getImage = function()
         local w, h = select(3, frame:unpack())
@@ -85,31 +84,33 @@ Portrait.new = function(gender, race, class)
             love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
             love.graphics.draw(texture, background_quad, x, y, 0)
 
-            love.graphics.draw(texture, quads[face_idx], x, y, 0)
+            if not is_hidden then
+                love.graphics.draw(texture, quads[face_idx], x, y, 0)
 
-            if eyebrows_idx > 1 then
-                love.graphics.draw(texture, quads[EYEBROWS_INDICES[eyebrows_idx]], x, y, 0)
-            end
+                if eyebrows_idx > 1 then
+                    love.graphics.draw(texture, quads[EYEBROWS_INDICES[eyebrows_idx]], x, y, 0)
+                end
 
-            if armor_idx > 1 then
-                love.graphics.draw(texture, quads[armor_indices[armor_idx]], x, y, 0)
-            end
+                if armor_idx > 1 then
+                    love.graphics.draw(texture, quads[armor_indices[armor_idx]], x, y, 0)
+                end
 
-            if beard_idx > 1 then
-                love.graphics.draw(texture, quads[beard_indices[beard_idx]], x, y, 0)
-            end
+                if beard_idx > 1 then
+                    love.graphics.draw(texture, quads[beard_indices[beard_idx]], x, y, 0)
+                end
 
-            if accessory_idx > 1 then
-                love.graphics.draw(texture, quads[accessory_indices[accessory_idx]], x, y, 0)
-            end
+                if accessory_idx > 1 then
+                    love.graphics.draw(texture, quads[accessory_indices[accessory_idx]], x, y, 0)
+                end
 
-            -- don't show hair when wearing head covering
-            if helm_idx == 1 and hair_idx > 1 then
-                love.graphics.draw(texture, quads[hair_indices[hair_idx]], x, y, 0)
-            end
+                -- don't show hair when wearing head covering
+                if helm_idx == 1 and hair_idx > 1 then
+                    love.graphics.draw(texture, quads[hair_indices[hair_idx]], x, y, 0)
+                end
 
-            if helm_idx > 1 then
-                love.graphics.draw(texture, quads[helm_indices[helm_idx]], x, y, 0)
+                if helm_idx > 1 then
+                    love.graphics.draw(texture, quads[helm_indices[helm_idx]], x, y, 0)
+                end                
             end
 
             love.graphics.draw(texture, border_quad, x, y, 0)
@@ -124,7 +125,7 @@ Portrait.new = function(gender, race, class)
         if not image then image = getImage() end
 
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
-        love.graphics.draw(image, x, y)
+        love.graphics.draw(image, x, y, angle)
     end
 
     local update = function(self) end
@@ -205,6 +206,55 @@ Portrait.new = function(gender, race, class)
         image = nil
     end
 
+    local getIdentifier = function(self)
+        local values = {
+            string.char(face_idx + ASCII_CHAR_OFFSET),
+            string.char(hair_idx + ASCII_CHAR_OFFSET),
+            string.char(helm_idx + ASCII_CHAR_OFFSET),
+            string.char(beard_idx + ASCII_CHAR_OFFSET),
+            string.char(armor_idx + ASCII_CHAR_OFFSET),
+            string.char(eyebrows_idx + ASCII_CHAR_OFFSET),
+            string.char(accessory_idx + ASCII_CHAR_OFFSET),
+        }
+        return table.concat(values, '')
+    end
+
+    local setIdentifier = function(self, value)
+        if value then
+            face_idx = string.byte(string.sub(value, 1, 1)) - ASCII_CHAR_OFFSET
+            hair_idx = string.byte(string.sub(value, 2, 2)) - ASCII_CHAR_OFFSET
+            helm_idx = string.byte(string.sub(value, 3, 3)) - ASCII_CHAR_OFFSET
+            beard_idx = string.byte(string.sub(value, 4, 4)) - ASCII_CHAR_OFFSET
+            armor_idx = string.byte(string.sub(value, 5, 5)) - ASCII_CHAR_OFFSET
+            eyebrows_idx = string.byte(string.sub(value, 6, 6)) - ASCII_CHAR_OFFSET
+            accessory_idx = string.byte(string.sub(value, 7, 7)) - ASCII_CHAR_OFFSET
+        end
+
+        is_hidden = (not value)
+
+        image = nil
+    end
+
+    local setRotation = function(self, angle_) angle = angle_ or 0 end
+
+    local configure = function(self, gender, race, class)
+        is_hidden = not (gender or race or class)
+
+        gender = string.lower(gender or 'male')
+        race = string.lower(race or 'human')
+        class = string.lower(class or 'fighter')
+
+        accessory_indices = ACCESSORY_INDICES[class]
+        beard_indices = BEARD_INDICES[gender]
+        armor_indices = ARMOR_INDICES[class]
+        hair_indices = HAIR_INDICES[gender]
+        helm_indices = HELM_INDICES[class]
+
+        face_idx = FACE_INDICES[race..'-'..gender]
+    end
+
+    configure(nil, gender, race, class)
+
     random(nil)
 
     return setmetatable({
@@ -224,10 +274,14 @@ Portrait.new = function(gender, race, class)
         nextBeard       = nextBeard,
         prevArmor       = prevArmor,
         nextArmor       = nextArmor,
+        configure       = configure,
+        setRotation     = setRotation,
         prevEyebrows    = prevEyebrows,
         nextEyebrows    = nextEyebrows,
         prevAccessory   = prevAccessory,
         nextAccessory   = nextAccessory,        
+        getIdentifier   = getIdentifier,
+        setIdentifier   = setIdentifier,
     }, Portrait)
 end
 

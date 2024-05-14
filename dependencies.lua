@@ -124,6 +124,7 @@ Item                = require 'src.components.item'
 Race                = require 'src.components.race'
 Info                = require 'src.components.info'
 NPC                 = require 'src.components.npc'
+PC                  = require 'src.components.pc'
 
 -- resolvers
 CombatResolver      = require 'src.resolvers.combat'
