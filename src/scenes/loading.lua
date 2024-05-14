@@ -134,6 +134,15 @@ local function loadGraphics(type)
     QuadCache:register(type, quads)
 end
 
+local function fixPortraitQuads()
+    local image = TextureCache:get('uf_portraits')
+    local quads = QuadCache:get('uf_portraits')
+    for _, quad in ipairs(quads) do
+        local x, y, w, h = quad:getViewport()
+        quad:setViewport(x + 2, y + 2, w - 2, h - 2)
+    end
+end
+
 local function addGameGraphicsLoaders(runners)
     table.insert(runners, { Runner(function() loadGraphics('uf_terrain') end),      'load terrain'          })
     table.insert(runners, { Runner(function() loadGraphics('uf_heroes') end),       'load heroes'           })
@@ -159,7 +168,8 @@ local function addUIGraphicsLoaders(runners)
     table.insert(runners, { Runner(function() loadGraphics('uf_portraits') end),    'load portraits'  })
     table.insert(runners, { Runner(function() loadGraphics('border') end),          'load border'     })
     -- TODO: cleaner if we can load health bar as part of graphics, but needs to know quads
-    table.insert(runners, { Runner(HealthBar.preload),                              'load health bar' }) 
+    table.insert(runners, { Runner(HealthBar.preload),                              'load health bar' })
+    table.insert(runners, { Runner(function() fixPortraitQuads() end),              'fix portraits'   }) 
 end
 
 Loading.new = function(T, opts, ...)

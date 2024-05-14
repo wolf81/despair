@@ -192,11 +192,11 @@ M.generateContainerTexture = function(w, h)
 
         -- middle
         for y = quad_h, h - quad_h * 2, quad_h do
-            love.graphics.draw(texture, quads[342], 0, y)
+            love.graphics.draw(texture, quads[344], 0, y)
             love.graphics.draw(texture, quads[349], w - quad_w, y)
         end
 
-        love.graphics.draw(texture, quads[342], 0, h - quad_h * 2)
+        love.graphics.draw(texture, quads[344], 0, h - quad_h * 2)
         love.graphics.draw(texture, quads[349], w - quad_w, h - quad_h * 2)
 
         local color_info = ColorHelper.getColors(texture, quads[342], true)[1]
