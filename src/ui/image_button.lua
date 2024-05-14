@@ -5,6 +5,8 @@
 
 local ImageButton = {}
 
+local DISABLED_ALPHA = 0.7
+
 ImageButton.new = function(image, action, ...)
     assert(image ~= nil, 'missing argument: "image"')
 
@@ -43,7 +45,11 @@ ImageButton.new = function(image, action, ...)
     local draw = function(self)
         local x, y, w, h = frame:unpack()
 
-        love.graphics.setColor(1.0, 1.0, 1.0, is_enabled and 1.0 or 0.5)
+        -- add white background behind texture for showing disabled state
+        love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
+        love.graphics.rectangle('fill', x + 1, y + 1, w - 2, h - 2)
+
+        love.graphics.setColor(1.0, 1.0, 1.0, is_enabled and 1.0 or DISABLED_ALPHA)
 
         if is_enabled and is_highlighted then
             love.graphics.setColor(0.5, 1.0, 0.9, 1.0)
