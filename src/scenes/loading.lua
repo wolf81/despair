@@ -7,7 +7,7 @@ local mfloor, mmax = math.floor, math.max
 
 local Loading = {}
 
-local MINIMUM_LOAD_DURATION = 0.5
+local MINIMUM_LOAD_DURATION = 0.1
 
 local ASSETS = {
     ['uf_skills'] = {
