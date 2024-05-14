@@ -206,8 +206,6 @@ NewPlayer.new = function()
                     mind = { value = mind_ },
                 }
                 skills = nil
-                name = nil
-                portrait.widget:setIdentifier(nil)
             end,
             {
                 { key = 'Strength',  value = str.value,  min = str.min,  max = str.max  },                
@@ -230,8 +228,6 @@ NewPlayer.new = function()
                     comm = { value = comm_ }, 
                     surv = { value = surv_ },
                 }
-                name = nil
-                portrait.widget:setIdentifier(nil)
             end,
             {
                 { key = 'Physical',         value = phys.value, min = phys.min, max = phys.max },
@@ -366,8 +362,9 @@ NewPlayer.new = function()
             char_buttons[3].widget:setEnabled(race ~= nil)
             char_buttons[4].widget:setEnabled(class ~= nil)
             char_buttons[5].widget:setEnabled(stats ~= nil)
-            char_buttons[6].widget:setEnabled(skills ~= nil)
+            char_buttons[6].widget:setEnabled(name ~= nil or skills ~= nil)
             char_buttons[7].widget:setEnabled(name ~= nil)
+            portrait.widget:configure(gender, race, class)
             play_button.widget:setEnabled(portrait.widget:getIdentifier() ~= nil)
 
             local lines = {}
