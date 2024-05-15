@@ -127,18 +127,30 @@ Class.new = function(entity, def)
         return false
     end
 
+    local canEquip = function(self, item)
+        if item.type == 'armor' then
+            print(item.kind)
+            if class == 'rogue' then
+                return item.kind == 'light'
+            end
+        end
+
+        return true
+    end
+
     return setmetatable({
         -- methods
-        getDamageBonus  = getDamageBonus,
-        getAttackBonus  = getAttackBonus,
-        getSkillBonus   = getSkillBonus,
-        getClassName    = getClassName,
-        canLevelUp      = canLevelUp,
-        getLevel        = getLevel,
+        getExp          = getExp,
+        addExp          = addExp,
         levelUp         = levelUp,
         isAnyOf         = isAnyOf,
-        addExp          = addExp,
-        getExp          = getExp,
+        getLevel        = getLevel,
+        canEquip        = canEquip,
+        canLevelUp      = canLevelUp,
+        getClassName    = getClassName,
+        getSkillBonus   = getSkillBonus,
+        getDamageBonus  = getDamageBonus,
+        getAttackBonus  = getAttackBonus,
     }, Class)
 end
 

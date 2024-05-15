@@ -21,7 +21,7 @@ MainMenu.new = function()
 
     local layout = tidy.HStack({
         UI.makeFlexSpace(),
-        tidy.VStack(tidy.Spacing(10), {
+        tidy.VStack(tidy.Spacing(2), {
             UI.makeFlexSpace(),
             UI.makeButton(onNewGame, generateTextButtonTexture('NEW GAME')),
             UI.makeButton(onContinue, generateTextButtonTexture('CONTINUE')),

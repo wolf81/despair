@@ -1,14 +1,14 @@
 ID$          |TYPE$ |TEXTURE$ |ANIM@ |KIND$  |NAME$           |AC# |BONUS# |
 
-padded       |armor |uf_items |222   |chest  |padded          |1   |0      |
-leather      |armor |uf_items |222   |chest  |leather         |2   |0      |
-stud_leather |armor |uf_items |223   |chest  |studded leather |3   |0      |
-scale_mail   |armor |uf_items |224   |chest  |scale mail      |4   |0      |
-chain_mail   |armor |uf_items |224   |chest  |chainmail       |5   |0      |
-splint_mail  |armor |uf_items |224   |chest  |splint mail     |6   |0      |
-half_plate   |armor |uf_items |225   |chest  |half plate      |7   |0      |
-full_plate   |armor |uf_items |226   |chest  |full plate      |8   |0      |
-robe         |armor |uf_items |221   |chest  |robe            |1   |0      |
+padded       |armor |uf_items |222   |light  |padded          |1   |0      |
+leather      |armor |uf_items |222   |light  |leather         |2   |0      |
+stud_leather |armor |uf_items |223   |light  |studded leather |3   |0      |
+scale_mail   |armor |uf_items |224   |medium |scale mail      |4   |0      |
+half_plate   |armor |uf_items |225   |medium |half plate      |7   |0      |
+splint_mail  |armor |uf_items |224   |heavy  |splint mail     |6   |0      |
+chain_mail   |armor |uf_items |224   |heavy  |chainmail       |5   |0      |
+full_plate   |armor |uf_items |226   |heavy  |full plate      |8   |0      |
+robe         |armor |uf_items |221   |light  |robe            |1   |0      |
 
 light_shield |armor |uf_items |111   |shield |light shield    |1   |0      |
 heavy_shield |armor |uf_items |112   |shield |heavy shield    |2   |0      |

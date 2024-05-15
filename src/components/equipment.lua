@@ -21,6 +21,10 @@ local SLOTS = TableHelper.readOnly({
     ['ring2']       = true,
 })
 
+local function isChestArmor(item)
+    return item.type == 'armor' and item.kind == 'light' or item.kind == 'medium' or item.kind == 'heavy'
+end 
+
 Equipment.new = function(entity, def)
     local backpack = entity:getComponent(Backpack)
     assert(backpack ~= nil, 'missing component: "Backpack"')
@@ -127,8 +131,14 @@ Equipment.new = function(entity, def)
     local equip = function(self, item)
         if item == nil then return false end
 
+        local class = entity:getComponent(Class)
+        if class then
+            print('check canEquip')
+            if class:canEquip(item) == false then return end
+        end
+
         if item.type == 'armor' then
-            if item.kind == 'chest' then
+            if isChestArmor(item) then
                 self:unequip('chest')
                 equip.chest = item
                 return true
