@@ -132,9 +132,9 @@ Equipment.new = function(entity, def)
         if item == nil then return false end
 
         local class = entity:getComponent(Class)
-        if class then
-            print('check canEquip')
-            if class:canEquip(item) == false then return end
+        if class and not class:canEquip(item) then 
+            Signal.emit('notify', 'Your class can not equip this item.')
+            return false 
         end
 
         if item.type == 'armor' then

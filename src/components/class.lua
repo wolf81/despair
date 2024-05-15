@@ -14,6 +14,33 @@ CLASSES = TableHelper.readOnly({
     ['mage']    = true,
 })
 
+ARMOR_PROFICIENCIES = {
+    ['fighter'] = {
+        ['heavy']  = true,
+        ['medium'] = true,
+        ['light']  = true,
+        ['none']   = true,
+    },
+    ['cleric'] = {
+        ['heavy']  = false,
+        ['medium'] = true,
+        ['light']  = true,
+        ['none']   = true,
+    },
+    ['rogue'] = {
+        ['heavy']  = false,
+        ['medium'] = false,
+        ['light']  = true,
+        ['none']   = true,
+    },
+    ['mage'] = {
+        ['heavy']  = false,
+        ['medium'] = false,
+        ['light']  = false,
+        ['none']   = true,
+    },
+}
+
 Class.new = function(entity, def)
     local class = def['class']
     assert(class ~= nil, 'missing field: "class"')
@@ -129,10 +156,7 @@ Class.new = function(entity, def)
 
     local canEquip = function(self, item)
         if item.type == 'armor' then
-            print(item.kind)
-            if class == 'rogue' then
-                return item.kind == 'light'
-            end
+            return ARMOR_PROFICIENCIES[class][item.kind]
         end
 
         return true
