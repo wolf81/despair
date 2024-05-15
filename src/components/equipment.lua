@@ -22,7 +22,11 @@ local SLOTS = TableHelper.readOnly({
 })
 
 local function isChestArmor(item)
-    return item.type == 'armor' and item.kind == 'light' or item.kind == 'medium' or item.kind == 'heavy'
+    return (item.type == 'armor' and (
+        item.kind == 'light' or 
+        item.kind == 'medium' or 
+        item.kind == 'heavy' or 
+        item.kind == 'none'))
 end 
 
 Equipment.new = function(entity, def)
@@ -172,11 +176,11 @@ Equipment.new = function(entity, def)
                     self:unequip('offhand')
                 end
 
-                if equip.mainhand ~= nil and equip.offhand == nil then
+                if equip.mainhand ~= nil and equip.offhand == nil and class:canDualWield() then
                     equip.offhand = item
                 else
                     self:unequip('mainhand')
-                    equip.mainhand = item                    
+                    equip.mainhand = item
                 end
                 return true
             elseif item.kind == '1h' then

@@ -14,32 +14,36 @@ CLASSES = TableHelper.readOnly({
     ['mage']    = true,
 })
 
-ARMOR_PROFICIENCIES = {
+ARMOR_PROFICIENCIES = TableHelper.readOnly({
     ['fighter'] = {
+        ['shield'] = true,
         ['heavy']  = true,
         ['medium'] = true,
         ['light']  = true,
         ['none']   = true,
     },
     ['cleric'] = {
+        ['shield'] = false,
         ['heavy']  = false,
         ['medium'] = true,
         ['light']  = true,
         ['none']   = true,
     },
     ['rogue'] = {
+        ['shield'] = false,
         ['heavy']  = false,
         ['medium'] = false,
         ['light']  = true,
         ['none']   = true,
     },
     ['mage'] = {
+        ['shield'] = false,
         ['heavy']  = false,
         ['medium'] = false,
         ['light']  = false,
         ['none']   = true,
     },
-}
+})
 
 Class.new = function(entity, def)
     local class = def['class']
@@ -162,6 +166,10 @@ Class.new = function(entity, def)
         return true
     end
 
+    local canDualWield = function(self)
+        return class == 'fighter' or class == 'rogue'
+    end
+
     return setmetatable({
         -- methods
         getExp          = getExp,
@@ -172,6 +180,7 @@ Class.new = function(entity, def)
         canEquip        = canEquip,
         canLevelUp      = canLevelUp,
         getClassName    = getClassName,
+        canDualWield    = canDualWield,
         getSkillBonus   = getSkillBonus,
         getDamageBonus  = getDamageBonus,
         getAttackBonus  = getAttackBonus,
