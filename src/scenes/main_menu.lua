@@ -16,8 +16,10 @@ local function onContinue()
     print('continue') 
 end
 
-MainMenu.new = function()
+MainMenu.new = function(fn)
     local frame = Rect(0)
+
+    if fn then print('exec'); fn() end
 
     local layout = tidy.HStack({
         UI.makeFlexSpace(),

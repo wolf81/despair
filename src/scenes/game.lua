@@ -231,6 +231,7 @@ Game.new = function(level_info, player_id)
         local pc, class = entity:getComponent(PC), entity:getComponent(Class)
         if pc and class then
             pc:getPortrait():setShowLevelUp(class:canLevelUp())
+            char_sheet_button.widget:setImage(pc:getPortrait():getImage())
         end
     end
 

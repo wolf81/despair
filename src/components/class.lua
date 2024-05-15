@@ -107,6 +107,7 @@ Class.new = function(entity, def)
     end
 
     local addExp = function(self, exp_)
+        exp_ = level * 10
         -- if current exp matches goal, no more gain possible, need to increase level first
         if self:canLevelUp() then return end
 

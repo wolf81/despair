@@ -16,7 +16,7 @@ end
 
 local function getCheckImage()
     local texture = TextureCache:get('uf_interface')
-    local quad = QuadCache:get('uf_interface')[381]
+    local quad = QuadCache:get('uf_interface')[384]
     local quad_w, quad_h = select(3, quad:getViewport())
 
     local background = TextureGenerator.generatePanelTexture(24, 24)

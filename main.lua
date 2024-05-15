@@ -33,12 +33,12 @@ function love.load(args)
     -- PLEASE NOTE: for Windows might need to add `--console` as well
     for _, arg in ipairs(args) do
         if arg == '--quadsheet' then
-            return Gamestate.switch(Loading(function() 
+            return Gamestate.switch(Loading(MainMenu, 'all', function() 
                 QuadSheetGenerator.generate()
                 love.event.quit()
             end))
         elseif arg == '--imagefont' then
-            FontSheetGenerator.generate()            
+            FontSheetGenerator.generate()
             love.event.quit()
         end
     end
