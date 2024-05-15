@@ -11,13 +11,13 @@ local function generateTextButtonTexture(title)
     return TextureGenerator.generateTextButtonTexture(80, 32, title)
 end
 
-EnterName.new = function(fn)
+EnterName.new = function(name, fn)
     local background = TextureGenerator.generatePanelTexture(220, 100)
     local background_w, background_h = background:getDimensions()
     local background_x = mfloor((WINDOW_W - background_w) / 2)
     local background_y = mfloor((WINDOW_H - background_h) / 2)
 
-    local textfield = UI.makeTextfield()
+    local textfield = UI.makeTextfield(name)
 
     local frame = Rect(background_x, background_y, background_w, background_h)
 
@@ -30,6 +30,8 @@ EnterName.new = function(fn)
         dismiss()
     end
 
+    local confirm_button = UI.makeButton(confirm, generateTextButtonTexture('OK'))
+
     local layout = tidy.Border(tidy.Margin(10), {
         tidy.VStack(tidy.Spacing(10), tidy.Stretch(1), {
             UI.makeLabel('ENTER NAME', { 1.0, 1.0, 1.0, 1.0 }, 'center', 'start'),
@@ -37,7 +39,7 @@ EnterName.new = function(fn)
             tidy.HStack({
                 UI.makeButton(dismiss, generateTextButtonTexture('Cancel')),
                 UI.makeFlexSpace(),
-                UI.makeButton(confirm, generateTextButtonTexture('OK')),
+                confirm_button,
             }),
         })
     }):setFrame(frame:unpack())
@@ -56,6 +58,8 @@ EnterName.new = function(fn)
 
 	local update = function(self, dt)
         for e in layout:eachElement() do e.widget:update(dt) end
+
+        confirm_button.widget:setEnabled(#textfield.widget:getText() > 0)
 	end
 
 	local enter = function(self, from)
@@ -79,9 +83,7 @@ EnterName.new = function(fn)
         textfield.widget:keyReleased(key, scancode)
     end
 
-    local textInput = function(self, text)
-    	textfield.widget:textInput(text)
-    end
+    local textInput = function(self, text) textfield.widget:textInput(text) end
 
     local setName = function(self, name) textfield.widget:setText(name) end
 

@@ -241,13 +241,7 @@ NewPlayer.new = function()
 
     local function onChangeName()
         print('change name')
-        local enter_name = EnterName(function(name_) 
-            name = name_ 
-            portrait.widget:setIdentifier(nil)
-        end)
-        enter_name:setName(name)
-
-        Gamestate.push(enter_name)
+        Gamestate.push(EnterName(name, function(name_) name = name_ end))
     end
 
     local function onChangePortrait()
