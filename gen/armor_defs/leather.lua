@@ -3,7 +3,7 @@ return {
 	type = 'armor',
 	texture = 'uf_items',
 	anim = { 222 },
-	kind = 'chest',
+	kind = 'light',
 	name = 'leather',
 	ac = 2,
 	bonus = 0,

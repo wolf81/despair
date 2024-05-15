@@ -3,7 +3,7 @@ return {
 	type = 'armor',
 	texture = 'uf_items',
 	anim = { 226 },
-	kind = 'chest',
+	kind = 'heavy',
 	name = 'full plate',
 	ac = 8,
 	bonus = 0,
