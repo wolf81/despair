@@ -19,8 +19,6 @@ end
 MainMenu.new = function(fn)
     local frame = Rect(0)
 
-    if fn then print('exec'); fn() end
-
     local layout = tidy.HStack({
         UI.makeFlexSpace(),
         tidy.VStack(tidy.Spacing(2), {
@@ -55,6 +53,8 @@ MainMenu.new = function(fn)
     local setFrame = function(self, x, y, w, h) frame = Rect(x, y, w, h) end
 
     local getFrame = function(self) return frame:unpack() end
+
+    if fn then fn() end
 
     return setmetatable({
         -- methods
