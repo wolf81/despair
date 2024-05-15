@@ -9,9 +9,13 @@ local LevelUp = {}
 
 local function getFrame(background)
     local w, h = background:getDimensions()
-    local x = (WINDOW_W - w) / 2
-    local y = (WINDOW_H - h) / 2
+    local x = (WINDOW_W - w - STATUS_PANEL_W) / 2
+    local y = (WINDOW_H - h - ACTION_BAR_H) / 2
     return Rect(x, y, w, h)
+end
+
+local function generateTextButtonTexture(title)
+    return TextureGenerator.generateTextButtonTexture(80, 32, title)
 end
 
 local function getCheckImage()
@@ -43,7 +47,7 @@ LevelUp.new = function(player)
 
     local preview = class:levelUp(true)
 
-    local background = TextureGenerator.generateParchmentTexture(220, 160)
+    local background = TextureGenerator.generatePanelTexture(220, 200)
     local frame = getFrame(background)
 
     local overlay = Overlay()
@@ -58,20 +62,23 @@ LevelUp.new = function(player)
     }
 
     if preview.dmg_bonus then
-        table.insert(lines, 'Damage:    ' .. StringHelper.padRight('+' .. tostring(preview.dmg_bonus), STR_PAD))
+        table.insert(lines, 
+            'Damage:    ' .. StringHelper.padRight('+' .. tostring(preview.dmg_bonus), STR_PAD))
     end
 
     local text = table.concat(lines, '\n')
+    local parchment = UI.makeParchment(text)
 
     local handles = {}
 
-    local layout = tidy.Border(tidy.Margin(20), {
-        tidy.VStack({
-            UI.makeLabel(text, { 0.0, 0.0, 0.0, 0.7 }),
-            UI.makeFlexSpace(),
-            tidy.HStack(tidy.MinSize(24), {
+    local layout = tidy.Border(tidy.Margin(10), {
+        tidy.VStack(tidy.Spacing(10), tidy.Stretch(1), {
+            UI.makeLabel('LEVEL UP', { 1.0, 1.0, 1.0, 1.0 }, 'center', 'start'),
+            parchment,
+            tidy.HStack({
+                UI.makeButton('dismiss', generateTextButtonTexture('CLOSE')),
                 UI.makeFlexSpace(),
-                UI.makeButton('accept', getCheckImage())
+                UI.makeButton('accept', generateTextButtonTexture('ACCEPT')),
             }),
         })
     }):setFrame(frame:unpack())

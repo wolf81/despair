@@ -20,7 +20,7 @@ local CLASS_ANIM = {
 
 local CLASS_EQUIP = {
     ['fighter'] = { 'chain_mail', 'light_shield', 'longsword', 'food_1', 'food_1' },
-    ['cleric']  = { 'chain_mail', 'morningstar', 'food_1', 'food_1' },
+    ['cleric']  = { 'scale_mail', 'morningstar', 'food_1', 'food_1' },
     ['rogue']   = { 'stud_leather', 'short_sword', 'short_sword', 'food_1', 'food_1' },
     ['mage']    = { 'robe', 'quarterstaff', 'food_1', 'food_1' },    
 }
