@@ -228,8 +228,10 @@ Game.new = function(level_info, player_id)
     end
 
     local onLevelUp = function(entity)
-        -- TODO: handle showing '+' icon in Portrait class, remove PortraitGenerator
-        char_sheet_button.widget:setImage(PortraitGenerator.generate(entity))
+        local pc, class = entity:getComponent(PC), entity:getComponent(Class)
+        if pc and class then
+            pc:getPortrait():setShowLevelUp(class:canLevelUp())
+        end
     end
 
     local enter = function(self, from)

@@ -9,6 +9,8 @@ local Portrait = {}
 
 local ASCII_CHAR_OFFSET = 65 -- start at letter 'A'
 
+local SPACING = 2
+
 local FACE_INDICES = {
     ['human-male']      = 61,
     ['human-female']    = 58,
@@ -72,9 +74,12 @@ Portrait.new = function(gender, race, class)
     local hair_indices = nil
     local helm_indices = nil
 
-    local face_idx, hair_idx, beard_idx, armor_idx, helm_idx, eyebrows_idx, accessory_idx = 1, 1, 1, 1, 1, 1, 1
+    local face_idx, hair_idx, beard_idx, armor_idx  = 1, 1, 1, 1
+    local helm_idx, eyebrows_idx, accessory_idx     = 1, 1, 1
 
     local image, angle = nil, 0
+
+    local show_level_up = false
 
     local getImage = function()
         local w, h = select(3, frame:unpack())
@@ -110,6 +115,13 @@ Portrait.new = function(gender, race, class)
 
                 if helm_idx > 1 then
                     love.graphics.draw(texture, quads[helm_indices[helm_idx]], x, y, 0)
+                end
+
+                if show_level_up then
+                    local plus_texture = TextureCache:get('uf_interface')
+                    local plus_quad = QuadCache:get('uf_interface')[379]
+                    local plus_w  = select(3, plus_quad:getViewport()) 
+                    love.graphics.draw(plus_texture, plus_quad, w - plus_w - SPACING, SPACING)
                 end                
             end
 
@@ -239,6 +251,11 @@ Portrait.new = function(gender, race, class)
 
     local setRotation = function(self, angle_) angle = angle_ or 0 end
 
+    local setShowLevelUp = function(self, flag) 
+        show_level_up = (flag == true) 
+        image = nil
+    end
+
     local configure = function(self, gender, race, class)
         is_hidden = not (gender or race or class)
 
@@ -253,6 +270,8 @@ Portrait.new = function(gender, race, class)
         helm_indices = HELM_INDICES[class]
 
         face_idx = FACE_INDICES[race..'-'..gender]
+
+        image = nil
     end
 
     configure(nil, gender, race, class)
@@ -284,6 +303,7 @@ Portrait.new = function(gender, race, class)
         nextAccessory   = nextAccessory,        
         getIdentifier   = getIdentifier,
         setIdentifier   = setIdentifier,
+        setShowLevelUp  = setShowLevelUp,
     }, Portrait)
 end
 
