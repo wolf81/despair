@@ -3,7 +3,8 @@
 --  Author: Wolfgang Schreurs
 --  info+despair@wolftrail.net
 
-local mfloor, matan2, lrandom = math.floor, math.atan2, love.math.random
+local mfloor, matan2, mmin, mmax = math.floor, math.atan2, math.min, math.max
+local lrandom = love.math.random
 
 local Level = {}
 
@@ -266,8 +267,12 @@ Level.new = function(dungeon, level_info)
     end
 
     local draw = function(self, x, y, w, h)
+        local entity = self:getPlayer() or stair_up
+        local x1, x2 = mmax(entity.coord.x - 9, 1), mmin(entity.coord.x + 9, map_w)
+        local y1, y2 = mmax(entity.coord.y - 6, 1), mmin(entity.coord.y + 6, map_h)
+
         camera:draw(function() 
-            map:draw()
+            map:draw(mfloor(x1), mfloor(y1), mfloor(x2), mfloor(y2))
 
             for _, entity in ipairs(entities) do
                 entity:draw()

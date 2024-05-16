@@ -41,14 +41,14 @@ Map.new = function(grid)
     -- use a sprite batch for world texture, to efficiently draw the same quad multiple times
     local worldSprites = love.graphics.newSpriteBatch(TextureCache:get('uf_terrain'))
 
-    local draw = function(self)
+    local draw = function(self, x1, y1, x2, y2)
         -- TODO: render only visible area, using x1, y1, x2, y2 for drawing rect
         worldSprites:clear()
 
         local texture = TextureCache:get('uf_terrain')
         local quads = QuadCache:get('uf_terrain')
-        for y = 1, height do
-            for x = 1, width do
+        for y = y1, y2 do
+            for x = x1, x2 do
                 local quad_idx = tiles[y][x]
                 worldSprites:add(quads[quad_idx], x * TILE_SIZE, y * TILE_SIZE)
             end
@@ -58,14 +58,14 @@ Map.new = function(grid)
 
         if is_grid_visible then
             love.graphics.setColor(1.0, 0.0, 1.0, 0.5)
-            for y = 1, self.width do
+            for x = x1, x2 do
                 love.graphics.line(
                     TILE_SIZE, 
                     y * TILE_SIZE, 
                     (self.width + 1) * TILE_SIZE, 
                     y * TILE_SIZE)
             end
-            for x = 1, self.height do
+            for y = y1, y2 do
                 love.graphics.line(
                     x * TILE_SIZE, 
                     TILE_SIZE, 
