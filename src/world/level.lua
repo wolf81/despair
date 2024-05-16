@@ -267,9 +267,18 @@ Level.new = function(dungeon, level_info)
     end
 
     local draw = function(self, x, y, w, h)
+        -- TODO: translate x, y, w, h provided values to coords and use for drawing instead
         local entity = self:getPlayer() or stair_up
         local x1, x2 = mmax(entity.coord.x - 9, 1), mmin(entity.coord.x + 9, map_w)
         local y1, y2 = mmax(entity.coord.y - 6, 1), mmin(entity.coord.y + 6, map_h)
+
+        --[[
+        -- figure out coords of visible area
+        local x1, y1 = camera:getWorldCoords(x, y)
+        local x2, y2 = camera:getWorldCoords(x + w, y + h)
+        x1, y1 = mmax(mfloor(x1 / TILE_SIZE), 1), mmax(mfloor(y1 / TILE_SIZE), 1)
+        x2, y2 = mmin(mfloor(x2 / TILE_SIZE), map_w), mmax(mfloor(y2 / TILE_SIZE), map_h)
+        --]]
 
         camera:draw(function() 
             map:draw(mfloor(x1), mfloor(y1), mfloor(x2), mfloor(y2))
