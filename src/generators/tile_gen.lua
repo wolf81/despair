@@ -3,19 +3,32 @@
 --  Author: Wolfgang Schreurs
 --  info+despair@wolftrail.net
 
-local lrandom = love.math.random
+local mceil, mmax, lrandom = math.ceil, math.max, love.math.random
 
 local M = {}
 
--- TODO: should be weighted
-local FLOOR_TILES   = {  22,  23,  24 }
-local WALL_TILES_H  = { 342, 343, 344 }
-local WALL_TILES_V  = { 322, 323, 324 }
+local FLOOR_TILES   = {  22,  25,  26,  23,  24,  27 }
+local WALL_TILES_H  = { 342, 343, 344, 345, 346, 347 }
+local WALL_TILES_V  = { 322, 323, 324, 325, 326, 327 }
+
+local function getWeighted(values)
+    local weighted = {}
+    local weight = 150
+    for idx, value in ipairs(values) do
+        weighted[value] = weight
+        weight = mmax(mceil(weight / 3), 1)
+    end
+    return weighted
+end
 
 M.generate = function(grid)
     local height, width = #grid, #grid[1]
 
     local tiles = {}
+
+    local wall_tiles_v = getWeighted(WALL_TILES_V)
+    local wall_tiles_h = getWeighted(WALL_TILES_H)
+    local floor_tiles = getWeighted(FLOOR_TILES)
 
     for y = 1, height do
         tiles[y] = {}
@@ -30,13 +43,13 @@ M.generate = function(grid)
                 if tile_id == 1 then
                     -- wall (horizontal or vertical)
                     if y < height and grid[y + 1][x] == 1 then
-                        tiles[y][x] = WALL_TILES_V[lrandom(#WALL_TILES_V)]
+                        tiles[y][x] = lume.weightedchoice(wall_tiles_v) -- WALL_TILES_V[lrandom(#WALL_TILES_V)]
                     else
-                        tiles[y][x] = WALL_TILES_H[lrandom(#WALL_TILES_H)]
+                        tiles[y][x] = lume.weightedchoice(wall_tiles_h) -- WALL_TILES_H[lrandom(#WALL_TILES_H)]
                     end
                 else
                     -- floor
-                    tiles[y][x] = FLOOR_TILES[lrandom(#FLOOR_TILES)]
+                    tiles[y][x] = lume.weightedchoice(floor_tiles) -- FLOOR_TILES[lrandom(#FLOOR_TILES)]
                 end
             end
         end

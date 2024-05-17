@@ -8,6 +8,8 @@ local lrandom = love.math.random
 
 local Level = {}
 
+local DRAW_RADIUS = 8
+
 local function onDropItem(self, entity)
     if self:hasStairs(entity.coord) then
         return Signal.emit('notify', 'It\'s not possible to drop items on stairs')
@@ -82,6 +84,8 @@ Level.new = function(dungeon, level_info)
         print(entity.name .. ' added to backpack')
     end
 
+    local map_draw_rect = Rect(0)
+
     local onMove = function(self, entity, coord, duration)
         self:setBlocked(entity.coord, false)
         self:setBlocked(coord, true)
@@ -96,6 +100,11 @@ Level.new = function(dungeon, level_info)
             return
         end
 
+        -- update tile drawing area of map to only draw in visible area
+        local x1, x2 = mmax(coord.x - DRAW_RADIUS, 1), mmin(coord.x + DRAW_RADIUS, map_w)
+        local y1, y2 = mmax(coord.y - DRAW_RADIUS, 1), mmin(coord.y + DRAW_RADIUS, map_h)
+        map_draw_rect = Rect(mfloor(x1), mfloor(y1), mfloor(x2), mfloor(y2))
+
         -- every once in a while, spawn a NPC if PC is not in combat 
         if not scheduler:inCombat() and lrandom(1, 25) == 1 then
             encounter_builder:makeEncounter(self, coord)
@@ -106,14 +115,13 @@ Level.new = function(dungeon, level_info)
 
         -- update fog of war
         fog:cover()
-        local radius = 8
-        shadowcaster:castLight(coord.x, coord.y, radius)
+        shadowcaster:castLight(coord.x, coord.y, DRAW_RADIUS)
 
         local cartographer = entity:getComponent(Cartographer)
         cartographer:updateChart(coord, map)
 
-        for y = coord.y - radius - 3, coord.y + radius + 3 do
-            for x = coord.x - radius - 3, coord.x + radius + 3 do
+        for y = y1, y2 do
+            for x = x1, x2 do
                 local coord = vector(x, y)
                 local is_visible = fog:isVisible(x, y)
 
@@ -267,21 +275,8 @@ Level.new = function(dungeon, level_info)
     end
 
     local draw = function(self, x, y, w, h)
-        -- TODO: translate x, y, w, h provided values to coords and use for drawing instead
-        local entity = self:getPlayer() or stair_up
-        local x1, x2 = mmax(entity.coord.x - 9, 1), mmin(entity.coord.x + 9, map_w)
-        local y1, y2 = mmax(entity.coord.y - 6, 1), mmin(entity.coord.y + 6, map_h)
-
-        --[[
-        -- figure out coords of visible area
-        local x1, y1 = camera:getWorldCoords(x, y)
-        local x2, y2 = camera:getWorldCoords(x + w, y + h)
-        x1, y1 = mmax(mfloor(x1 / TILE_SIZE), 1), mmax(mfloor(y1 / TILE_SIZE), 1)
-        x2, y2 = mmin(mfloor(x2 / TILE_SIZE), map_w), mmax(mfloor(y2 / TILE_SIZE), map_h)
-        --]]
-
         camera:draw(function() 
-            map:draw(mfloor(x1), mfloor(y1), mfloor(x2), mfloor(y2))
+            map:draw(map_draw_rect:unpack())
 
             for _, entity in ipairs(entities) do
                 entity:draw()
