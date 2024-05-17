@@ -26,8 +26,6 @@ Fog.new = function(width, height)
                 end
             end
         end
-
-        love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
     end
 
     local update = function(self, dt)
