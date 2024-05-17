@@ -3,7 +3,7 @@
 --  Author: Wolfgang Schreurs
 --  info+despair@wolftrail.net
 
-local mceil, mmax, lrandom = math.ceil, math.max, love.math.random
+local mceil, mmax = math.ceil, math.max
 
 local M = {}
 
@@ -41,15 +41,13 @@ M.generate = function(grid)
                 tiles[y][x] = 1
             else
                 if tile_id == 1 then
-                    -- wall (horizontal or vertical)
                     if y < height and grid[y + 1][x] == 1 then
-                        tiles[y][x] = lume.weightedchoice(wall_tiles_v) -- WALL_TILES_V[lrandom(#WALL_TILES_V)]
+                        tiles[y][x] = lume.weightedchoice(wall_tiles_v)
                     else
-                        tiles[y][x] = lume.weightedchoice(wall_tiles_h) -- WALL_TILES_H[lrandom(#WALL_TILES_H)]
+                        tiles[y][x] = lume.weightedchoice(wall_tiles_h)
                     end
                 else
-                    -- floor
-                    tiles[y][x] = lume.weightedchoice(floor_tiles) -- FLOOR_TILES[lrandom(#FLOOR_TILES)]
+                    tiles[y][x] = lume.weightedchoice(floor_tiles)
                 end
             end
         end
