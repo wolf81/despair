@@ -227,7 +227,7 @@ M.generatePanelTexture = function(w, h)
             love.graphics.draw(texture, quads[333], x, 0)
             love.graphics.draw(texture, quads[338], x, h - quad_h)
         end
-
+        
         -- middle
         if w > 32 then
             love.graphics.draw(texture, quads[333], w - quad_w * 2, 0)
