@@ -39,6 +39,7 @@ local function createEntity(def, coord)
         entity:addComponent(MoveSpeed(entity, def))
         entity:addComponent(HealthBar(entity, def))
         entity:addComponent(Energy(entity, def))
+        entity:addComponent(PC(entity, def))
 
         -- equip all from backpack
         entity:getComponent(Backpack):equipAll()

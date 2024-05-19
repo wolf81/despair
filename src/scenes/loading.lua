@@ -7,7 +7,7 @@ local mfloor, mmax = math.floor, math.max
 
 local Loading = {}
 
-local MINIMUM_LOAD_DURATION = 0.5
+local MINIMUM_LOAD_DURATION = 0.1
 
 local ASSETS = {
     ['uf_skills'] = {
@@ -70,9 +70,7 @@ local ASSETS = {
         {  8,  16,  56, 120,   8,  16 },
         { 16,  16,  64, 120,  16,  16 },
         -- buttons
-        { 16,  16,   8, 176, 144,  16 },
-        { 16,  16,   8, 192, 144,  16 },
-        { 16,  16,   8, 208, 144,  16 },
+        { 16,  16,   8, 176, 144,  64 },
     },
 }
 
@@ -134,6 +132,15 @@ local function loadGraphics(type)
     QuadCache:register(type, quads)
 end
 
+local function fixPortraitQuads()
+    local image = TextureCache:get('uf_portraits')
+    local quads = QuadCache:get('uf_portraits')
+    for _, quad in ipairs(quads) do
+        local x, y, w, h = quad:getViewport()
+        quad:setViewport(x + 2, y + 2, w - 2, h - 2)
+    end
+end
+
 local function addGameGraphicsLoaders(runners)
     table.insert(runners, { Runner(function() loadGraphics('uf_terrain') end),      'load terrain'          })
     table.insert(runners, { Runner(function() loadGraphics('uf_heroes') end),       'load heroes'           })
@@ -159,7 +166,8 @@ local function addUIGraphicsLoaders(runners)
     table.insert(runners, { Runner(function() loadGraphics('uf_portraits') end),    'load portraits'  })
     table.insert(runners, { Runner(function() loadGraphics('border') end),          'load border'     })
     -- TODO: cleaner if we can load health bar as part of graphics, but needs to know quads
-    table.insert(runners, { Runner(HealthBar.preload),                              'load health bar' }) 
+    table.insert(runners, { Runner(HealthBar.preload),                              'load health bar' })
+    table.insert(runners, { Runner(function() fixPortraitQuads() end),              'fix portraits'   }) 
 end
 
 Loading.new = function(T, opts, ...)

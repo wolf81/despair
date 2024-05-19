@@ -4,7 +4,7 @@ return {
 	name = 'Barnabas',
 	class = 'cleric',
 	race = 'halfling',
-	level = 1,
+	level = 2,
 	sight = 60,
 	speed = 25,
 	str = 10,

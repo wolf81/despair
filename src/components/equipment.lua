@@ -21,6 +21,14 @@ local SLOTS = TableHelper.readOnly({
     ['ring2']       = true,
 })
 
+local function isChestArmor(item)
+    return (item.type == 'armor' and (
+        item.kind == 'light' or 
+        item.kind == 'medium' or 
+        item.kind == 'heavy' or 
+        item.kind == 'none'))
+end 
+
 Equipment.new = function(entity, def)
     local backpack = entity:getComponent(Backpack)
     assert(backpack ~= nil, 'missing component: "Backpack"')
@@ -127,8 +135,14 @@ Equipment.new = function(entity, def)
     local equip = function(self, item)
         if item == nil then return false end
 
+        local class = entity:getComponent(Class)
+        if class and not class:canEquip(item) then 
+            Signal.emit('notify', 'Your class can not equip this item.')
+            return false 
+        end
+
         if item.type == 'armor' then
-            if item.kind == 'chest' then
+            if isChestArmor(item) then
                 self:unequip('chest')
                 equip.chest = item
                 return true
@@ -162,11 +176,11 @@ Equipment.new = function(entity, def)
                     self:unequip('offhand')
                 end
 
-                if equip.mainhand ~= nil and equip.offhand == nil then
+                if equip.mainhand ~= nil and equip.offhand == nil and class:canDualWield() then
                     equip.offhand = item
                 else
                     self:unequip('mainhand')
-                    equip.mainhand = item                    
+                    equip.mainhand = item
                 end
                 return true
             elseif item.kind == '1h' then

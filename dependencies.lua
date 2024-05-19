@@ -124,6 +124,7 @@ Item                = require 'src.components.item'
 Race                = require 'src.components.race'
 Info                = require 'src.components.info'
 NPC                 = require 'src.components.npc'
+PC                  = require 'src.components.pc'
 
 -- resolvers
 CombatResolver      = require 'src.resolvers.combat'
@@ -136,9 +137,9 @@ QuadCache           = Cache()
 -- generators
 FontSheetGenerator  = require 'src.generators.font_sheet_gen'
 QuadSheetGenerator  = require 'src.generators.quad_sheet_gen'
-PortraitGenerator   = require 'src.generators.portrait_gen'
 TextureGenerator    = require 'src.generators.texture_gen'
 QuadGenerator       = require 'src.generators.quad_gen'
 MazeGenerator       = require 'src.generators.maze_gen'
+TileGenerator       = require 'src.generators.tile_gen'
 NameGenerator       = require 'src.generators.name_gen'
 IdGenerator         = require 'src.generators.id_gen'

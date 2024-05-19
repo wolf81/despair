@@ -160,15 +160,15 @@ Dungeon.new = function(level_info, player)
 
     return setmetatable({
         -- methods
-        draw            = draw,
-        enter           = enter,
-        update          = update,
-        setFrame        = setFrame,
-        getLevel        = getLevel,
-        setLevel        = setLevel,
+        draw        = draw,
+        enter       = enter,
+        update      = update,
+        setFrame    = setFrame,
+        getLevel    = getLevel,
+        setLevel    = setLevel,
         -- TODO: call these methods from Level directly?
-        nextLevel       = nextLevel,
-        prevLevel       = prevLevel,
+        nextLevel   = nextLevel,
+        prevLevel   = prevLevel,
     }, Dungeon)
 end
 

@@ -20,7 +20,7 @@ local CLASS_ANIM = {
 
 local CLASS_EQUIP = {
     ['fighter'] = { 'chain_mail', 'light_shield', 'longsword', 'food_1', 'food_1' },
-    ['cleric']  = { 'chain_mail', 'morningstar', 'food_1', 'food_1' },
+    ['cleric']  = { 'scale_mail', 'morningstar', 'food_1', 'food_1' },
     ['rogue']   = { 'stud_leather', 'short_sword', 'short_sword', 'food_1', 'food_1' },
     ['mage']    = { 'robe', 'quarterstaff', 'food_1', 'food_1' },    
 }
@@ -139,14 +139,16 @@ local function getName(gender, race)
     return name
 end
 
-NewPlayer.new = function(level_info)
+NewPlayer.new = function()
     local image = TextureGenerator.generatePanelTexture(120, 48)
 
     local lines = {}
 
     local parchment = UI.makeParchment('', 20)
+    local portrait = UI.makePortrait(nil, nil, nil)
+    portrait.widget:setRotation(0.1)
 
-    local gender, race, class, stats, skills, name, portrait = nil, nil, nil, nil, nil, nil, nil
+    local gender, race, class, stats, skills, name = nil, nil, nil, nil, nil, nil
 
     local needs_update = true
     
@@ -160,7 +162,7 @@ NewPlayer.new = function(level_info)
                 stats = nil
                 skills = nil
                 name = nil
-                portrait = nil
+                portrait.widget:setIdentifier(nil)
             end,
             unpack(GENDERS)))
     end
@@ -174,7 +176,7 @@ NewPlayer.new = function(level_info)
                 stats = nil
                 skills = nil
                 name = nil
-                portrait = nil
+                portrait.widget:setIdentifier(nil)
             end,
             unpack(RACES)))
     end
@@ -187,7 +189,7 @@ NewPlayer.new = function(level_info)
                 stats = nil
                 skills = nil
                 name = nil
-                portrait = nil
+                portrait.widget:setIdentifier(nil)
             end,
             unpack(CLASSES)))
     end
@@ -204,8 +206,6 @@ NewPlayer.new = function(level_info)
                     mind = { value = mind_ },
                 }
                 skills = nil
-                name = nil
-                portrait = nil
             end,
             {
                 { key = 'Strength',  value = str.value,  min = str.min,  max = str.max  },                
@@ -228,8 +228,6 @@ NewPlayer.new = function(level_info)
                     comm = { value = comm_ }, 
                     surv = { value = surv_ },
                 }
-                name = nil
-                portrait = nil
             end,
             {
                 { key = 'Physical',         value = phys.value, min = phys.min, max = phys.max },
@@ -243,21 +241,18 @@ NewPlayer.new = function(level_info)
 
     local function onChangeName()
         print('change name')
-        local enter_name = EnterName(function(name_) 
-            name = name_ 
-            portrait = nil
-        end)
-        enter_name:setName(name)
-
-        Gamestate.push(enter_name)
+        Gamestate.push(EnterName(name, function(name_) name = name_ end))
     end
 
     local function onChangePortrait()
         print('change portrait')
 
-        Gamestate.push(MakePortrait(gender or 'Male', race or 'Human', class or 'Fighter', function(image)
-            portrait = image
-        end))
+        local make_portrait = MakePortrait(gender or 'Male', race or 'Human', class or 'Fighter', function(portrait_id)
+            portrait.widget:setIdentifier(portrait_id)
+        end)
+        make_portrait:setIdentifier(portrait.widget:getIdentifier())
+
+        Gamestate.push(make_portrait)
     end
 
     local function onChooseRandom()
@@ -274,7 +269,9 @@ NewPlayer.new = function(level_info)
         local phys, subt, know, comm, surv = getSkillValues(race)
         skills = { phys = phys, subt = subt, know = know, comm = comm, surv = surv }
 
-        portrait = MakePortrait(gender, race, class):getImage()
+        local portrait_id = Portrait(gender, race, class):getIdentifier()
+        portrait.widget:configure(gender, race, class)
+        portrait.widget:setIdentifier(portrait_id)
 
         needs_update = true
     end
@@ -286,14 +283,17 @@ NewPlayer.new = function(level_info)
     local function onPlay()
         local class_name = string.lower(class)
         local race_name = string.lower(race)
+        local gender_name = string.lower(gender)
         local player_id = 'pc'
+        local portrait_id = portrait.widget:getIdentifier()
 
         EntityFactory.register({
             id = player_id,
             type = 'pc',
             name = name,
-            class = class_name,
+            gender = gender_name,
             race = race_name,
+            class = class_name,
             level = 1,
             sight = 60,
             speed = RACE_SPEED[race_name],
@@ -304,6 +304,7 @@ NewPlayer.new = function(level_info)
             equip = CLASS_EQUIP[class_name],
             texture = 'uf_heroes',
             anim = CLASS_ANIM[class_name],
+            portrait_id = portrait_id,
         })
 
         local level_info = loadLevels()
@@ -345,12 +346,8 @@ NewPlayer.new = function(level_info)
 
         for e in layout:eachElement() do e.widget:draw() end
 
-        if portrait then
-            love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
-            local x, y, w, h = parchment.widget:getFrame()
-            local portrait_w, portrait_h = portrait:getDimensions()
-            love.graphics.draw(portrait, x + w - portrait_w - 20, y + 10, 0.1)
-        end
+        portrait.widget:setFrame(WINDOW_W - 200 - 60, 20, 48, 48)
+        portrait.widget:draw()
     end
 
     local update = function(self, dt)
@@ -359,9 +356,10 @@ NewPlayer.new = function(level_info)
             char_buttons[3].widget:setEnabled(race ~= nil)
             char_buttons[4].widget:setEnabled(class ~= nil)
             char_buttons[5].widget:setEnabled(stats ~= nil)
-            char_buttons[6].widget:setEnabled(skills ~= nil)
+            char_buttons[6].widget:setEnabled(name ~= nil or skills ~= nil)
             char_buttons[7].widget:setEnabled(name ~= nil)
-            play_button.widget:setEnabled(portrait ~= nil)
+            portrait.widget:configure(gender, race, class)
+            play_button.widget:setEnabled(portrait.widget:getIdentifier() ~= nil)
 
             local lines = {}
             if name then 

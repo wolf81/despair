@@ -70,8 +70,9 @@ M.makeParchment = function(text, margin)
     return tidy.Elem(Parchment(text, margin), tidy.Stretch(1))
 end
 
-M.makeTextfield = function()
+M.makeTextfield = function(text)
     local textfield = Textfield()
+    textfield:setText(text)
     local w, h = textfield:getSize()
     return tidy.Elem(textfield, tidy.MinSize(w, h), tidy.Stretch(1, 0))
 end

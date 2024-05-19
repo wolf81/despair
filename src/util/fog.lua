@@ -7,14 +7,11 @@ local mfloor = math.floor
 
 local Fog = {}
 
-local getKey = function(x, y)
-    return x .. ':' .. y
-end
+local function getKey(x, y) return x .. ':' .. y end
 
 Fog.new = function(width, height) 
-   local visible = {}
-    local revealed = {}
-    local last_visible = {}
+    local texture = TextureGenerator.generateColorTexture(TILE_SIZE, TILE_SIZE, { 0.0, 0.0, 0.0, 1.0 })
+    local visible, revealed, last_visible = {}, {}, {}
 
     local draw = function(self, ox, oy)
         local x = mfloor(ox / TILE_SIZE)
@@ -25,12 +22,14 @@ Fog.new = function(width, height)
                 local key = getKey(x, y)
                 if not visible[key] then
                     love.graphics.setColor(0.0, 0.0, 0.0, revealed[key] and 0.5 or 1.0)
-                    love.graphics.rectangle('fill', x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE)
+                    love.graphics.draw(texture, x * TILE_SIZE, y * TILE_SIZE)
                 end
             end
         end
+    end
 
-        love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
+    local update = function(self, dt)
+        -- body
     end
 
     local reveal = function(self, x, y)
@@ -57,6 +56,7 @@ Fog.new = function(width, height)
         draw        = draw,
         cover       = cover,
         reveal      = reveal,
+        update      = update,
         isVisible   = isVisible,
         wasVisible  = wasVisible,
     }, Fog)

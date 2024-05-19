@@ -14,6 +14,37 @@ CLASSES = TableHelper.readOnly({
     ['mage']    = true,
 })
 
+ARMOR_PROFICIENCIES = TableHelper.readOnly({
+    ['fighter'] = {
+        ['shield'] = true,
+        ['heavy']  = true,
+        ['medium'] = true,
+        ['light']  = true,
+        ['none']   = true,
+    },
+    ['cleric'] = {
+        ['shield'] = false,
+        ['heavy']  = false,
+        ['medium'] = true,
+        ['light']  = true,
+        ['none']   = true,
+    },
+    ['rogue'] = {
+        ['shield'] = false,
+        ['heavy']  = false,
+        ['medium'] = false,
+        ['light']  = true,
+        ['none']   = true,
+    },
+    ['mage'] = {
+        ['shield'] = false,
+        ['heavy']  = false,
+        ['medium'] = false,
+        ['light']  = false,
+        ['none']   = true,
+    },
+})
+
 Class.new = function(entity, def)
     local class = def['class']
     assert(class ~= nil, 'missing field: "class"')
@@ -76,6 +107,7 @@ Class.new = function(entity, def)
     end
 
     local addExp = function(self, exp_)
+        exp_ = level * 10
         -- if current exp matches goal, no more gain possible, need to increase level first
         if self:canLevelUp() then return end
 
@@ -127,18 +159,32 @@ Class.new = function(entity, def)
         return false
     end
 
+    local canEquip = function(self, item)
+        if item.type == 'armor' then
+            return ARMOR_PROFICIENCIES[class][item.kind]
+        end
+
+        return true
+    end
+
+    local canDualWield = function(self)
+        return class == 'fighter' or class == 'rogue'
+    end
+
     return setmetatable({
         -- methods
-        getDamageBonus  = getDamageBonus,
-        getAttackBonus  = getAttackBonus,
-        getSkillBonus   = getSkillBonus,
-        getClassName    = getClassName,
-        canLevelUp      = canLevelUp,
-        getLevel        = getLevel,
+        getExp          = getExp,
+        addExp          = addExp,
         levelUp         = levelUp,
         isAnyOf         = isAnyOf,
-        addExp          = addExp,
-        getExp          = getExp,
+        getLevel        = getLevel,
+        canEquip        = canEquip,
+        canLevelUp      = canLevelUp,
+        getClassName    = getClassName,
+        canDualWield    = canDualWield,
+        getSkillBonus   = getSkillBonus,
+        getDamageBonus  = getDamageBonus,
+        getAttackBonus  = getAttackBonus,
     }, Class)
 end
 

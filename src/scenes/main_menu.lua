@@ -16,12 +16,12 @@ local function onContinue()
     print('continue') 
 end
 
-MainMenu.new = function()
+MainMenu.new = function(fn)
     local frame = Rect(0)
 
     local layout = tidy.HStack({
         UI.makeFlexSpace(),
-        tidy.VStack(tidy.Spacing(10), {
+        tidy.VStack(tidy.Spacing(2), {
             UI.makeFlexSpace(),
             UI.makeButton(onNewGame, generateTextButtonTexture('NEW GAME')),
             UI.makeButton(onContinue, generateTextButtonTexture('CONTINUE')),
@@ -53,6 +53,8 @@ MainMenu.new = function()
     local setFrame = function(self, x, y, w, h) frame = Rect(x, y, w, h) end
 
     local getFrame = function(self) return frame:unpack() end
+
+    if fn then fn() end
 
     return setmetatable({
         -- methods

@@ -3,7 +3,7 @@ return {
 	type = 'armor',
 	texture = 'uf_items',
 	anim = { 224 },
-	kind = 'chest',
+	kind = 'heavy',
 	name = 'splint mail',
 	ac = 6,
 	bonus = 0,
