@@ -3,49 +3,104 @@
 --  Author: Wolfgang Schreurs
 --  info+despair@wolftrail.net
 
-local mfloor = math.floor
+local mfloor, mmin, mmax = math.floor, math.min, math.max
 
 local Fog = {}
 
+local SPEED = 2.0
+
 local function getKey(x, y) return x .. ':' .. y end
 
-Fog.new = function(width, height) 
-    local texture = TextureGenerator.generateColorTexture(TILE_SIZE, TILE_SIZE, { 0.0, 0.0, 0.0, 1.0 })
-    local visible, revealed, last_visible = {}, {}, {}
+Fog.new = function(map_w, map_h) 
+    local texture = TextureGenerator.generateColorTexture(TILE_SIZE, TILE_SIZE, { 
+        0.0, 0.0, 0.0, 1.0 
+    })
 
-    local draw = function(self, ox, oy)
-        local x = mfloor(ox / TILE_SIZE)
-        local y = mfloor(oy / TILE_SIZE)        
+    local fog = {}
+    for y = 1, map_h do
+        fog[y] = {}
+        for x = 1, map_w do
+            fog[y][x] = 1.0
+        end
+    end
+
+    local revealed, visible, active = {}, {}, {}
+
+    local prev_rect, next_rect = Rect(1, 1, 0, 0), Rect(1, 1, 0, 0)
+
+    local draw = function(self)
+        local x, y, w, h = next_rect:unpack()
+        for x = x, x + w do
+            for y = y, y + h do
+                love.graphics.setColor(1.0, 1.0, 1.0, fog[y][x])
+                love.graphics.draw(texture, x * TILE_SIZE, y * TILE_SIZE)
+            end
+        end
+    end
+
+    local update = function(self, dt, x, y, w, h)
+        local rect = Rect(mmax(x, 1), mmax(y, 1), mmin(w, map_w - x), mmin(h, map_h - y))
         
-        for x = x, x + width do
-            for y = y, y + height do
-                local key = getKey(x, y)
-                if not visible[key] then
-                    love.graphics.setColor(0.0, 0.0, 0.0, revealed[key] and 0.5 or 1.0)
-                    love.graphics.draw(texture, x * TILE_SIZE, y * TILE_SIZE)
+        if next_rect ~= rect then
+            prev_rect = next_rect
+            next_rect = rect
+
+            -- TODO: perhaps be be optimized by just comparing points from next rect with previous
+            local x1, y1, w1, h1 = prev_rect:unpack()
+            local x2, y2, w2, h2 = next_rect:unpack()
+            w1 = mmin(x1 + w1, map_w - x1)
+            h1 = mmin(y1 + h1, map_h - y1)
+            w2 = mmin(x2 + w2, map_w - x2)
+            h2 = mmin(y2 + h2, map_h - y2)
+            
+            x1 = mmin(x1, x2)
+            y1 = mmin(y1, y2)
+            x2 = mmax(x1 + w1, x2 + w2)
+            y2 = mmax(y1 + h1, y2 + h2)
+
+            for y = y1, y2 do
+                for x = x1, x2 do
+                    local fog_tile = fog[y][x]
+                    local in_prev_rect = prev_rect:contains(x, y)
+                    local in_next_rect = next_rect:contains(x, y)
+                    
+                    local key = getKey(x, y)
+                    if not visible[key] then
+                        active[key] = { x, y, 'fade-in' }
+                    else
+                        active[key] = { x, y, 'fade-out' }
+                    end
+                end
+            end
+        end
+
+        for key, info in pairs(active) do
+            local x, y, mode = unpack(info)
+            if mode == 'fade-in' then
+                local alpha = revealed[getKey(x, y)] and 0.5 or 1.0
+                fog[y][x] = math.min(fog[y][x] + dt * SPEED, alpha)
+                if fog[y][x] == alpha then
+                    active[key] = nil
+                end
+            else
+                fog[y][x] = math.max(fog[y][x] - dt * SPEED, 0.0)
+                if fog[y][x] == 0.0 then
+                    active[key] = nil
                 end
             end
         end
     end
 
-    local update = function(self, dt)
-        -- body
-    end
-
     local reveal = function(self, x, y)
-        local key = getKey(x, y)
-        visible[key] = true
-        revealed[key] = true        
+        if x > 0 and x < map_w and y > 0 and y < map_h then
+            revealed[getKey(x, y)] = true
+            visible[getKey(x, y)] = true
+        end
     end
 
-    local isVisible = function(self, x, y)
-        return visible[getKey(x, y)] == true
-    end
+    local isVisible = function(self, x, y) return visible[getKey(x, y)] end
 
-    local cover = function(self)
-        last_visible = visible
-        visible = {}
-    end
+    local cover = function(self) visible = {} end
 
     return setmetatable({
         -- methods

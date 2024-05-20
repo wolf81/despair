@@ -21,8 +21,11 @@ Rect.new = function(x, y, w, h)
 
     local getSize = function(self) return w, h end
 
+    local clone = function(self) return Rect(x, y, w, h) end
+
     return setmetatable({
-        -- methods        
+        -- methods
+        clone       = clone,
         unpack      = unpack,
         getSize     = getSize,
         contains    = contains,
