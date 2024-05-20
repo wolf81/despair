@@ -30,6 +30,12 @@ Rect.new = function(x, y, w, h)
     }, Rect)
 end
 
+function Rect.__eq(self, other)
+    local x1, y1, w1, h1 = self:unpack()
+    local x2, y2, w2, h2 = other:unpack()
+    return x1 == x2 and y1 == y2 and w1 == w2 and h1 == h2
+end
+
 return setmetatable(Rect, {
     __call = function(_, ...) return Rect.new(...) end,
 })

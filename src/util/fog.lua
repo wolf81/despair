@@ -42,10 +42,6 @@ Fog.new = function(width, height)
         return visible[getKey(x, y)] == true
     end
 
-    local wasVisible = function(self, x, y)
-        return last_visible[getKey(x, y)] == true
-    end
-
     local cover = function(self)
         last_visible = visible
         visible = {}
@@ -58,7 +54,6 @@ Fog.new = function(width, height)
         reveal      = reveal,
         update      = update,
         isVisible   = isVisible,
-        wasVisible  = wasVisible,
     }, Fog)
 end
 
