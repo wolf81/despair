@@ -16,72 +16,71 @@ Fog.new = function(map_w, map_h)
         0.0, 0.0, 0.0, 1.0 
     })
 
-    local fog = {}
+    -- keep track of fog alpha values for all tiles in level
+    local fog_alpha = {}
     for y = 1, map_h do
-        fog[y] = {}
+        fog_alpha[y] = {}
         for x = 1, map_w do
-            fog[y][x] = { alpha = 1.0 }
+            fog_alpha[y][x] = 1.0
         end
     end
 
-    local revealed, visible, active = {}, {}, {}
+    -- a set of tiles that have been discovered
+    local revealed = {}
 
+    -- a set of tiles that are currently visible, so in line of sight
+    local visible = {}
+
+    -- a set of tiles in current or previous drawing rect
+    local active = {}
+
+    -- previous and next drawing rectangles
     local prev_rect, next_rect = Rect(1, 1, 0, 0), Rect(1, 1, 0, 0)
 
     local draw = function(self)
         local x, y, w, h = next_rect:unpack()
         for x = x, x + w do
             for y = y, y + h do
-                love.graphics.setColor(1.0, 1.0, 1.0, fog[y][x].alpha)
+                love.graphics.setColor(1.0, 1.0, 1.0, fog_alpha[y][x])
                 love.graphics.draw(texture, x * TILE_SIZE, y * TILE_SIZE)
             end
         end
     end
 
     local update = function(self, dt, x, y, w, h)
+        -- constrain visible rectangle to map size
         local rect = Rect(mmax(x, 1), mmax(y, 1), mmin(w, map_w - x), mmin(h, map_h - y))
-        
+
+        -- if the visible rectangle has changed compared to previous update ...        
         if next_rect ~= rect then
-            prev_rect = next_rect
-            next_rect = rect
+            prev_rect, next_rect = next_rect, rect
 
-            -- TODO: perhaps be be optimized by just comparing points from next rect with previous
-            local x1, y1, w1, h1 = prev_rect:unpack()
-            local x2, y2, w2, h2 = next_rect:unpack()
-            w1 = mmin(x1 + w1, map_w - x1)
-            h1 = mmin(y1 + h1, map_h - y1)
-            w2 = mmin(x2 + w2, map_w - x2)
-            h2 = mmin(y2 + h2, map_h - y2)
-            
-            x1 = mmin(x1, x2)
-            y1 = mmin(y1, y2)
-            x2 = mmax(x1 + w1, x2 + w2)
-            y2 = mmax(y1 + h1, y2 + h2)
-
-            for y = y1, y2 do
-                for x = x1, x2 do                    
-                    local key = getKey(x, y)
-                    if not visible[key] then
-                        active[key] = { x, y, 'fade-in' }
-                    else
-                        active[key] = { x, y, 'fade-out' }
+            -- create a set of active tiles - tiles in current or previous drawing rect
+            for _, rect in ipairs({ prev_rect, next_rect }) do
+                local x, y, w, h = rect:unpack()
+                for y = mmax(y, 1), mmin(y + h, map_h) do
+                    for x = mmax(x, 1), mmin(x + w, map_w) do
+                        active[getKey(x, y)] = { x, y }
                     end
                 end
             end
         end
 
+        -- animate fog tiles with fade-in or fade-out animation
         for key, info in pairs(active) do
-            local x, y, mode = unpack(info)
-            local alpha = fog[y][x].alpha
-            if mode == 'fade-in' then
+            local x, y = unpack(info)
+            local alpha = fog_alpha[y][x]
+            if not visible[key] then
+                -- show fog of war
                 local to_alpha = revealed[getKey(x, y)] and 0.5 or 1.0
                 alpha = mmin(alpha + dt * SPEED, to_alpha)
                 if alpha == to_alpha then active[key] = nil end
             else
+                -- hide fog of war
                 alpha = mmax(alpha - dt * SPEED, 0.0)
                 if alpha == 0.0 then active[key] = nil end
             end
-            fog[y][x].alpha = alpha            
+            fog_alpha[y][x] = alpha            
         end
     end
 
