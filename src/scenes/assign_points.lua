@@ -15,6 +15,7 @@ local function generateImageButtonTexture(quad_idx)
     return TextureGenerator.generateImageButtonTexture(24, 24, quad_idx)
 end
 
+-- TODO: should perhaps be called assign stats (?)
 AssignPoints.new = function(title, fn, points_info, remaining)
     local frame = Rect(0)
 
@@ -33,6 +34,8 @@ AssignPoints.new = function(title, fn, points_info, remaining)
 
     local confirm = function() 
         if fn then 
+            -- TODO: return the diff of original points and added points (?)
+            -- we need to clean-up NewPlayer and LevelUp scenes afterwards
             local points = {}
             for _, point_info in ipairs(points_info) do
                 table.insert(points, point_info.value)

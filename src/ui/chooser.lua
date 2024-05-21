@@ -7,9 +7,10 @@ local mmin, mmax = math.min, math.max
 
 local Chooser = {}
 
-local DISABLED_ALPHA = 0.7
+-- TODO: same as Textview, add to global constants?
 local SCROLLBAR_W = 20
 local SCROLL_SPEED = 150
+
 local ITEM_H = 32
 
 Chooser.new = function(fn, ...)
@@ -20,7 +21,6 @@ Chooser.new = function(fn, ...)
 
     local background = nil
     local frame = Rect(0)
-    local is_enabled = true
 
     local selected_idx = 0
 
@@ -37,7 +37,7 @@ Chooser.new = function(fn, ...)
     local draw = function(self)
         local x, y, w, h = frame:unpack()
 
-        love.graphics.setColor(1.0, 1.0, 1.0, (is_enabled and 1.0 or DISABLED_ALPHA))
+        love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
         love.graphics.draw(background, x, y)
 
         love.graphics.setScissor(x + 1, y + 1, w - 2, h - 2)
@@ -52,8 +52,6 @@ Chooser.new = function(fn, ...)
     end
 
     local update = function(self, dt)
-        if not is_enabled then return end
-
         local h = select(2, frame:getSize())
 
         scrollbar:update(dt)
