@@ -20,7 +20,7 @@ Fog.new = function(map_w, map_h)
     for y = 1, map_h do
         fog[y] = {}
         for x = 1, map_w do
-            fog[y][x] = 1.0
+            fog[y][x] = { alpha = 1.0 }
         end
     end
 
@@ -32,7 +32,7 @@ Fog.new = function(map_w, map_h)
         local x, y, w, h = next_rect:unpack()
         for x = x, x + w do
             for y = y, y + h do
-                love.graphics.setColor(1.0, 1.0, 1.0, fog[y][x])
+                love.graphics.setColor(1.0, 1.0, 1.0, fog[y][x].alpha)
                 love.graphics.draw(texture, x * TILE_SIZE, y * TILE_SIZE)
             end
         end
@@ -76,25 +76,24 @@ Fog.new = function(map_w, map_h)
 
         for key, info in pairs(active) do
             local x, y, mode = unpack(info)
+            local alpha = fog[y][x].alpha
             if mode == 'fade-in' then
-                local alpha = revealed[getKey(x, y)] and 0.5 or 1.0
-                fog[y][x] = math.min(fog[y][x] + dt * SPEED, alpha)
-                if fog[y][x] == alpha then
-                    active[key] = nil
-                end
+                local to_alpha = revealed[getKey(x, y)] and 0.5 or 1.0
+                alpha = mmin(alpha + dt * SPEED, to_alpha)
+                if alpha == to_alpha then active[key] = nil end
             else
-                fog[y][x] = math.max(fog[y][x] - dt * SPEED, 0.0)
-                if fog[y][x] == 0.0 then
-                    active[key] = nil
-                end
+                alpha = mmax(alpha - dt * SPEED, 0.0)
+                if alpha == 0.0 then active[key] = nil end
             end
+            fog[y][x].alpha = alpha            
         end
     end
 
     local reveal = function(self, x, y)
         if x > 0 and x < map_w and y > 0 and y < map_h then
-            revealed[getKey(x, y)] = true
-            visible[getKey(x, y)] = true
+            local key = getKey(x, y)
+            revealed[key] = true
+            visible[key] = true
         end
     end
 
