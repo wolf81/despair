@@ -59,11 +59,7 @@ Fog.new = function(map_w, map_h)
             y2 = mmax(y1 + h1, y2 + h2)
 
             for y = y1, y2 do
-                for x = x1, x2 do
-                    local fog_tile = fog[y][x]
-                    local in_prev_rect = prev_rect:contains(x, y)
-                    local in_next_rect = next_rect:contains(x, y)
-                    
+                for x = x1, x2 do                    
                     local key = getKey(x, y)
                     if not visible[key] then
                         active[key] = { x, y, 'fade-in' }
