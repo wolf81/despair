@@ -13,7 +13,7 @@ local function getKey(x, y) return x .. ':' .. y end
 
 Fog.new = function(map_w, map_h) 
     local texture = TextureGenerator.generateColorTexture(TILE_SIZE, TILE_SIZE, { 
-        0.0, 0.0, 0.0, 1.0 
+        0.0, 0.0, 0.0, 1.0
     })
 
     -- keep track of fog alpha values for all tiles in level
@@ -34,8 +34,8 @@ Fog.new = function(map_w, map_h)
     -- a set of tiles in current or previous drawing rect
     local active = {}
 
-    -- previous and next drawing rectangles
-    local prev_rect, next_rect = Rect(1, 1, 0, 0), Rect(1, 1, 0, 0)
+    -- previous and next drawing area rectangles
+    local prev_rect, next_rect = Rect(0), Rect(0)
 
     local draw = function(self)
         local x, y, w, h = next_rect:unpack()
