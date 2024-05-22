@@ -139,6 +139,7 @@ local function getName(gender, race)
     return name
 end
 
+-- TODO: maybe we should make Stats, Skills objects to use here?
 NewPlayer.new = function()
     local image = TextureGenerator.generatePanelTexture(120, 48)
 
@@ -222,11 +223,11 @@ NewPlayer.new = function()
             'ASSIGN SKILLS',
             function(phys_, subt_, know_, comm_, surv_) 
                 skills = { 
-                    phys = { value = phys_ }, 
-                    subt = { value = subt_ }, 
-                    know = { value = know_ }, 
-                    comm = { value = comm_ }, 
-                    surv = { value = surv_ },
+                    phys = { value = phys.value + phys_ }, 
+                    subt = { value = subt.value + subt_ }, 
+                    know = { value = know.value + know_ }, 
+                    comm = { value = comm.value + comm_ }, 
+                    surv = { value = surv.value + surv_ },
                 }
             end,
             {
