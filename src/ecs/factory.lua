@@ -112,15 +112,15 @@ local function createEntity(def, coord)
     elseif entity.type == 'spell' then        
         entity.z_index = 20 
 
-        entity:addComponent(Spell(entity, def))
+        entity:addComponent(Usable(entity, def))
     end
 
     return entity
 end
 
 M.register = function(definition)
-    assert(definition.id ~= nil, 'id is required')
-    assert(definition.type ~= nil, 'type is required')
+    assert(definition.id ~= nil, 'missing field: "id"')
+    assert(definition.type ~= nil, 'missing field: "type"')
 
     definitions[definition.id] = definition
     if type_info[definition.type] == nil then

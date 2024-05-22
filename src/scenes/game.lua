@@ -211,10 +211,8 @@ Game.new = function(level_info, player_id)
     end
 
     local onInventoryChanged = function(player)
-        local food_count = 0
-        local wand_count = 0
-        local tome_count = 0
-        local potion_count = 0
+        -- calculate item totals in inventory
+        local food_count, wand_count, tome_count, potion_count = 0, 0, 0, 0
 
         for idx = 1, backpack:getSize() do
             local item = backpack:peek(idx)            
@@ -229,6 +227,7 @@ Game.new = function(level_info, player_id)
             end
         end
 
+        -- enable buttons if item totals are greater than 0
         for element in layout:eachElement() do
             if getmetatable(element.widget) == ActionButton then
                 local button = element.widget

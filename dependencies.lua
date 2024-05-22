@@ -87,13 +87,19 @@ UI                  = require 'src.util.ui'
 DijkstraMap         = require 'src.dijkstra.dijkstra'
 
 -- actions
-CastSpell           = require 'src.actions.cast_spell'
 Destroy             = require 'src.actions.destroy'
 Attack              = require 'src.actions.attack'
 Rest                = require 'src.actions.rest'
 Move                = require 'src.actions.move'
 Idle                = require 'src.actions.idle'
 Use                 = require 'src.actions.use'
+
+-- usable
+Potion              = require 'src.usable.potion'
+Spell               = require 'src.usable.spell'
+Tome                = require 'src.usable.tome'
+Food                = require 'src.usable.food'
+Wand                = require 'src.usable.wand'
 
 -- spells
 MagicMissile        = require 'src.spells.magic_missile'
@@ -125,7 +131,6 @@ Health              = require 'src.components.health'
 Skills              = require 'src.components.skills'
 Class               = require 'src.components.class'
 Stats               = require 'src.components.stats'
-Spell               = require 'src.components.spell'
 Item                = require 'src.components.item'
 Race                = require 'src.components.race'
 Info                = require 'src.components.info'
