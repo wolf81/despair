@@ -201,9 +201,9 @@ NewPlayer.new = function()
             'ASSIGN STATS',
             function(str_, dex_, mind_) 
                 stats = { 
-                    str = { value = str_ }, 
-                    dex = { value = dex_ }, 
-                    mind = { value = mind_ },
+                    str  = { value = str.value + str_   }, 
+                    dex  = { value = dex.value + dex_   }, 
+                    mind = { value = mind.value + mind_ },
                 }
                 skills = nil
             end,

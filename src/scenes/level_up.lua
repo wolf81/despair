@@ -92,9 +92,9 @@ LevelUp.new = function(player)
         Gamestate.push(AssignPoints(
             'ASSIGN STATS',
             function(str_, dex_, mind_) 
-                stats:assignPoints(str_ - str, 'str')
-                stats:assignPoints(dex_ - dex, 'dex')
-                stats:assignPoints(mind_ - mind, 'mind')
+                stats:assignPoints(str_, 'str')
+                stats:assignPoints(dex_, 'dex')
+                stats:assignPoints(mind_, 'mind')
                 acceptButton.widget:setEnabled(stats:getPoints() == 0)
             end,
             {
