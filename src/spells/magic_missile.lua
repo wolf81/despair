@@ -22,6 +22,9 @@ local function getAngle(coord1, coord2)
 
     local dxy = coord1 - coord2
     local angle = math.atan2(dxy.x, -dxy.y) + math.pi / 2
+
+    print('angle:', angle, coord1:angleTo(coord2), coord2:angleTo(coord1))
+
     return angle
 end
 
@@ -33,7 +36,7 @@ MagicMissile.new = function(level, entity, coord)
 
     local cast = function(self, duration, fn)
         print('cast magic missile')
-        
+
         Timer.after(duration, fn)
         --Timer.tween(duration, entity, { coord = coord }, 'linear', fn)
     end
