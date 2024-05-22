@@ -3,30 +3,45 @@
 --  Author: Wolfgang Schreurs
 --  info+despair@wolftrail.net
 
-local M = {}
+local Wand = {}
 
-M.use = function(usable, source, target, level, duration)
-    local entities = level:getEntities(target, function(entity) 
-        -- TODO: some wands might target walls or maybe empty space
-        return entity.type == 'pc' or entity.type == 'npc'
-    end)
+Wand.new = function(entity, def)
+    local effect = nil
 
-    for _, entity in ipairs(entities) do
-        local health = entity:getComponent(Health)
-        local damage = ndn.dice('3d4').roll()
-        health:harm(damage)
+    if def.effect then
+        effect = EntityFactory.create(def.effect)
     end
 
-    local effect = usable:getEffect()
-    if effect ~= nil then
-        if FlagsHelper.hasFlag(effect.flags, FLAGS.projectile) then
-            EffectHelper.showProjectile(effect, level, 0.5, source.coord, target)
-        else
-            EffectHelper.showEffect(effect, level, 0.5, target)
+    local use = function(source, target, level, duration)
+        local entities = level:getEntities(target, function(entity) 
+            -- TODO: some wands might target walls or maybe empty space
+            return entity.type == 'pc' or entity.type == 'npc'
+        end)
+
+        for _, entity in ipairs(entities) do
+            local health = entity:getComponent(Health)
+            local damage = ndn.dice('3d4').roll()
+            health:harm(damage)
         end
+
+        local effect = usable:getEffect()
+        if effect ~= nil then
+            if FlagsHelper.hasFlag(effect.flags, FLAGS.projectile) then
+                EffectHelper.showProjectile(effect, level, 0.5, source.coord, target)
+            else
+                EffectHelper.showEffect(effect, level, 0.5, target)
+            end
+        end
+
+        return false
     end
 
-    return false
+    return setmetatable({
+        -- methods
+        use = use,
+    }, Wand)
 end
 
-return M
+return setmetatable(Wand, {
+    __call = function(_, ...) return Wand.new(...) end,
+})

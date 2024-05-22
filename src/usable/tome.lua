@@ -3,10 +3,19 @@
 --  Author: Wolfgang Schreurs
 --  info+despair@wolftrail.net
 
-local M = {}
+local Tome = {}
 
-M.use = function(usable, source, target, level, duration)
-    return false
+Tome.new = function(entity, def)
+    local use = function(source, target, level, duration)
+        return false
+    end
+    
+    return setmetatable({
+        -- methods
+        use = use,
+    }, Tome)
 end
 
-return M
+return setmetatable(Tome, {
+    __call = function(_, ...) return Tome.new(...) end,
+})

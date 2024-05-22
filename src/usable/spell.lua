@@ -3,10 +3,21 @@
 --  Author: Wolfgang Schreurs
 --  info+despair@wolftrail.net
 
-local M = {}
+local Spell = {}
 
-M.use = function(usable, source, target, level, duration)
-    return false
+Spell.new = function(entity, def)
+    print(entity.name)
+
+    local use = function(source, target, level, duration)
+        return false
+    end    
+
+    return setmetatable({
+        -- methods
+        use = use,
+    }, Spell)
 end
 
-return M
+return setmetatable(Spell, {
+    __call = function(_, ...) return Spell.new(...) end,
+})

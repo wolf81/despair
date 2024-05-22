@@ -7,12 +7,12 @@ local lrandom = love.math.random
 
 local Usable = {}
 
-local TYPE_INVOKE_INFO = {
-    ['potion']  = Potion.use,
-    ['spell']   = Spell.use,
-    ['wand']    = Wand.use,
-    ['food']    = Food.use,
-    ['tome']    = Tome.use,
+local USABLE_TYPE_INFO = {
+    ['potion']  = Potion,
+    ['spell']   = Spell,
+    ['wand']    = Wand,
+    ['food']    = Food,
+    ['tome']    = Tome,
 }
 
 Usable.new = function(entity, def)
@@ -22,20 +22,15 @@ Usable.new = function(entity, def)
         amount = lrandom(1, 4)
     end
 
-    local useFn = TYPE_INVOKE_INFO[entity.type]
-    assert(useFn ~= nil, 'no use function defined for "' .. entity.type .. '"')
+    local T = USABLE_TYPE_INFO[entity.type]
+    assert(T ~= nil, 'no usable type defined for "' .. entity.type .. '"')
+    local usable = T(entity, def)
 
     -- the default use function is a noop, just returning success status: false
     local use = function(self, source, target, level, duration) 
-        useFn(self, source, target, level, duration)
+        usable:use(source, target, level, duration)
     end
     
-    local getEffect = function(self)
-        if not def.effect then return nil end
-        
-        return EntityFactory.create(def.effect)
-    end
-
     local expend = function(self) 
         amount = math.max(amount - 1, 0)
         
@@ -51,7 +46,6 @@ Usable.new = function(entity, def)
         -- methods
         use             = use,
         expend          = expend,
-        getEffect       = getEffect,
         requiresTarget  = requiresTarget,
     }, Usable)
 end

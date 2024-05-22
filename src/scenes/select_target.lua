@@ -66,12 +66,6 @@ SelectTarget.new = function(entity)
                 local use = Use(level, entity, ability, target_coord)
                 entity:getComponent(Control):setAction(use)
             end
-
-            local spell = ability:getComponent(Spell)
-            if spell then
-                local cast_spell = CastSpell(level, entity, spell, target_coord)
-                entity:getComponent(Control):setAction(cast_spell)
-            end
         end
 
         if Gamestate.current() == self then Gamestate.pop() end

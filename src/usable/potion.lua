@@ -3,15 +3,24 @@
 --  Author: Wolfgang Schreurs
 --  info+despair@wolftrail.net
 
-local M = {}
+local Potion = {}
 
-M.use = function(usable, source, target, level, duration)
-    if target == nil then return false end
+Potion.new = function(entity, def)
+    local use = function(source, target, level, duration)
+        if target == nil then return false end
 
-    local health = target:getComponent(Health)
-    health:heal(lrandom(2, 6))
+        local health = target:getComponent(Health)
+        health:heal(lrandom(2, 6))
 
-    return true
+        return true
+    end
+    
+    return setmetatable({
+        -- methods
+        use = use,    
+    }, Potion)
 end
 
-return M
+return setmetatable(Potion, {
+    __call = function(_, ...) return Potion.new(...) end,
+})

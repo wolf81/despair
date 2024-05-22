@@ -3,15 +3,24 @@
 --  Author: Wolfgang Schreurs
 --  info+despair@wolftrail.net
 
-local M = {}
+local Food = {}
 
-M.use = function(usable, source, target, level, duration)
-    if target == nil then return false end
+Food.new = function(entity, def)    
+    local use = function(source, target, level, duration)
+        if target == nil then return false end
 
-    local energy = target:getComponent(Energy)
-    energy:eatFood(5)
+        local energy = target:getComponent(Energy)
+        energy:eatFood(5)
 
-    return true
+        return true
+    end
+
+    return setmetatable({
+        -- methods 
+        use = use,   
+    }, Food)
 end
 
-return M
+return setmetatable(Food, {
+    __call = function(_, ...) return Food.new(...) end,
+})
