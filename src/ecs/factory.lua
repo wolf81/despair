@@ -17,7 +17,7 @@ local function createEntity(def, coord)
 
     local entity = Entity(def, coord) 
 
-    entity.flags = M.getFlags(id) 
+    entity.flags = M.getFlags(id, entity.type) 
     -- provice every entity with an Info component, for displaying name and details in UI
     entity:addComponent(Info(entity, def))
 
@@ -162,11 +162,11 @@ M.getDefinition = function(id)
     return definitions[id]
 end
 
-M.getFlags = function(id)
+M.getFlags = function(id, type)
     local flags = 0
 
     local def = definitions[id]
-    if def ~= nil then return FlagsHelper.parseFlags(def['flags'] or {}) end
+    if def ~= nil then return FlagsHelper.parseFlags(def['flags'] or {}, type) end
 
     return 0
 end

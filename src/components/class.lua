@@ -7,14 +7,23 @@ local mmin, mfloor = math.min, math.floor
 
 local Class = {}
 
-CLASSES = TableHelper.readOnly({
+local SPELLS = TableHelper.readOnly({
+    ['cleric'] = {
+        'magic-missile',
+    },
+    ['mage'] = {
+        'magic-missile',
+    },
+})
+
+local CLASSES = TableHelper.readOnly({
     ['fighter'] = true,
     ['cleric']  = true,
     ['rogue']   = true,
     ['mage']    = true,
 })
 
-ARMOR_PROFICIENCIES = TableHelper.readOnly({
+local ARMOR_PROFICIENCIES = TableHelper.readOnly({
     ['fighter'] = {
         ['shield'] = true,
         ['heavy']  = true,
@@ -171,6 +180,10 @@ Class.new = function(entity, def)
         return class == 'fighter' or class == 'rogue'
     end
 
+    local getSpells = function(self)
+        return SPELLS[class] or {}
+    end
+
     return setmetatable({
         -- methods
         getExp          = getExp,
@@ -179,6 +192,7 @@ Class.new = function(entity, def)
         isAnyOf         = isAnyOf,
         getLevel        = getLevel,
         canEquip        = canEquip,
+        getSpells       = getSpells,
         canLevelUp      = canLevelUp,
         getClassName    = getClassName,
         canDualWield    = canDualWield,

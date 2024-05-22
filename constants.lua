@@ -27,6 +27,10 @@ FONT = love.graphics.newImageFont('gfx/image_font.png',
     'yz ABCDEFGHIJKLMNOPQRSTUVWXYZ')
 
 FLAGS = TableHelper.readOnly({
+    -- spell flags
+    ['arcane']          = 0x1,
+    ['divine']          = 0x2,
+
     -- effect flags
     ['projectile']      = 0x1,
 

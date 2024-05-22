@@ -20,6 +20,10 @@ local DEATH_ACTIONS = {
     ['char-sheet']  = true,
 }
 
+local function getSpells(player)
+    return player:getComponent(Class):getSpells()
+end
+
 local function getItems(player, type)
     local backpack = player:getComponent(Backpack)
 
@@ -242,6 +246,7 @@ Game.new = function(level_info, player_id)
             ['char-sheet']      = function() onShowCharacterSheet(player) end,
             ['take']            = function() onInventoryChanged(player) end,
             ['put']             = function() onInventoryChanged(player) end,
+            ['cast-spell']      = function() onShowItems(getSpells(player), 'cast-spell') end,
             ['use-food']        = function() onShowItems(getItems(player, 'food'), 'use-food') end,
             ['use-wand']        = function() onShowItems(getItems(player, 'wand'), 'use-wand') end,
             ['use-scroll']      = function() onShowItems(getItems(player, 'tome'), 'use-scroll') end,
