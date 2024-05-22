@@ -11,21 +11,36 @@ local function getLevel(entity)
     return class:getLevel() or npc:getLevel()
 end
 
+local function getAngle(coord1, coord2)
+    coord1 = vector(coord1.x + 0.5, coord1.y + 0.5)
+    coord2 = vector(coord2.x + 0.5, coord2.y + 0.5)            
+
+    --[[
+    effect:getComponent(Visual):setRotation(math.atan2(dxy.x, -dxy.y) + math.pi / 2)
+    effect.coord = coord1
+    --]]
+
+    local dxy = coord1 - coord2
+    local angle = math.atan2(dxy.x, -dxy.y) + math.pi / 2
+    return angle
+end
+
 MagicMissile.new = function(level, entity, coord)
     local level = getLevel(entity)
 
-    local draw = function(self)
-        -- body
-    end
+    local texture = TextureCache:get('uf_fx')
+    local quads = QuadCache:get('uf_fx') -- 81
 
-    local update = function(self, dt)
-        -- body
+    local cast = function(self, duration, fn)
+        print('cast magic missile')
+        
+        Timer.after(duration, fn)
+        --Timer.tween(duration, entity, { coord = coord }, 'linear', fn)
     end
 
     return setmetatable({
         -- methods
-        draw    = draw,
-        update  = update,
+        cast    = cast,
     }, MagicMissile)
 end
 

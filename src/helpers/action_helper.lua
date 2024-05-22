@@ -55,4 +55,6 @@ M.getRestCost = function(entity) return BASE_ACTION_COST end
 
 M.getUseCost = function(entity) return BASE_ACTION_COST end
 
+M.getSpellCost = function(entity) return BASE_ACTION_COST end
+
 return M
