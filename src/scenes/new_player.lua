@@ -359,7 +359,7 @@ NewPlayer.new = function()
             char_buttons[6].widget:setEnabled(name ~= nil or skills ~= nil)
             char_buttons[7].widget:setEnabled(name ~= nil)
             portrait.widget:configure(gender, race, class)
-            play_button.widget:setEnabled(portrait.widget:getIdentifier() ~= nil)
+            play_button.widget:setEnabled(name ~= nil)
 
             local lines = {}
             if name then 
