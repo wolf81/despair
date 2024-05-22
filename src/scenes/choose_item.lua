@@ -27,7 +27,7 @@ end
 
 local function getFrame(anchor_x, anchor_y, item_count)
     local w, h = TILE_SIZE * item_count, TILE_SIZE
-    local x = anchor_x - w / 2 + (w / item_count / 2) 
+    local x = math.max(anchor_x - w / 2 + (w / item_count / 2), 0)
     local y = anchor_y - h - 1
     return Rect(x, y, w, h)
 end
