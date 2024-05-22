@@ -87,12 +87,16 @@ UI                  = require 'src.util.ui'
 DijkstraMap         = require 'src.dijkstra.dijkstra'
 
 -- actions
+CastSpell           = require 'src.actions.cast_spell'
 Destroy             = require 'src.actions.destroy'
 Attack              = require 'src.actions.attack'
 Rest                = require 'src.actions.rest'
 Move                = require 'src.actions.move'
 Idle                = require 'src.actions.idle'
 Use                 = require 'src.actions.use'
+
+-- spells
+MagicMissile        = require 'src.spells.magic_missile'
 
 -- input modes
 Keyboard            = require 'src.input_modes.keyboard'

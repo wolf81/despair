@@ -35,8 +35,8 @@ local function initSystems(entities)
 end
 
 Level.new = function(dungeon, level_info)
-    assert(dungeon ~= nil, 'missing argument "dungeon"')
-    assert(level_info ~= nil, 'missing argument "level_info"')
+    assert(dungeon ~= nil, 'missing argument: "dungeon"')
+    assert(level_info ~= nil, 'missing argument: "level_info"')
 
     -- generate a map
     local tiles, stair_up, stair_dn = MazeGenerator.generate(MAP_SIZE, level_info.corr_size)

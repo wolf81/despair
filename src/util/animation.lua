@@ -8,7 +8,7 @@ local mmin, mmax = math.min, math.max
 local Animation = {}
 
 Animation.new = function(frames, duration)
-    assert(duration ~= nil, 'missing argument "duration"')
+    assert(duration ~= nil, 'missing argument: "duration"')
 
     local frame_idx = 1
     local time = 0.0

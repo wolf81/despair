@@ -52,7 +52,7 @@ Visual.new = function(entity, def, duration)
     end
 
     colorize = function(self, duration)
-        assert(duration ~= nil, 'missing argument "duration"')
+        assert(duration ~= nil, 'missing argument: "duration"')
 
         -- prevent shader from triggering multiple times while one is busy
         if shader_info.shader ~= nil then return end
