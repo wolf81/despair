@@ -108,7 +108,11 @@ local function createEntity(def, coord)
         entity:addComponent(Usable(entity, def))
         entity:addComponent(Item(entity, def))        
     elseif entity.type == 'effect' then
-        entity.z_index  = 20
+        entity.z_index = 20
+    elseif entity.type == 'spell' then        
+        entity.z_index = 20 
+
+        entity:addComponent(Spell(entity, def))
     end
 
     return entity

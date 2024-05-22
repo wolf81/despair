@@ -1,10 +1,10 @@
-ID$             |TYPE$ |NAME$           |LEVEL |TEXTURE$ |ANIM@ |FLAGS@ |
+ID$             |TYPE$ |NAME$           |LEVEL# |TEXTURE$ |ANIM@ |FLAGS@ |
 
-light           |spell |Light           |0     |uf_fx    |41    |A,D    |
-resistance      |spell |Resistance      |0     |uf_fx    |40    |D,N    |
-magic-missile   |spell |Magic Missile   |1     |uf_fx    |81    |A      |
-mage-armor      |spell |Mage Armor      |1     |uf_fx    |10    |A      |
-sleep           |spell |Sleep           |1     |uf_fx    |43    |A      |
-shield-of-faith |spell |Shield of Faith |1     |uf_fx    |5     |D      |
-invisibility    |spell |Invisibility    |2     |uf_fx    |45    |A,I    |
-mirror-image    |spell |Mirror Image    |2     |uf_fx    |32    |A,I    |
+light           |spell |Light           |0      |uf_fx    |41    |A,D    |
+resistance      |spell |Resistance      |0      |uf_fx    |40    |D,N    |
+magic-missile   |spell |Magic Missile   |1      |uf_fx    |81    |A      |
+mage-armor      |spell |Mage Armor      |1      |uf_fx    |10    |A      |
+sleep           |spell |Sleep           |1      |uf_fx    |43    |A      |
+shield-of-faith |spell |Shield of Faith |1      |uf_fx    |5     |D      |
+invisibility    |spell |Invisibility    |2      |uf_fx    |45    |A,I    |
+mirror-image    |spell |Mirror Image    |2      |uf_fx    |32    |A,I    |

@@ -52,7 +52,11 @@ ChooseItem.new = function(player, items, button)
         local x, y = frame:unpack()
         local button = getImageButton(item, function()
             local usable = item:getComponent(Usable)
+            local spell = item:getComponent(Spell)
+
             if usable and usable:requiresTarget() then
+                showSelectTarget(item, player)
+            elseif spell then
                 showSelectTarget(item, player) 
             else
                 local level = game:getDungeon():getLevel()

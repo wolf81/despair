@@ -53,7 +53,7 @@ SelectTarget.new = function(entity)
         frame = Rect(x, y, w, h)
 
         ox = -w % TILE_SIZE - TILE_SIZE
-        oy = -h % TILE_SIZE
+        oy = -h % TILE_SIZE + 3 -- TODO: why add 3 to fix alignment; fix calculation
     end
 
     local mouseReleased = function(self, mx, my, button, istouch, presses)

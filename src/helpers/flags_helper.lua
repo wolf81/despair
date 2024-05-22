@@ -17,7 +17,7 @@ M.parseFlags = function(flags, type)
             if flag == 'A' then 
                 val = bbor(val, FLAGS.arcane)
             elseif flag == 'D' then
-                val = bbor(val, FLAGS.devine)
+                val = bbor(val, FLAGS.divine)
             end
         end
     else

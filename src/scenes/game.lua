@@ -21,7 +21,27 @@ local DEATH_ACTIONS = {
 }
 
 local function getSpells(player)
-    return player:getComponent(Class):getSpells()
+    local spells = {}
+
+    local class = player:getComponent(Class)
+    local class_name = class:getClassName()
+
+    local type_flag = 0 
+    if class_name == 'cleric' then
+        type_flag = FLAGS.divine
+    elseif class_name == 'mage' then
+        type_flag = FLAGS.arcane
+    end 
+
+    local spell_ids = EntityFactory.getIds('spell')
+    for _, spell_id in ipairs(spell_ids) do
+        local flags = EntityFactory.getFlags(spell_id, 'spell')
+        if FlagsHelper.hasFlag(flags, type_flag) then
+            table.insert(spells, EntityFactory.create(spell_id))
+        end
+    end
+
+    return spells
 end
 
 local function getItems(player, type)
