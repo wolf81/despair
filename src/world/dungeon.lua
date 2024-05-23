@@ -54,7 +54,7 @@ local function generateLootTable()
     end
 
     for _, id in ipairs(EntityFactory.getIds('wand')) do
-        loot_table[id] = 2
+        loot_table[id] = 200
     end
 
     for _, id in ipairs(EntityFactory.getIds('food')) do

@@ -102,11 +102,11 @@ MageArmor           = require 'src.spells.mage_armor'
 Light               = require 'src.spells.light'
 
 -- usable
-Potion              = require 'src.usable.potion'
-Spell               = require 'src.usable.spell'
-Tome                = require 'src.usable.tome'
-Food                = require 'src.usable.food'
-Wand                = require 'src.usable.wand'
+PotionUsable        = require 'src.usable.potion_usable'
+SpellUsable         = require 'src.usable.spell_usable'
+TomeUsable          = require 'src.usable.tome_usable'
+FoodUsable          = require 'src.usable.food_usable'
+WandUsable          = require 'src.usable.wand_usable'
 
 -- input modes
 Keyboard            = require 'src.input_modes.keyboard'

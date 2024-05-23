@@ -3,7 +3,7 @@
 --  Author: Wolfgang Schreurs
 --  info+despair@wolftrail.net
 
-local Spell = {}
+local SpellUsable = {}
 
 local SPELL_TYPE_INFO = {
     ['shield-of-faith'] = ShieldOfFaith,
@@ -13,7 +13,7 @@ local SPELL_TYPE_INFO = {
     ['light']           = Light,
 }
 
-Spell.new = function(entity, def)
+SpellUsable.new = function(entity, def)
     local use = function(self, source, target, level, duration)
         local T = SPELL_TYPE_INFO[entity.id]
 
@@ -21,14 +21,14 @@ Spell.new = function(entity, def)
         spell:cast(duration)
 
         return false
-    end    
+    end
 
     return setmetatable({
         -- methods
         use = use,
-    }, Spell)
+    }, SpellUsable)
 end
 
-return setmetatable(Spell, {
-    __call = function(_, ...) return Spell.new(...) end,
+return setmetatable(SpellUsable, {
+    __call = function(_, ...) return SpellUsable.new(...) end,
 })

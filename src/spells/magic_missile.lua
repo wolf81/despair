@@ -7,8 +7,12 @@ local MagicMissile = {}
 
 local function getLevel(entity)
     local class = entity:getComponent(Class)
+    if class then return class:getLevel() end
+
     local npc = entity:getComponent(NPC)
-    return class:getLevel() or npc:getLevel() or 1
+    if npc then return npc:getLevel() end
+
+    return 1
 end
 
 local function getAngle(coord1, coord2)
@@ -28,6 +32,14 @@ local function getAngle(coord1, coord2)
     return angle
 end
 
+local function getEntity(level, coord)
+    local entities = level:getEntities(coord, function(entity) 
+        return entity.type == 'pc' or entity.type == 'npc'
+    end)
+
+    return #entities > 0 and entities[1] or nil
+end
+
 MagicMissile.new = function(level, source, entity, target_coord)
     local spell_level = getLevel(source)
 
@@ -40,8 +52,16 @@ MagicMissile.new = function(level, source, entity, target_coord)
     effect.flags = FlagsHelper.parseFlags({ 'PR' }, 'effect')
 
     local cast = function(self, duration)
-        print('cast magic missile')
-        EffectHelper.showProjectile(effect, level, duration, source.coord, target_coord)
+        local entity = getEntity(level, target_coord)
+        if entity ~= nil then
+            local damage = ndn.dice('1d4+1').roll()
+            entity:getComponent(Health):harm(damage)
+
+            EffectHelper.showProjectile(effect, level, duration, source.coord, target_coord)
+            return true
+        end
+
+        return false
     end
 
     return setmetatable({

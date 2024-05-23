@@ -4,5 +4,5 @@ return {
 	name = 'wand',
 	texture = 'uf_items',
 	anim = { 409 },
-	effect = 'ef_bolt_purple',
+	spell = 'magic-missile',
 }

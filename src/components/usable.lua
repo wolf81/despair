@@ -8,11 +8,11 @@ local lrandom = love.math.random
 local Usable = {}
 
 local USABLE_TYPE_INFO = {
-    ['potion']  = Potion,
-    ['spell']   = Spell,
-    ['wand']    = Wand,
-    ['food']    = Food,
-    ['tome']    = Tome,
+    ['potion']  = PotionUsable,
+    ['spell']   = SpellUsable,
+    ['wand']    = WandUsable,
+    ['food']    = FoodUsable,
+    ['tome']    = TomeUsable,
 }
 
 Usable.new = function(entity, def)
