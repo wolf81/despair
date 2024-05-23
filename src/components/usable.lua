@@ -26,7 +26,6 @@ Usable.new = function(entity, def)
     assert(T ~= nil, 'no usable type defined for "' .. entity.type .. '"')
     local usable = T(entity, def)
 
-    -- the default use function is a noop, just returning success status: false
     local use = function(self, source, target, level, duration) 
         usable:use(source, target, level, duration)
     end

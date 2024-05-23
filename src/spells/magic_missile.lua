@@ -8,7 +8,7 @@ local MagicMissile = {}
 local function getLevel(entity)
     local class = entity:getComponent(Class)
     local npc = entity:getComponent(NPC)
-    return class:getLevel() or npc:getLevel()
+    return class:getLevel() or npc:getLevel() or 1
 end
 
 local function getAngle(coord1, coord2)
@@ -28,17 +28,20 @@ local function getAngle(coord1, coord2)
     return angle
 end
 
-MagicMissile.new = function(level, entity, coord)
-    local level = getLevel(entity)
+MagicMissile.new = function(level, source, entity, target_coord)
+    local spell_level = getLevel(source)
 
-    local texture = TextureCache:get('uf_fx')
-    local quads = QuadCache:get('uf_fx') -- 81
+    -- create an effect at runtime
+    local effect = EntityFactory.create({
+        id      = 'ef_' .. entity.id,
+        texture = 'uf_fx',
+        anim    = { 81 },
+    })
+    effect.flags = FlagsHelper.parseFlags({ 'PR' }, 'effect')
 
-    local cast = function(self, duration, fn)
+    local cast = function(self, duration)
         print('cast magic missile')
-
-        Timer.after(duration, fn)
-        --Timer.tween(duration, entity, { coord = coord }, 'linear', fn)
+        EffectHelper.showProjectile(effect, level, duration, source.coord, target_coord)
     end
 
     return setmetatable({

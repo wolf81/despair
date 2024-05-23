@@ -22,7 +22,8 @@ M.showProjectile = function(effect, level, duration, origin_coord, target_coord)
 
     local dxy = origin_coord - target_coord
     -- TODO: for wand effect, origin isn't quite in center depending on direction
-    effect:getComponent(Visual):setRotation(matan2(dxy.x, -dxy.y) + HALF_PI)
+    local angle = matan2(dxy.x, -dxy.y) + HALF_PI
+    effect:getComponent(Visual):setRotation(angle)
     effect.coord = origin_coord
 
     -- TODO: projectiles should have a constant speed, related to distance

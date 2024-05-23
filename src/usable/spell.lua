@@ -5,10 +5,21 @@
 
 local Spell = {}
 
-Spell.new = function(entity, def)
-    print(entity.name)
+local SPELL_TYPE_INFO = {
+    ['shield-of-faith'] = ShieldOfFaith,
+    ['magic-missile']   = MagicMissile,
+    ['resistance']      = Resistance,
+    ['mage-armor']      = MageArmor,
+    ['light']           = Light,
+}
 
-    local use = function(source, target, level, duration)
+Spell.new = function(entity, def)
+    local use = function(self, source, target, level, duration)
+        local T = SPELL_TYPE_INFO[entity.id]
+
+        local spell = T(level, source, entity, target)
+        spell:cast(duration)
+
         return false
     end    
 

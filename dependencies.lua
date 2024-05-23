@@ -94,15 +94,19 @@ Move                = require 'src.actions.move'
 Idle                = require 'src.actions.idle'
 Use                 = require 'src.actions.use'
 
+-- spells
+ShieldOfFaith       = require 'src.spells.shield_of_faith'
+MagicMissile        = require 'src.spells.magic_missile'
+Resistance          = require 'src.spells.resistance'
+MageArmor           = require 'src.spells.mage_armor'
+Light               = require 'src.spells.light'
+
 -- usable
 Potion              = require 'src.usable.potion'
 Spell               = require 'src.usable.spell'
 Tome                = require 'src.usable.tome'
 Food                = require 'src.usable.food'
 Wand                = require 'src.usable.wand'
-
--- spells
-MagicMissile        = require 'src.spells.magic_missile'
 
 -- input modes
 Keyboard            = require 'src.input_modes.keyboard'
