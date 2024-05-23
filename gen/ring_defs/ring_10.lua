@@ -1,4 +1,4 @@
-return {
+ return {
 	id = 'ring_10',
 	type = 'ring',
 	name = 'ring',

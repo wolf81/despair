@@ -22,7 +22,7 @@ return {
         'Laoise',
         'Aoibhe',
         'Fiadh',
-        'Áine',
+        'Aine',
         'Sinead',
         'Eabha',
         'Aisling',
