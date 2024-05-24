@@ -121,6 +121,7 @@ System              = require 'src.ecs.system'
 -- components
 Cartographer        = require 'src.components.cartographer'
 Equippable          = require 'src.components.equippable'
+Conditions          = require 'src.components.conditions'
 HealthBar           = require 'src.components.health_bar'
 MoveSpeed           = require 'src.components.move_speed'
 Equipment           = require 'src.components.equipment'

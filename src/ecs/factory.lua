@@ -40,6 +40,7 @@ local function createEntity(def, coord)
         entity:addComponent(HealthBar(entity, def))
         entity:addComponent(Energy(entity, def))
         entity:addComponent(PC(entity, def))
+        entity:addComponent(Conditions(entity, def))
 
         -- equip all from backpack
         entity:getComponent(Backpack):equipAll()
@@ -55,6 +56,7 @@ local function createEntity(def, coord)
         entity:addComponent(Defense(entity, def))
         entity:addComponent(MoveSpeed(entity, def))
         entity:addComponent(HealthBar(entity, def))
+        entity:addComponent(Conditions(entity, def))
         -- TODO: optionally allow some NPCs to have a class as described in Microlite20 manual?
 
         -- equip all from backpack

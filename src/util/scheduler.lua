@@ -6,8 +6,7 @@
 local Scheduler = {}
 
 Scheduler.new = function()
-    local turn_idx, turn_finished = 0, true
-    local turn = nil
+    local turn, turn_finished = nil, true
     local entities, entity_idx = {}, 0
 
     local in_combat = false
@@ -41,9 +40,9 @@ Scheduler.new = function()
         if not turn:isFinished() then turn:update() end
     end
 
-    local getTurnIndex = function(self) return turn_idx end
-
     local inCombat = function(self) return in_combat end
+
+    local getTurnIndex = function(self) return turn and turn:getIndex() or 0 end
 
     return setmetatable({
         -- methods

@@ -40,7 +40,19 @@ MagicMissile.new = function(level, source, entity, target_coord)
             local damage = ndn.dice('1d4+1').roll()
             entity:getComponent(Health):harm(damage)
 
+            -- TODO: add projectiles based on level, e.g.:
+            -- * PC (3): 2 projectiles
+            -- * PC (5): 3 projectiles
+            -- * etc...
             EffectHelper.showProjectile(effect, level, duration, source.coord, target_coord)
+
+            --[[
+            -- could be nice if we could add a relative distance from center from mid point, e.g.
+            EffectHelper.showProjectile(effect, level, duration, source.coord, target_coord, -0.2)
+            EffectHelper.showProjectile(effect, level, duration, source.coord, target_coord, 0.2)
+            -- the relative distance should be used to create a curved movement
+            --]]
+
             return true
         end
 
