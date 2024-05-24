@@ -15,7 +15,6 @@ M.showProjectile = function(effect, level, duration, origin_coord, target_coord)
     assert(duration ~= nil, 'missing argument: "duration"')
     assert(origin_coord ~= nil, 'missing argument: "origin_coord"')
     assert(target_coord ~= nil, 'missing argument: "target_coord"')
-    assert(FlagsHelper.hasFlag(effect.flags, FLAGS.projectile), 'missing flag: "projectile"')
 
     origin_coord = vector(origin_coord.x + 0.5, origin_coord.y + 0.5)
     target_coord = vector(target_coord.x + 0.5, target_coord.y + 0.5)            

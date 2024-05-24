@@ -15,23 +15,6 @@ local function getLevel(entity)
     return 1
 end
 
-local function getAngle(coord1, coord2)
-    coord1 = vector(coord1.x + 0.5, coord1.y + 0.5)
-    coord2 = vector(coord2.x + 0.5, coord2.y + 0.5)            
-
-    --[[
-    effect:getComponent(Visual):setRotation(math.atan2(dxy.x, -dxy.y) + math.pi / 2)
-    effect.coord = coord1
-    --]]
-
-    local dxy = coord1 - coord2
-    local angle = math.atan2(dxy.x, -dxy.y) + math.pi / 2
-
-    print('angle:', angle, coord1:angleTo(coord2), coord2:angleTo(coord1))
-
-    return angle
-end
-
 local function getEntity(level, coord)
     local entities = level:getEntities(coord, function(entity) 
         return entity.type == 'pc' or entity.type == 'npc'
@@ -49,7 +32,6 @@ MagicMissile.new = function(level, source, entity, target_coord)
         texture = 'uf_fx',
         anim    = { 81 },
     })
-    effect.flags = FlagsHelper.parseFlags({ 'PR' }, 'effect')
 
     local cast = function(self, duration)
         local entity = getEntity(level, target_coord)
