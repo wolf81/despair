@@ -19,21 +19,13 @@ Use.new = function(level, entity, item, target)
 
         did_execute = true
 
-        usable:use(target, level)
-
         -- use wand on enemy
         -- use potion on Kendrick
         -- use tome on ..?
+        -- use (cast) spell on ..?
         Signal.emit('use', entity, item, target)
 
-        local effect = usable:getEffect()
-        if effect ~= nil then
-            if FlagsHelper.hasFlag(effect.flags, FLAGS.projectile) then
-                EffectHelper.showProjectile(effect, level, 0.5, entity.coord, target)
-            else
-                EffectHelper.showEffect(effect, level, 0.5, target)
-            end
-        end
+        usable:use(entity, target, level, duration)
 
         Timer.after(duration, function()
             is_finished = true

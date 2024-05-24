@@ -20,6 +20,30 @@ local DEATH_ACTIONS = {
     ['char-sheet']  = true,
 }
 
+local function getSpells(player)
+    local spells = {}
+
+    local class = player:getComponent(Class)
+    local class_name = class:getClassName()
+
+    local type_flag = 0 
+    if class_name == 'cleric' then
+        type_flag = FLAGS.divine
+    elseif class_name == 'mage' then
+        type_flag = FLAGS.arcane
+    end 
+
+    local spell_ids = EntityFactory.getIds('spell')
+    for _, spell_id in ipairs(spell_ids) do
+        local flags = EntityFactory.getFlags(spell_id, 'spell')
+        if FlagsHelper.hasFlag(flags, type_flag) then
+            table.insert(spells, EntityFactory.create(spell_id))
+        end
+    end
+
+    return spells
+end
+
 local function getItems(player, type)
     local backpack = player:getComponent(Backpack)
 
@@ -187,10 +211,8 @@ Game.new = function(level_info, player_id)
     end
 
     local onInventoryChanged = function(player)
-        local food_count = 0
-        local wand_count = 0
-        local tome_count = 0
-        local potion_count = 0
+        -- calculate item totals in inventory
+        local food_count, wand_count, tome_count, potion_count = 0, 0, 0, 0
 
         for idx = 1, backpack:getSize() do
             local item = backpack:peek(idx)            
@@ -205,6 +227,7 @@ Game.new = function(level_info, player_id)
             end
         end
 
+        -- enable buttons if item totals are greater than 0
         for element in layout:eachElement() do
             if getmetatable(element.widget) == ActionButton then
                 local button = element.widget
@@ -242,6 +265,7 @@ Game.new = function(level_info, player_id)
             ['char-sheet']      = function() onShowCharacterSheet(player) end,
             ['take']            = function() onInventoryChanged(player) end,
             ['put']             = function() onInventoryChanged(player) end,
+            ['cast-spell']      = function() onShowItems(getSpells(player), 'cast-spell') end,
             ['use-food']        = function() onShowItems(getItems(player, 'food'), 'use-food') end,
             ['use-wand']        = function() onShowItems(getItems(player, 'wand'), 'use-wand') end,
             ['use-scroll']      = function() onShowItems(getItems(player, 'tome'), 'use-scroll') end,

@@ -7,20 +7,11 @@ local mfloor, mmin, mmax = math.floor, math.min, math.max
 
 local Label = {}
 
-local function getHeight(text)
-    local n_lines = select(2, string.gsub(text, '\n', '\n'))
-    if n_lines > 1 then
-        return n_lines * (FONT:getHeight() * FONT:getLineHeight()) + FONT:getHeight()
-    end
-
-    return FONT:getHeight()
-end
-
 Label.new = function(text, color, halign, valign)
     local text_info = {
         text    = text or '',
         width   = FONT:getWidth(text or ''),
-        height  = getHeight(text or ''),
+        height  = StringHelper.getHeight(text or ''),
     }
 
     local frame = Rect(0)
@@ -63,7 +54,7 @@ Label.new = function(text, color, halign, valign)
     local setText = function(self, text_) 
         text_info.text = text_ or ''
         text_info.width = FONT:getWidth(text_ or '')
-        text_info.height = getHeight(text_ or '')
+        text_info.height = StringHelper.getHeight(text_ or '')
     end
 
     local getText = function(self) return text_info.text or '' end

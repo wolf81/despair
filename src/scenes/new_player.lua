@@ -139,6 +139,7 @@ local function getName(gender, race)
     return name
 end
 
+-- TODO: maybe we should make Stats, Skills objects to use here?
 NewPlayer.new = function()
     local image = TextureGenerator.generatePanelTexture(120, 48)
 
@@ -201,9 +202,9 @@ NewPlayer.new = function()
             'ASSIGN STATS',
             function(str_, dex_, mind_) 
                 stats = { 
-                    str = { value = str_ }, 
-                    dex = { value = dex_ }, 
-                    mind = { value = mind_ },
+                    str  = { value = str.value + str_   }, 
+                    dex  = { value = dex.value + dex_   }, 
+                    mind = { value = mind.value + mind_ },
                 }
                 skills = nil
             end,
@@ -222,11 +223,11 @@ NewPlayer.new = function()
             'ASSIGN SKILLS',
             function(phys_, subt_, know_, comm_, surv_) 
                 skills = { 
-                    phys = { value = phys_ }, 
-                    subt = { value = subt_ }, 
-                    know = { value = know_ }, 
-                    comm = { value = comm_ }, 
-                    surv = { value = surv_ },
+                    phys = { value = phys.value + phys_ }, 
+                    subt = { value = subt.value + subt_ }, 
+                    know = { value = know.value + know_ }, 
+                    comm = { value = comm.value + comm_ }, 
+                    surv = { value = surv.value + surv_ },
                 }
             end,
             {
@@ -359,7 +360,7 @@ NewPlayer.new = function()
             char_buttons[6].widget:setEnabled(name ~= nil or skills ~= nil)
             char_buttons[7].widget:setEnabled(name ~= nil)
             portrait.widget:configure(gender, race, class)
-            play_button.widget:setEnabled(portrait.widget:getIdentifier() ~= nil)
+            play_button.widget:setEnabled(name ~= nil)
 
             local lines = {}
             if name then 

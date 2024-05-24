@@ -77,6 +77,12 @@ M.makeTextfield = function(text)
     return tidy.Elem(textfield, tidy.MinSize(w, h), tidy.Stretch(1, 0))
 end
 
+M.makeTextview = function(text)
+    local textview = Textview()
+    textview:setText(text)
+    return tidy.Elem(textview, tidy.Stretch(1))
+end
+
 M.makePortrait = function(gender, race, class)
     local portrait = Portrait(gender, race, class)
     local w, h = portrait:getSize()

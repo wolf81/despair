@@ -257,7 +257,7 @@ Portrait.new = function(gender, race, class)
     end
 
     local configure = function(self, gender, race, class)
-        is_hidden = not (gender or race or class)
+        if gender and race and class then is_hidden = false end
 
         gender = string.lower(gender or 'male')
         race = string.lower(race or 'human')

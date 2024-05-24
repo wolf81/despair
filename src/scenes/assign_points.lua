@@ -15,6 +15,14 @@ local function generateImageButtonTexture(quad_idx)
     return TextureGenerator.generateImageButtonTexture(24, 24, quad_idx)
 end
 
+--[[
+points_info structured as such:
+    {
+        { key = '', value = 3, min = 3, max = 3 },                
+        { key = '', value = 4, min = 2, max = 4 },
+        { key = '', value = 5, min = 3, max = 6 },
+    }
+]]
 AssignPoints.new = function(title, fn, points_info, remaining)
     local frame = Rect(0)
 
@@ -29,13 +37,18 @@ AssignPoints.new = function(title, fn, points_info, remaining)
 
     local from_scene = nil
 
+    local initial_values = {}
+    for _, point_info in ipairs(points_info) do
+        table.insert(initial_values, point_info.value)
+    end
+
     local dismiss = function() overlay:fadeOut(Gamestate.pop) end
 
     local confirm = function() 
         if fn then 
             local points = {}
-            for _, point_info in ipairs(points_info) do
-                table.insert(points, point_info.value)
+            for idx, point_info in ipairs(points_info) do
+                table.insert(points, point_info.value - initial_values[idx])
             end
             fn(unpack(points))
         end

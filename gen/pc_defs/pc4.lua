@@ -11,7 +11,7 @@ return {
 	dex = 16,
 	mind = 13,
 	flags = { '' },
-	equip = { 'chain_mail', 'morningstar', 'food_1', 'food_1' },
+	equip = { 'scale_mail', 'morningstar', 'food_1', 'food_1' },
 	texture = 'uf_heroes',
 	anim = { 17, 18, 19, 20 },
 }

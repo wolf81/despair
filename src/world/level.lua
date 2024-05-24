@@ -23,20 +23,22 @@ end
 local function initSystems(entities)
     local visual_system, control_system = System(Visual), System(Control)
     local health_system, health_bar_system = System(Health), System(HealthBar)
+    local conditions_system = System(Conditions)
 
     for _, entity in ipairs(entities) do
         visual_system:addComponent(entity)
         control_system:addComponent(entity)
         health_system:addComponent(entity)
         health_bar_system:addComponent(entity)
+        conditions_system:addComponent(entity)
     end    
 
-    return { visual_system, control_system, health_system, health_bar_system }
+    return { visual_system, control_system, health_system, health_bar_system, conditions_system }
 end
 
 Level.new = function(dungeon, level_info)
-    assert(dungeon ~= nil, 'missing argument "dungeon"')
-    assert(level_info ~= nil, 'missing argument "level_info"')
+    assert(dungeon ~= nil, 'missing argument: "dungeon"')
+    assert(level_info ~= nil, 'missing argument: "level_info"')
 
     -- generate a map
     local tiles, stair_up, stair_dn = MazeGenerator.generate(MAP_SIZE, level_info.corr_size)
@@ -63,7 +65,7 @@ Level.new = function(dungeon, level_info)
     local scheduler = Scheduler()
 
     -- fog of war
-    local fog = Fog(16, 10)
+    local fog = Fog(map_w, map_h)
 
     -- add camera
     local camera = Camera(0.0, 0.0, 1.0)
@@ -258,7 +260,9 @@ Level.new = function(dungeon, level_info)
     end
 
     local update = function(self, dt)  
-        if is_paused == true then return end      
+        if is_paused == true then return end
+
+        fog:update(dt, map_draw_rect:unpack())
         
         for i = #entities, 1, -1 do
             local entity = entities[i]
@@ -274,16 +278,14 @@ Level.new = function(dungeon, level_info)
         scheduler:update(self)
     end
 
-    local draw = function(self, x, y, w, h)
+    local draw = function(self, x, y, w, h)        
         camera:draw(function() 
             map:draw(map_draw_rect:unpack())
+            fog:draw()
 
             for _, entity in ipairs(entities) do
                 entity:draw()
             end
-
-            local ox, oy = camera:getWorldCoords(0, 0)
-            fog:draw(ox, oy)
         end, x, y, w, h)
     end
 
@@ -399,7 +401,7 @@ Level.new = function(dungeon, level_info)
     local getScheduler = function(self) return scheduler end
 
     local getInfo = function(self) return level_info end
-    
+
     return setmetatable({
         -- methods
         draw                = draw,

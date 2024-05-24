@@ -63,6 +63,7 @@ Parchment           = require 'src.ui.parchment'
 Scrollbar           = require 'src.ui.scrollbar'
 Seperator           = require 'src.ui.seperator'
 Portrait            = require 'src.ui.portrait'
+Textview            = require 'src.ui.textview'
 Scroller            = require 'src.ui.scroller'
 Overlay             = require 'src.ui.overlay'
 Chooser             = require 'src.ui.chooser'
@@ -93,6 +94,20 @@ Move                = require 'src.actions.move'
 Idle                = require 'src.actions.idle'
 Use                 = require 'src.actions.use'
 
+-- spells
+ShieldOfFaith       = require 'src.spells.shield_of_faith'
+MagicMissile        = require 'src.spells.magic_missile'
+Resistance          = require 'src.spells.resistance'
+MageArmor           = require 'src.spells.mage_armor'
+Light               = require 'src.spells.light'
+
+-- usable
+PotionUsable        = require 'src.usable.potion_usable'
+SpellUsable         = require 'src.usable.spell_usable'
+TomeUsable          = require 'src.usable.tome_usable'
+FoodUsable          = require 'src.usable.food_usable'
+WandUsable          = require 'src.usable.wand_usable'
+
 -- input modes
 Keyboard            = require 'src.input_modes.keyboard'
 Mouse               = require 'src.input_modes.mouse'
@@ -106,6 +121,7 @@ System              = require 'src.ecs.system'
 -- components
 Cartographer        = require 'src.components.cartographer'
 Equippable          = require 'src.components.equippable'
+Conditions          = require 'src.components.conditions'
 HealthBar           = require 'src.components.health_bar'
 MoveSpeed           = require 'src.components.move_speed'
 Equipment           = require 'src.components.equipment'

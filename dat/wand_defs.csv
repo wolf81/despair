@@ -1,8 +1,8 @@
-ID$    |TYPE$ |NAME$ |TEXTURE$ |ANIM@ |EFFECT$        |
+ID$    |TYPE$ |NAME$ |TEXTURE$ |ANIM@ |SPELL$        |
 
-wand_1 |wand  |wand  |uf_items |364   |ef_bolt_purple |
-wand_2 |wand  |wand  |uf_items |365   |ef_lightning   |
-wand_3 |wand  |wand  |uf_items |408   |ef_orb_blue    |
-wand_4 |wand  |wand  |uf_items |409   |ef_bolt_purple |
-wand_5 |wand  |wand  |uf_items |452   |ef_lightning   |
-wand_6 |wand  |wand  |uf_items |453   |ef_orb_blue    |
+wand_1 |wand  |wand  |uf_items |364   |magic-missile |
+wand_2 |wand  |wand  |uf_items |365   |magic-missile |
+wand_3 |wand  |wand  |uf_items |408   |magic-missile |
+wand_4 |wand  |wand  |uf_items |409   |magic-missile |
+wand_5 |wand  |wand  |uf_items |452   |magic-missile |
+wand_6 |wand  |wand  |uf_items |453   |magic-missile |

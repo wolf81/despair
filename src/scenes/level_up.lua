@@ -18,6 +18,10 @@ local function generateTextButtonTexture(title)
     return TextureGenerator.generateTextButtonTexture(80, 32, title)
 end
 
+local function generateImageButtonTexture(quad_idx)
+    return TextureGenerator.generateImageButtonTexture(24, 24, quad_idx)
+end
+
 local function getCheckImage()
     local texture = TextureCache:get('uf_interface')
     local quad = QuadCache:get('uf_interface')[384]
@@ -42,12 +46,13 @@ LevelUp.new = function(player)
 
     local class = player:getComponent(Class)
     local health = player:getComponent(Health)
+    local stats = player:getComponent(Stats)
 
     local next_level = class:getLevel() + 1
 
     local preview = class:levelUp(true)
 
-    local background = TextureGenerator.generatePanelTexture(220, 200)
+    local background = TextureGenerator.generatePanelTexture(240, 220)
     local frame = getFrame(background)
 
     local overlay = Overlay()
@@ -66,21 +71,61 @@ LevelUp.new = function(player)
             'Damage:    ' .. StringHelper.padRight('+' .. tostring(preview.dmg_bonus), STR_PAD))
     end
 
-    local text = table.concat(lines, '\n')
-    local parchment = UI.makeParchment(text)
+    local dismiss = function()
+        overlay:fadeOut(Gamestate.pop) 
+    end
 
-    local handles = {}
+    local accept = function()
+        class:levelUp()
+        dismiss()
+    end
+
+    local acceptButton = UI.makeButton(accept, generateTextButtonTexture('ACCEPT'))
+    acceptButton.widget:setEnabled(stats:getPoints() == 0)
+
+    local assignStat = function()
+        local str = stats:getValue('str')
+        local dex = stats:getValue('dex')
+        local mind = stats:getValue('mind')
+        local points = stats:getPoints()
+        
+        Gamestate.push(AssignPoints(
+            'ASSIGN STATS',
+            function(str_, dex_, mind_) 
+                stats:assignPoints(str_, 'str')
+                stats:assignPoints(dex_, 'dex')
+                stats:assignPoints(mind_, 'mind')
+                acceptButton.widget:setEnabled(stats:getPoints() == 0)
+            end,
+            {
+                { key = 'Strength',  value = str,  min = str,  max = str + points  },                
+                { key = 'Dexterity', value = dex,  min = dex,  max = dex + points  },
+                { key = 'Mind',      value = mind, min = mind, max = mind + points },
+            },
+        points))        
+    end
+
+    local text = table.concat(lines, '\n')
+
+    local controls = {
+        UI.makeLabel('LEVEL UP', { 1.0, 1.0, 1.0, 1.0 }, 'center', 'start'),
+        UI.makeTextview(text),
+        tidy.HStack({
+            UI.makeLabel('Assign stat point', { 1.0, 1.0, 1.0, 1.0 }, 'left', 'center'),
+            UI.makeFlexSpace(),
+            UI.makeButton(assignStat, generateImageButtonTexture(379)),
+        }),
+        tidy.HStack({
+            UI.makeButton(dismiss, generateTextButtonTexture('CLOSE')),
+            UI.makeFlexSpace(),
+            acceptButton,
+        }),
+    }
+
+    if stats:getPoints() == 0 then table.remove(controls, 3) end
 
     local layout = tidy.Border(tidy.Margin(10), {
-        tidy.VStack(tidy.Spacing(10), tidy.Stretch(1), {
-            UI.makeLabel('LEVEL UP', { 1.0, 1.0, 1.0, 1.0 }, 'center', 'start'),
-            parchment,
-            tidy.HStack({
-                UI.makeButton('dismiss', generateTextButtonTexture('CLOSE')),
-                UI.makeFlexSpace(),
-                UI.makeButton('accept', generateTextButtonTexture('ACCEPT')),
-            }),
-        })
+        tidy.VStack(tidy.Spacing(10), tidy.Stretch(1), controls)
     }):setFrame(frame:unpack())
 
     local update = function(self, dt)
@@ -104,29 +149,21 @@ LevelUp.new = function(player)
 
         game = from
         overlay:fadeIn()
-
-        -- TODO: update player stats for new level
-        handle = Signal.register('accept', function() 
-            class:levelUp()
-            Gamestate.pop() 
-        end)
     end
 
     local leave = function(self, to)
         game = nil
-
-        Signal.remove('accept', handle)
     end
 
     local keyReleased = function(self, key, scancode)
         if Gamestate.current() == self and key == 'escape' then 
-            overlay:fadeOut(Gamestate.pop) 
+            dismiss()
         end
     end
 
     local mouseReleased = function(self, mx, my, button, istouch, presses)
         if Gamestate.current() == self and not frame:contains(mx, my) then
-            overlay:fadeOut(Gamestate.pop) 
+            dismiss()
         end
     end
         

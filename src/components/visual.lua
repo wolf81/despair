@@ -52,7 +52,7 @@ Visual.new = function(entity, def, duration)
     end
 
     colorize = function(self, duration)
-        assert(duration ~= nil, 'missing argument "duration"')
+        assert(duration ~= nil, 'missing argument: "duration"')
 
         -- prevent shader from triggering multiple times while one is busy
         if shader_info.shader ~= nil then return end
@@ -115,6 +115,10 @@ Visual.new = function(entity, def, duration)
         return self
     end
 
+    setAlpha = function(self, alpha)
+        fade.alpha = alpha
+    end
+
     getSize = function(self) return quad_w, quad_h end
 
     return setmetatable({
@@ -125,6 +129,7 @@ Visual.new = function(entity, def, duration)
         fadeOut     = fadeOut,
         getSize     = getSize,
         colorize    = colorize,
+        setAlpha    = setAlpha,
         setShader   = setShader,
         setOffset   = setOffset,
         setRotation = setRotation,

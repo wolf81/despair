@@ -17,7 +17,7 @@ local function createEntity(def, coord)
 
     local entity = Entity(def, coord) 
 
-    entity.flags = M.getFlags(id) 
+    entity.flags = M.getFlags(id, entity.type) 
     -- provice every entity with an Info component, for displaying name and details in UI
     entity:addComponent(Info(entity, def))
 
@@ -40,6 +40,7 @@ local function createEntity(def, coord)
         entity:addComponent(HealthBar(entity, def))
         entity:addComponent(Energy(entity, def))
         entity:addComponent(PC(entity, def))
+        entity:addComponent(Conditions(entity, def))
 
         -- equip all from backpack
         entity:getComponent(Backpack):equipAll()
@@ -55,6 +56,7 @@ local function createEntity(def, coord)
         entity:addComponent(Defense(entity, def))
         entity:addComponent(MoveSpeed(entity, def))
         entity:addComponent(HealthBar(entity, def))
+        entity:addComponent(Conditions(entity, def))
         -- TODO: optionally allow some NPCs to have a class as described in Microlite20 manual?
 
         -- equip all from backpack
@@ -108,15 +110,19 @@ local function createEntity(def, coord)
         entity:addComponent(Usable(entity, def))
         entity:addComponent(Item(entity, def))        
     elseif entity.type == 'effect' then
-        entity.z_index  = 20
+        entity.z_index = 20
+    elseif entity.type == 'spell' then        
+        entity.z_index = 20 
+
+        entity:addComponent(Usable(entity, def))
     end
 
     return entity
 end
 
 M.register = function(definition)
-    assert(definition.id ~= nil, 'id is required')
-    assert(definition.type ~= nil, 'type is required')
+    assert(definition.id ~= nil, 'missing field: "id"')
+    assert(definition.type ~= nil, 'missing field: "type"')
 
     definitions[definition.id] = definition
     if type_info[definition.type] == nil then
@@ -162,11 +168,11 @@ M.getDefinition = function(id)
     return definitions[id]
 end
 
-M.getFlags = function(id)
+M.getFlags = function(id, type)
     local flags = 0
 
     local def = definitions[id]
-    if def ~= nil then return FlagsHelper.parseFlags(def['flags'] or {}) end
+    if def ~= nil then return FlagsHelper.parseFlags(def['flags'] or {}, type) end
 
     return 0
 end

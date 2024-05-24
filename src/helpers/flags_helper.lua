@@ -7,16 +7,28 @@ local bband, bbor = bit.band, bit.bor
 
 local M = {}
 
-M.parseFlags = function(flags)
+M.parseFlags = function(flags, type)
     local val = 0
 
-    for idx, flag in pairs(flags) do
-        if flag == 'PR' then
-            val = bbor(val, FLAGS.projectile)
-        elseif flag == 'NW' then            
-            val = bbor(val, FLAGS.natural_weapon)
-        elseif flag == 'SB' then
-            val = bbor(val, FLAGS.shadow_blend)
+    -- TODO: clean-up per type, maybe not group all together under FLAGS
+
+    if type == 'spell' then
+        for idx, flag in pairs(flags) do
+            if flag == 'A' then 
+                val = bbor(val, FLAGS.arcane)
+            elseif flag == 'D' then
+                val = bbor(val, FLAGS.divine)
+            end
+        end
+    else
+        for idx, flag in pairs(flags) do
+            if flag == 'PR' then
+                val = bbor(val, FLAGS.projectile)
+            elseif flag == 'NW' then            
+                val = bbor(val, FLAGS.natural_weapon)
+            elseif flag == 'SB' then
+                val = bbor(val, FLAGS.shadow_blend)
+            end
         end
     end
 

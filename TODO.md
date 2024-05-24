@@ -9,13 +9,13 @@
 * feat: Make generic bar view class that can be used for health, hunger, mana, ...
 * feat: For systems, add a draw method and optional sort method, to use for rendering & allow removal of draw method in Entity class
 * feat: HealthBar system should not be drawn from Visual system after making above change
-* feat: Get experience for killing monsters and level up
 * feat: setters in components should return self, so builder pattern can be used, see Visual setRotation, setOffset
 * feat: use Dijkstra map distance to stop chase player when out of certain range, expect for creatures with some kind of tracking ability
 * feat: allow sleep if no monsters are nearby, regardless if monsters are still chasing player
 * feat: give all UI components an alpha property to use when drawing, in order to allow for smoother fade-in & fade-out transitions
 * feat: the Textfield UI component should have a focus or hightlight state that shows a cursor
 * feat: the Textfield UI cursor mentioned above should allow for editing text at arbitrary position
+* feat: remove arrow projectile from effects, add projectile_defs instead
 
 ## BUGS 
 
@@ -32,6 +32,7 @@
 
 # DONE
 
+* feat: Get experience for killing monsters and level up
 * feat: Generate monsters randomly just outside visible area of player
 * feat: Implement sleep & health recovery over sleep, remove automatic health recovery
 * feat: Implement dual-wield attacks

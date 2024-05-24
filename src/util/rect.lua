@@ -21,13 +21,22 @@ Rect.new = function(x, y, w, h)
 
     local getSize = function(self) return w, h end
 
+    local clone = function(self) return Rect(x, y, w, h) end
+
     return setmetatable({
-        -- methods        
+        -- methods
+        clone       = clone,
         unpack      = unpack,
         getSize     = getSize,
         contains    = contains,
         getPosition = getPosition,
     }, Rect)
+end
+
+function Rect.__eq(self, other)
+    local x1, y1, w1, h1 = self:unpack()
+    local x2, y2, w2, h2 = other:unpack()
+    return x1 == x2 and y1 == y2 and w1 == w2 and h1 == h2
 end
 
 return setmetatable(Rect, {
