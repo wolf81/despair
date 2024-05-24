@@ -32,6 +32,7 @@ MagicMissile.new = function(level, source, entity, target_coord)
         texture = 'uf_fx',
         anim    = { 81 },
     })
+    effect:getComponent(Visual):setAlpha(0.8)
 
     local cast = function(self, duration)
         local entity = getEntity(level, target_coord)

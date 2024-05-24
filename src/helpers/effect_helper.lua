@@ -16,13 +16,20 @@ M.showProjectile = function(effect, level, duration, origin_coord, target_coord)
     assert(origin_coord ~= nil, 'missing argument: "origin_coord"')
     assert(target_coord ~= nil, 'missing argument: "target_coord"')
 
+    -- projectiles start from center of tile, move towards target center of tile
     origin_coord = vector(origin_coord.x + 0.5, origin_coord.y + 0.5)
-    target_coord = vector(target_coord.x + 0.5, target_coord.y + 0.5)            
+    target_coord = vector(target_coord.x + 0.5, target_coord.y + 0.5)
 
+    local visual = effect:getComponent(Visual)
+
+    -- adjust offset to take into account projectile image size
+    local w, h = effect:getComponent(Visual):getSize() 
+    visual:setOffset((TILE_SIZE - w) / 2, (TILE_SIZE - h) / 2)
+
+    -- rotate projectile towards angle 
     local dxy = origin_coord - target_coord
-    -- TODO: for wand effect, origin isn't quite in center depending on direction
-    local angle = matan2(dxy.x, -dxy.y) + HALF_PI
-    effect:getComponent(Visual):setRotation(angle)
+    visual:setRotation(matan2(dxy.x, -dxy.y) + HALF_PI)
+
     effect.coord = origin_coord
 
     -- TODO: projectiles should have a constant speed, related to distance
