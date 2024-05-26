@@ -3,6 +3,8 @@
 --  Author: Wolfgang Schreurs
 --  info+despair@wolftrail.net
 
+local mfloor = math.floor
+
 local ImageButton = {}
 
 local DISABLED_ALPHA = 0.7
@@ -60,7 +62,7 @@ ImageButton.new = function(image, action, ...)
 
         local image_w, image_h = image:getDimensions()
 
-        love.graphics.draw(image, x, y)
+        love.graphics.draw(image, x + mfloor((w - image_w) / 2), y + mfloor((h - image_h) / 2))
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
     end
 
