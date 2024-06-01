@@ -258,6 +258,15 @@ Game.new = function(level_info, player_id)
         end
     end
 
+    local onConditionsChanged = function(entity)
+        local pc, class = entity:getComponent(PC), entity:getComponent(Class)
+        if pc and class then
+            pc:getPortrait():setShowLevelUp(class:canLevelUp())
+            char_sheet_button.widget:setImage(pc:getPortrait():getImage())
+            -- TODO: add images for conditions
+        end
+    end
+
     local enter = function(self, from)
         local handlers = {
             ['sleep']           = function() onSleepPlayer(player, dungeon:getLevel()) end,
@@ -274,6 +283,7 @@ Game.new = function(level_info, player_id)
             ['change-level']    = function(...) onChangeLevel(...) end,
             ['notify']          = function(...) onNotify(...) end,
             ['level-up']        = function(...) onLevelUp(...) end,
+            ['conditions']      = function(...) onConditionsChanged(...) end,
         }
         for action, handler in pairs(handlers) do
             handles[action] = Signal.register(action, handler)

@@ -32,7 +32,7 @@ M.getMoveCost = function(entity, ...)
     local prev_coord = entity.coord
 
     for _, coord in ipairs(coords) do
-        local dxy = entity.coord - prev_coord
+        local dxy = coord - prev_coord
         local direction = Direction.fromHeading(dxy.x, dxy.y)
         if Direction.isOrdinal(direction) then
             total_ap = total_ap + mfloor(move_ap * ORDINAL_MOVE_FACTOR)
@@ -56,5 +56,8 @@ M.getRestCost = function(entity) return BASE_ACTION_COST end
 M.getUseCost = function(entity) return BASE_ACTION_COST end
 
 M.getSpellCost = function(entity) return BASE_ACTION_COST end
+
+-- convert ap to time in seconds
+M.getTime = function(ap) return ap / BASE_ACTION_COST * 6 end
 
 return M

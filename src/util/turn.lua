@@ -13,6 +13,9 @@ Turn.new = function(entities, level)
     -- create a shallow clone of entities table, to prevent modifying entities in Scheduler
     local entities = { unpack(entities) }
 
+    -- the time consumed by the turn, in seconds
+    local time = 0
+
     -- remove player from entity list, as player will always start first
     local player = nil
     for idx, entity in ipairs(entities) do
@@ -48,6 +51,9 @@ Turn.new = function(entities, level)
 
             local action = control:getAction(level)
             if action then
+                -- convert AP to time in seconds, assuming 30 AP is equal to 6 seconds
+                time = ActionHelper.getTime(action:getAP())
+
                 -- when sleeping, turns are instant, since PC will not be seeing anything
                 local is_sleeping = getmetatable(action) == Rest
                 turn_duration = is_sleeping and 0 or TURN_DURATION
@@ -83,9 +89,12 @@ Turn.new = function(entities, level)
 
     local inCombat = function(self) return in_combat end
 
+    local getTime = function(self) return time end
+
     return setmetatable({
         -- methods
         update      = update,
+        getTime     = getTime,
         getIndex    = getIndex,
         inCombat    = inCombat,
         isFinished  = isFinished,

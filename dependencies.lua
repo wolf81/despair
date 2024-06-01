@@ -15,6 +15,9 @@ lume                = require 'lib.lume.lume'
 tidy                = require 'lib.composer' -- TODO: rename composer to tidy
 ndn                 = require 'lib.ndn'
 
+-- conditions
+Modify              = require 'src.conditions.modify'
+
 -- helpers
 GamestateHelper     = require 'src.helpers.gamestate_helper'
 EffectHelper        = require 'src.helpers.effect_helper'

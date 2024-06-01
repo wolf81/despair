@@ -9,22 +9,21 @@ Conditions.new = function(entity, def)
     local conditions = {}
     local turn_idx = 0
 
-    local add = function(self, condition, turns)
-        print('add condition: ', condition)    
+    local add = function(self, condition)
+        print('add condition with key: ', condition:getKey())    
 
-        conditions[condition] = turns
+        conditions[condition:getKey()] = condition
+
+        Signal.emit('conditions', entity)            
     end
 
-    local remove = function(self, T)
+    local remove = function(self, key)
         -- e.g. when using dispel
-        print('remove condition of type: ', T)
+        print('remove condition with key: ', key)
 
-        for condition in pairs(conditions) do
-            if getmetatable(condition) == T then
-                table.remove(conditions, condition)
-                break
-            end
-        end
+        conditions[key] = nil
+
+        Signal.emit('conditions', entity)            
     end
 
     local update = function(self, dt, level)
@@ -32,24 +31,31 @@ Conditions.new = function(entity, def)
 
         if turn_idx == level_turn_idx then return end
 
-        local finished = {}
-
-        for condition, turns in pairs(conditions) do
-            local next_turns = turns - 1
-            conditions[condition] = next_turns
-            if next_turns == 0 then table.insert(finished, condition) end
-        end
-
-        for idx = #finished, 1, -1 do
-            table.remove(conditions, finished[idx])
+        for key, condition in pairs(conditions) do
+            if condition:isExpired(level:getScheduler():getTime()) then
+                self:remove(key)
+            end
         end
 
         turn_idx = level_turn_idx
     end
 
+    local get = function(self, prop)
+        local values = {}
+
+        for key, condition in pairs(conditions) do
+            if condition:getProperty() == prop then
+                values[key] = condition:getValue()
+            end
+        end
+
+        return values
+    end
+
     return setmetatable({
         -- methods        
         add     = add,
+        get     = get,
         remove  = remove,
         update  = update,
     }, Conditions)

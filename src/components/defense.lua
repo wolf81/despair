@@ -41,6 +41,12 @@ Defense.new = function(entity, def)
             bonus = bonus + stats:getBonus('dex')
         end
 
+        -- get armor class modifiers from e.g. spells
+        local modifiers = entity:getComponent(Conditions):get('ac')
+        for key, value in pairs(modifiers) do
+            bonus = bonus + value
+        end
+
         return bonus
     end
 

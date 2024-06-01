@@ -8,6 +8,7 @@ local Scheduler = {}
 Scheduler.new = function()
     local turn, turn_finished = nil, true
     local entities, entity_idx = {}, 0
+    local time = 0
 
     local in_combat = false
 
@@ -31,8 +32,13 @@ Scheduler.new = function()
         if #entities == 0 then return end
 
         if not turn or turn:isFinished() then 
-            if turn then in_combat = turn:inCombat() end
-            
+            if turn then 
+                in_combat = turn:inCombat() 
+
+                -- add time used by last turn, this will be the current time
+                time = time + turn:getTime()
+            end
+
             turn = Turn(entities, level) 
             Signal.emit('turn', turn:getIndex())            
         end
@@ -44,9 +50,12 @@ Scheduler.new = function()
 
     local getTurnIndex = function(self) return turn and turn:getIndex() or 0 end
 
+    local getTime = function(self) return time end
+
     return setmetatable({
         -- methods
         update          = update,
+        getTime         = getTime,
         inCombat        = inCombat,
         addEntity       = addEntity,
         removeEntity    = removeEntity,
