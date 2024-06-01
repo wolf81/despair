@@ -259,11 +259,12 @@ Game.new = function(level_info, player_id)
     end
 
     local onConditionsChanged = function(entity)
-        local pc, class = entity:getComponent(PC), entity:getComponent(Class)
-        if pc and class then
-            pc:getPortrait():setShowLevelUp(class:canLevelUp())
+        local pc = entity:getComponent(PC)
+        print('conditions changed')
+        if pc then
+            local conditions = entity:getComponent(Conditions)
+            pc:getPortrait():setIcons(conditions:getIcons())
             char_sheet_button.widget:setImage(pc:getPortrait():getImage())
-            -- TODO: add images for conditions
         end
     end
 

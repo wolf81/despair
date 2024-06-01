@@ -28,12 +28,10 @@ end
 
 MageArmor.new = function(level, entity, coord)
     local cast = function(self, duration)
-        print('cast mage armor')
-
         -- duration: 1 hour (3600 seconds) per level
         local exp_time = level:getScheduler():getTime() + getLevel(entity) * 3600
 
-        local modify_ac = Modify('mage_armor', 'ac', 4, exp_time)
+        local modify_ac = Modify('mage_armor', 'Mage Armor', 'ac', 4, exp_time)
 
         -- configure icon
         modify_ac:setIcon(getIcon(400))

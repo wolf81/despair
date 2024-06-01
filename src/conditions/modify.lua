@@ -5,12 +5,14 @@
 
 local Modify = {}
 
-Modify.new = function(key, prop, value, exp_time)
+Modify.new = function(key, name, prop, value, exp_time)
     local icon = nil
 
     local isExpired = function(self, time) return time > exp_time end
 
     local getKey = function(self) return key end
+
+    local getName = function(self) return name end
 
     local getProperty = function(self) return prop end
 
@@ -23,6 +25,7 @@ Modify.new = function(key, prop, value, exp_time)
     return setmetatable({
         -- methods
         getKey      = getKey,
+        getName     = getName,
         getIcon     = getIcon,
         setIcon     = setIcon,
         getValue    = getValue,

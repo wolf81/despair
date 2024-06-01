@@ -80,6 +80,7 @@ Portrait.new = function(gender, race, class)
     local image, angle = nil, 0
 
     local show_level_up = false
+    local icons = {}
 
     local getImage = function()
         local w, h = select(3, frame:unpack())
@@ -122,7 +123,13 @@ Portrait.new = function(gender, race, class)
                     local plus_quad = QuadCache:get('uf_interface')[379]
                     local plus_w  = select(3, plus_quad:getViewport()) 
                     love.graphics.draw(plus_texture, plus_quad, w - plus_w - SPACING, SPACING)
-                end                
+                end
+
+                for idx, icon in ipairs(icons) do
+                    local col = math.floor((idx - 1) / 3)
+                    local row = (idx - 1) % 3
+                    love.graphics.draw(icon, col * 16, row * 16)
+                end          
             end
 
             love.graphics.draw(texture, border_quad, x, y, 0)
@@ -256,6 +263,11 @@ Portrait.new = function(gender, race, class)
         image = nil
     end
 
+    local setIcons = function(self, icons_)
+        icons = icons_ or {} 
+        image = nil
+    end
+
     local configure = function(self, gender, race, class)
         if gender and race and class then is_hidden = false end
 
@@ -284,6 +296,7 @@ Portrait.new = function(gender, race, class)
         update          = update,
         random          = random,
         getSize         = getSize,
+        setIcons        = setIcons,
         getImage        = getImage,
         getFrame        = getFrame,
         setFrame        = setFrame,

@@ -52,12 +52,25 @@ Conditions.new = function(entity, def)
         return values
     end
 
+    local getIcons = function(self)
+        local icons = {}
+
+        for key, condition in pairs(conditions) do
+            local icon = condition:getIcon()
+            if icon then table.insert(icons, icon) end
+        end
+
+        return icons
+    end
+
     return setmetatable({
         -- methods        
-        add     = add,
-        get     = get,
-        remove  = remove,
-        update  = update,
+        add         = add,
+        get         = get,
+        remove      = remove,
+        update      = update,
+        -- TODO: cleaner to have an iterator method perhaps?
+        getIcons    = getIcons,
     }, Conditions)
 end
 
