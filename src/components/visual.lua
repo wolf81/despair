@@ -26,7 +26,13 @@ Visual.new = function(entity, def, duration)
 
     local anim_handle = nil
 
-    update = function(self, dt, level) anim:update(dt) end
+    update = function(self, dt, level) 
+        for _, shader in pairs(shaders) do
+            shader:update(dt)
+        end
+
+        anim:update(dt) 
+    end
 
     draw = function(self)
         for _, shader in pairs(shaders) do
@@ -58,6 +64,12 @@ Visual.new = function(entity, def, duration)
         if shaders['colorize'] then return end
 
         shaders['colorize'] = Colorize(duration)
+    end
+
+    pulsate = function(self)
+        if shaders['pulsate'] then return end
+
+        shaders['pulsate'] = Pulsate()
     end
 
     fadeOut = function(self, duration)
@@ -103,6 +115,7 @@ Visual.new = function(entity, def, duration)
         fadeIn      = fadeIn,
         fadeOut     = fadeOut,
         getSize     = getSize,
+        pulsate     = pulsate,
         colorize    = colorize,
         setAlpha    = setAlpha,
         setShader   = setShader,

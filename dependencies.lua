@@ -17,6 +17,7 @@ ndn                 = require 'lib.ndn'
 
 -- shaders
 Colorize            = require 'src.shaders.colorize'
+Pulsate             = require 'src.shaders.pulsate'
 
 -- conditions
 Modify              = require 'src.conditions.modify'
