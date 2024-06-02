@@ -5,16 +5,6 @@
 
 local MagicMissile = {}
 
-local function getLevel(entity)
-    local class = entity:getComponent(Class)
-    if class then return class:getLevel() end
-
-    local npc = entity:getComponent(NPC)
-    if npc then return npc:getLevel() end
-
-    return 1
-end
-
 local function getEntity(level, coord)
     local entities = level:getEntities(coord, function(entity) 
         return entity.type == 'pc' or entity.type == 'npc'
@@ -23,28 +13,28 @@ local function getEntity(level, coord)
     return #entities > 0 and entities[1] or nil
 end
 
-MagicMissile.new = function(level, source, entity, target_coord)
-    local spell_level = getLevel(source)
+MagicMissile.new = function(level, caster, spell, target_coord)
+    local spell_level = EntityHelper.getLevel(caster) or 1
 
     -- create an effect at runtime
     local effect = EntityFactory.create({
-        id      = 'ef_' .. entity.id,
+        id      = 'ef_' .. spell.id,
         texture = 'uf_fx',
         anim    = { 81 },
     })
     effect:getComponent(Visual):setAlpha(0.8)
 
     local cast = function(self, duration)
-        local entity = getEntity(level, target_coord)
-        if entity ~= nil then
+        local target = getEntity(level, target_coord)
+        if target ~= nil then
             local damage = ndn.dice('1d4+1').roll()
-            entity:getComponent(Health):harm(damage)
+            target:getComponent(Health):harm(damage)
 
             -- TODO: add projectiles based on level, e.g.:
             -- * PC (3): 2 projectiles
             -- * PC (5): 3 projectiles
             -- * etc...
-            EffectHelper.showProjectile(effect, level, duration, source.coord, target_coord)
+            EffectHelper.showProjectile(effect, level, duration, caster.coord, target.coord)
 
             --[[
             -- could be nice if we could add a relative distance from center from mid point, e.g.
@@ -61,7 +51,7 @@ MagicMissile.new = function(level, source, entity, target_coord)
 
     return setmetatable({
         -- methods
-        cast    = cast,
+        cast = cast,
     }, MagicMissile)
 end
 

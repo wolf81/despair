@@ -14,6 +14,22 @@ local function getParchmentColor()
     return color_info.color
 end
 
+M.generateImage = function(texture_name, quad_idx)
+    local texture = TextureCache:get(texture_name)
+    local quads = QuadCache:get(texture_name)
+    local quad = quads[quad_idx]
+
+    local quad_w, quad_h = select(3, quad:getViewport())
+
+    local canvas = love.graphics.newCanvas(quad_h, quad_h)
+    canvas:renderTo(function() 
+        love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
+        love.graphics.draw(texture, quad, 0, 0)
+    end)
+
+    return canvas
+end
+
 M.generateTextButtonTexture = function(w, h, text) 
     local image = TextureGenerator.generatePanelTexture(w, h)
     local w, h = image:getDimensions()

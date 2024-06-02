@@ -14,10 +14,11 @@ local SPELL_TYPE_INFO = {
 }
 
 SpellUsable.new = function(entity, def)
-    local use = function(self, source, target, level, duration)
+    -- the caster of a spell, could be a player, npc, wand, ...
+    local use = function(self, caster, target_coord, level, duration)
         local T = SPELL_TYPE_INFO[entity.id]
 
-        local spell = T(level, source, entity, target)
+        local spell = T(level, caster, entity, target_coord)
         spell:cast(duration)
 
         return false

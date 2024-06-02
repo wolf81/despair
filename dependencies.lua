@@ -20,6 +20,7 @@ Modify              = require 'src.conditions.modify'
 
 -- helpers
 GamestateHelper     = require 'src.helpers.gamestate_helper'
+EntityHelper        = require 'src.helpers.entity_helper'
 EffectHelper        = require 'src.helpers.effect_helper'
 ActionHelper        = require 'src.helpers.action_helper'
 StringHelper        = require 'src.helpers.string_helper'
