@@ -15,6 +15,9 @@ lume                = require 'lib.lume.lume'
 tidy                = require 'lib.composer' -- TODO: rename composer to tidy
 ndn                 = require 'lib.ndn'
 
+-- shaders
+Colorize            = require 'src.shaders.colorize'
+
 -- conditions
 Modify              = require 'src.conditions.modify'
 

@@ -10,10 +10,7 @@ local Visual = {}
 Visual.new = function(entity, def, duration)
     local frames = def['anim'] or { 1 }
 
-    local shader_info = {
-        shader = nil,
-        params = {},
-    }
+    local shaders = {}
 
     duration = duration or ANIM_DURATION
 
@@ -32,11 +29,8 @@ Visual.new = function(entity, def, duration)
     update = function(self, dt, level) anim:update(dt) end
 
     draw = function(self)
-        if shader_info.shader ~= nil then
-            love.graphics.setShader(shader_info.shader)
-            for k, v in pairs(shader_info.params) do
-                shader_info.shader:send(k, v)
-            end
+        for _, shader in pairs(shaders) do
+            shader:set()
         end
 
         love.graphics.setColor(1.0, 1.0, 1.0, fade.alpha)
@@ -45,7 +39,14 @@ Visual.new = function(entity, def, duration)
         anim:draw(texture, quads, pos, angle, ox, oy)
         love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
 
-        love.graphics.setShader()
+        for key, shader in pairs(shaders) do
+            shader:unset()
+
+            if shader:isFinished() then
+                print('remove shader', key)
+                shaders[key] = nil
+            end
+        end
 
         local health_bar = entity:getComponent(HealthBar)
         if health_bar then health_bar:draw(fade.alpha) end
@@ -54,35 +55,9 @@ Visual.new = function(entity, def, duration)
     colorize = function(self, duration)
         assert(duration ~= nil, 'missing argument: "duration"')
 
-        -- prevent shader from triggering multiple times while one is busy
-        if shader_info.shader ~= nil then return end
+        if shaders['colorize'] then return end
 
-        -- setup shader and default param values
-        shader_info.shader = ShaderCache:get('color_mix')
-        shader_info.params = {
-            ['blendColor']  = { 1.0, 0.0, 0.0, 0.0 },
-            ['alpha']       = 1.0,
-        }
-
-        local fade_in_params = {
-            ['blendColor'] = { 1.0, 0.0, 0.0, 0.8 }, 
-            ['alpha'] = 1.0,
-        }
-
-        local fade_out_params = {
-            ['blendColor'] = { 1.0, 0.0, 0.0, 0.0 }, 
-            ['alpha'] = 1.0,                        
-        }
-
-        local time = duration / 2
-
-        -- fade in to color ...
-        Timer.tween(time, shader_info.params, fade_in_params, 'out-quad', function() 
-            -- fade out to color ...
-            Timer.tween(time, shader_info.params, fade_out_params, 'in-quad', function() 
-                shader_info.shader = nil 
-            end)
-        end)
+        shaders['colorize'] = Colorize(duration)
     end
 
     fadeOut = function(self, duration)

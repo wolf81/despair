@@ -16,6 +16,7 @@
 * feat: the Textfield UI component should have a focus or hightlight state that shows a cursor
 * feat: the Textfield UI cursor mentioned above should allow for editing text at arbitrary position
 * feat: remove arrow projectile from effects, add projectile_defs instead
+* feat: support adding multiple shaders to a Visual component
 
 ## BUGS 
 
