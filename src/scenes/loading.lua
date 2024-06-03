@@ -180,9 +180,9 @@ Loading.new = function(T, opts, ...)
     local background_w, background_h = background:getDimensions()
 
     local text = 'LOADING'
-    local text_h = FONT:getHeight()
-    local text_x = mfloor((WINDOW_W - FONT:getWidth(text)) / 2)
-    local text_y = mfloor((WINDOW_H - FONT:getHeight()) / 2)
+    local text_h = FONTS['default']:getHeight()
+    local text_x = mfloor((WINDOW_W - FONTS['default']:getWidth(text)) / 2)
+    local text_y = mfloor((WINDOW_H - FONTS['default']:getHeight()) / 2)
 
     local time = MINIMUM_LOAD_DURATION
 
@@ -204,7 +204,7 @@ Loading.new = function(T, opts, ...)
 
     local enter = function(self)
         runner, message = unpack(table.remove(runners, 1))
-        message_x = mfloor((WINDOW_W - FONT:getWidth(message)) / 2)
+        message_x = mfloor((WINDOW_W - FONTS['default']:getWidth(message)) / 2)
     end
 
     local update = function(self, dt)
@@ -213,7 +213,7 @@ Loading.new = function(T, opts, ...)
         local is_runner_done = runner:update()
         if is_runner_done and #runners > 0 then
             runner, message = unpack(table.remove(runners, 1))
-            message_x = mfloor((WINDOW_W - FONT:getWidth(message)) / 2)
+            message_x = mfloor((WINDOW_W - FONTS['default']:getWidth(message)) / 2)
         elseif is_runner_done and #runners == 0 and time == 0 then
             return Gamestate.switch(T(unpack(args)))
         end

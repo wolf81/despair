@@ -97,7 +97,7 @@ Cartographer.new = function(entity, def)
         love.graphics.setColor(0.0, 0.0, 0.0, 0.7)
 
         local title = "LEVEL " .. level_idx
-        local title_x = mfloor((w - FONT:getWidth(title)) / 2)
+        local title_x = mfloor((w - FONTS['default']:getWidth(title)) / 2)
         love.graphics.print(title, x + title_x, y + 10)
 
         local chart_w, chart_h = chart_image:getDimensions()

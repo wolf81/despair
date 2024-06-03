@@ -34,7 +34,7 @@ M.generateTextButtonTexture = function(w, h, text)
     local image = TextureGenerator.generatePanelTexture(w, h)
     local w, h = image:getDimensions()
 
-    local text_w, text_h = FONT:getWidth(text), FONT:getHeight()
+    local text_w, text_h = FONTS['default']:getWidth(text), FONTS['default']:getHeight()
     local text_x, text_y = mfloor((w - text_w) / 2), mfloor((h - text_h) / 2)
 
     local canvas = love.graphics.newCanvas(w, h)

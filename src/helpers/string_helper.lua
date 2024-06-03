@@ -25,10 +25,10 @@ M.getHeight = function(str)
     local lines = select(2, string.gsub(str, '\n', '\n'))
 
     if lines > 1 then
-        return lines * FONT:getHeight() * FONT:getLineHeight() + FONT:getHeight()
+        return (lines * FONTS['default']:getHeight() * FONTS['default']:getLineHeight() + FONTS['default']:getHeight())
     end
 
-    return FONT:getHeight()
+    return FONTS['default']:getHeight()
 end
 
 return M

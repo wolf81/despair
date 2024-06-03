@@ -16,19 +16,19 @@ local function trySetCursor()
 end
 
 local function configureGraphics()
-    FONT:setLineHeight(2.0)
-    love.graphics.setFont(FONT)
+    local font = love.graphics.newImageFont('gfx/image_font.png', 
+        '1234567890!#$%&*()-+=[]:;"\'<' ..
+        '>,.?/abcdefghijklmnopqrstuvwx' ..
+        'yz ABCDEFGHIJKLMNOPQRSTUVWXYZ')
+    font:setLineHeight(2.0)
+    love.graphics.setFont(font)
+
+    FONTS['default'] = font
 
     love.graphics.setLineStyle('rough')
 end
 
 function love.load(args)
-    love.window.setTitle('Dungeon of Despair')
-
-    success = love.window.setMode(WINDOW_W * UI_SCALE, WINDOW_H * UI_SCALE, {
-        highdpi = false,
-    })
-
     -- handle command line args, if any
     -- PLEASE NOTE: for Windows might need to add `--console` as well
     for _, arg in ipairs(args) do
@@ -62,6 +62,9 @@ function love.draw()
     love.graphics.scale(UI_SCALE)
     Gamestate.draw()
     love.graphics.pop()
+
+    love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
+    love.graphics.print("Current FPS: "..tostring(love.timer.getFPS()), 10, 10)
 end
 
 function love.textinput(t)

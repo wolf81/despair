@@ -15,10 +15,6 @@ lume                = require 'lib.lume.lume'
 tidy                = require 'lib.composer' -- TODO: rename composer to tidy
 ndn                 = require 'lib.ndn'
 
--- shaders
-Colorize            = require 'src.shaders.colorize'
-Pulsate             = require 'src.shaders.pulsate'
-
 -- conditions
 Modify              = require 'src.conditions.modify'
 
@@ -32,6 +28,7 @@ ColorHelper         = require 'src.helpers.color_helper'
 TableHelper         = require 'src.helpers.table_helper'
 FlagsHelper         = require 'src.helpers.flags_helper'
 PathHelper          = require 'src.helpers.path_helper'
+FontHelper          = require 'src.helpers.font_helper'
 
 -- scenes
 SelectTarget        = require 'src.scenes.select_target'

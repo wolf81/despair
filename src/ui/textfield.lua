@@ -35,7 +35,7 @@ Textfield.new = function()
 
     local update = function(self, dt)
         local x, y, w, h = contents.frame:unpack()
-        local text_w = FONT:getWidth(contents.text)
+        local text_w = FONTS['default']:getWidth(contents.text)
         if text_w > w then
             contents.ox = math.floor(w - text_w)
         else
@@ -49,7 +49,7 @@ Textfield.new = function()
     local getText = function(self) return contents.text end
 
     local getSize = function(self) 
-        return FONT:getWidth(contents.text), FONT:getHeight() * FONT:getLineHeight() 
+        return FONTS['default']:getWidth(contents.text), FONTS['default']:getHeight() * FONTS['default']:getLineHeight() 
     end
 
     local setFrame = function(self, x, y, w, h) 
@@ -57,7 +57,7 @@ Textfield.new = function()
 
         border = TextureGenerator.generateBorderTexture(w, h, { 1.0, 1.0, 1.0, 0.8 })
 
-        local text_y = math.floor((h - FONT:getHeight()) / 2)
+        local text_y = math.floor((h - FONTS['default']:getHeight()) / 2)
         local text_x = text_y        
         contents.frame = Rect(text_x, text_y, w - text_x * 2, h - text_y * 2)
     end

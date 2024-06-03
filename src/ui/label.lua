@@ -10,7 +10,7 @@ local Label = {}
 Label.new = function(text, color, halign, valign)
     local text_info = {
         text    = text or '',
-        width   = FONT:getWidth(text or ''),
+        width   = FONTS['default']:getWidth(text or ''),
         height  = StringHelper.getHeight(text or ''),
     }
 
@@ -53,7 +53,7 @@ Label.new = function(text, color, halign, valign)
 
     local setText = function(self, text_) 
         text_info.text = text_ or ''
-        text_info.width = FONT:getWidth(text_ or '')
+        text_info.width = FONTS['default']:getWidth(text_ or '')
         text_info.height = StringHelper.getHeight(text_ or '')
     end
 

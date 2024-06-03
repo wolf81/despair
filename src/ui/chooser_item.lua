@@ -12,7 +12,7 @@ local TEXT_COLOR = { 0.0, 0.0, 0.0, 0.7 }
 ChooserItem.new = function(text)
     local frame = Rect(0)
 
-    local text_w, text_h = FONT:getWidth(text), FONT:getHeight()
+    local text_w, text_h = FONTS['default']:getWidth(text), FONTS['default']:getHeight()
 
     local text_offset = { x = 0, y = 0 }
 

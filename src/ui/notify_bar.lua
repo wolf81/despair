@@ -71,11 +71,11 @@ NotifyBar.new = function()
 
         if not notification or notification.message ~= message then
             -- calculate a rectangle, large enough to fit the text, including some margin
-            local spacing = FONT:getHeight() - FONT:getLineHeight()
+            local spacing = FONTS['default']:getHeight() - FONTS['default']:getLineHeight()
             local max_w = WINDOW_W - STATUS_PANEL_W - MARGIN * 2
-            local line_h = FONT:getHeight() * FONT:getLineHeight()
+            local line_h = FONTS['default']:getHeight() * FONTS['default']:getLineHeight()
 
-            local w = FONT:getWidth(message)
+            local w = FONTS['default']:getWidth(message)
             local lines = mceil(w / max_w)
             local is_half_line = w < (max_w / 2)
             local h = lines * line_h + MARGIN * 2 - spacing

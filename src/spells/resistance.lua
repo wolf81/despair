@@ -8,6 +8,7 @@ local Resistance = {}
 Resistance.new = function(level, entity, coord)
     local cast = function(self, duration)
         print('cast resistance')
+        -- +1 to saving throws
     end
 
     return setmetatable({

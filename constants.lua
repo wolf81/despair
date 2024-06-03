@@ -21,12 +21,11 @@ UI_SCALE            = 1.0
 STATUS_PANEL_W      = 48 * 3 -- equal to the size of 3 action buttons
 ACTION_BAR_H        = 48
 
-FONT = love.graphics.newImageFont('gfx/image_font.png', 
-    '1234567890!#$%&*()-+=[]:;"\'<' ..
-    '>,.?/abcdefghijklmnopqrstuvwx' ..
-    'yz ABCDEFGHIJKLMNOPQRSTUVWXYZ')
+FONTS = {
+    ['default'] = nil
+}
 
-FLAGS = TableHelper.readOnly({
+FLAGS = {
     -- spell flags
     ['arcane']          = 0x1,
     ['divine']          = 0x2,
@@ -38,5 +37,5 @@ FLAGS = TableHelper.readOnly({
     ['natural_weapon']  = 0x1, -- weapons like claws, tooth, tail, fists, ...
 
     -- npc flags
-    ['shadow_blend']    = 0x1, -- disappaer in shadows, but revealed by means of a Daylight spell
-})
+    ['shadow_blend']    = 0x1, -- disappear in shadows, but revealed by means of a Daylight spell
+}
