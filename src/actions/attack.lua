@@ -54,7 +54,7 @@ Attack.new = function(level, entity, target)
         end
 
         -- visualize hit on target by drawing with a tint color
-        if is_hit then target:getComponent(Visual):colorize(0.3) end
+        if is_hit then target:getComponent(Visual):colorize(duration) end
 
         -- show camera shake effect if player performs a critical hit
         if is_crit and entity == level:getPlayer() then level:shakeCamera(duration) end
