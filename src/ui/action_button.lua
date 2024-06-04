@@ -32,19 +32,13 @@ ActionButton.new = function(action, ...)
 
     local args = {...}
 
-    local texture = TextureCache:get('actionbar')
-    local quads = QuadCache:get('actionbar')
-    local quad_idx = ACTION_INFO[action]
-
     local frame = Rect(0)
     
     local is_enabled, is_selected, is_highlighted, is_pressed = true, false, false, false
+
+    local texture = TextureGenerator.generateIconButtonTexture('actionbar', ACTION_INFO[action])
     
-    local background = nil
-
     local update = function(self, dt)
-        if quad_idx == 0 then return end
-
         if not is_enabled then return end
 
         local mx, my = love.mouse.getPosition()
@@ -65,8 +59,6 @@ ActionButton.new = function(action, ...)
     end
 
     local draw = function(self)
-        if not background then return end
-
         local x, y, w, h = frame:unpack()
 
         -- add white background behind texture for showing disabled state
@@ -74,23 +66,15 @@ ActionButton.new = function(action, ...)
         love.graphics.rectangle('fill', x + 1, y + 1, w - 2, h - 2)
 
         love.graphics.setColor(1.0, 1.0, 1.0, (is_enabled and 1.0 or DISABLED_ALPHA))
-        love.graphics.draw(background, x, y)
 
         if is_enabled and (is_highlighted or is_selected) then
             love.graphics.setColor(0.5, 1.0, 0.9, 1.0)
         end
 
-        love.graphics.draw(texture, quads[quad_idx], x, y)
-        love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
+        love.graphics.draw(texture, x, y)
     end
 
-    local setFrame = function(self, x, y, w, h)
-        frame = Rect(x, y, w, h)
-        
-        if w > 0 and h > 0 then
-            background = TextureGenerator.generatePanelTexture(w, h)
-        end
-    end
+    local setFrame = function(self, x, y, w, h) frame = Rect(x, y, w, h) end
 
     local getFrame = function(self) return frame:unpack() end
 
@@ -101,6 +85,7 @@ ActionButton.new = function(action, ...)
     local setEnabled = function(self, flag) 
         is_enabled = (flag == true) 
 
+        -- TODO: should be flags
         if not is_enabled then
             is_highlighted = false
             is_selected = false

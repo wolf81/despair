@@ -5,23 +5,9 @@
 
 local ChooseItem = {}
 
-local function getImage(texture, quad)
-    local quad_w, quad_h = select(3, quad:getViewport())
-    local canvas = love.graphics.newCanvas(quad_w, quad_h)
-    canvas:renderTo(function()
-        love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
-        love.graphics.draw(texture, quad, 0, 0) 
-    end)
-
-    return canvas
-end
-
 local function getImageButton(item, fn)
     local def = EntityFactory.getDefinition(item.id)
-    local texture = TextureCache:get(def.texture)
-    local quads = QuadCache:get(def.texture)
-    local quad_idx = def.anim[1]
-    local image = getImage(texture, quads[quad_idx])
+    local image = TextureGenerator.generateIconButtonTexture(def.texture, def.anim[1])
     return ImageButton(image, fn)
 end
 

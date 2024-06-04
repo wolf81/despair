@@ -9,6 +9,20 @@ local ImageButton = {}
 
 local DISABLED_ALPHA = 0.7
 
+local function generateTexture(image)
+    local image_w, image_h = image:getDimensions()
+    local background = TextureGenerator.generatePanelTexture(image_w, image_h)
+
+    local canvas = love.graphics.newCanvas(image_w, image_h)
+    canvas:renderTo(function() 
+        love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
+        love.graphics.draw(background, 0, 0)
+        love.graphics.draw(image, 0, 0)
+    end)
+
+    return canvas
+end
+
 ImageButton.new = function(image, action, ...)
     assert(image ~= nil, 'missing argument: "image"')
 
@@ -19,6 +33,8 @@ ImageButton.new = function(image, action, ...)
     local is_highlighted, is_pressed, is_enabled = false, false, true
 
     local background = nil
+
+    local texture = generateTexture(image)
 
     local update = function(self, dt)
         if not is_enabled then return end
@@ -54,27 +70,17 @@ ImageButton.new = function(image, action, ...)
         love.graphics.rectangle('fill', x + 1, y + 1, w - 2, h - 2)
 
         love.graphics.setColor(1.0, 1.0, 1.0, is_enabled and 1.0 or DISABLED_ALPHA)
-        love.graphics.draw(background, x, y)
 
         if is_enabled and is_highlighted then
             love.graphics.setColor(0.5, 1.0, 0.9, 1.0)
         end
 
-        local image_w, image_h = image:getDimensions()
-
-        love.graphics.draw(image, x + mfloor((w - image_w) / 2), y + mfloor((h - image_h) / 2))
-        love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
+        love.graphics.draw(texture, x, y)
     end
 
     local getSize = function(self) return frame:getSize() end
 
-    local setFrame = function(self, x, y, w, h) 
-        frame = Rect(x, y, w, h)
-
-        if w > 0 and h > 0 then
-            background = TextureGenerator.generatePanelTexture(w, h)
-        end
-    end
+    local setFrame = function(self, x, y, w, h) frame = Rect(x, y, w, h) end
 
     local getFrame = function(self) return frame:unpack() end
 
@@ -82,7 +88,9 @@ ImageButton.new = function(image, action, ...)
 
     local setImage = function(self, image_)
         assert(image ~= nil, 'missing argument: "image_"')
-        image = image_ 
+        -- image = image_ 
+
+        texture = generateTexture(image_)
     end
     
     return setmetatable({

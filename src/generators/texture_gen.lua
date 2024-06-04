@@ -47,6 +47,24 @@ M.generateTextButtonTexture = function(w, h, text)
     return canvas
 end
 
+M.generateIconButtonTexture = function(texture_name, quad_idx)
+    local image = TextureGenerator.generatePanelTexture(TILE_SIZE, TILE_SIZE)
+    local w, h = image:getDimensions()
+
+    local texture = TextureCache:get(texture_name)
+    local quad = QuadCache:get(texture_name)[quad_idx]
+    local quad_w, quad_h = select(3, quad:getViewport())
+
+    local canvas = love.graphics.newCanvas(w, h)
+    canvas:renderTo(function()
+        love.graphics.setColor(1.0, 1.0, 1.0, 1.0) 
+        love.graphics.draw(image, 0, 0)
+        love.graphics.draw(texture, quad, mfloor((w - quad_w) / 2), mfloor((h - quad_h) / 2))
+    end)
+
+    return canvas
+end
+
 M.generateImageButtonTexture = function(w, h, quad_idx)
     local canvas = TextureGenerator.generateBorderTexture(24, 24, { 0.5, 0.1, 0.1, 1.0 })
 
